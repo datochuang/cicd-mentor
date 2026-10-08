@@ -117,9 +117,9 @@ def build(name, doc_title, kicker, pages):
     pdf = out / (name + ".pdf")
     subprocess.run([CHROME, "--headless=new", "--disable-gpu", "--no-pdf-header-footer",
                     "--print-to-pdf=%s" % pdf, h.as_uri()], check=True, capture_output=True)
-    png_dir = ROOT / "build/pages" / name
+    # 逐頁 PNG 進版控：GitHub 的 README 不能嵌 PDF，只能嵌圖片；也拿來逐頁檢查排版
+    png_dir = out / "img" / name
     shutil.rmtree(png_dir, ignore_errors=True)
     png_dir.mkdir(parents=True)
-    if shutil.which("pdftoppm"):
-        subprocess.run(["pdftoppm", "-png", "-r", "80", str(pdf), str(png_dir / "p")], check=True)
+    subprocess.run(["pdftoppm", "-png", "-r", "110", str(pdf), str(png_dir / "p")], check=True)
     print(h.relative_to(ROOT), pdf.relative_to(ROOT), png_dir.relative_to(ROOT), sep="\n")

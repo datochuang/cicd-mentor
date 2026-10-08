@@ -26,10 +26,11 @@
 - `docs/slides/`：給公司內部讀者的投影片式圖形文件（產出物，HTML＋PDF），描述 **AI agent 專案本身**，不是這個討論專案
 - `docs/figures/<文件名>/build.py`：每份投影片的產生器；`docs/figures/lib/slides.py` 是共用的畫圖工具與 HTML／PDF 輸出
 - `docs/archive/`：被取代的舊文件，留著參考，不再更新
+- `README.md`：GitHub 首頁，依序嵌入主要投影片的逐頁 PNG（GitHub 不能嵌 PDF）。投影片的頁數或標題改變時，README 的圖片清單與 alt 文字要一起改
 
 # 指令
 
-- 產生投影片：`python3 docs/figures/<文件名>/build.py`，輸出 `docs/slides/<文件名>.{html,pdf}`，逐頁 PNG 在 `build/pages/<文件名>/`（需要 Google Chrome 與 poppler 的 `pdftoppm`）
+- 產生投影片：`python3 docs/figures/<文件名>/build.py`，輸出 `docs/slides/<文件名>.{html,pdf}`，逐頁 PNG 在 `docs/slides/img/<文件名>/`（需要 Google Chrome 與 poppler 的 `pdftoppm`）
 
 # 圖形化文件的規則
 
