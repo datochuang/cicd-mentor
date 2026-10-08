@@ -61,6 +61,7 @@
 
 ## 其他
 
+- 這是我個人專用的 repo（GitHub：datochuang/cicd-mentor，branch `master`）：每次 commit 後直接 `git push`，不必再問
 - 我做出新決定或改變想法時：在 `decision-log.md` 新增一筆，並同步更新 `direction.md`
 - 討論中值得保留的分析與調查，整理到 `research/`，並在相關決定中連結
 - 只有在文件結構或工作規則改變時才更新這份 CLAUDE.md
