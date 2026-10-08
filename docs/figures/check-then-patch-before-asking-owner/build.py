@@ -14,7 +14,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
 from slides import *
 
 NAME = "check-then-patch-before-asking-owner"
-KICKER = "第一次進 workspace 的檢查"
+KICKER = "進到陌生 workspace 的檢查"
 
 
 def mark(s, x, y, ok, text, fill=None):
@@ -24,13 +24,13 @@ def mark(s, x, y, ok, text, fill=None):
 
 
 # ── 圖 1：流程 ──────────────────────────────────────────────────────
-CHECKS = [("Self-documenting", "看得懂嗎", "圖 2"), ("SSOT", "跑得起來嗎；只有一份嗎", "圖 3–4"), ("Traceability", "連得回來源嗎", "圖 5"),
+CHECKS = [("Self-documenting", "看得懂嗎", "圖 2"), ("SSOT（環境／複本）", "跑得起來嗎；只有一份嗎", "圖 3–4"), ("Traceability", "連得回來源嗎", "圖 5"),
           ("Continuous Integration", "每次變更有機器檢查嗎", "圖 6"), ("Code review", "併入前有人看過嗎", "圖 7"), ("Small batches", "一包一件事嗎", "圖 8")]
 
 
 def p1():
     s = []
-    T(s, 20, 20, "這份文件回答：第一次進一個沒看過的 workspace，怎麼具體檢查它有沒有 CI/CD；檢查點不過時，自己先補什麼 ↓", cls="tx-lbl", fill=INK2)
+    T(s, 20, 20, "這份文件回答：人或 AI agent 進到一個沒看過的 workspace，怎麼檢查它有沒有 CI/CD；不過時自己先補什麼 ↓", cls="tx-lbl", fill=INK2)
     # 進去之前
     rect(s, 20, 44, 200, 150, col="var(--rule-2)", fill="var(--surface-2)", sw=1.2)
     T(s, 34, 68, "進去之前", cls="tx", fill=INK2, w=700)
@@ -134,7 +134,7 @@ def p3():
         ["編得過、跑得完", "結果和 owner 手上的一致"],
         ["filelist 引用不存在的檔", "script 在 /home 或 /proj 底下", "工具版本只在 .cshrc 裡", "同一份 RTL，兩台機器結果不同"],
         [("setup.sh", "工具版本、環境變數寫死在裡面，進 depot"),
-         ("run_smoke.sh", "從乾淨 workspace 編 top＋跑一個 sim"),
+         ("run_sanity.sh", "從乾淨 workspace 編 top＋跑一個 sim"),
          ("缺檔清單", "哪個 filelist 第幾行引用、誰最後動過"),
          (".p4ignore 提案", "進了 depot 的產生檔列出來")],
         ["缺的檔在誰的 workspace", "產生檔要不要移出版控"],
@@ -142,7 +142,7 @@ def p3():
          ("只有「缺的檔在誰那裡」這件事非問 owner 不可。", False)],
         "SSOT 的檢查：怎麼查（專用 workspace 只 sync、照 repo 寫的方式編 top 跑最小 sim、每個失敗分類、跟 owner 的結果比對）；"
         "判定（編得過跑得完、結果一致；不過的徵兆：filelist 引用不存在的檔、script 在 home 或 proj 底下、工具版本只在 .cshrc）；"
-        "先補：setup.sh、run_smoke.sh、缺檔清單、.p4ignore 提案；只需要問 owner：缺的檔在誰的 workspace、產生檔要不要移出版控。")
+        "先補：setup.sh、run_sanity.sh、缺檔清單、.p4ignore 提案；只需要問 owner：缺的檔在誰的 workspace、產生檔要不要移出版控。")
 
 
 def p3b():
@@ -187,7 +187,7 @@ def p5():
         ["找 submit 觸發的檢查：p4 triggers、CI job", "找定期 regression：結果放哪、誰看得到", "翻最近一次壞掉：多久後、被誰發現"],
         ["每個 submit 都有機器跑過最小檢查", "結果公開看得到，附 CL 號"],
         ["只有人手動跑", "有 nightly，結果只在跑的人信箱", "壞掉由下游先發現", "狀態表靠人填 Excel"],
-        [("最小 check", "拿圖 3 的 run_smoke.sh：編得過＋一個 sim"),
+        [("最小 check", "拿圖 3 的 run_sanity.sh：編得過＋一個 sim"),
          ("排上去跑", "先定時跑，再進到每個 CL 都跑"),
          ("結果可見", "寫到 repo 看得到的地方，附 CL 號與 manifest"),
          ("狀態表由結果產生", "從 manifest 與 log 產生，不用人填")],
@@ -196,7 +196,7 @@ def p5():
          ("裝觸發、配算力、通知誰，要 owner 點頭。", False)],
         "Continuous Integration 的檢查：怎麼查（找 submit 觸發的檢查、找定期 regression 與結果、翻最近一次壞掉多久後被誰發現）；"
         "判定（每個 submit 都有機器跑過最小檢查、結果公開附 CL 號；不過的徵兆：只有人手動跑、nightly 結果只在信箱、壞掉由下游先發現）；"
-        "先補：最小 check 用圖 3 的 run_smoke.sh、先定時跑再每個 CL 跑、結果寫到看得到的地方附 CL 號與 manifest；只需要問 owner：觸發裝在哪誰有權限、算力與 license 配額、壞了通知誰。")
+        "先補：最小 check 用圖 3 的 run_sanity.sh、先定時跑再每個 CL 跑、結果寫到看得到的地方附 CL 號與 manifest；只需要問 owner：觸發裝在哪誰有權限、算力與 license 配額、壞了通知誰。")
 
 
 def p_review():
@@ -223,7 +223,7 @@ def p6():
         ["一包一件事", "說明看得懂改了什麼、為什麼"],
         ["說明是 update、fix、sync", "一包混 RTL、tb、script", "一包是某人一整段期間的工作"],
         [("CL 說明模板", "改了什麼／為什麼／怎麼驗"),
-         ("pre-submit 清單", "跑過 smoke、filelist 更新、一包一件事"),
+         ("pre-submit 清單", "跑過 sanity check、filelist 更新、一包一件事"),
          ("拆包示範", "拿一包進行中的工作，用 shelved CL 拆成幾包")],
         ["團隊願不願意用模板", "進行中的大包怎麼拆，當事人決定"],
         [("submit 的歷史改不了，能補的是下一包的寫法：模板、清單、一個拆開的示範。", True),
@@ -235,7 +235,7 @@ def p6():
 
 # ── 圖 7：分工與 patch 怎麼交 ────────────────────────────────────────
 TIERS = [
-    ("自己補，直接交 patch", GOAL, "solid", ["PROJECT_MAP 初稿、目錄負責人表初稿", "setup.sh、run_smoke.sh", "make_manifest.sh、known-good 點", "最小 check 與排程、狀態表產生", "CL 說明模板、pre-submit 清單", "review 流程提案、resolve 清單"]),
+    ("自己補，直接交 patch", GOAL, "solid", ["PROJECT_MAP 初稿、目錄負責人表初稿", "setup.sh、run_sanity.sh", "make_manifest.sh、known-good 點", "最小 check 與排程、狀態表產生", "CL 說明模板、pre-submit 清單", "review 流程提案、resolve 清單"]),
     ("補了，但要 owner 決定", GOAL, "dash", ["產物移出版控、flow 收成一份", "目錄標為棄用", "觸發裝不裝、review 擋不擋 submit", "壞了通知誰", "拆包的示範採不採用", "IP 的本地修改要不要回報 vendor"]),
     ("只有 owner 知道，要問", WARN, "dash", ["缺的檔在誰那裡", "猜的用途對不對、每個目錄誰負責", "交付物給誰、含什麼", "進行中的大包怎麼拆", "flow 的正本由誰維護"]),
 ]
@@ -271,7 +271,7 @@ def p7():
         ("多數缺口靠通用常識就補得出第一版；owner 的工作從回答問題變成採用或修正 patch。", True),
         ("三類事只有 owner 知道；問的時候附上你已經查到的部分。", False),
     ])
-    aria = ("三欄分工：自己補直接交 patch（PROJECT_MAP 與目錄負責人表初稿、setup.sh 與 run_smoke.sh、make_manifest.sh 與 known-good 點、最小 check 與排程與狀態表產生、CL 說明模板與 pre-submit 清單、review 流程提案與 resolve 清單）；"
+    aria = ("三欄分工：自己補直接交 patch（PROJECT_MAP 與目錄負責人表初稿、setup.sh 與 run_sanity.sh、make_manifest.sh 與 known-good 點、最小 check 與排程與狀態表產生、CL 說明模板與 pre-submit 清單、review 流程提案與 resolve 清單）；"
             "補了但要 owner 決定（產物移出版控與 flow 收成一份、目錄標為棄用、觸發裝不裝與 review 擋不擋 submit、壞了通知誰、拆包示範採不採用、IP 本地修改要不要回報 vendor）；"
             "只有 owner 知道要問（缺的檔在誰那裡、猜的用途對不對與每個目錄誰負責、交付物給誰含什麼、進行中的大包怎麼拆、flow 的正本由誰維護）。"
             "下方是 patch 怎麼交的四步：每個 patch 一個 shelved CL、說明寫四件事、owner 採用等於 submit 不採用回一句為什麼、結果記進 PROJECT_MAP。"
@@ -280,16 +280,16 @@ def p7():
 
 
 PAGES = [
-    ("流程：六個檢查各驗一個原則，不過就先補一版給 owner 採用", p1()),
-    ("Self-documenting：只讀 repo 說不出目錄用途，就先寫一版地圖", p2()),
-    ("SSOT：乾淨的 workspace 跑不起來，缺的先補成 script 進 depot", p3()),
-    ("SSOT：產物、flow、IP 多出來的那份，先收攏回一份來源", p3b()),
-    ("Traceability：交付物說不出來源，就補一份 manifest 跟著它走", p4()),
-    ("CI：submit 後沒有機器檢查，就先把 smoke check 排上去跑", p5()),
+    ("流程：六個檢查各驗一個原則，不過就做 patch，由專案 owner 決定收不收", p1()),
+    ("Self-documenting：光看 depot 說不出每個目錄做什麼，就先補一份目錄說明", p2()),
+    ("SSOT（環境）：乾淨的 workspace 跑不起來，缺的先補成 script 進 depot", p3()),
+    ("SSOT（複本）：產物、複製的 flow、解壓的 IP 各只留一份來源，其餘改成產生", p3b()),
+    ("Traceability：結果說不出哪個 CL 跑的，就附一份 manifest 記來源", p4()),
+    ("CI：submit 後沒有機器檢查，就先掛一個 sanity check 跟著 submit 跑", p5()),
     ("Code review：沒人看過就 submit，先補一條 shelve 給人看的流程", p_review()),
-    ("Small batches：歷史改不了，補的是說明模板與拆包的示範", p6()),
-    ("分工：自己能補的直接交 patch，只有三類事才問 owner", p7()),
+    ("Small batches：過去的大 CL 改不了，先給 CL 說明模板和拆小 CL 的示範", p6()),
+    ("分工：agent 能補的直接送 patch，只有 owner 才知道的事才開口問", p7()),
 ]
 
 if __name__ == "__main__":
-    build(NAME, "第一次進 workspace：照六個原則檢查，不過就先補一版", KICKER, PAGES)
+    build(NAME, "進到陌生的 workspace：人或 agent 照六個原則檢查，不過就先做 patch", KICKER, PAGES)

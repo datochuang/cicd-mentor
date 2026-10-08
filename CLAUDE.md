@@ -45,6 +45,7 @@
 - 顏色分工固定：WARN＝現狀的問題與缺口、GOAL＝CI/CD 與目標狀態、AGENT＝AI agent、PM＝人類 PM
 - 不載入外部字型或 CDN，HTML 要能在沒有外網的內網直接打開
 - 每次產生後逐頁看 PNG：超框、疊字、被切掉的字、對不齊
+- 標題做完要盲讀驗收：派乾淨 context 的 subagent，只給它文件標題與每頁標題（不給圖和內文），扮演「每天用 Perforce、不熟 CI/CD、沒參與討論」的讀者，問它光從標題看不看得出每頁的目的；報告存 `docs/reviews/`，照報告改。常見的病：主詞缺席、討論裡才有的簡稱、指涉別頁或別份文件、用 repo／smoke 這種公司不用的詞（公司說 depot、sanity check）
 - 內容須與 `direction.md` 一致；尚未決定的事項要標明「待決定」
 
 # 維護規則
