@@ -25,9 +25,10 @@
 | T9 | 10-08 | 圖形文件第 6 頁「對的掌舵人」四個條件 | 我歸納的，確認是否符合你心中的人選 | 同上 |
 | T10 | 10-08 | 圖形文件要不要做盲讀驗收 | 派沒看過討論的 subagent 扮成讀者只讀 PDF，回報看不懂的地方 | |
 | T11 | 10-08 | 舊文字版說明文件的 Artifact 連結要不要刪 | 檔案已移到 docs/archive/；連結 https://claude.ai/artifact/GqNg8P9QN569RFvVhb1Yme 仍在 | |
-| T17 | 10-09 | 圖形文件《第一次進 workspace：照五個原則檢查，不過就先補一版》初稿等你修正 | 七頁全部是我創作的。特別要看：五個檢查的順序、每頁「先補什麼」的 patch 名單、第 7 頁三類分工與「owner 採用才進 depot」這個預設 | docs/slides/check-then-patch-before-asking-owner.pdf |
-| T18 | 10-09 | **CI 原則的意思補了一句「共用的 main 隨時可用」**（D4 微調） | 加「沒有 branch」那頁時，它的危害要掛到 CI 上，原本的定義只講「改動進來時被檢查」，沒講檢查的目的是讓 main 隨時可用。請確認這個補法，不然就要考慮第六個原則 | direction.md 定錨點 |
-| T14 | 10-08 | 圖形文件《把版控當備份的團隊》初稿等你修正 | 十頁全部是我創作的，情境與細節（submit 的時機、五個散落的地方、下游的問題、第 8 頁「沒有 branch」的危害清單等）都要你對照實際狀況修正 | docs/slides/repo-as-backup-keeps-files-not-answers.pdf |
+| T17 | 10-09 | 圖形文件《第一次進 workspace：照五個原則檢查，不過就先補一版》初稿等你修正 | 九頁（10-09 晚上加了 SSOT 第二頁：產物、flow、IP；Code review 一頁；分工頁加了對應項目）。特別要看：六個檢查的順序、每頁「先補什麼」的 patch 名單、第 9 頁三類分工與「owner 採用才進 depot」這個預設 | docs/slides/check-then-patch-before-asking-owner.pdf |
+| T19 | 10-09 | **第六個原則 Code review**（併入前有人看過並留紀錄）等你確認 | 追加的「沒有 review」「resolve 整份收下」兩頁掛不進原來五個：CI 是機器把關，review 是人把關，對策不同。已寫進圖形文件收斂頁、direction.md、檢查文件第 7 頁；不採用的話這三處要改 | direction.md 定錨點 |
+| T18 | 10-09 | **CI 原則的意思補了「共用的 main 隨時可用」「結果由機器寫下」**（D4 微調） | 加「沒有 branch」那頁時，它的危害要掛到 CI 上，原本的定義只講「改動進來時被檢查」，沒講檢查的目的是讓 main 隨時可用。請確認這個補法，不然就要考慮第六個原則 | direction.md 定錨點 |
+| T14 | 10-08 | 圖形文件《把版控當備份的團隊》初稿等你修正 | 十八頁全部是我創作的（10-09 晚上追加圖 9–16：沒有 review、resolve 整份收下、產物進 depot、IP 解壓覆蓋、flow 複製、兩台機器結果不同、Excel 狀態表、退不回去）。情境與細節都要你對照實際狀況修正 | docs/slides/repo-as-backup-keeps-files-not-answers.pdf |
 
 ## 其他
 

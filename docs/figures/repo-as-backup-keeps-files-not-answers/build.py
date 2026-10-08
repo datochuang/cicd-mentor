@@ -6,7 +6,7 @@
 # 讀完要能：在圖裡認出自己團隊的做法，說出哪些問題是從這些做法長出來的。
 # 主旨：把版控當備份的團隊，depot 裡有檔案，但結果的來源、跑法、環境與理由都在人身上；
 #       問題在整合、交接與人員異動時浮現。
-# 脈絡：1–3 具體怎麼運作 → 4–8 造成什麼問題 → 9 總結 → 10 收斂成五個原則（之後對策的定錨點）。
+# 脈絡：1–3 具體怎麼運作 → 4–16 造成什麼問題（9–16 為 2026-10-09 追加）→ 17 總結 → 18 收斂成六個原則（之後對策的定錨點；第六個 Code review 待使用者確認）。
 # 所有路徑、CL 號碼、label 名稱都是示意，不對應任何實際專案。
 import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
@@ -404,72 +404,313 @@ def p8():
     return svg(s, 880, 480, aria)
 
 
-# ── 圖 9：總結 ──────────────────────────────────────────────────────
+# ── 圖 9–16：八個追加的問題（2026-10-09 加）。共用版型：左邊圖、右邊危害 ─────────
+def problem_page(draw, harms, lines, aria, harms_y=70):
+    s = []
+    draw(s)
+    T(s, 570, harms_y - 10, "危害", cls="tx-lbl", fill=WARN)
+    for j, t in enumerate(harms):
+        check(s, 582, harms_y + 14 + 26 * j, False, t, cls="tx-s")
+    bottom(s, 350, lines)
+    return svg(s, 880, 480, aria)
+
+
+def box_p(s, x, y, w, h, title, sub=None, col=INK2, kind="plain"):
+    if kind == "solid":
+        rect(s, x, y, w, h, col=col, fill=col, op=".10", sw=1.6)
+    elif kind == "dash":
+        rect(s, x, y, w, h, col=col, fill=col, op=".05", sw=1.4, dash="6 4")
+    else:
+        rect(s, x, y, w, h, col="var(--rule-2)", fill="var(--surface-2)", sw=1.2)
+    T(s, x + 12, y + 21, title, cls="tx", fill=col, w=700)
+    if sub:
+        T(s, x + 12, y + 39, sub, fill=INK2)
+
+
+# 圖 9：沒有 review
+def n_review():
+    def draw(s):
+        T(s, 20, 24, "今天：submit 就是完成", cls="tx-lbl", fill=INK2)
+        for i, t in enumerate(["改", "submit", "完成"]):
+            x = 20 + i * 120
+            box_p(s, x, 40, 100, 40, t)
+            if i < 2:
+                arrow(s, x + 103, 60, x + 117, 60, col=INK2, ar="ar", sw=1.4)
+        s.append('<text x="40" y="170" style="font-family:var(--sans);font-size:64px;font-weight:700;fill:%s">0</text>' % WARN)
+        T(s, 90, 150, "個人在 submit 之前", cls="tx", fill=INK2)
+        T(s, 90, 170, "看過這一包", cls="tx", fill=INK2)
+        rect(s, 20, 200, 520, 96, col=WARN, fill=WARN, op=".05", sw=1.3, dash="6 4")
+        T(s, 34, 224, "review 只發生在里程碑的 design review 會議", cls="tx", fill=WARN, w=700)
+        T(s, 34, 246, "看的是投影片與架構，隔很久一次", fill=INK2)
+        T(s, 34, 266, "會議上看不到任何一個 CL，也沒有人逐包看改了什麼", fill=INK2)
+        T(s, 20, 322, "示意：A 改了 bus 的 ready 行為，B 的 block 到整合才發現", fill=GRAY)
+    return problem_page(draw,
+        ["interface 改了，用它的人整合時才知道", "錯誤要等機器或下游來抓", "為什麼這樣改，只有作者知道", "新人的寫法沒人修正，變成習慣"],
+        [("submit 等於完成，所以沒有任何一包在併入前被第二個人看過。", True),
+         ("design review 的會議看的是架構與投影片，看不到任何一個 CL。", False)],
+        "左邊：改、submit、完成三步，底下一個大大的 0，表示 submit 之前看過這一包的人數；review 只發生在里程碑的 design review 會議，看的是投影片與架構，看不到任何 CL。"
+        "右邊危害：interface 改了用它的人整合時才知道、錯誤要等機器或下游來抓、為什麼這樣改只有作者知道、新人的寫法沒人修正。")
+
+
+# 圖 10：兩人改同一個檔
+def n_conflict():
+    def draw(s):
+        box_p(s, 190, 20, 160, 40, "top.v", "兩個人同時 checkout")
+        box_p(s, 20, 90, 230, 44, "A：改第 10–20 行", "ready 的時序", col=INK2)
+        box_p(s, 300, 90, 230, 44, "B：改第 50–60 行", "新的 debug port", col=INK2)
+        arrow(s, 230, 64, 150, 86, col=INK2, ar="ar", sw=1.2)
+        arrow(s, 310, 64, 390, 86, col=INK2, ar="ar", sw=1.2)
+        pill(s, 300, 146, "B 先 submit", GRAY)
+        box_p(s, 20, 146, 230, 44, "A：sync，要 resolve", "兩邊都改了同一個檔")
+        arrow(s, 135, 194, 135, 208, col=WARN, ar="ar-w", sw=1.4)
+        box_p(s, 20, 212, 230, 44, "accept yours：整份用自己的", "沒看兩邊差在哪", col=WARN, kind="dash")
+        arrow(s, 135, 260, 135, 274, col=WARN, ar="ar-w", sw=1.4)
+        rect(s, 20, 278, 510, 44, col=WARN, fill=WARN, op=".12", sw=1.6)
+        T(s, 34, 299, "top.v 裡 B 的第 50–60 行不見了", cls="tx", fill=WARN, w=700)
+        T(s, 34, 316, "沒有錯誤訊息，submit 也成功", fill=INK2)
+    return problem_page(draw,
+        ["改動消失，沒有任何錯誤訊息", "要等下游壞了才發現，然後互相指責", "為了躲開，改成鎖檔或各改各的複本", "複本越多，離只有一份真相越遠"],
+        [("resolve 需要看懂兩邊的改動；沒人看，就整份收下自己的。", True),
+         ("版控給的是合併的機制，習慣上當成覆蓋。", False)],
+        "兩人同時 checkout top.v：A 改第 10 到 20 行，B 改第 50 到 60 行。B 先 submit；A sync 後要 resolve，選了 accept yours 整份用自己的，"
+        "結果 top.v 裡 B 的改動不見了，沒有錯誤訊息，submit 也成功。右邊危害：改動消失沒有訊息、要等下游壞了才發現、為了躲開改成鎖檔或各改各的複本、複本越多離只有一份真相越遠。")
+
+
+# 圖 11：產物和來源一起進 depot
+def n_derived():
+    def draw(s):
+        rect(s, 20, 30, 520, 150, col="var(--rule-2)", fill="var(--surface)", sw=1.2, dash="4 3")
+        T(s, 32, 50, "depot", cls="tx-lbl", fill=GRAY)
+        box_p(s, 50, 70, 180, 60, "rtl/　來源", "RTL 原始碼", col=GOAL, kind="solid")
+        box_p(s, 330, 70, 180, 60, "netlist/　產物", "synthesis 跑出來的", col=WARN, kind="dash")
+        arrow(s, 234, 100, 326, 100, col=INK2, ar="ar", sw=1.4)
+        T(s, 280, 90, "synthesis", anchor="middle", fill=GRAY)
+        T(s, 280, 160, "synthesis 在某人的 workspace 跑，產物再 submit 進來", anchor="middle", fill=GRAY)
+        arrow(s, 140, 214, 140, 134, col=INK2, ar="ar", sw=1.4)
+        T(s, 140, 232, "RTL 之後又改了", anchor="middle", fill=INK2)
+        arrow(s, 420, 214, 420, 134, col=WARN, ar="ar-w", sw=1.6)
+        T(s, 420, 232, "ECO 直接改 netlist", anchor="middle", fill=WARN)
+        pill(s, 280, 256, "兩份對不上，哪一份算數？", WARN, anchor="middle")
+        T(s, 20, 306, "下游拿的是 netlist；再跑一次 synthesis，ECO 就被蓋掉", fill=GRAY)
+    return problem_page(draw,
+        ["兩份真相，改哪一份才算數沒人說得清", "ECO 改在產物上，重新產生一次就消失", "產物對應哪一版來源，沒有紀錄", "depot 越來越大，sync 越來越久"],
+        [("產物該由來源產生；進了 depot，它就成了第二份真相。", True),
+         ("改產物比改來源快，所以 ECO 都改在產物上；下一次重新產生，就把它蓋掉。", False)],
+        "depot 裡同時有 rtl 來源和 netlist 產物，netlist 由某人在 workspace 跑 synthesis 產生。之後 RTL 又改了，ECO 卻直接改在 netlist 上，兩份對不上。"
+        "右邊危害：兩份真相改哪一份才算數沒人說得清、ECO 改在產物上重新產生一次就消失、產物對應哪一版來源沒有紀錄、depot 越來越大。")
+
+
+# 圖 12：第三方 IP 解壓覆蓋
+def n_ip():
+    def draw(s):
+        box_p(s, 20, 24, 120, 40, "IP vendor")
+        rows = [("ip_v1.2.tgz", "解壓到 ip/，覆蓋", None),
+                ("本地改了一個 lint 的 patch", "改在 ip/ 裡面", GOAL),
+                ("ip_v1.3.tgz", "解壓到 ip/，覆蓋", None)]
+        for i, (t, sub, col) in enumerate(rows):
+            y = 84 + i * 62
+            if col:
+                box_p(s, 180, y, 230, 44, t, sub, col=col, kind="solid")
+            else:
+                box_p(s, 180, y, 230, 44, t, sub)
+                arrow(s, 80, 68, 80, y + 22, col=INK2, ar=None, sw=1) if False else None
+            if i < 2:
+                arrow(s, 295, y + 48, 295, y + 58, col=INK2, ar="ar", sw=1.2)
+        arrow(s, 144, 44, 176, 100, col=INK2, ar="ar", sw=1.2)
+        arrow(s, 144, 44, 176, 228, col=INK2, ar="ar", sw=1.2)
+        rect(s, 430, 84, 110, 168, col=WARN, fill=WARN, op=".05", sw=1.3, dash="6 4")
+        T(s, 442, 106, "ip/ 現在是", cls="tx", fill=WARN, w=700)
+        T(s, 442, 126, "v1.3？", fill=INK2)
+        T(s, 442, 144, "加上 patch？", fill=INK2)
+        T(s, 442, 162, "patch 被蓋掉了？", fill=INK2)
+        T(s, 442, 190, "depot 裡只看到", fill=GRAY)
+        T(s, 442, 206, "一大包檔案換掉", fill=GRAY)
+        T(s, 442, 222, "說明：update ip", fill=GRAY)
+        T(s, 20, 296, "示意：lint patch 在 v1.3 解壓時被蓋掉，重新 lint 才發現", fill=GRAY)
+    return problem_page(draw,
+        ["本地 patch 被下一次 drop 蓋掉", "晶片裡是哪一版 IP，只能問解壓的人", "vendor 的 errata 對不上手上的版本", "兩個專案用同一個 IP 的不同版，沒人知道"],
+        [("IP 以 tarball 進來、解壓覆蓋，版控裡看不出 drop 與 drop 之間的差異。", True),
+         ("每一次 drop 都是一次沒有紀錄的大包 submit。", False)],
+        "IP vendor 送來 ip_v1.2.tgz，解壓到 ip 目錄覆蓋；本地改了一個 lint 的 patch 在 ip 裡面；之後 ip_v1.3.tgz 又解壓覆蓋。ip 目錄現在是 v1.3 還是加上 patch，patch 被蓋掉了嗎，"
+        "depot 裡只看到一大包檔案換掉、說明是 update ip。右邊危害：本地 patch 被下一次 drop 蓋掉、晶片裡是哪一版 IP 只能問解壓的人、vendor 的 errata 對不上、兩個專案用不同版沒人知道。")
+
+
+# 圖 13：flow script 每個專案複製一份
+def n_flow():
+    def draw(s):
+        box_p(s, 180, 20, 200, 44, "flow 的正本？", "沒有人說得出是哪一份", col=WARN, kind="dash")
+        projs = [("chipA/scripts/", "改了幾處"), ("chipB/scripts/", "改了更多，修了一個 bug"), ("ipX/scripts/", "改最多，還加了功能")]
+        for i, (t, sub) in enumerate(projs):
+            x = 20 + i * 178
+            arrow(s, 280, 68, x + 80, 100, col=GRAY, ar="ar-gray", sw=1.2, dash="4 3")
+            box_p(s, x, 104, 160, 60, t, sub)
+        pill(s, 198, 176, "修了一個 bug", GOAL)
+        arrow(s, 190, 186, 110, 186, col=WARN, ar="ar-w", sw=1.4, dash="4 3")
+        arrow(s, 318, 186, 400, 186, col=WARN, ar="ar-w", sw=1.4, dash="4 3")
+        T(s, 100, 210, "✗ 傳不過去", fill=WARN)
+        T(s, 400, 210, "✗ 傳不過去", fill=WARN)
+        T(s, 20, 250, "複製的時候很快，複製之後各自演化", cls="tx", fill=INK2)
+        T(s, 20, 272, "同一個 bug 在 chipA 與 ipX 還在；新專案不知道該從哪一份複製", fill=GRAY)
+    return problem_page(draw,
+        ["同一個 bug 在每個專案各修一次", "新專案不知道該從哪一份複製", "各專案 flow 行為不同，結果不能比", "沒有人知道哪一份是正本"],
+        [("複製是最快的共用方式，複製之後就各自演化。", True),
+         ("修好的東西留在修的那個專案裡。", False)],
+        "flow 的正本沒有人說得出是哪一份；chipA、chipB、ipX 各複製一份 scripts，各改了不同的地方。chipB 修了一個 bug，傳不到 chipA 與 ipX。"
+        "右邊危害：同一個 bug 各修一次、新專案不知道從哪一份複製、各專案 flow 行為不同結果不能比、沒有人知道哪一份是正本。")
+
+
+# 圖 14：同一份 RTL，兩台機器結果不同
+def n_env():
+    def draw(s):
+        box_p(s, 170, 20, 220, 40, "同一個 CL 48977 的 RTL", col=INK2)
+        arrow(s, 230, 64, 140, 104, col=INK2, ar="ar", sw=1.2)
+        arrow(s, 330, 64, 420, 104, col=INK2, ar="ar", sw=1.2)
+        for x, title, items, res, col in [(20, "機器 A：yuting 的桌機", ["VCS 2023.03", "+define+FAST_SIM", "lib v1.2（本機的）"], "PASS", GOAL),
+                                           (300, "機器 B：CAD farm", ["VCS 2024.09", "沒有 define", "lib v1.3"], "FAIL", WARN)]:
+            rect(s, x, 108, 240, 124, col="var(--rule-2)", fill="var(--surface-2)", sw=1.2)
+            T(s, x + 12, 130, title, cls="tx", fill=INK2, w=700)
+            for j, it in enumerate(items):
+                T(s, x + 12, 154 + 20 * j, "· " + it, fill=INK2)
+            pill(s, x + 240 - 12, 118, res, col, anchor="end")
+        T(s, 20, 262, "差在哪？沒有任何紀錄：.cshrc、alias、環境變數、license feature", cls="tx", fill=WARN)
+        T(s, 20, 286, "兩個人各自相信自己的環境，報告上只寫 PASS", fill=GRAY)
+    return problem_page(draw,
+        ["PASS 不代表對，FAIL 不代表錯", "報告上的 PASS 不知道是哪個環境跑的", "搬到 farm 或新機器就壞", "找差異只能逐項比 .cshrc"],
+        [("跑的環境沒有跟著 RTL 一起進版控，同一份來源在不同機器上就是不同的設計。", True),
+         ("結果能不能信，取決於跑的人記不記得自己的設定。", False)],
+        "同一個 CL 的 RTL，在機器 A（VCS 2023.03、有 FAST_SIM define、本機的 lib v1.2）跑出 PASS，在機器 B（VCS 2024.09、沒有 define、lib v1.3）跑出 FAIL。差在哪沒有任何紀錄。"
+        "右邊危害：PASS 不代表對 FAIL 不代表錯、報告上的 PASS 不知道是哪個環境、搬到 farm 就壞、找差異只能逐項比 .cshrc。")
+
+
+# 圖 15：regression 狀態靠人填 Excel
+def n_excel():
+    def draw(s):
+        steps = [("regression 跑完", "log 在 run 目錄", None), ("有人看 log", "挑幾個看", None), ("填進 Excel", "每週一次", WARN), ("PM 看 Excel", "看到的是上週的", None)]
+        for i, (t, sub, col) in enumerate(steps):
+            x = 20 + i * 132
+            if col:
+                box_p(s, x, 30, 120, 50, t, sub, col=col, kind="dash")
+            else:
+                box_p(s, x, 30, 120, 50, t, sub)
+            if i < 3:
+                arrow(s, x + 123, 55, x + 129, 55, col=INK2, ar="ar", sw=1.2)
+        rect(s, 20, 110, 520, 130, col="var(--rule-2)", fill="var(--surface)", sw=1.2)
+        T(s, 32, 130, "status.xlsx（示意）", cls="tx-lbl", fill=GRAY)
+        cols = [40, 160, 260, 380]
+        hdr = ["test", "result", "version", ""]
+        rows = [["t_dma_basic", "PASS", "", "← log 其實還沒跑完"], ["t_dma_burst", "PASS", "上週五的", "← 版本靠回想"], ["t_irq_all", "？", "", "← 沒人填"]]
+        for j, h in enumerate(hdr):
+            T(s, cols[j], 152, h, fill=GRAY)
+        line(s, 32, 158, 528, 158)
+        for r, row in enumerate(rows):
+            for j, c in enumerate(row):
+                T(s, cols[j], 180 + 22 * r, c, fill=WARN if j == 3 else INK2)
+        T(s, 20, 268, "表是機器結果的手抄本，抄的那一刻就開始脫節", cls="tx", fill=INK2)
+    return problem_page(draw,
+        ["表是上週的，結果是今天的", "PASS 的定義每個人不同", "版本欄靠回想，對不回 CL", "沒人敢信，最後還是去問跑的人"],
+        [("結果由機器產生，狀態卻由人抄寫；抄的時候就跟實際脫節。", True),
+         ("狀態表回答不了「這是哪一版、哪個環境跑的」。", False)],
+        "四步：regression 跑完 log 在 run 目錄、有人看 log、每週填進 Excel、PM 看 Excel 看到的是上週的。示意的 status.xlsx 裡 result 寫 PASS 但 log 其實還沒跑完、version 欄靠回想或空白。"
+        "右邊危害：表是上週的、PASS 的定義每個人不同、版本欄對不回 CL、沒人敢信最後還是去問跑的人。")
+
+
+# 圖 16：想退回上次能跑的狀態
+def n_rollback():
+    def draw(s):
+        arrow(s, 20, 50, 540, 50, col="var(--rule-2)", ar="ar-gray", sw=1.6)
+        box_p(s, 20, 26, 170, 48, "上個里程碑：能跑", "label RTL_FREEZE_v2", col=GOAL, kind="solid")
+        for i in range(6):
+            x = 220 + i * 40
+            rect(s, x, 40, 30, 20, col="var(--rule-2)", fill="var(--surface-2)", sw=1)
+        box_p(s, 470, 26, 70, 48, "現在", "壞了", col=WARN, kind="solid")
+        T(s, 20, 104, "想退回去", cls="tx-lbl", fill=INK2)
+        items = [("sync 到 label", "檔案回去了", True), ("工具版本", "已經換了，舊版 license 沒了", False),
+                 ("/proj 的 script", "已經被改過", False), ("ip/", "被下一個 drop 蓋掉", False), ("環境", ".cshrc 改過，沒人記得舊的", False)]
+        for j, (t, sub, ok) in enumerate(items):
+            y = 128 + 28 * j
+            check(s, 32, y, ok, t, cls="tx")
+            T(s, 190, y, sub, fill=INK2)
+        rect(s, 360, 120, 180, 60, col=WARN, fill=WARN, op=".12", sw=1.6)
+        T(s, 372, 144, "還是壞的", cls="tx", fill=WARN, w=700)
+        T(s, 372, 164, "退不回去，只能往前修", fill=INK2)
+        T(s, 20, 296, "所以 tape-out 前的 freeze 靠複製整個目錄：因為知道回不去", fill=GRAY)
+    return problem_page(draw,
+        ["label 只能回檔案，回不了環境與產物", "退不回去，只能往前硬修", "freeze 靠複製目錄，因為回不去", "風險只能累積，不能歸零"],
+        [("回到一個能跑的狀態需要檔案、工具、環境、IP 一起回去；版控只記了檔案。", True),
+         ("所以沒有人退回去，大家只往前修。", False)],
+        "時間軸：上個里程碑能跑（label RTL_FREEZE_v2），中間六包 submit，現在壞了。想退回去：sync 到 label 檔案回去了；工具版本已經換了；/proj 的 script 被改過；ip 被下一個 drop 蓋掉；環境 .cshrc 改過沒人記得舊的。結果還是壞的，退不回去只能往前修。"
+        "右邊危害：label 只能回檔案、退不回去只能往前硬修、freeze 靠複製目錄、風險只能累積不能歸零。")
+
+
+# ── 圖 17：總結 ──────────────────────────────────────────────────────
 DONE = ["檔案的最新版在哪", "誰在什麼時候改過哪個檔案", "舊版救得回來", "里程碑那天的檔案清單（label）"]
 NOT = [("這個結果是哪一版做的？", "跑的人"), ("從乾淨的機器能重現嗎？", "沒人試過"), ("哪一次改動弄壞了它？", "大家一起猜"),
        ("下游收到的跟上一版差在哪？", "上游工程師"), ("跑的步驟與環境在哪裡？", "CAD 加跑的人"), ("這個檔案還有人在用嗎？", "最資深的人"),
-       ("這個目錄裝什麼、靠哪些東西？", "帶你的那個人"), ("main 現在能用嗎？", "sync 了才知道")]
+       ("這個目錄裝什麼、靠哪些東西？", "帶你的那個人"), ("main 現在能用嗎？", "sync 了才知道"),
+       ("這一包併入前誰看過？", "沒有人"), ("晶片裡是哪一版 IP？", "解壓的那個人")]
 
 
-def p9():
+def p_summary():
     s = []
     T(s, 20, 40, "depot 做到的", cls="tx-lbl", fill=GOAL)
     for j, t in enumerate(DONE):
-        check(s, 32, 72 + 27 * j, True, t)
+        check(s, 32, 72 + 25 * j, True, t)
     T(s, 20, 206, "備份要做的事，它都做到了", fill=GRAY)
     T(s, 440, 40, "depot 答不出來的", cls="tx-lbl", fill=WARN)
     T(s, 760, 40, "今天誰在回答", cls="tx-lbl", fill=GRAY)
     for j, (q, who) in enumerate(NOT):
-        y = 72 + 27 * j
+        y = 72 + 25 * j
         check(s, 452, y, False, q)
         pill(s, 760, y - 14, who, GRAY, h=20)
-    bottom(s, 300, [
+    bottom(s, 322, [
         ("備份的功能它確實做到了；右邊每一題，今天都由某個人的記憶回答。", True),
         ("AI 的產出要跨團隊被採用，先得讓紀錄能回答右邊這些題。", False),
     ])
     aria = ("左欄 depot 做到的，四個打勾：檔案的最新版在哪、誰在什麼時候改過哪個檔案、舊版救得回來、里程碑那天的檔案清單。"
             "右欄 depot 答不出來的，六個打叉，各附今天誰在回答：這個結果是哪一版做的（跑的人）、從乾淨的機器能重現嗎（沒人試過）、哪一次改動弄壞了它（大家一起猜）、"
-            "下游收到的跟上一版差在哪（上游工程師）、跑的步驟與環境在哪裡（CAD 加跑的人）、這個檔案還有人在用嗎（最資深的人）、這個目錄裝什麼靠哪些東西（帶你的那個人）、main 現在能用嗎（sync 了才知道）。")
+            "下游收到的跟上一版差在哪（上游工程師）、跑的步驟與環境在哪裡（CAD 加跑的人）、這個檔案還有人在用嗎（最資深的人）、這個目錄裝什麼靠哪些東西（帶你的那個人）、main 現在能用嗎（sync 了才知道）、這一包併入前誰看過（沒有人）、晶片裡是哪一版 IP（解壓的那個人）。")
     return svg(s, 880, 480, aria)
 
-# ── 圖 10：收斂成五個原則 ─────────────────────────────────────────────
+# ── 圖 18：收斂成六個原則 ─────────────────────────────────────────────
 # 原則一律用英文專有名詞（2026-10-09 使用者定），中文只是註解。
 ANCHORS = [
     ("Small batches", "小步常進", "改動小而頻繁地進到共用的地方，每一包說得出改了哪一件事",
-     "隨便挑一包 submit，說得出它改了哪一件事", ["圖 1", "圖 5", "圖 8"]),
-    ("Single Source of Truth", "SSOT　單一事實來源", "跑得起來需要的一切都在版控裡，而且只有一份",
-     "換一台乾淨的機器，只靠版控的內容做出同一個結果", ["圖 2", "圖 3", "圖 6"]),
+     "隨便挑一包 submit，說得出它改了哪一件事", [1, 5, 8, 10]),
+    ("Single Source of Truth", "SSOT　單一事實來源", "跑得起來需要的一切都在版控裡，而且只有一份；產物由來源產生",
+     "換一台乾淨的機器，只靠版控的內容做出同一個結果", [2, 3, 6, 11, 12, 13, 14]),
     ("Traceability", "可追溯", "每個結果與交付物都連得回產生它的版本、工具、環境與步驟",
-     "隨便拿一份結果，說得出它的版本、工具、環境與步驟", ["圖 3", "圖 4", "圖 6"]),
-    ("Continuous Integration", "CI　變更即驗證", "改動進來的當下就被機器檢查，共用的 main 隨時可用",
-     "改壞的那一包進來時就被標出來，用不著等到整合", ["圖 5", "圖 8"]),
+     "隨便拿一份結果，說得出它的版本、工具、環境與步驟", [3, 4, 6, 14, 15, 16]),
+    ("Continuous Integration", "CI　變更即驗證", "改動進來的當下就被機器檢查，結果由機器寫下；共用的 main 隨時可用",
+     "改壞的那一包進來時就被標出來，用不著等到整合", [5, 8, 15]),
     ("Self-documenting", "自我描述", "目錄的用途、相依、怎麼跑，寫在 repo 裡",
-     "第一次來的人或 AI agent 只讀 repo，就說得出每個目錄的用途與相依", ["圖 6", "圖 7"]),
+     "第一次來的人只讀 repo，就說得出每個目錄的用途與相依", [6, 7, 13]),
+    ("Code review", "併入前有人看過", "每一包在併入 main 之前，有第二個人看過並留下紀錄",
+     "隨便挑一包併入 main 的 submit，說得出誰看過、看了什麼", [8, 9, 10]),
 ]
 
 
-def p10():
+def p_principles():
     s = []
     T(s, 20, 34, "原則", cls="tx-lbl", fill=GOAL)
-    T(s, 260, 34, "意思，以及做得到／做不到的檢驗", cls="tx-lbl", fill=INK2)
-    T(s, 712, 34, "沒做到時的問題", cls="tx-lbl", fill=WARN)
+    T(s, 250, 34, "意思，以及做得到／做不到的檢驗", cls="tx-lbl", fill=INK2)
+    T(s, 640, 34, "沒做到時的問題（圖號）", cls="tx-lbl", fill=WARN)
     for i, (en, zh, meaning, test, figs) in enumerate(ANCHORS):
-        y = 48 + 62 * i
+        y = 46 + 56 * i
         rect(s, 20, y + 8, 3, 40, col=GOAL, fill=GOAL, sw=0)
-        T(s, 34, y + 26, en, cls="tx", fill=GOAL, w=700)
-        T(s, 34, y + 45, zh, fill=GRAY)
-        T(s, 260, y + 24, meaning, fill=INK2)
-        T(s, 260, y + 44, "檢驗：" + test, fill=GRAY)
-        x = 712
-        for f in figs:
-            x += pill(s, x, y + 18, f, WARN, h=20) + 6
-        line(s, 20, y + 58, 860, y + 58)
-    bottom(s, 374, [
-        ("五個原則都是 repo 該有的性質，各有一個做得到或做不到的檢驗。", True),
+        T(s, 34, y + 24, en, cls="tx", fill=GOAL, w=700)
+        T(s, 34, y + 43, zh, fill=GRAY)
+        T(s, 250, y + 22, meaning, fill=INK2)
+        T(s, 250, y + 42, "檢驗：" + test, fill=GRAY)
+        for k, f in enumerate(figs):
+            row, col_ = divmod(k, 4)
+            pill(s, 640 + col_ * 52, y + 8 + 22 * row, "圖 %d" % f, WARN, h=18)
+        line(s, 20, y + 54, 860, y + 54)
+    bottom(s, 394, [
+        ("六個原則都是 repo 該有的性質，各有一個做得到或做不到的檢驗。", True),
         ("之後談對策，每一條只回答一個問題：它讓哪一個檢驗從做不到變成做得到。", False),
     ])
-    aria = ("五列原則，各附意思、檢驗與對應的問題頁：Small batches（圖 1、5、8）；Single Source of Truth, SSOT（圖 2、3、6）；Traceability（圖 3、4、6）；"
-            "Continuous Integration, CI（圖 5、8）；Self-documenting（圖 6、7）。")
+    aria = ("六列原則，各附意思、檢驗與對應的問題頁：Small batches（圖 1、5、8、10）；Single Source of Truth, SSOT（圖 2、3、6、11、12、13、14）；"
+            "Traceability（圖 3、4、6、14、15、16）；Continuous Integration, CI（圖 5、8、15）；Self-documenting（圖 6、7、13）；Code review（圖 8、9、10）。")
     return svg(s, 880, 480, aria)
 
 
@@ -482,8 +723,16 @@ PAGES = [
     ("問題：下游說不出收到了什麼，人走了流程跟著走", p6()),
     ("問題：目錄的用途靠人帶路，AI agent 每個 workspace 都要另寫指引", p7()),
     ("問題：沒有 branch，半成品留在 workspace 或進 main，main 隨時會壞", p8()),
-    ("總結：備份做到了，關於檔案的問題一個都答不出", p9()),
-    ("收斂：八個問題歸到五個原則，之後的對策各自對應其中一個", p10()),
+    ("問題：submit 就算完成，沒有任何一包在併入前被人看過", n_review()),
+    ("問題：兩人改同一個檔，resolve 整份收下，另一人的改動消失", n_conflict()),
+    ("問題：產物和來源一起進 depot，改了哪一份才算數沒人說得清", n_derived()),
+    ("問題：第三方 IP 解壓覆蓋，晶片裡是哪一版沒人說得出", n_ip()),
+    ("問題：flow script 每個專案複製一份改，修好的 bug 傳不出去", n_flow()),
+    ("問題：同一份 RTL 兩台機器跑出不同結果，分不出哪個才對", n_env()),
+    ("問題：regression 狀態靠人填 Excel，表和實際結果對不上", n_excel()),
+    ("問題：想退回上次能跑的狀態，檔案回得去，環境回不去", n_rollback()),
+    ("總結：備份做到了，關於檔案的問題一個都答不出", p_summary()),
+    ("收斂：所有問題歸到六個原則，之後的對策各自對應其中一個", p_principles()),
 ]
 
 if __name__ == "__main__":

@@ -20,10 +20,10 @@ PDF 版：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agen
 
 ### 把版控當備份的團隊：depot 留住檔案，留不住答案
 
-這類團隊每天具體怎麼做事，問題從哪裡長出來，最後收斂成五個原則。十頁。PDF：[docs/slides/repo-as-backup-keeps-files-not-answers.pdf](docs/slides/repo-as-backup-keeps-files-not-answers.pdf)
+這類團隊每天具體怎麼做事，問題從哪裡長出來，最後收斂成六個原則。十八頁。PDF：[docs/slides/repo-as-backup-keeps-files-not-answers.pdf](docs/slides/repo-as-backup-keeps-files-not-answers.pdf)
 
 <details>
-<summary>展開十頁</summary>
+<summary>展開十八頁</summary>
 
 ![日常：改動在個人 workspace 累積，depot 隔很久才收到一大包](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-1.png)
 
@@ -41,32 +41,52 @@ PDF 版：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agen
 
 ![問題：沒有 branch，半成品留在 workspace 或進 main，main 隨時會壞](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-8.png)
 
-![總結：備份做到了，關於檔案的問題一個都答不出](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-9.png)
+![問題：submit 就算完成，沒有任何一包在併入前被人看過](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-9.png)
 
-![收斂：八個問題歸到五個原則，之後的對策各自對應其中一個](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-10.png)
+![問題：兩人改同一個檔，resolve 整份收下，另一人的改動消失](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-10.png)
+
+![問題：產物和來源一起進 depot，改了哪一份才算數沒人說得清](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-11.png)
+
+![問題：第三方 IP 解壓覆蓋，晶片裡是哪一版沒人說得出](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-12.png)
+
+![問題：flow script 每個專案複製一份改，修好的 bug 傳不出去](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-13.png)
+
+![問題：同一份 RTL 兩台機器跑出不同結果，分不出哪個才對](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-14.png)
+
+![問題：regression 狀態靠人填 Excel，表和實際結果對不上](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-15.png)
+
+![問題：想退回上次能跑的狀態，檔案回得去，環境回不去](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-16.png)
+
+![總結：備份做到了，關於檔案的問題一個都答不出](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-17.png)
+
+![收斂：所有問題歸到六個原則，之後的對策各自對應其中一個](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-18.png)
 
 </details>
 
-### 第一次進 workspace：照五個原則檢查，不過就先補一版
+### 第一次進 workspace：照六個原則檢查，不過就先補一版
 
-人或 AI agent 進到一個沒看過的 workspace，具體怎麼檢查它有沒有 CI/CD；每個檢查點不過時自己先補什麼，只有哪些事才問 owner。七頁。PDF：[docs/slides/check-then-patch-before-asking-owner.pdf](docs/slides/check-then-patch-before-asking-owner.pdf)
+人或 AI agent 進到一個沒看過的 workspace，具體怎麼檢查它有沒有 CI/CD；每個檢查點不過時自己先補什麼，只有哪些事才問 owner。九頁。PDF：[docs/slides/check-then-patch-before-asking-owner.pdf](docs/slides/check-then-patch-before-asking-owner.pdf)
 
 <details>
-<summary>展開七頁</summary>
+<summary>展開九頁</summary>
 
-![流程：五個檢查各驗一個原則，不過就先補一版給 owner 採用](docs/slides/img/check-then-patch-before-asking-owner/p-1.png)
+![流程：六個檢查各驗一個原則，不過就先補一版給 owner 採用](docs/slides/img/check-then-patch-before-asking-owner/p-1.png)
 
 ![Self-documenting：只讀 repo 說不出目錄用途，就先寫一版地圖](docs/slides/img/check-then-patch-before-asking-owner/p-2.png)
 
 ![SSOT：乾淨的 workspace 跑不起來，缺的先補成 script 進 depot](docs/slides/img/check-then-patch-before-asking-owner/p-3.png)
 
-![Traceability：交付物說不出來源，就補一份 manifest 跟著它走](docs/slides/img/check-then-patch-before-asking-owner/p-4.png)
+![SSOT：產物、flow、IP 多出來的那份，先收攏回一份來源](docs/slides/img/check-then-patch-before-asking-owner/p-4.png)
 
-![CI：submit 後沒有機器檢查，就先把 smoke check 排上去跑](docs/slides/img/check-then-patch-before-asking-owner/p-5.png)
+![Traceability：交付物說不出來源，就補一份 manifest 跟著它走](docs/slides/img/check-then-patch-before-asking-owner/p-5.png)
 
-![Small batches：歷史改不了，補的是說明模板與拆包的示範](docs/slides/img/check-then-patch-before-asking-owner/p-6.png)
+![CI：submit 後沒有機器檢查，就先把 smoke check 排上去跑](docs/slides/img/check-then-patch-before-asking-owner/p-6.png)
 
-![分工：自己能補的直接交 patch，只有三類事才問 owner](docs/slides/img/check-then-patch-before-asking-owner/p-7.png)
+![Code review：沒人看過就 submit，先補一條 shelve 給人看的流程](docs/slides/img/check-then-patch-before-asking-owner/p-7.png)
+
+![Small batches：歷史改不了，補的是說明模板與拆包的示範](docs/slides/img/check-then-patch-before-asking-owner/p-8.png)
+
+![分工：自己能補的直接交 patch，只有三類事才問 owner](docs/slides/img/check-then-patch-before-asking-owner/p-9.png)
 
 </details>
 
