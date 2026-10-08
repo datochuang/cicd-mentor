@@ -15,6 +15,7 @@
 | T5 | 10-08 | **資安與 IP**：design 資料能否交給 LLM、用哪種模型與部署方式；agent 在版控上用誰的身分、有哪些權限 | 未討論，可能最早卡關 | research/industry-practices-and-risks.md |
 | T6 | 10-08 | **成功指標**怎麼定 | 圖形文件只有方向示意，具體指標與門檻未定 | |
 | T7 | 10-08 | **轉型的終點**：流程存在就好，還是要團隊真正理解並自己維護 | D2 給了初步答案（先改變 PM，由他帶動團隊），細節待討論 | decision-log.md D2 |
+| T15 | 10-08 | **目錄用途與相依關係沒有文件，對 agent 設計的影響**：通用 agent 每個 workspace 都要另寫指引，那這個 agent 要不要自己建立並維護每個專案的目錄說明與相依關係（並放進版控）？ | 你在討論第二份圖形文件時提出這個問題；只寫進了文件第 7 頁，還沒討論對 agent 本身的設計意涵 | docs/slides/repo-as-backup-keeps-files-not-answers.pdf 第 7 頁 |
 
 ## 等你確認的產出
 
@@ -24,7 +25,7 @@
 | T9 | 10-08 | 圖形文件第 6 頁「對的掌舵人」四個條件 | 我歸納的，確認是否符合你心中的人選 | 同上 |
 | T10 | 10-08 | 圖形文件要不要做盲讀驗收 | 派沒看過討論的 subagent 扮成讀者只讀 PDF，回報看不懂的地方 | |
 | T11 | 10-08 | 舊文字版說明文件的 Artifact 連結要不要刪 | 檔案已移到 docs/archive/；連結 https://claude.ai/artifact/GqNg8P9QN569RFvVhb1Yme 仍在 | |
-| T14 | 10-08 | 圖形文件《把版控當備份的團隊》初稿等你修正 | 七頁全部是我創作的，情境與細節（submit 的時機、五個散落的地方、下游的問題等）都要你對照實際狀況修正 | docs/slides/repo-as-backup-keeps-files-not-answers.pdf |
+| T14 | 10-08 | 圖形文件《把版控當備份的團隊》初稿等你修正 | 八頁全部是我創作的，情境與細節（submit 的時機、五個散落的地方、下游的問題等）都要你對照實際狀況修正 | docs/slides/repo-as-backup-keeps-files-not-answers.pdf |
 
 ## 其他
 

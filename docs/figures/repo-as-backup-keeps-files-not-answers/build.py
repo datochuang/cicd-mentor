@@ -6,7 +6,7 @@
 # 讀完要能：在圖裡認出自己團隊的做法，說出哪些問題是從這些做法長出來的。
 # 主旨：把版控當備份的團隊，depot 裡有檔案，但結果的來源、跑法、環境與理由都在人身上；
 #       問題在整合、交接與人員異動時浮現。
-# 脈絡：1–3 具體怎麼運作 → 4–6 造成什麼問題 → 7 總結。
+# 脈絡：1–3 具體怎麼運作 → 4–7 造成什麼問題 → 8 總結。
 # 所有路徑、CL 號碼、label 名稱都是示意，不對應任何實際專案。
 import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
@@ -296,13 +296,71 @@ def p6():
     return svg(s, 880, 480, aria)
 
 
-# ── 圖 7：總結 ──────────────────────────────────────────────────────
-DONE = ["檔案的最新版在哪", "誰在什麼時候改過哪個檔案", "舊版救得回來", "里程碑那天的檔案清單（label）"]
-NOT = [("這個結果是哪一版做的？", "跑的人"), ("從乾淨的機器能重現嗎？", "沒人試過"), ("哪一次改動弄壞了它？", "大家一起猜"),
-       ("下游收到的跟上一版差在哪？", "上游工程師"), ("跑的步驟與環境在哪裡？", "CAD 加跑的人"), ("這個檔案還有人在用嗎？", "最資深的人")]
+# ── 圖 7：目錄靠人帶路 ──────────────────────────────────────────────
+TREE = [
+    ("/proj/chipA/", ""),
+    ("  rtl/", "哪些檔案還在用？"),
+    ("  rtl_old/", "能刪嗎？"),
+    ("  rtl_new2/", "跟 rtl/ 差在哪？"),
+    ("  sim/", ""),
+    ("  sim_yuting/", "個人的，還是正式的？"),
+    ("  scripts/", "哪個才是正式的？"),
+    ("  scripts_bak/", ""),
+    ("  release_0917/", "跟 label 的內容一樣嗎？"),
+    ("  tmp/", ""),
+    ("  top.f", "引用的檔案一半在 rtl_new2/"),
+    ("  README", "寫的是上一個專案"),
+]
+WORKSPACES = [("chipA 的 workspace", "rtl_new2/ sim_yuting/"), ("chipB 的 workspace", "src/ verif_old/ run2/"), ("IP-X 的 workspace", "design/ tb_v3/ tmp/")]
 
 
 def p7():
+    s = []
+    T(s, 20, 24, "第一次打開專案目錄看到的：用途與相依都要猜", cls="tx-lbl", fill=INK2)
+    rect(s, 20, 36, 380, 258, col="var(--rule-2)", fill="var(--surface-2)", sw=1.2)
+    for i, (name, q) in enumerate(TREE):
+        y = 58 + 20 * i
+        T(s, 34, y, name, fill=INK2)
+        if q:
+            T(s, 176, y, "? " + q, fill=WARN)
+    T(s, 20, 316, "新來的工程師：問同事、慢慢摸；摸出來的地圖留在他腦袋裡", fill=GRAY)
+    T(s, 440, 24, "通用的 AI agent 進到這些 workspace", cls="tx-lbl", fill=INK2)
+    rect(s, 440, 120, 120, 172, col=AGENT, fill=AGENT, op=".10", sw=1.6)
+    T(s, 500, 196, "通用 AI agent", cls="tx", anchor="middle", fill=AGENT, w=700)
+    T(s, 500, 216, "讀得懂檔案", anchor="middle", fill=INK2)
+    T(s, 500, 232, "讀不出用途", anchor="middle", fill=INK2)
+    T(s, 584, 108, "每個 workspace 另寫一份", cls="tx-lbl", fill=WARN)
+    for i, (name, sub) in enumerate(WORKSPACES):
+        y = 120 + 64 * i
+        arrow(s, 562, y + 22, 580, y + 22, col=AGENT, ar="ar-a", sw=1.4)
+        rect(s, 584, y, 110, 44, col=WARN, fill=WARN, op=".06", sw=1.3, dash="5 3")
+        T(s, 596, y + 27, "指引 " + name.split(" ")[0], cls="tx", fill=WARN, w=700)
+        arrow(s, 698, y + 22, 712, y + 22, col=INK2, ar="ar", sw=1.4)
+        rect(s, 716, y, 144, 44, col="var(--rule-2)", fill="var(--surface-2)", sw=1.2)
+        T(s, 724, y + 18, name, fill=INK2)
+        T(s, 724, y + 35, sub, fill=GRAY)
+    T(s, 440, 316, "指引誰寫得出來？", cls="tx-lbl", fill=WARN)
+    x = 440
+    for t, c in [("只有知道的那幾個人", WARN), ("有幾個 workspace 就要寫幾份", GRAY)]:
+        x += pill(s, x, 326, t, c) + 8
+    bottom(s, 362, [
+        ("目錄的用途與相依關係沒有寫下來，新人靠問、靠摸；地圖最後還是只在人的腦袋裡。", True),
+        ("通用的 AI agent 一樣看不懂，每個 workspace 都得由知道的人另寫一份指引。", False),
+    ])
+    aria = ("左邊是第一次打開專案目錄看到的樹：rtl、rtl_old、rtl_new2、sim、sim_yuting、scripts、scripts_bak、release_0917、tmp、top.f、README，"
+            "旁邊是要猜的問題：哪些檔案還在用、能刪嗎、跟 rtl 差在哪、個人的還是正式的、哪個才是正式的、跟 label 的內容一樣嗎、top.f 引用的檔案一半在 rtl_new2、README 寫的是上一個專案。"
+            "右邊是通用 AI agent，讀得懂檔案、讀不出用途；它要進 chipA、chipB、IP-X 三個 workspace，每個都要另寫一份指引；指引只有知道的那幾個人寫得出來，有幾個 workspace 就要寫幾份。")
+    return svg(s, 880, 480, aria)
+
+
+# ── 圖 8：總結 ──────────────────────────────────────────────────────
+DONE = ["檔案的最新版在哪", "誰在什麼時候改過哪個檔案", "舊版救得回來", "里程碑那天的檔案清單（label）"]
+NOT = [("這個結果是哪一版做的？", "跑的人"), ("從乾淨的機器能重現嗎？", "沒人試過"), ("哪一次改動弄壞了它？", "大家一起猜"),
+       ("下游收到的跟上一版差在哪？", "上游工程師"), ("跑的步驟與環境在哪裡？", "CAD 加跑的人"), ("這個檔案還有人在用嗎？", "最資深的人"),
+       ("這個目錄裝什麼、靠哪些東西？", "帶你的那個人")]
+
+
+def p8():
     s = []
     T(s, 20, 40, "depot 做到的", cls="tx-lbl", fill=GOAL)
     for j, t in enumerate(DONE):
@@ -320,7 +378,7 @@ def p7():
     ])
     aria = ("左欄 depot 做到的，四個打勾：檔案的最新版在哪、誰在什麼時候改過哪個檔案、舊版救得回來、里程碑那天的檔案清單。"
             "右欄 depot 答不出來的，六個打叉，各附今天誰在回答：這個結果是哪一版做的（跑的人）、從乾淨的機器能重現嗎（沒人試過）、哪一次改動弄壞了它（大家一起猜）、"
-            "下游收到的跟上一版差在哪（上游工程師）、跑的步驟與環境在哪裡（CAD 加跑的人）、這個檔案還有人在用嗎（最資深的人）。")
+            "下游收到的跟上一版差在哪（上游工程師）、跑的步驟與環境在哪裡（CAD 加跑的人）、這個檔案還有人在用嗎（最資深的人）、這個目錄裝什麼靠哪些東西（帶你的那個人）。")
     return svg(s, 880, 480, aria)
 
 
@@ -331,7 +389,8 @@ PAGES = [
     ("問題：「這份結果是哪一版跑的」要問好幾個人，答案仍是大概", p4()),
     ("問題：壞掉被發現時，離改壞它的那次 submit 已經很遠", p5()),
     ("問題：下游說不出收到了什麼，人走了流程跟著走", p6()),
-    ("總結：備份做到了，關於檔案的問題一個都答不出", p7()),
+    ("問題：目錄的用途靠人帶路，AI agent 每個 workspace 都要另寫指引", p7()),
+    ("總結：備份做到了，關於檔案的問題一個都答不出", p8()),
 ]
 
 if __name__ == "__main__":

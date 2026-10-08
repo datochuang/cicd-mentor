@@ -20,10 +20,10 @@ PDF 版：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agen
 
 ### 把版控當備份的團隊：depot 留住檔案，留不住答案
 
-這類團隊每天具體怎麼做事，問題從哪裡長出來。七頁。PDF：[docs/slides/repo-as-backup-keeps-files-not-answers.pdf](docs/slides/repo-as-backup-keeps-files-not-answers.pdf)
+這類團隊每天具體怎麼做事，問題從哪裡長出來。八頁。PDF：[docs/slides/repo-as-backup-keeps-files-not-answers.pdf](docs/slides/repo-as-backup-keeps-files-not-answers.pdf)
 
 <details>
-<summary>展開七頁</summary>
+<summary>展開八頁</summary>
 
 ![日常：改動在個人 workspace 累積，depot 隔很久才收到一大包](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-1.png)
 
@@ -37,7 +37,9 @@ PDF 版：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agen
 
 ![問題：下游說不出收到了什麼，人走了流程跟著走](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-6.png)
 
-![總結：備份做到了，關於檔案的問題一個都答不出](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-7.png)
+![問題：目錄的用途靠人帶路，AI agent 每個 workspace 都要另寫指引](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-7.png)
+
+![總結：備份做到了，關於檔案的問題一個都答不出](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-8.png)
 
 </details>
 
