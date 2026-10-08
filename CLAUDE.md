@@ -4,6 +4,8 @@
 
 公司 IC 設計相關的工程部門沒有 CI/CD 的觀念與實踐。Version control（以 Perforce 為主）幾乎被當成單純的檔案備份工具，頂多搭配打 label/tag，只有極少數流程會 trigger sanity check，僅此而已。
 
+經過一段時間的推廣，多數人（尤其是主要的主管）已經大致認可「迭代式開發＋CI/CD」的方向是正面的；頂多懷疑它是否絕對必要，或不覺得做得到。因此對內的文件不需要花太多篇幅論證必要性，重點放在「為什麼做不起來」與「怎麼做到」。
+
 我想設計一個自主運行的 CI/CD mentor agent：持續掃描 version control repo，檢視既有與新增的 artifact。這個 agent 具備比工程師更好的 CI/CD 觀念與各種 programming/scripting 技能，透過 Slack 或 mail 等工具，及時找出整個 repo 的問題並提出建議，必要時甚至協助實作。
 
 # 產出
@@ -21,12 +23,26 @@
 - `direction.md`：目前有效的整體構想、設計要點、未決問題。持續更新
 - `decision-log.md`：依日期記錄的決定、理由、取代了什麼。只增不改
 - `research/`：討論時整理的參考資料（業界實踐、類比分析等），附來源
-- `docs/agent-overview.html`：給公司內部讀者的圖形化說明文件，描述 **AI agent 專案本身**（不是這個討論專案），逐章增加。同時發佈為 Artifact（https://claude.ai/artifact/GqNg8P9QN569RFvVhb1Yme），並輸出同名 PDF
+- `docs/slides/`：給公司內部讀者的投影片式圖形文件（產出物，HTML＋PDF），描述 **AI agent 專案本身**，不是這個討論專案
+- `docs/figures/<文件名>/build.py`：每份投影片的產生器；`docs/figures/lib/slides.py` 是共用的畫圖工具與 HTML／PDF 輸出
+- `docs/archive/`：被取代的舊文件，留著參考，不再更新
+
+# 指令
+
+- 產生投影片：`python3 docs/figures/<文件名>/build.py`，輸出 `docs/slides/<文件名>.{html,pdf}`，逐頁 PNG 在 `build/pages/<文件名>/`（需要 Google Chrome 與 poppler 的 `pdftoppm`）
 
 # 圖形化文件的規則
 
-- HTML 不寫 `<html>`／`<head>`／`<body>`（Artifact 發佈時會自動包上）；要能在沒有外網的內網直接打開，所以不載入外部字型、CDN 或圖片，圖一律用 HTML／CSS 或 inline SVG
-- 每次修改後：重新產生 PDF（`sh docs/build-pdf.sh`，或指定單一檔案 `sh docs/build-pdf.sh docs/agent-overview.html`），檢查分頁沒有被切壞，並重新發佈 Artifact
+做法沿用 `../google-xls` 的投影片式文件（規則全文在 `../google-xls/docs/slide-doc-rules.md`），重點：
+
+- 讀者一眼就要抓到核心觀念：A4 橫式，一頁一張圖、一行標題；每頁完整句子最多三句，其餘是短標籤、膠囊、箭頭；因果關係用箭頭畫
+- 動工前先寫下三句話（讀者是誰、讀完要能做什麼、主旨），記在 build.py 開頭；先交主旨與每頁標題，再只畫第 1 頁當樣板，確認後才展開
+- 頁標題「<主題>：<結論>」，直述句約 30 字；kicker「<文件主題>　·　圖 N ／ M」；第 1 頁圖的最上方放「這份文件回答：…」
+- 檔名是結論縮成一句、含動詞的 kebab-case 英文
+- 不用對比否定句（「不是 X，是 Y」）、顧問腔、時間數值；專有名詞用台灣業界慣用的英文
+- 顏色分工固定：WARN＝現狀的問題與缺口、GOAL＝CI/CD 與目標狀態、AGENT＝AI agent、PM＝人類 PM
+- 不載入外部字型或 CDN，HTML 要能在沒有外網的內網直接打開
+- 每次產生後逐頁看 PNG：超框、疊字、被切掉的字、對不齊
 - 內容須與 `direction.md` 一致；尚未決定的事項要標明「待決定」
 
 # 維護規則
