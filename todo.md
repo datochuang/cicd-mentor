@@ -25,7 +25,7 @@
 | T10 | 10-08 | 圖形文件要不要做盲讀驗收 | 派沒看過討論的 subagent 扮成讀者只讀 PDF，回報看不懂的地方 | |
 | T11 | 10-08 | 舊文字版說明文件的 Artifact 連結要不要刪 | 檔案已移到 docs/archive/；連結 https://claude.ai/artifact/GqNg8P9QN569RFvVhb1Yme 仍在 | |
 
-## 推上 GitHub 之前
+## 其他
 
 | # | 加入 | 項目 | 現況／下一步 | 相關 |
 |---|---|---|---|---|
