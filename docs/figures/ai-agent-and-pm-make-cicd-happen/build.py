@@ -16,27 +16,6 @@ NAME = "ai-agent-and-pm-make-cicd-happen"
 KICKER = "CI/CD Mentor Agent"
 
 
-def box(s, x, y, w, h, title, sub=None, col=INK2, kind="plain", sub2=None):
-    """kind: plain（灰底）、solid（該色淡底）、dash（該色虛線）。"""
-    if kind == "solid":
-        rect(s, x, y, w, h, col=col, fill=col, op=".10", sw=1.6)
-    elif kind == "dash":
-        rect(s, x, y, w, h, col=col, fill=col, op=".05", sw=1.5, dash="6 4")
-    else:
-        rect(s, x, y, w, h, col="var(--rule-2)", fill="var(--surface-2)", sw=1.2)
-    T(s, x + 14, y + 22, title, cls="tx", fill=col, w=700)
-    if sub:
-        T(s, x + 14, y + 40, sub, fill=INK2)
-    if sub2:
-        T(s, x + 14, y + 56, sub2, fill=INK2)
-
-
-def bottom(s, y, lines):
-    line(s, 20, y, 860, y)
-    for i, (txt, bold) in enumerate(lines):
-        T(s, 20, y + 26 + 24 * i, txt, cls="tx", fill=INK2, w=600 if bold else None)
-
-
 # ── 圖 1：方向 ──────────────────────────────────────────────────────
 LAYERS = [
     ("公司競爭力", "更快、更可靠地交出晶片", "plain"),

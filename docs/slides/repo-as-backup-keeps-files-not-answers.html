@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+<meta charset="utf-8">
+<title>把版控當備份的團隊：depot 留住檔案，留不住答案</title>
+<style>
+:root{--paper:#fff;--surface:#fff;--surface-2:#eef2f5;--ink:#17212b;--ink-2:#48596a;--ink-3:#78889a;--rule:#cfd9e1;--rule-2:#aebbc7;
+--goal:#116b64;--warn:#a0580f;--agent:#2f6f9f;--pm:#7a4f9a;
+--mono:"SF Mono",Menlo,Consolas,"PingFang TC","Noto Sans TC","Microsoft JhengHei",monospace;
+--sans:"Helvetica Neue",Arial,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif}
+html,body{margin:0;padding:0;background:#fff;color:var(--ink);font-family:var(--sans)}
+body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@page{size:A4 landscape;margin:0}
+.slide{width:297mm;height:210mm;box-sizing:border-box;padding:11mm 14mm 9mm;display:flex;flex-direction:column;break-after:page;page-break-after:always;overflow:hidden;position:relative}
+.slide:last-child{break-after:auto;page-break-after:auto}
+@media screen{body{background:#e6ebef}.slide{background:#fff;margin:8mm auto;box-shadow:0 1px 4px rgba(0,0,0,.12)}}
+.kicker{font-family:var(--mono);font-size:9.5pt;letter-spacing:.06em;color:var(--ink-3);margin:0 0 2mm}
+.slide h1{font-family:var(--sans);font-size:20pt;font-weight:600;margin:0 0 5mm;line-height:1.25}
+.fig{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{display:block;color:var(--ink)}
+.pn{position:absolute;right:14mm;bottom:6mm;font-family:var(--mono);font-size:8.5pt;color:var(--ink-3)}
+.tx{font-family:var(--mono);font-size:12px;fill:currentColor}
+.tx-s{font-family:var(--mono);font-size:10.5px;fill:var(--ink-3)}
+.tx-b{font-family:var(--sans);font-size:15px;font-weight:700;fill:currentColor}
+.tx-lbl{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.06em;fill:var(--ink-3)}
+</style>
+</head>
+<body>
+<section class="slide"><div class="kicker">版控只當備份的團隊　·　圖 1 ／ 7</div><h1>日常：改動在個人 workspace 累積，depot 隔很久才收到一大包</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="兩條水平的泳道。上面是個人 workspace，一整條都是密集的改動：改 RTL、跑 sim、改 testbench、改 filelist、改 script。下面是 Perforce depot，只在三個點各收到一包很大的 submit，說明分別是 update、fix、before freeze；兩包之間 depot 沒有任何變化。下方列出什麼時候才 submit：里程碑到了、有人跟你要、休假前、怕 workspace 壞掉、主管提醒；以及一包裡面有什麼：好幾個 block 的 RTL、順手改的 script、新的 testbench、一起改的 filelist。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="20.0" text-anchor="start" fill="var(--ink-2)">這份文件回答：把版控當備份的團隊，每天具體怎麼做事；問題從這些做法的哪裡長出來 ↓</text>
+<text class="tx" x="20.0" y="74.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">個人 workspace</text>
+<text class="tx-s" x="20.0" y="92.0" text-anchor="start" fill="var(--ink-3)">p4 client，只有自己看得到</text>
+<rect x="190.0" y="46.0" width="670.0" height="66.0" rx="4" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<line x1="221.4" y1="54.0" x2="221.4" y2="72.0" stroke="var(--ink-2)" stroke-width="1.6"/>
+<text class="tx-s" x="221.4" y="90.0" text-anchor="middle" fill="var(--ink-2)">改 RTL</text>
+<line x1="268.1" y1="54.0" x2="268.1" y2="72.0" stroke="var(--ink-2)" stroke-width="1.6"/>
+<text class="tx-s" x="268.1" y="105.0" text-anchor="middle" fill="var(--ink-2)">跑 sim</text>
+<line x1="314.8" y1="54.0" x2="314.8" y2="72.0" stroke="var(--ink-2)" stroke-width="1.6"/>
+<text class="tx-s" x="314.8" y="90.0" text-anchor="middle" fill="var(--ink-2)">改 tb</text>
+<line x1="361.5" y1="54.0" x2="361.5" y2="72.0" stroke="var(--ink-2)" stroke-width="1.6"/>
+<text class="tx-s" x="361.5" y="105.0" text-anchor="middle" fill="var(--ink-2)">改 RTL</text>
+<line x1="408.2" y1="54.0" x2="408.2" y2="72.0" stroke="var(--ink-2)" stroke-width="1.6"/>
+<text class="tx-s" x="408.2" y="90.0" text-anchor="middle" fill="var(--ink-2)">改 .f</text>
+<line x1="454.9" y1="54.0" x2="454.9" y2="72.0" stroke="var(--ink-2)" stroke-width="1.6"/>
+<text class="tx-s" x="454.9" y="105.0" text-anchor="middle" fill="var(--ink-2)">跑 sim</text>
+<line x1="501.6" y1="54.0" x2="501.6" y2="72.0" stroke="var(--ink-2)" stroke-width="1.6"/>
+<text class="tx-s" x="501.6" y="90.0" text-anchor="middle" fill="var(--ink-2)">改 script</text>
+<line x1="548.4" y1="54.0" x2="548.4" y2="72.0" stroke="var(--ink-2)" stroke-width="1.6"/>
+<text class="tx-s" x="548.4" y="105.0" text-anchor="middle" fill="var(--ink-2)">改 RTL</text>
+<line x1="595.1" y1="54.0" x2="595.1" y2="72.0" stroke="var(--ink-2)" stroke-width="1.6"/>
+<text class="tx-s" x="595.1" y="90.0" text-anchor="middle" fill="var(--ink-2)">跑 sim</text>
+<line x1="641.8" y1="54.0" x2="641.8" y2="72.0" stroke="var(--ink-2)" stroke-width="1.6"/>
+<text class="tx-s" x="641.8" y="105.0" text-anchor="middle" fill="var(--ink-2)">改 tb</text>
+<line x1="688.5" y1="54.0" x2="688.5" y2="72.0" stroke="var(--ink-2)" stroke-width="1.6"/>
+<text class="tx-s" x="688.5" y="90.0" text-anchor="middle" fill="var(--ink-2)">改 RTL</text>
+<line x1="735.2" y1="54.0" x2="735.2" y2="72.0" stroke="var(--ink-2)" stroke-width="1.6"/>
+<text class="tx-s" x="735.2" y="105.0" text-anchor="middle" fill="var(--ink-2)">跑 regression</text>
+<line x1="781.9" y1="54.0" x2="781.9" y2="72.0" stroke="var(--ink-2)" stroke-width="1.6"/>
+<text class="tx-s" x="781.9" y="90.0" text-anchor="middle" fill="var(--ink-2)">改 RTL</text>
+<line x1="828.6" y1="54.0" x2="828.6" y2="72.0" stroke="var(--ink-2)" stroke-width="1.6"/>
+<text class="tx-s" x="828.6" y="105.0" text-anchor="middle" fill="var(--ink-2)">跑 sim</text>
+<text class="tx" x="20.0" y="238.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">Perforce depot</text>
+<text class="tx-s" x="20.0" y="256.0" text-anchor="start" fill="var(--ink-3)">大家看得到的那份</text>
+<line x1="190.0" y1="232.0" x2="860.0" y2="232.0" stroke="var(--rule-2)" stroke-width="1.4"/>
+<rect x="278.0" y="199.0" width="140.0" height="50.0" fill="var(--surface)" stroke="var(--rule-2)" stroke-width="1"/>
+<rect x="274.0" y="203.0" width="140.0" height="50.0" fill="var(--surface)" stroke="var(--rule-2)" stroke-width="1"/>
+<rect x="270.0" y="207.0" width="140.0" height="50.0" fill="var(--surface)" stroke="var(--ink-2)" stroke-width="1.4"/>
+<text class="tx" x="282.0" y="228.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">CL 48211</text>
+<text class="tx-s" x="282.0" y="246.0" text-anchor="start" fill="var(--ink-3)">說明：update</text>
+<line x1="340.0" y1="116.0" x2="340.0" y2="195.0" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ar)"/>
+<text class="tx" x="350.0" y="160.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">submit 一大包</text>
+<rect x="528.0" y="199.0" width="140.0" height="50.0" fill="var(--surface)" stroke="var(--rule-2)" stroke-width="1"/>
+<rect x="524.0" y="203.0" width="140.0" height="50.0" fill="var(--surface)" stroke="var(--rule-2)" stroke-width="1"/>
+<rect x="520.0" y="207.0" width="140.0" height="50.0" fill="var(--surface)" stroke="var(--ink-2)" stroke-width="1.4"/>
+<text class="tx" x="532.0" y="228.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">CL 48977</text>
+<text class="tx-s" x="532.0" y="246.0" text-anchor="start" fill="var(--ink-3)">說明：fix</text>
+<line x1="590.0" y1="116.0" x2="590.0" y2="195.0" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="728.0" y="199.0" width="140.0" height="50.0" fill="var(--surface)" stroke="var(--rule-2)" stroke-width="1"/>
+<rect x="724.0" y="203.0" width="140.0" height="50.0" fill="var(--surface)" stroke="var(--rule-2)" stroke-width="1"/>
+<rect x="720.0" y="207.0" width="140.0" height="50.0" fill="var(--surface)" stroke="var(--ink-2)" stroke-width="1.4"/>
+<text class="tx" x="732.0" y="228.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">CL 49340</text>
+<text class="tx-s" x="732.0" y="246.0" text-anchor="start" fill="var(--ink-3)">說明：before freeze</text>
+<line x1="790.0" y1="116.0" x2="790.0" y2="195.0" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ar)"/>
+<text class="tx-s" x="465.0" y="282.0" text-anchor="middle" fill="var(--ink-3)">這段期間 depot 沒有任何變化</text>
+<text class="tx-lbl" x="20.0" y="314.0" text-anchor="start" fill="var(--ink-2)">什麼時候才 submit</text>
+<rect x="190.0" y="300.0" width="70.9" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="225.5" y="314.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">里程碑到了</text>
+<rect x="268.9" y="300.0" width="70.9" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="304.4" y="314.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">有人跟你要</text>
+<rect x="347.9" y="300.0" width="50.6" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="373.1" y="314.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">休假前</text>
+<rect x="406.4" y="300.0" width="119.9" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="466.3" y="314.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">怕 workspace 壞掉</text>
+<rect x="534.3" y="300.0" width="60.7" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="564.6" y="314.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">主管提醒</text>
+<text class="tx-lbl" x="20.0" y="348.0" text-anchor="start" fill="var(--ink-2)">一包裡面有什麼</text>
+<rect x="190.0" y="334.0" width="130.0" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="255.0" y="348.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">好幾個 block 的 RTL</text>
+<rect x="328.0" y="334.0" width="104.8" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="380.5" y="348.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">順手改的 script</text>
+<rect x="440.9" y="334.0" width="103.4" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="492.6" y="348.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">新的 testbench</text>
+<rect x="552.2" y="334.0" width="79.6" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="592.1" y="348.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">一起改的 .f</text>
+<line x1="20.0" y1="378.0" x2="860.0" y2="378.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="404.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">submit 的目的是把檔案存起來，所以在怕丟、有人要、里程碑到了的時候才做。</text>
+<text class="tx" x="20.0" y="428.0" text-anchor="start" fill="var(--ink-2)">兩次 submit 之間的所有改動，只存在這個人的 workspace 裡，別人看不到也用不到。</text>
+</svg></div><div class="pn">1 / 7</div></section>
+<section class="slide"><div class="kicker">版控只當備份的團隊　·　圖 2 ／ 7</div><h1>散落：跑得起來需要的東西分在五個地方，depot 只是其中之一</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="頂端的問題：從一台乾淨的機器把 regression 重跑一次，需要的東西在哪裡？線往下分到五個方塊：Perforce depot（進版控：RTL 大部分、testbench 一部分、舊版的 filelist、有時連 netlist 也進）；個人 workspace（沒進版控：改到一半的 RTL、新寫的 testbench、修過才跑得過的 filelist、本機的 patch）；共用磁碟（沒進版控：run 目錄與 log、regression 的 script、交給 PD 的 tarball、共用的 lib）；home 目錄與 wiki（沒進版控：.cshrc 裡的 module、工具版本、license 設定、過期的步驟）；人的腦袋（沒進版控：哪個 run 對應哪一版、為什麼這樣改、哪些檔案沒在用、先跑哪個再跑哪個）。後四格以括號標示換一台機器就不在。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx" x="440.0" y="30.0" text-anchor="middle" fill="var(--ink-2)" style="font-weight:700">從一台乾淨的機器把 regression 重跑一次，需要的東西在哪裡？</text>
+<line x1="440.0" y1="38.0" x2="440.0" y2="56.0" stroke="var(--rule-2)" stroke-width="1.4"/>
+<line x1="100.0" y1="56.0" x2="780.0" y2="56.0" stroke="var(--rule-2)" stroke-width="1.4"/>
+<line x1="100.0" y1="56.0" x2="100.0" y2="70.0" stroke="var(--rule-2)" stroke-width="1.4"/>
+<rect x="20.0" y="70.0" width="160.0" height="220.0" fill="var(--surface)" stroke="var(--ink-2)" stroke-width="1.6"/>
+<text class="tx" x="32.0" y="94.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">Perforce depot</text>
+<rect x="32.0" y="106.0" width="50.6" height="18.0" rx="9" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="57.3" y="118.0" text-anchor="middle" fill="var(--ink-2)" style="font-weight:700">進版控</text>
+<text class="tx-s" x="32.0" y="156.0" text-anchor="start" fill="var(--ink-2)">RTL（大部分）</text>
+<text class="tx-s" x="32.0" y="180.0" text-anchor="start" fill="var(--ink-2)">testbench（一部分）</text>
+<text class="tx-s" x="32.0" y="204.0" text-anchor="start" fill="var(--ink-2)">舊版的 filelist</text>
+<text class="tx-s" x="32.0" y="228.0" text-anchor="start" fill="var(--ink-2)">有時連 netlist 也進</text>
+<line x1="270.0" y1="56.0" x2="270.0" y2="70.0" stroke="var(--rule-2)" stroke-width="1.4"/>
+<rect x="190.0" y="70.0" width="160.0" height="220.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".05"/>
+<text class="tx" x="202.0" y="94.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">個人 workspace</text>
+<rect x="202.0" y="106.0" width="60.7" height="18.0" rx="9" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="232.4" y="118.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">沒進版控</text>
+<text class="tx-s" x="202.0" y="156.0" text-anchor="start" fill="var(--ink-2)">改到一半的 RTL</text>
+<text class="tx-s" x="202.0" y="180.0" text-anchor="start" fill="var(--ink-2)">新寫的 testbench</text>
+<text class="tx-s" x="202.0" y="204.0" text-anchor="start" fill="var(--ink-2)">修過才跑得過的 .f</text>
+<text class="tx-s" x="202.0" y="228.0" text-anchor="start" fill="var(--ink-2)">本機的 patch</text>
+<line x1="440.0" y1="56.0" x2="440.0" y2="70.0" stroke="var(--rule-2)" stroke-width="1.4"/>
+<rect x="360.0" y="70.0" width="160.0" height="220.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".05"/>
+<text class="tx" x="372.0" y="94.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">共用磁碟 /proj</text>
+<rect x="372.0" y="106.0" width="60.7" height="18.0" rx="9" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="402.4" y="118.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">沒進版控</text>
+<text class="tx-s" x="372.0" y="156.0" text-anchor="start" fill="var(--ink-2)">run 目錄與 log</text>
+<text class="tx-s" x="372.0" y="180.0" text-anchor="start" fill="var(--ink-2)">regression 的 script</text>
+<text class="tx-s" x="372.0" y="204.0" text-anchor="start" fill="var(--ink-2)">交給 PD 的 tarball</text>
+<text class="tx-s" x="372.0" y="228.0" text-anchor="start" fill="var(--ink-2)">大家共用的 lib</text>
+<line x1="610.0" y1="56.0" x2="610.0" y2="70.0" stroke="var(--rule-2)" stroke-width="1.4"/>
+<rect x="530.0" y="70.0" width="160.0" height="220.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".05"/>
+<text class="tx" x="542.0" y="94.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">home 目錄與 wiki</text>
+<rect x="542.0" y="106.0" width="60.7" height="18.0" rx="9" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="572.4" y="118.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">沒進版控</text>
+<text class="tx-s" x="542.0" y="156.0" text-anchor="start" fill="var(--ink-2)">.cshrc 裡的 module</text>
+<text class="tx-s" x="542.0" y="180.0" text-anchor="start" fill="var(--ink-2)">工具版本</text>
+<text class="tx-s" x="542.0" y="204.0" text-anchor="start" fill="var(--ink-2)">license 設定</text>
+<text class="tx-s" x="542.0" y="228.0" text-anchor="start" fill="var(--ink-2)">一頁過期的步驟</text>
+<line x1="780.0" y1="56.0" x2="780.0" y2="70.0" stroke="var(--rule-2)" stroke-width="1.4"/>
+<rect x="700.0" y="70.0" width="160.0" height="220.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".05"/>
+<text class="tx" x="712.0" y="94.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">人的腦袋</text>
+<rect x="712.0" y="106.0" width="60.7" height="18.0" rx="9" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="742.4" y="118.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">沒進版控</text>
+<text class="tx-s" x="712.0" y="156.0" text-anchor="start" fill="var(--ink-2)">哪個 run 對應哪一版</text>
+<text class="tx-s" x="712.0" y="180.0" text-anchor="start" fill="var(--ink-2)">為什麼這樣改</text>
+<text class="tx-s" x="712.0" y="204.0" text-anchor="start" fill="var(--ink-2)">哪些檔案沒在用</text>
+<text class="tx-s" x="712.0" y="228.0" text-anchor="start" fill="var(--ink-2)">先跑哪個再跑哪個</text>
+<line x1="190.0" y1="304.0" x2="860.0" y2="304.0" stroke="var(--warn)" stroke-width="1.2"/>
+<line x1="190.0" y1="298.0" x2="190.0" y2="304.0" stroke="var(--warn)" stroke-width="1.2"/>
+<line x1="860.0" y1="298.0" x2="860.0" y2="304.0" stroke="var(--warn)" stroke-width="1.2"/>
+<text class="tx" x="525.0" y="322.0" text-anchor="middle" fill="var(--warn)" style="font-weight:600">這四處的東西，換一台機器就不在</text>
+<text class="tx-s" x="100.0" y="322.0" text-anchor="middle" fill="var(--ink-3)">只有這一格進了版控</text>
+<line x1="20.0" y1="350.0" x2="860.0" y2="350.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="376.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">depot 裡只有檔案的一部分；要跑得起來，其餘的東西散在磁碟、home 目錄和人的腦袋裡。</text>
+<text class="tx" x="20.0" y="400.0" text-anchor="start" fill="var(--ink-2)">換一台乾淨的機器，照 depot 的內容做不出同一個結果。</text>
+</svg></div><div class="pn">2 / 7</div></section>
+<section class="slide"><div class="kicker">版控只當備份的團隊　·　圖 3 ／ 7</div><h1>交付：結果靠 email 裡的路徑傳遞，label 只記得檔案</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左欄是一次 regression 的結果怎麼傳出去，四步：在自己的 workspace 跑完；把 run 目錄的路徑貼進 email；收件人照路徑進去看 log 與 report；之後那個目錄被覆蓋或清掉，email 裡的路徑還在但內容已經換了。右欄是里程碑時打的 label，例如 RTL_FREEZE_v2：它記得哪些檔案、各是哪個版本；它不記得 simulator 與 synthesis 工具的版本、環境變數與 license 設定、跑了哪些測試與結果、怎麼跑與 script 在誰的目錄。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="24.0" text-anchor="start" fill="var(--ink-2)">一次 regression 的結果怎麼傳出去</text>
+<rect x="20.0" y="40.0" width="380.0" height="52.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="34.0" y="61.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">在自己的 workspace 跑完</text>
+<text class="tx-s" x="34.0" y="80.0" text-anchor="start" fill="var(--ink-2)">結果留在 run 目錄</text>
+<line x1="210.0" y1="96.0" x2="210.0" y2="110.0" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="20.0" y="114.0" width="380.0" height="52.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="34.0" y="135.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">把 run 目錄的路徑貼進 email</text>
+<text class="tx-s" x="34.0" y="154.0" text-anchor="start" fill="var(--ink-2)">/proj/chipA/yuting/run_0917_v3/</text>
+<line x1="210.0" y1="170.0" x2="210.0" y2="184.0" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="20.0" y="188.0" width="380.0" height="52.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="34.0" y="209.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">收件人照路徑進去看 log 與 report</text>
+<text class="tx-s" x="34.0" y="228.0" text-anchor="start" fill="var(--ink-2)">看到的是當下目錄裡的內容</text>
+<line x1="210.0" y1="244.0" x2="210.0" y2="258.0" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="20.0" y="262.0" width="380.0" height="52.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".06"/>
+<text class="tx" x="34.0" y="283.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">之後那個目錄被覆蓋或清掉</text>
+<text class="tx-s" x="34.0" y="302.0" text-anchor="start" fill="var(--ink-2)">email 裡的路徑還在，內容已經換了</text>
+<text class="tx-lbl" x="440.0" y="24.0" text-anchor="start" fill="var(--ink-2)">里程碑時打一個 label</text>
+<rect x="440.0" y="40.0" width="146.0" height="24.0" rx="12" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="513.0" y="58.0" text-anchor="middle" fill="var(--ink-2)" style="font-weight:700">label  RTL_FREEZE_v2</text>
+<text class="tx-lbl" x="440.0" y="98.0" text-anchor="start" fill="var(--goal)">它記得</text>
+<text class="tx" x="452.0" y="122.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx" x="472.0" y="122.0" text-anchor="start" fill="var(--ink-2)">哪些檔案、各是哪個版本</text>
+<text class="tx-lbl" x="440.0" y="160.0" text-anchor="start" fill="var(--warn)">它不記得</text>
+<text class="tx" x="452.0" y="184.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="472.0" y="184.0" text-anchor="start" fill="var(--ink-2)">simulator 與 synthesis 工具的版本</text>
+<text class="tx" x="452.0" y="212.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="472.0" y="212.0" text-anchor="start" fill="var(--ink-2)">環境變數與 license 設定</text>
+<text class="tx" x="452.0" y="240.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="472.0" y="240.0" text-anchor="start" fill="var(--ink-2)">跑了哪些測試、結果如何</text>
+<text class="tx" x="452.0" y="268.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="472.0" y="268.0" text-anchor="start" fill="var(--ink-2)">怎麼跑：script 在誰的目錄</text>
+<line x1="20.0" y1="346.0" x2="860.0" y2="346.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="372.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">結果和它的來源之間沒有連結：email 裡的路徑指向一個會變的目錄，label 只記得檔案。</text>
+<text class="tx" x="20.0" y="396.0" text-anchor="start" fill="var(--ink-2)">想知道某個結果是怎麼來的，只能找到跑的那個人問。</text>
+</svg></div><div class="pn">3 / 7</div></section>
+<section class="slide"><div class="kicker">版控只當備份的團隊　·　圖 4 ／ 7</div><h1>問題：「這份結果是哪一版跑的」要問好幾個人，答案仍是大概</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="一條問答的鏈：PL 問這份報告是哪一版跑的；跑的人回想，說應該是上次 sync 那版（靠記憶）；翻 workspace，還有改到一半的檔案（靠當下的狀態）；問 CAD，工具版本看 .cshrc（靠記憶）；翻 email 找路徑，run 目錄已經換過內容（靠目錄還沒被清）。最後的答案：大概是 CL 48977 加上我手上改的幾個，工具應該是那一版，結果你看我 email 裡那個路徑。下方列出沒有紀錄的地方：改動只在 workspace 沒有 CL 號碼、label 沒記工具版本、run 目錄會被覆蓋、跑法在個人的 script 裡。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<rect x="20.0" y="50.0" width="150.0" height="64.0" fill="var(--surface)" stroke="var(--ink-2)" stroke-width="1.6"/>
+<text class="tx" x="32.0" y="74.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">PL 問</text>
+<text class="tx-s" x="32.0" y="96.0" text-anchor="start" fill="var(--ink-2)">這份報告是哪一版跑的？</text>
+<line x1="173.0" y1="82.0" x2="187.0" y2="82.0" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="190.0" y="50.0" width="150.0" height="64.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="202.0" y="74.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">跑的人回想</text>
+<text class="tx-s" x="202.0" y="96.0" text-anchor="start" fill="var(--ink-2)">「應該是上次 sync 那版」</text>
+<rect x="202.0" y="124.0" width="50.6" height="18.0" rx="9" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="227.3" y="136.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">靠記憶</text>
+<line x1="343.0" y1="82.0" x2="357.0" y2="82.0" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="360.0" y="50.0" width="150.0" height="64.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="372.0" y="74.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">翻 workspace</text>
+<text class="tx-s" x="372.0" y="96.0" text-anchor="start" fill="var(--ink-2)">還有改到一半的檔案</text>
+<rect x="372.0" y="124.0" width="81.1" height="18.0" rx="9" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="412.6" y="136.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">靠當下的狀態</text>
+<line x1="513.0" y1="82.0" x2="527.0" y2="82.0" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="530.0" y="50.0" width="150.0" height="64.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="542.0" y="74.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">問 CAD</text>
+<text class="tx-s" x="542.0" y="96.0" text-anchor="start" fill="var(--ink-2)">工具版本看 .cshrc</text>
+<rect x="542.0" y="124.0" width="50.6" height="18.0" rx="9" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="567.3" y="136.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">靠記憶</text>
+<line x1="683.0" y1="82.0" x2="697.0" y2="82.0" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="700.0" y="50.0" width="150.0" height="64.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="712.0" y="74.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">翻 email 找路徑</text>
+<text class="tx-s" x="712.0" y="96.0" text-anchor="start" fill="var(--ink-2)">run 目錄已經換過內容</text>
+<rect x="712.0" y="124.0" width="91.3" height="18.0" rx="9" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="757.6" y="136.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">靠目錄還沒被清</text>
+<line x1="840.0" y1="116.0" x2="840.0" y2="158.0" stroke="var(--warn)" stroke-width="1.6" marker-end="url(#ar-w)"/>
+<rect x="20.0" y="162.0" width="840.0" height="60.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.6" fill-opacity=".08"/>
+<text class="tx" x="34.0" y="188.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">答案</text>
+<text class="tx" x="90.0" y="188.0" text-anchor="start" fill="var(--ink-2)">「大概是 CL 48977 加上我手上改的幾個，工具應該是那一版，結果你看我 email 裡那個路徑」</text>
+<text class="tx-s" x="90.0" y="210.0" text-anchor="start" fill="var(--warn)">每個「大概」「應該」，各對應一個沒有紀錄的地方</text>
+<text class="tx-lbl" x="20.0" y="264.0" text-anchor="start" fill="var(--warn)">沒有紀錄的地方</text>
+<rect x="20.0" y="276.0" width="199.9" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="119.9" y="290.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">改動只在 workspace，沒有 CL 號碼</text>
+<rect x="227.9" y="276.0" width="118.9" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="287.3" y="290.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">label 沒記工具版本</text>
+<rect x="354.8" y="276.0" width="106.3" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="407.9" y="290.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">run 目錄會被覆蓋</text>
+<rect x="469.1" y="276.0" width="141.7" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="539.9" y="290.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">跑法在個人的 script 裡</text>
+<line x1="20.0" y1="332.0" x2="860.0" y2="332.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="358.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">沒有任何一筆紀錄把結果、檔案版本、工具版本和跑法綁在一起。</text>
+<text class="tx" x="20.0" y="382.0" text-anchor="start" fill="var(--ink-2)">答案由幾個人的記憶拼出來，每一段都帶著「應該」。</text>
+</svg></div><div class="pn">4 / 7</div></section>
+<section class="slide"><div class="kicker">版控只當備份的團隊　·　圖 5 ／ 7</div><h1>問題：壞掉被發現時，離改壞它的那次 submit 已經很遠</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="一條 depot 的時間軸。最左邊是改壞的那次 submit，一大包、說明是 update、當時沒有人知道它壞了；中間是其他人的七包 submit；最右邊是整合時發現，top 編不過或下游跑不起來。括號標出從改壞那次到發現點之間，每一包都要拆開看。下方：怎麼找，一包一包拆開猜哪幾個檔案有關、逐個問當時改了什麼、在自己的 workspace 把舊版換回來試；誰先發現：整合的人、PD、DV、韌體、客戶。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<line x1="40.0" y1="120.0" x2="850.0" y2="120.0" stroke="var(--rule-2)" stroke-width="1.6" marker-end="url(#ar-gray)"/>
+<rect x="50.0" y="78.0" width="180.0" height="84.0" fill="var(--surface)" stroke="var(--surface)" stroke-width="0"/>
+<rect x="50.0" y="78.0" width="180.0" height="84.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".06"/>
+<text class="tx" x="64.0" y="100.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">改壞的那次 submit</text>
+<text class="tx-s" x="64.0" y="120.0" text-anchor="start" fill="var(--ink-2)">一大包，說明是『update』</text>
+<text class="tx-s" x="64.0" y="140.0" text-anchor="start" fill="var(--ink-2)">當時沒有人知道它壞了</text>
+<text class="tx-lbl" x="260.0" y="70.0" text-anchor="start" fill="var(--ink-3)">其他人的 submit，一樣一包一包</text>
+<rect x="260.0" y="103.0" width="56.0" height="34.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.1"/>
+<text class="tx-s" x="288.0" y="125.0" text-anchor="middle" fill="var(--ink-3)">update</text>
+<rect x="324.0" y="103.0" width="56.0" height="34.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.1"/>
+<text class="tx-s" x="352.0" y="125.0" text-anchor="middle" fill="var(--ink-3)">fix</text>
+<rect x="388.0" y="103.0" width="56.0" height="34.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.1"/>
+<text class="tx-s" x="416.0" y="125.0" text-anchor="middle" fill="var(--ink-3)">sync</text>
+<rect x="452.0" y="103.0" width="56.0" height="34.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.1"/>
+<text class="tx-s" x="480.0" y="125.0" text-anchor="middle" fill="var(--ink-3)">misc</text>
+<rect x="516.0" y="103.0" width="56.0" height="34.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.1"/>
+<text class="tx-s" x="544.0" y="125.0" text-anchor="middle" fill="var(--ink-3)">update</text>
+<rect x="580.0" y="103.0" width="56.0" height="34.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.1"/>
+<text class="tx-s" x="608.0" y="125.0" text-anchor="middle" fill="var(--ink-3)">fix</text>
+<rect x="644.0" y="103.0" width="56.0" height="34.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.1"/>
+<text class="tx-s" x="672.0" y="125.0" text-anchor="middle" fill="var(--ink-3)">update</text>
+<rect x="710.0" y="78.0" width="150.0" height="84.0" fill="var(--surface)" stroke="var(--surface)" stroke-width="0"/>
+<rect x="710.0" y="78.0" width="150.0" height="84.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.8" fill-opacity=".14"/>
+<text class="tx" x="724.0" y="100.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">整合時發現</text>
+<text class="tx-s" x="724.0" y="120.0" text-anchor="start" fill="var(--ink-2)">top 編不過</text>
+<text class="tx-s" x="724.0" y="140.0" text-anchor="start" fill="var(--ink-2)">或下游跑不起來</text>
+<line x1="50.0" y1="178.0" x2="700.0" y2="178.0" stroke="var(--warn)" stroke-width="1.2"/>
+<line x1="50.0" y1="172.0" x2="50.0" y2="178.0" stroke="var(--warn)" stroke-width="1.2"/>
+<line x1="700.0" y1="172.0" x2="700.0" y2="178.0" stroke="var(--warn)" stroke-width="1.2"/>
+<text class="tx" x="375.0" y="196.0" text-anchor="middle" fill="var(--warn)" style="font-weight:600">回頭要查的範圍：每一包都要拆開看</text>
+<text class="tx-lbl" x="20.0" y="240.0" text-anchor="start" fill="var(--ink-2)">怎麼找</text>
+<text class="tx" x="32.0" y="264.0" text-anchor="start" fill="var(--ink-2)">· 一包一包拆開，猜哪幾個檔案有關</text>
+<text class="tx" x="32.0" y="286.0" text-anchor="start" fill="var(--ink-2)">· 逐個問當時改了什麼</text>
+<text class="tx" x="32.0" y="308.0" text-anchor="start" fill="var(--ink-2)">· 在自己的 workspace 把舊版換回來試</text>
+<text class="tx-lbl" x="460.0" y="240.0" text-anchor="start" fill="var(--ink-2)">誰先發現</text>
+<rect x="460.0" y="252.0" width="60.7" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="490.4" y="266.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">整合的人</text>
+<rect x="528.7" y="252.0" width="32.6" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="545.0" y="266.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">PD</text>
+<rect x="569.3" y="252.0" width="32.6" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="585.6" y="266.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">DV</text>
+<rect x="609.9" y="252.0" width="40.4" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="630.1" y="266.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">韌體</text>
+<rect x="658.3" y="252.0" width="40.4" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="678.5" y="266.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">客戶</text>
+<text class="tx-s" x="460.0" y="300.0" text-anchor="start" fill="var(--ink-3)">發現的人離那次改動最遠，手上沒有線索</text>
+<line x1="20.0" y1="332.0" x2="860.0" y2="332.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="358.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">改動進 depot 時沒有任何檢查，問題要等到整合或下游才浮現。</text>
+<text class="tx" x="20.0" y="382.0" text-anchor="start" fill="var(--ink-2)">從發現點往回找，中間每一包都要拆開看；一次送進的東西越多，越難切。</text>
+</svg></div><div class="pn">5 / 7</div></section>
+<section class="slide"><div class="kicker">版控只當備份的團隊　·　圖 6 ／ 7</div><h1>問題：下游說不出收到了什麼，人走了流程跟著走</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左半：上游工程師從 workspace 手動打包成 chipA_rtl_0917.tgz，README 靠回想寫改了什麼，交給下游 PD、DV、韌體、客戶。下游問不出來的：跟上一包差在哪、哪些是刻意改的哪些是順手改的、這包和 label 的內容一樣嗎、出問題了要回報哪一版。右半：資深工程師知道的 regression 怎麼跑、哪些檔案沒在用、為什麼這樣接、環境怎麼設、run 和版本的對應；離職或調組之後，接手的人拿到的這五項都打叉，depot 裡只剩一堆檔案。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="24.0" text-anchor="start" fill="var(--ink-2)">交給下游</text>
+<rect x="20.0" y="40.0" width="160.0" height="56.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="34.0" y="62.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">上游工程師</text>
+<text class="tx-s" x="34.0" y="82.0" text-anchor="start" fill="var(--ink-2)">從 workspace 手動打包</text>
+<line x1="184.0" y1="68.0" x2="212.0" y2="68.0" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="216.0" y="40.0" width="184.0" height="56.0" fill="var(--surface)" stroke="var(--ink-2)" stroke-width="1.4"/>
+<text class="tx" x="230.0" y="62.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">chipA_rtl_0917.tgz</text>
+<text class="tx-s" x="230.0" y="82.0" text-anchor="start" fill="var(--ink-2)">README：改了…（靠回想）</text>
+<line x1="308.0" y1="100.0" x2="308.0" y2="122.0" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="20.0" y="126.0" width="380.0" height="44.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="34.0" y="153.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">下游：PD、DV、韌體、客戶</text>
+<text class="tx-lbl" x="20.0" y="200.0" text-anchor="start" fill="var(--warn)">下游問不出來的</text>
+<text class="tx" x="32.0" y="224.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="52.0" y="224.0" text-anchor="start" fill="var(--ink-2)">跟上一包差在哪？</text>
+<text class="tx" x="32.0" y="250.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="52.0" y="250.0" text-anchor="start" fill="var(--ink-2)">哪些是刻意改的、哪些是順手改的？</text>
+<text class="tx" x="32.0" y="276.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="52.0" y="276.0" text-anchor="start" fill="var(--ink-2)">這包和 label 的內容一樣嗎？</text>
+<text class="tx" x="32.0" y="302.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="52.0" y="302.0" text-anchor="start" fill="var(--ink-2)">出問題了，要回報哪一版？</text>
+<text class="tx-lbl" x="460.0" y="24.0" text-anchor="start" fill="var(--ink-2)">人離開的時候</text>
+<rect x="460.0" y="40.0" width="160.0" height="180.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="474.0" y="62.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">資深工程師知道的</text>
+<text class="tx-s" x="474.0" y="90.0" text-anchor="start" fill="var(--ink-2)">· regression 怎麼跑</text>
+<text class="tx-s" x="474.0" y="112.0" text-anchor="start" fill="var(--ink-2)">· 哪些檔案沒在用</text>
+<text class="tx-s" x="474.0" y="134.0" text-anchor="start" fill="var(--ink-2)">· 為什麼這樣接</text>
+<text class="tx-s" x="474.0" y="156.0" text-anchor="start" fill="var(--ink-2)">· 環境怎麼設</text>
+<text class="tx-s" x="474.0" y="178.0" text-anchor="start" fill="var(--ink-2)">· run 和版本的對應</text>
+<line x1="624.0" y1="126.0" x2="696.0" y2="126.0" stroke="var(--warn)" stroke-width="1.6" marker-end="url(#ar-w)"/>
+<text class="tx-s" x="660.0" y="114.0" text-anchor="middle" fill="var(--warn)">離職／調組</text>
+<rect x="700.0" y="40.0" width="160.0" height="180.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".05"/>
+<text class="tx" x="714.0" y="62.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">接手的人拿到的</text>
+<text class="tx-s" x="714.0" y="90.0" text-anchor="start" fill="var(--warn)">✗ regression 怎麼跑</text>
+<text class="tx-s" x="714.0" y="112.0" text-anchor="start" fill="var(--warn)">✗ 哪些檔案沒在用</text>
+<text class="tx-s" x="714.0" y="134.0" text-anchor="start" fill="var(--warn)">✗ 為什麼這樣接</text>
+<text class="tx-s" x="714.0" y="156.0" text-anchor="start" fill="var(--warn)">✗ 環境怎麼設</text>
+<text class="tx-s" x="714.0" y="178.0" text-anchor="start" fill="var(--warn)">✗ run 和版本的對應</text>
+<text class="tx-s" x="714.0" y="208.0" text-anchor="start" fill="var(--ink-2)">depot 裡只剩一堆檔案</text>
+<line x1="20.0" y1="332.0" x2="860.0" y2="332.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="358.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">下游收到的是一包檔案，拿不到它的來歷。</text>
+<text class="tx" x="20.0" y="382.0" text-anchor="start" fill="var(--ink-2)">工作流程存在人身上，人離開的時候，depot 留不住它。</text>
+</svg></div><div class="pn">6 / 7</div></section>
+<section class="slide"><div class="kicker">版控只當備份的團隊　·　圖 7 ／ 7</div><h1>總結：備份做到了，關於檔案的問題一個都答不出</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左欄 depot 做到的，四個打勾：檔案的最新版在哪、誰在什麼時候改過哪個檔案、舊版救得回來、里程碑那天的檔案清單。右欄 depot 答不出來的，六個打叉，各附今天誰在回答：這個結果是哪一版做的（跑的人）、從乾淨的機器能重現嗎（沒人試過）、哪一次改動弄壞了它（大家一起猜）、下游收到的跟上一版差在哪（上游工程師）、跑的步驟與環境在哪裡（CAD 加跑的人）、這個檔案還有人在用嗎（最資深的人）。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="40.0" text-anchor="start" fill="var(--goal)">depot 做到的</text>
+<text class="tx" x="32.0" y="72.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx" x="52.0" y="72.0" text-anchor="start" fill="var(--ink-2)">檔案的最新版在哪</text>
+<text class="tx" x="32.0" y="102.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx" x="52.0" y="102.0" text-anchor="start" fill="var(--ink-2)">誰在什麼時候改過哪個檔案</text>
+<text class="tx" x="32.0" y="132.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx" x="52.0" y="132.0" text-anchor="start" fill="var(--ink-2)">舊版救得回來</text>
+<text class="tx" x="32.0" y="162.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx" x="52.0" y="162.0" text-anchor="start" fill="var(--ink-2)">里程碑那天的檔案清單（label）</text>
+<text class="tx-s" x="20.0" y="206.0" text-anchor="start" fill="var(--ink-3)">備份要做的事，它都做到了</text>
+<text class="tx-lbl" x="440.0" y="40.0" text-anchor="start" fill="var(--warn)">depot 答不出來的</text>
+<text class="tx-lbl" x="760.0" y="40.0" text-anchor="start" fill="var(--ink-3)">今天誰在回答</text>
+<text class="tx" x="452.0" y="72.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="472.0" y="72.0" text-anchor="start" fill="var(--ink-2)">這個結果是哪一版做的？</text>
+<rect x="760.0" y="58.0" width="50.6" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="785.3" y="72.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">跑的人</text>
+<text class="tx" x="452.0" y="102.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="472.0" y="102.0" text-anchor="start" fill="var(--ink-2)">從乾淨的機器能重現嗎？</text>
+<rect x="760.0" y="88.0" width="60.7" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="790.4" y="102.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">沒人試過</text>
+<text class="tx" x="452.0" y="132.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="472.0" y="132.0" text-anchor="start" fill="var(--ink-2)">哪一次改動弄壞了它？</text>
+<rect x="760.0" y="118.0" width="70.9" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="795.5" y="132.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">大家一起猜</text>
+<text class="tx" x="452.0" y="162.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="472.0" y="162.0" text-anchor="start" fill="var(--ink-2)">下游收到的跟上一版差在哪？</text>
+<rect x="760.0" y="148.0" width="70.9" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="795.5" y="162.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">上游工程師</text>
+<text class="tx" x="452.0" y="192.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="472.0" y="192.0" text-anchor="start" fill="var(--ink-2)">跑的步驟與環境在哪裡？</text>
+<rect x="760.0" y="178.0" width="85.9" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="803.0" y="192.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">CAD 加跑的人</text>
+<text class="tx" x="452.0" y="222.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="472.0" y="222.0" text-anchor="start" fill="var(--ink-2)">這個檔案還有人在用嗎？</text>
+<rect x="760.0" y="208.0" width="70.9" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="795.5" y="222.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">最資深的人</text>
+<line x1="20.0" y1="300.0" x2="860.0" y2="300.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="326.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">備份的功能它確實做到了；右邊每一題，今天都由某個人的記憶回答。</text>
+<text class="tx" x="20.0" y="350.0" text-anchor="start" fill="var(--ink-2)">AI 的產出要跨團隊被採用，先得讓紀錄能回答右邊這些題。</text>
+</svg></div><div class="pn">7 / 7</div></section>
+</body>
+</html>

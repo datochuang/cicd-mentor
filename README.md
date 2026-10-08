@@ -16,6 +16,31 @@ PDF 版：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agen
 
 ![協作：agent 自主地轉循環，方向由 PM 理解後核准](docs/slides/img/ai-agent-and-pm-make-cicd-happen/p-6.png)
 
+## 其他圖形文件
+
+### 把版控當備份的團隊：depot 留住檔案，留不住答案
+
+這類團隊每天具體怎麼做事，問題從哪裡長出來。七頁。PDF：[docs/slides/repo-as-backup-keeps-files-not-answers.pdf](docs/slides/repo-as-backup-keeps-files-not-answers.pdf)
+
+<details>
+<summary>展開七頁</summary>
+
+![日常：改動在個人 workspace 累積，depot 隔很久才收到一大包](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-1.png)
+
+![散落：跑得起來需要的東西分在五個地方，depot 只是其中之一](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-2.png)
+
+![交付：結果靠 email 裡的路徑傳遞，label 只記得檔案](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-3.png)
+
+![問題：「這份結果是哪一版跑的」要問好幾個人，答案仍是大概](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-4.png)
+
+![問題：壞掉被發現時，離改壞它的那次 submit 已經很遠](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-5.png)
+
+![問題：下游說不出收到了什麼，人走了流程跟著走](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-6.png)
+
+![總結：備份做到了，關於檔案的問題一個都答不出](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-7.png)
+
+</details>
+
 ## 這個 repo 裡有什麼
 
 目前是規劃階段，還沒有 agent 的程式碼。
@@ -25,6 +50,7 @@ PDF 版：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agen
 | [direction.md](direction.md) | 目前有效的整體構想、設計要點、未決問題 |
 | [decision-log.md](decision-log.md) | 每個決定的日期、理由、取代了什麼 |
 | [research/](research/) | 業界實踐與類比分析等參考資料，附來源 |
-| [docs/slides/](docs/slides/) | 上面這份圖形文件的 HTML 與 PDF |
+| [docs/slides/](docs/slides/) | 圖形文件的 HTML、PDF 與逐頁 PNG |
+| [todo.md](todo.md) | 擱置的議題與待決定的事 |
 
-上面的圖由 `python3 docs/figures/ai-agent-and-pm-make-cicd-happen/build.py` 產生（需要 Google Chrome 與 poppler）。
+這些圖由 `python3 docs/figures/<文件名>/build.py` 產生（需要 Google Chrome 與 poppler）。
