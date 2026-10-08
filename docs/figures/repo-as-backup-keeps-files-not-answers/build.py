@@ -382,16 +382,17 @@ def p8():
     return svg(s, 880, 480, aria)
 
 # ── 圖 9：收斂成五個原則 ─────────────────────────────────────────────
+# 原則一律用英文專有名詞（2026-10-09 使用者定），中文只是註解。
 ANCHORS = [
-    ("小步常進", "改動小而頻繁地進到共用的地方，每一包說得出改了哪一件事",
+    ("Small batches", "小步常進", "改動小而頻繁地進到共用的地方，每一包說得出改了哪一件事",
      "隨便挑一包 submit，說得出它改了哪一件事", ["圖 1", "圖 5"]),
-    ("單一事實來源（SSOT）", "跑得起來需要的一切都在版控裡，而且只有一份",
+    ("Single Source of Truth", "SSOT　單一事實來源", "跑得起來需要的一切都在版控裡，而且只有一份",
      "換一台乾淨的機器，只靠版控的內容做出同一個結果", ["圖 2", "圖 3", "圖 6"]),
-    ("可追溯", "每個結果與交付物都連得回產生它的版本、工具、環境與步驟",
+    ("Traceability", "可追溯", "每個結果與交付物都連得回產生它的版本、工具、環境與步驟",
      "隨便拿一份結果，說得出它的版本、工具、環境與步驟", ["圖 3", "圖 4", "圖 6"]),
-    ("變更即驗證（CI）", "改動進來的當下就被機器檢查",
+    ("Continuous Integration", "CI　變更即驗證", "改動進來的當下就被機器檢查",
      "改壞的那一包進來時就被標出來，用不著等到整合", ["圖 5"]),
-    ("自我描述", "目錄的用途、相依、怎麼跑，寫在 repo 裡",
+    ("Self-documenting", "自我描述", "目錄的用途、相依、怎麼跑，寫在 repo 裡",
      "第一次來的人或 AI agent 只讀 repo，就說得出每個目錄的用途與相依", ["圖 6", "圖 7"]),
 ]
 
@@ -399,14 +400,15 @@ ANCHORS = [
 def p9():
     s = []
     T(s, 20, 34, "原則", cls="tx-lbl", fill=GOAL)
-    T(s, 210, 34, "意思，以及做得到／做不到的檢驗", cls="tx-lbl", fill=INK2)
+    T(s, 260, 34, "意思，以及做得到／做不到的檢驗", cls="tx-lbl", fill=INK2)
     T(s, 712, 34, "沒做到時的問題", cls="tx-lbl", fill=WARN)
-    for i, (name, meaning, test, figs) in enumerate(ANCHORS):
+    for i, (en, zh, meaning, test, figs) in enumerate(ANCHORS):
         y = 48 + 62 * i
         rect(s, 20, y + 8, 3, 40, col=GOAL, fill=GOAL, sw=0)
-        T(s, 34, y + 32, name, cls="tx", fill=GOAL, w=700)
-        T(s, 210, y + 24, meaning, fill=INK2)
-        T(s, 210, y + 44, "檢驗：" + test, fill=GRAY)
+        T(s, 34, y + 26, en, cls="tx", fill=GOAL, w=700)
+        T(s, 34, y + 45, zh, fill=GRAY)
+        T(s, 260, y + 24, meaning, fill=INK2)
+        T(s, 260, y + 44, "檢驗：" + test, fill=GRAY)
         x = 712
         for f in figs:
             x += pill(s, x, y + 18, f, WARN, h=20) + 6
@@ -415,8 +417,8 @@ def p9():
         ("五個原則都是 repo 該有的性質，各有一個做得到或做不到的檢驗。", True),
         ("之後談對策，每一條只回答一個問題：它讓哪一個檢驗從做不到變成做得到。", False),
     ])
-    aria = ("五列原則，各附意思、檢驗與對應的問題頁：小步常進（圖 1、5）；單一事實來源 SSOT（圖 2、3、6）；可追溯（圖 3、4、6）；"
-            "變更即驗證 CI（圖 5）；自我描述（圖 6、7）。")
+    aria = ("五列原則，各附意思、檢驗與對應的問題頁：Small batches（圖 1、5）；Single Source of Truth, SSOT（圖 2、3、6）；Traceability（圖 3、4、6）；"
+            "Continuous Integration, CI（圖 5）；Self-documenting（圖 6、7）。")
     return svg(s, 880, 480, aria)
 
 
