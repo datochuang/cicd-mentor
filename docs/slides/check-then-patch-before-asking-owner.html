@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+<meta charset="utf-8">
+<title>第一次進 workspace：照五個原則檢查，不過就先補一版</title>
+<style>
+:root{--paper:#fff;--surface:#fff;--surface-2:#eef2f5;--ink:#17212b;--ink-2:#48596a;--ink-3:#78889a;--rule:#cfd9e1;--rule-2:#aebbc7;
+--goal:#116b64;--warn:#a0580f;--agent:#2f6f9f;--pm:#7a4f9a;
+--mono:"SF Mono",Menlo,Consolas,"PingFang TC","Noto Sans TC","Microsoft JhengHei",monospace;
+--sans:"Helvetica Neue",Arial,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif}
+html,body{margin:0;padding:0;background:#fff;color:var(--ink);font-family:var(--sans)}
+body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@page{size:A4 landscape;margin:0}
+.slide{width:297mm;height:210mm;box-sizing:border-box;padding:11mm 14mm 9mm;display:flex;flex-direction:column;break-after:page;page-break-after:always;overflow:hidden;position:relative}
+.slide:last-child{break-after:auto;page-break-after:auto}
+@media screen{body{background:#e6ebef}.slide{background:#fff;margin:8mm auto;box-shadow:0 1px 4px rgba(0,0,0,.12)}}
+.kicker{font-family:var(--mono);font-size:9.5pt;letter-spacing:.06em;color:var(--ink-3);margin:0 0 2mm}
+.slide h1{font-family:var(--sans);font-size:20pt;font-weight:600;margin:0 0 5mm;line-height:1.25}
+.fig{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{display:block;color:var(--ink)}
+.pn{position:absolute;right:14mm;bottom:6mm;font-family:var(--mono);font-size:8.5pt;color:var(--ink-3)}
+.tx{font-family:var(--mono);font-size:12px;fill:currentColor}
+.tx-s{font-family:var(--mono);font-size:10.5px;fill:var(--ink-3)}
+.tx-b{font-family:var(--sans);font-size:15px;font-weight:700;fill:currentColor}
+.tx-lbl{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.06em;fill:var(--ink-3)}
+</style>
+</head>
+<body>
+<section class="slide"><div class="kicker">第一次進 workspace 的檢查　·　圖 1 ／ 7</div><h1>流程：五個檢查各驗一個原則，不過就先補一版給 owner 採用</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左邊是進去之前要做的事：開專用乾淨的 workspace、只 sync 不碰別人的目錄、先記基線、指令以站上 p4 help 為準。中間是五個檢查的順序：Self-documenting 看得懂嗎（圖 2）、SSOT 跑得起來嗎（圖 3）、Traceability 連得回來源嗎（圖 4）、Continuous Integration 每次變更有機器檢查嗎（圖 5）、Small batches 一包一件事嗎（圖 6）。右邊是每個檢查都走一遍的循環：查、判定、不過就先補一版 patch、交 owner 採用或修正、結果記進地圖。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="20.0" text-anchor="start" fill="var(--ink-2)">這份文件回答：第一次進一個沒看過的 workspace，怎麼具體檢查它有沒有 CI/CD；檢查點不過時，自己先補什麼 ↓</text>
+<rect x="20.0" y="44.0" width="200.0" height="150.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="34.0" y="68.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">進去之前</text>
+<text class="tx-s" x="34.0" y="96.0" text-anchor="start" fill="var(--ink-2)">· 開專用、乾淨的 workspace</text>
+<text class="tx-s" x="34.0" y="118.0" text-anchor="start" fill="var(--ink-2)">· 只 sync，不碰別人的目錄</text>
+<text class="tx-s" x="34.0" y="140.0" text-anchor="start" fill="var(--ink-2)">· 看到的狀態先記成基線</text>
+<text class="tx-s" x="34.0" y="162.0" text-anchor="start" fill="var(--ink-2)">· 指令以站上 p4 help 為準</text>
+<line x1="224.0" y1="120.0" x2="254.0" y2="120.0" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ar)"/>
+<text class="tx-lbl" x="260.0" y="36.0" text-anchor="start" fill="var(--goal)">五個檢查，照這個順序</text>
+<rect x="260.0" y="44.0" width="270.0" height="38.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".08"/>
+<text class="tx" x="272.0" y="60.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">1  Self-documenting</text>
+<text class="tx-s" x="272.0" y="75.0" text-anchor="start" fill="var(--ink-2)">看得懂嗎</text>
+<rect x="475.2" y="53.0" width="42.8" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="496.6" y="67.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">圖 2</text>
+<line x1="395.0" y1="84.0" x2="395.0" y2="88.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<rect x="260.0" y="90.0" width="270.0" height="38.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".08"/>
+<text class="tx" x="272.0" y="106.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">2  SSOT</text>
+<text class="tx-s" x="272.0" y="121.0" text-anchor="start" fill="var(--ink-2)">跑得起來嗎</text>
+<rect x="475.2" y="99.0" width="42.8" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="496.6" y="113.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">圖 3</text>
+<line x1="395.0" y1="130.0" x2="395.0" y2="134.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<rect x="260.0" y="136.0" width="270.0" height="38.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".08"/>
+<text class="tx" x="272.0" y="152.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">3  Traceability</text>
+<text class="tx-s" x="272.0" y="167.0" text-anchor="start" fill="var(--ink-2)">連得回來源嗎</text>
+<rect x="475.2" y="145.0" width="42.8" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="496.6" y="159.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">圖 4</text>
+<line x1="395.0" y1="176.0" x2="395.0" y2="180.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<rect x="260.0" y="182.0" width="270.0" height="38.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".08"/>
+<text class="tx" x="272.0" y="198.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">4  Continuous Integration</text>
+<text class="tx-s" x="272.0" y="213.0" text-anchor="start" fill="var(--ink-2)">每次變更有機器檢查嗎</text>
+<rect x="475.2" y="191.0" width="42.8" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="496.6" y="205.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">圖 5</text>
+<line x1="395.0" y1="222.0" x2="395.0" y2="226.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<rect x="260.0" y="228.0" width="270.0" height="38.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".08"/>
+<text class="tx" x="272.0" y="244.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">5  Small batches</text>
+<text class="tx-s" x="272.0" y="259.0" text-anchor="start" fill="var(--ink-2)">一包一件事嗎</text>
+<rect x="475.2" y="237.0" width="42.8" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="496.6" y="251.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">圖 6</text>
+<text class="tx-s" x="260.0" y="290.0" text-anchor="start" fill="var(--ink-3)">圖 5 的 check 直接用圖 3 的 script</text>
+<text class="tx-s" x="260.0" y="306.0" text-anchor="start" fill="var(--ink-3)">圖 5 的結果附上圖 4 的 manifest</text>
+<text class="tx-lbl" x="580.0" y="36.0" text-anchor="start" fill="var(--ink-2)">每個檢查都走一遍</text>
+<rect x="580.0" y="44.0" width="280.0" height="36.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="594.0" y="67.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">查</text>
+<line x1="720.0" y1="84.0" x2="720.0" y2="92.0" stroke="var(--ink-2)" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="580.0" y="96.0" width="280.0" height="36.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="594.0" y="119.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">判定</text>
+<line x1="720.0" y1="136.0" x2="720.0" y2="144.0" stroke="var(--ink-2)" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="580.0" y="148.0" width="280.0" height="36.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".06"/>
+<text class="tx" x="594.0" y="171.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">不過：先補一版 patch</text>
+<line x1="720.0" y1="188.0" x2="720.0" y2="196.0" stroke="var(--ink-2)" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="580.0" y="200.0" width="280.0" height="36.0" fill="var(--pm)" stroke="var(--pm)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="594.0" y="223.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">交 owner：採用或修正</text>
+<line x1="720.0" y1="240.0" x2="720.0" y2="248.0" stroke="var(--ink-2)" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="580.0" y="252.0" width="280.0" height="36.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="594.0" y="275.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">結果記進地圖</text>
+<text class="tx-s" x="740.0" y="115.0" text-anchor="start" fill="var(--ink-3)">過：記錄，下一個</text>
+<line x1="20.0" y1="330.0" x2="860.0" y2="330.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="356.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">五個檢查各對應一個原則的檢驗；不過的時候，多數缺口靠通用常識就能先補一版。</text>
+<text class="tx" x="20.0" y="380.0" text-anchor="start" fill="var(--ink-2)">owner 拿到的是可以直接採用的 patch，只有少數幾件事需要他回答。</text>
+</svg></div><div class="pn">1 / 7</div></section>
+<section class="slide"><div class="kicker">第一次進 workspace 的檢查　·　圖 2 ／ 7</div><h1>Self-documenting：只讀 repo 說不出目錄用途，就先寫一版地圖</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="Self-documenting 的檢查：怎麼查（列頂層目錄與 README、找 filelist 與 run script、對照哪些檔案沒被引用、看最近的 CL）；判定（每個目錄說得出用途、誰引用誰畫得出來、怎麼跑有寫下來；不過的徵兆：rtl_old 與 rtl_new2 並存、README 過期、沒有檔案說怎麼跑）；先補：PROJECT_MAP.md 初稿標依據、從 filelist 擷取的相依圖、疑似未使用清單只標不刪；只需要問 owner：猜的那幾行對不對、疑似未使用的目錄能不能標為棄用。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<rect x="20.0" y="14.0" width="120.8" height="24.0" rx="12" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="80.4" y="32.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">Self-documenting</text>
+<text class="tx" x="152.8" y="31.0" text-anchor="start" fill="var(--ink-2)">檢驗：第一次來的人或 AI agent 只讀 repo，就說得出每個目錄的用途與相依</text>
+<text class="tx-lbl" x="20.0" y="70.0" text-anchor="start" fill="var(--ink-2)">怎麼查</text>
+<text class="tx-s" x="20.0" y="94.0" text-anchor="start" fill="var(--ink-2)">· 列頂層目錄，找 README、說明檔</text>
+<text class="tx-s" x="20.0" y="116.0" text-anchor="start" fill="var(--ink-2)">· 找 filelist 與 run script</text>
+<text class="tx-s" x="20.0" y="138.0" text-anchor="start" fill="var(--ink-2)">· 對照：哪些檔案沒被任何 filelist 引用</text>
+<text class="tx-s" x="20.0" y="160.0" text-anchor="start" fill="var(--ink-2)">· 看最近的 CL：哪些目錄還有人在動</text>
+<text class="tx-lbl" x="300.0" y="70.0" text-anchor="start" fill="var(--ink-2)">判定</text>
+<text class="tx" x="300.0" y="94.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="318.0" y="94.0" text-anchor="start" fill="var(--ink-2)">每個頂層目錄說得出用途</text>
+<text class="tx" x="300.0" y="116.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="318.0" y="116.0" text-anchor="start" fill="var(--ink-2)">誰引用誰畫得出來</text>
+<text class="tx" x="300.0" y="138.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="318.0" y="138.0" text-anchor="start" fill="var(--ink-2)">怎麼跑有一份寫下來的</text>
+<text class="tx-s" x="300.0" y="170.0" text-anchor="start" fill="var(--warn)">不過的徵兆</text>
+<text class="tx" x="300.0" y="192.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx-s" x="318.0" y="192.0" text-anchor="start" fill="var(--ink-2)">rtl_old/ 與 rtl_new2/ 並存</text>
+<text class="tx" x="300.0" y="214.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx-s" x="318.0" y="214.0" text-anchor="start" fill="var(--ink-2)">README 寫的是上一個專案</text>
+<text class="tx" x="300.0" y="236.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx-s" x="318.0" y="236.0" text-anchor="start" fill="var(--ink-2)">沒有任何檔案說怎麼跑</text>
+<text class="tx-lbl" x="560.0" y="70.0" text-anchor="start" fill="var(--goal)">不過時，先補這些（自己做）</text>
+<rect x="560.0" y="80.0" width="300.0" height="136.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".06"/>
+<text class="tx" x="574.0" y="104.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">PROJECT_MAP.md 初稿</text>
+<text class="tx-s" x="574.0" y="121.0" text-anchor="start" fill="var(--ink-2)">每個目錄一行用途，標依據：擷取／推測／猜的</text>
+<text class="tx" x="574.0" y="144.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">相依圖</text>
+<text class="tx-s" x="574.0" y="161.0" text-anchor="start" fill="var(--ink-2)">從 filelist 擷取誰引用誰</text>
+<text class="tx" x="574.0" y="184.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">疑似未使用清單</text>
+<text class="tx-s" x="574.0" y="201.0" text-anchor="start" fill="var(--ink-2)">沒被引用也沒人動的目錄，只標不刪</text>
+<text class="tx-lbl" x="560.0" y="242.0" text-anchor="start" fill="var(--warn)">只需要問 owner</text>
+<text class="tx-s" x="560.0" y="264.0" text-anchor="start" fill="var(--warn)">? 標「猜的」那幾行對不對</text>
+<text class="tx-s" x="560.0" y="284.0" text-anchor="start" fill="var(--warn)">? 疑似未使用的目錄能不能標為棄用</text>
+<line x1="20.0" y1="356.0" x2="860.0" y2="356.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="382.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">看懂的依據要分開標：擷取的、推測的、猜的，owner 只需要看猜的那幾行。</text>
+<text class="tx" x="20.0" y="406.0" text-anchor="start" fill="var(--ink-2)">沒被引用的目錄先標、不刪；刪不刪是 owner 的事。</text>
+</svg></div><div class="pn">2 / 7</div></section>
+<section class="slide"><div class="kicker">第一次進 workspace 的檢查　·　圖 3 ／ 7</div><h1>SSOT：乾淨的 workspace 跑不起來，缺的先補成 script 進 depot</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="SSOT 的檢查：怎麼查（專用 workspace 只 sync、照 repo 寫的方式編 top 跑最小 sim、每個失敗分類、跟 owner 的結果比對）；判定（編得過跑得完、結果一致；不過的徵兆：filelist 引用不存在的檔、script 在 home 或 proj 底下、工具版本只在 .cshrc）；先補：setup.sh、run_smoke.sh、缺檔清單、.p4ignore 提案；只需要問 owner：缺的檔在誰的 workspace、產生檔要不要移出版控。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<rect x="20.0" y="14.0" width="202.7" height="24.0" rx="12" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="121.4" y="32.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">Single Source of Truth (SSOT)</text>
+<text class="tx" x="234.7" y="31.0" text-anchor="start" fill="var(--ink-2)">檢驗：換一台乾淨的機器，只靠版控的內容做出同一個結果</text>
+<text class="tx-lbl" x="20.0" y="70.0" text-anchor="start" fill="var(--ink-2)">怎麼查</text>
+<text class="tx-s" x="20.0" y="94.0" text-anchor="start" fill="var(--ink-2)">· 專用 workspace 只 sync，不帶本機設定</text>
+<text class="tx-s" x="20.0" y="116.0" text-anchor="start" fill="var(--ink-2)">· 照 repo 裡寫的方式編 top、跑一個最小的 sim</text>
+<text class="tx-s" x="20.0" y="138.0" text-anchor="start" fill="var(--ink-2)">· 每個失敗分類：缺檔／缺工具／缺環境／缺 script</text>
+<text class="tx-s" x="20.0" y="160.0" text-anchor="start" fill="var(--ink-2)">· 跟 owner 手上的結果比對</text>
+<text class="tx-lbl" x="300.0" y="70.0" text-anchor="start" fill="var(--ink-2)">判定</text>
+<text class="tx" x="300.0" y="94.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="318.0" y="94.0" text-anchor="start" fill="var(--ink-2)">編得過、跑得完</text>
+<text class="tx" x="300.0" y="116.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="318.0" y="116.0" text-anchor="start" fill="var(--ink-2)">結果和 owner 手上的一致</text>
+<text class="tx-s" x="300.0" y="148.0" text-anchor="start" fill="var(--warn)">不過的徵兆</text>
+<text class="tx" x="300.0" y="170.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx-s" x="318.0" y="170.0" text-anchor="start" fill="var(--ink-2)">filelist 引用不存在的檔</text>
+<text class="tx" x="300.0" y="192.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx-s" x="318.0" y="192.0" text-anchor="start" fill="var(--ink-2)">script 在 /home 或 /proj 底下</text>
+<text class="tx" x="300.0" y="214.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx-s" x="318.0" y="214.0" text-anchor="start" fill="var(--ink-2)">工具版本只在 .cshrc 裡</text>
+<text class="tx-lbl" x="560.0" y="70.0" text-anchor="start" fill="var(--goal)">不過時，先補這些（自己做）</text>
+<rect x="560.0" y="80.0" width="300.0" height="176.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".06"/>
+<text class="tx" x="574.0" y="104.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">setup.sh</text>
+<text class="tx-s" x="574.0" y="121.0" text-anchor="start" fill="var(--ink-2)">工具版本、環境變數寫死在裡面，進 depot</text>
+<text class="tx" x="574.0" y="144.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">run_smoke.sh</text>
+<text class="tx-s" x="574.0" y="161.0" text-anchor="start" fill="var(--ink-2)">從乾淨 workspace 編 top＋跑一個 sim</text>
+<text class="tx" x="574.0" y="184.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">缺檔清單</text>
+<text class="tx-s" x="574.0" y="201.0" text-anchor="start" fill="var(--ink-2)">哪個 filelist 第幾行引用、誰最後動過</text>
+<text class="tx" x="574.0" y="224.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">.p4ignore 提案</text>
+<text class="tx-s" x="574.0" y="241.0" text-anchor="start" fill="var(--ink-2)">進了 depot 的產生檔列出來</text>
+<text class="tx-lbl" x="560.0" y="282.0" text-anchor="start" fill="var(--warn)">只需要問 owner</text>
+<text class="tx-s" x="560.0" y="304.0" text-anchor="start" fill="var(--warn)">? 缺的檔在誰的 workspace</text>
+<text class="tx-s" x="560.0" y="324.0" text-anchor="start" fill="var(--warn)">? 產生檔要不要移出版控</text>
+<line x1="20.0" y1="356.0" x2="860.0" y2="356.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="382.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">跑不起來的每一個原因，都是一件散在 depot 外面的東西；補法是把它寫成 script 進 depot。</text>
+<text class="tx" x="20.0" y="406.0" text-anchor="start" fill="var(--ink-2)">只有「缺的檔在誰那裡」這件事非問 owner 不可。</text>
+</svg></div><div class="pn">3 / 7</div></section>
+<section class="slide"><div class="kicker">第一次進 workspace 的檢查　·　圖 4 ／ 7</div><h1>Traceability：交付物說不出來源，就補一份 manifest 跟著它走</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="Traceability 的檢查：怎麼查（拿最近的 label、release 包、regression 報告，問哪個 CL、哪些工具版本、什麼環境、怎麼跑，用指紋比對 release 包和 label）；判定（四件事都從紀錄答得出、release 包和 label 對得上；不過的徵兆：label 只有檔案清單、報告是會變的路徑、release 包手動打）；先補：make_manifest.sh、manifest 跟著結果走、舊交付物反查；只需要問 owner：交付物的正式清單。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<rect x="20.0" y="14.0" width="95.6" height="24.0" rx="12" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="67.8" y="32.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">Traceability</text>
+<text class="tx" x="127.6" y="31.0" text-anchor="start" fill="var(--ink-2)">檢驗：隨便拿一份結果，說得出它的版本、工具、環境與步驟</text>
+<text class="tx-lbl" x="20.0" y="70.0" text-anchor="start" fill="var(--ink-2)">怎麼查</text>
+<text class="tx-s" x="20.0" y="94.0" text-anchor="start" fill="var(--ink-2)">· 拿最近的 label、release 包、regression 報告</text>
+<text class="tx-s" x="20.0" y="116.0" text-anchor="start" fill="var(--ink-2)">· 問四件事：CL、工具版本、環境、怎麼跑</text>
+<text class="tx-s" x="20.0" y="138.0" text-anchor="start" fill="var(--ink-2)">· 用內容指紋比對 release 包和 label 的檔案</text>
+<text class="tx-lbl" x="300.0" y="70.0" text-anchor="start" fill="var(--ink-2)">判定</text>
+<text class="tx" x="300.0" y="94.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="318.0" y="94.0" text-anchor="start" fill="var(--ink-2)">四件事都從紀錄答得出，用不著問人</text>
+<text class="tx" x="300.0" y="116.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="318.0" y="116.0" text-anchor="start" fill="var(--ink-2)">release 包和 label 對得上</text>
+<text class="tx-s" x="300.0" y="148.0" text-anchor="start" fill="var(--warn)">不過的徵兆</text>
+<text class="tx" x="300.0" y="170.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx-s" x="318.0" y="170.0" text-anchor="start" fill="var(--ink-2)">label 只有檔案清單</text>
+<text class="tx" x="300.0" y="192.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx-s" x="318.0" y="192.0" text-anchor="start" fill="var(--ink-2)">報告是一個會變的路徑</text>
+<text class="tx" x="300.0" y="214.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx-s" x="318.0" y="214.0" text-anchor="start" fill="var(--ink-2)">release 包手動打，README 靠回想</text>
+<text class="tx-lbl" x="560.0" y="70.0" text-anchor="start" fill="var(--goal)">不過時，先補這些（自己做）</text>
+<rect x="560.0" y="80.0" width="300.0" height="136.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".06"/>
+<text class="tx" x="574.0" y="104.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">make_manifest.sh</text>
+<text class="tx-s" x="574.0" y="121.0" text-anchor="start" fill="var(--ink-2)">寫出 CL、label、工具版本、環境、指令、結果摘要</text>
+<text class="tx" x="574.0" y="144.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">manifest 跟著結果走</text>
+<text class="tx-s" x="574.0" y="161.0" text-anchor="start" fill="var(--ink-2)">放進 run 目錄與 release 包，一起進 depot</text>
+<text class="tx" x="574.0" y="184.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">舊交付物反查</text>
+<text class="tx-s" x="574.0" y="201.0" text-anchor="start" fill="var(--ink-2)">指紋對得上就補 manifest，對不上標「無法追溯」</text>
+<text class="tx-lbl" x="560.0" y="242.0" text-anchor="start" fill="var(--warn)">只需要問 owner</text>
+<text class="tx-s" x="560.0" y="264.0" text-anchor="start" fill="var(--warn)">? 交付物的正式清單：給誰、含什麼</text>
+<line x1="20.0" y1="356.0" x2="860.0" y2="356.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="382.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">manifest 是結果和來源之間缺的那條線；讓產生結果的 script 順手寫出來，就不用靠人記。</text>
+<text class="tx" x="20.0" y="406.0" text-anchor="start" fill="var(--ink-2)">過去的交付物追不回來的，標成基線，從現在開始追。</text>
+</svg></div><div class="pn">4 / 7</div></section>
+<section class="slide"><div class="kicker">第一次進 workspace 的檢查　·　圖 5 ／ 7</div><h1>CI：submit 後沒有機器檢查，就先把 smoke check 排上去跑</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="Continuous Integration 的檢查：怎麼查（找 submit 觸發的檢查、找定期 regression 與結果、翻最近一次壞掉多久後被誰發現）；判定（每個 submit 都有機器跑過最小檢查、結果公開附 CL 號；不過的徵兆：只有人手動跑、nightly 結果只在信箱、壞掉由下游先發現）；先補：最小 check 用圖 3 的 run_smoke.sh、先定時跑再每個 CL 跑、結果寫到看得到的地方附 CL 號與 manifest；只需要問 owner：觸發裝在哪誰有權限、算力與 license 配額、壞了通知誰。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<rect x="20.0" y="14.0" width="190.1" height="24.0" rx="12" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="115.1" y="32.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">Continuous Integration (CI)</text>
+<text class="tx" x="222.1" y="31.0" text-anchor="start" fill="var(--ink-2)">檢驗：改壞的那一包進來時就被標出來，用不著等到整合</text>
+<text class="tx-lbl" x="20.0" y="70.0" text-anchor="start" fill="var(--ink-2)">怎麼查</text>
+<text class="tx-s" x="20.0" y="94.0" text-anchor="start" fill="var(--ink-2)">· 找 submit 觸發的檢查：p4 triggers、CI job</text>
+<text class="tx-s" x="20.0" y="116.0" text-anchor="start" fill="var(--ink-2)">· 找定期 regression：結果放哪、誰看得到</text>
+<text class="tx-s" x="20.0" y="138.0" text-anchor="start" fill="var(--ink-2)">· 翻最近一次壞掉：多久後、被誰發現</text>
+<text class="tx-lbl" x="300.0" y="70.0" text-anchor="start" fill="var(--ink-2)">判定</text>
+<text class="tx" x="300.0" y="94.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="318.0" y="94.0" text-anchor="start" fill="var(--ink-2)">每個 submit 都有機器跑過最小檢查</text>
+<text class="tx" x="300.0" y="116.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="318.0" y="116.0" text-anchor="start" fill="var(--ink-2)">結果公開看得到，附 CL 號</text>
+<text class="tx-s" x="300.0" y="148.0" text-anchor="start" fill="var(--warn)">不過的徵兆</text>
+<text class="tx" x="300.0" y="170.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx-s" x="318.0" y="170.0" text-anchor="start" fill="var(--ink-2)">只有人手動跑</text>
+<text class="tx" x="300.0" y="192.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx-s" x="318.0" y="192.0" text-anchor="start" fill="var(--ink-2)">有 nightly，結果只在跑的人信箱</text>
+<text class="tx" x="300.0" y="214.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx-s" x="318.0" y="214.0" text-anchor="start" fill="var(--ink-2)">壞掉由下游先發現</text>
+<text class="tx-lbl" x="560.0" y="70.0" text-anchor="start" fill="var(--goal)">不過時，先補這些（自己做）</text>
+<rect x="560.0" y="80.0" width="300.0" height="136.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".06"/>
+<text class="tx" x="574.0" y="104.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">最小 check</text>
+<text class="tx-s" x="574.0" y="121.0" text-anchor="start" fill="var(--ink-2)">拿圖 3 的 run_smoke.sh：編得過＋一個 sim</text>
+<text class="tx" x="574.0" y="144.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">排上去跑</text>
+<text class="tx-s" x="574.0" y="161.0" text-anchor="start" fill="var(--ink-2)">先定時跑，再進到每個 CL 都跑</text>
+<text class="tx" x="574.0" y="184.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">結果可見</text>
+<text class="tx-s" x="574.0" y="201.0" text-anchor="start" fill="var(--ink-2)">寫到 repo 看得到的地方，附 CL 號與 manifest</text>
+<text class="tx-lbl" x="560.0" y="242.0" text-anchor="start" fill="var(--warn)">只需要問 owner</text>
+<text class="tx-s" x="560.0" y="264.0" text-anchor="start" fill="var(--warn)">? 觸發要裝在哪、誰有權限</text>
+<text class="tx-s" x="560.0" y="284.0" text-anchor="start" fill="var(--warn)">? 算力與 license 的配額</text>
+<text class="tx-s" x="560.0" y="304.0" text-anchor="start" fill="var(--warn)">? 壞了通知誰</text>
+<line x1="20.0" y1="356.0" x2="860.0" y2="356.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="382.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">最小的 check 就是圖 3 那個 script；先讓它定時跑、結果看得到，再談每個 CL 都跑。</text>
+<text class="tx" x="20.0" y="406.0" text-anchor="start" fill="var(--ink-2)">裝觸發、配算力、通知誰，要 owner 點頭。</text>
+</svg></div><div class="pn">5 / 7</div></section>
+<section class="slide"><div class="kicker">第一次進 workspace 的檢查　·　圖 6 ／ 7</div><h1>Small batches：歷史改不了，補的是說明模板與拆包的示範</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="Small batches 的檢查：怎麼查（p4 changes 看最近的 submit 幾個檔案與說明、p4 describe 看一包裡幾件事、看兩包之間隔多久）；判定（一包一件事、說明看得懂；不過的徵兆：說明是 update fix sync、一包混 RTL tb script、一包是某人一整段期間的工作）；先補：CL 說明模板、pre-submit 清單、拆包示範；只需要問 owner：團隊願不願意用模板、進行中的大包怎麼拆。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<rect x="20.0" y="14.0" width="101.9" height="24.0" rx="12" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="70.9" y="32.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">Small batches</text>
+<text class="tx" x="133.9" y="31.0" text-anchor="start" fill="var(--ink-2)">檢驗：隨便挑一包 submit，說得出它改了哪一件事</text>
+<text class="tx-lbl" x="20.0" y="70.0" text-anchor="start" fill="var(--ink-2)">怎麼查</text>
+<text class="tx-s" x="20.0" y="94.0" text-anchor="start" fill="var(--ink-2)">· p4 changes 看最近的 submit：幾個檔案、說明</text>
+<text class="tx-s" x="20.0" y="116.0" text-anchor="start" fill="var(--ink-2)">· 挑幾包用 p4 describe 看：一包裡幾件事</text>
+<text class="tx-s" x="20.0" y="138.0" text-anchor="start" fill="var(--ink-2)">· 看兩包之間隔多久</text>
+<text class="tx-lbl" x="300.0" y="70.0" text-anchor="start" fill="var(--ink-2)">判定</text>
+<text class="tx" x="300.0" y="94.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="318.0" y="94.0" text-anchor="start" fill="var(--ink-2)">一包一件事</text>
+<text class="tx" x="300.0" y="116.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="318.0" y="116.0" text-anchor="start" fill="var(--ink-2)">說明看得懂改了什麼、為什麼</text>
+<text class="tx-s" x="300.0" y="148.0" text-anchor="start" fill="var(--warn)">不過的徵兆</text>
+<text class="tx" x="300.0" y="170.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx-s" x="318.0" y="170.0" text-anchor="start" fill="var(--ink-2)">說明是 update、fix、sync</text>
+<text class="tx" x="300.0" y="192.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx-s" x="318.0" y="192.0" text-anchor="start" fill="var(--ink-2)">一包混 RTL、tb、script</text>
+<text class="tx" x="300.0" y="214.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx-s" x="318.0" y="214.0" text-anchor="start" fill="var(--ink-2)">一包是某人一整段期間的工作</text>
+<text class="tx-lbl" x="560.0" y="70.0" text-anchor="start" fill="var(--goal)">不過時，先補這些（自己做）</text>
+<rect x="560.0" y="80.0" width="300.0" height="136.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".06"/>
+<text class="tx" x="574.0" y="104.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">CL 說明模板</text>
+<text class="tx-s" x="574.0" y="121.0" text-anchor="start" fill="var(--ink-2)">改了什麼／為什麼／怎麼驗</text>
+<text class="tx" x="574.0" y="144.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">pre-submit 清單</text>
+<text class="tx-s" x="574.0" y="161.0" text-anchor="start" fill="var(--ink-2)">跑過 smoke、filelist 更新、一包一件事</text>
+<text class="tx" x="574.0" y="184.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">拆包示範</text>
+<text class="tx-s" x="574.0" y="201.0" text-anchor="start" fill="var(--ink-2)">拿一包進行中的工作，用 shelved CL 拆成幾包</text>
+<text class="tx-lbl" x="560.0" y="242.0" text-anchor="start" fill="var(--warn)">只需要問 owner</text>
+<text class="tx-s" x="560.0" y="264.0" text-anchor="start" fill="var(--warn)">? 團隊願不願意用模板</text>
+<text class="tx-s" x="560.0" y="284.0" text-anchor="start" fill="var(--warn)">? 進行中的大包怎麼拆，當事人決定</text>
+<line x1="20.0" y1="356.0" x2="860.0" y2="356.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="382.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">submit 的歷史改不了，能補的是下一包的寫法：模板、清單、一個拆開的示範。</text>
+<text class="tx" x="20.0" y="406.0" text-anchor="start" fill="var(--ink-2)">大包怎麼拆，只有當事人知道哪些改動是一起的。</text>
+</svg></div><div class="pn">6 / 7</div></section>
+<section class="slide"><div class="kicker">第一次進 workspace 的檢查　·　圖 7 ／ 7</div><h1>分工：自己能補的直接交 patch，只有三類事才問 owner</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="三欄分工：自己補直接交 patch（PROJECT_MAP 初稿、setup.sh 與 run_smoke.sh、make_manifest.sh、最小 check 與排程、CL 說明模板與 pre-submit 清單）；補了但要 owner 決定（產生檔移出版控、目錄標為棄用、觸發裝不裝、壞了通知誰、拆包示範採不採用）；只有 owner 知道要問（缺的檔在誰那裡、猜的用途對不對、交付物給誰含什麼、進行中的大包怎麼拆）。下方是 patch 怎麼交的四步：每個 patch 一個 shelved CL、說明寫四件事、owner 採用等於 submit 不採用回一句為什麼、結果記進 PROJECT_MAP。最後是從頭到尾守住的四條：不碰別人的 workspace、不刪任何東西、owner 採用才進 depot、猜的一律標出來。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<rect x="20.0" y="20.0" width="272.0" height="160.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.6" fill-opacity=".10"/>
+<text class="tx" x="34.0" y="44.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">自己補，直接交 patch</text>
+<text class="tx-s" x="34.0" y="70.0" text-anchor="start" fill="var(--ink-2)">· PROJECT_MAP 初稿</text>
+<text class="tx-s" x="34.0" y="92.0" text-anchor="start" fill="var(--ink-2)">· setup.sh、run_smoke.sh</text>
+<text class="tx-s" x="34.0" y="114.0" text-anchor="start" fill="var(--ink-2)">· make_manifest.sh</text>
+<text class="tx-s" x="34.0" y="136.0" text-anchor="start" fill="var(--ink-2)">· 最小 check 與排程</text>
+<text class="tx-s" x="34.0" y="158.0" text-anchor="start" fill="var(--ink-2)">· CL 說明模板、pre-submit 清單</text>
+<rect x="304.0" y="20.0" width="272.0" height="160.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".05"/>
+<text class="tx" x="318.0" y="44.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">補了，但要 owner 決定</text>
+<text class="tx-s" x="318.0" y="70.0" text-anchor="start" fill="var(--ink-2)">· 產生檔移出版控</text>
+<text class="tx-s" x="318.0" y="92.0" text-anchor="start" fill="var(--ink-2)">· 目錄標為棄用</text>
+<text class="tx-s" x="318.0" y="114.0" text-anchor="start" fill="var(--ink-2)">· 觸發裝不裝、裝在哪</text>
+<text class="tx-s" x="318.0" y="136.0" text-anchor="start" fill="var(--ink-2)">· 壞了通知誰</text>
+<text class="tx-s" x="318.0" y="158.0" text-anchor="start" fill="var(--ink-2)">· 拆包的示範採不採用</text>
+<rect x="588.0" y="20.0" width="272.0" height="160.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".05"/>
+<text class="tx" x="602.0" y="44.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">只有 owner 知道，要問</text>
+<text class="tx-s" x="602.0" y="70.0" text-anchor="start" fill="var(--ink-2)">· 缺的檔在誰那裡</text>
+<text class="tx-s" x="602.0" y="92.0" text-anchor="start" fill="var(--ink-2)">· 猜的用途對不對</text>
+<text class="tx-s" x="602.0" y="114.0" text-anchor="start" fill="var(--ink-2)">· 交付物給誰、含什麼</text>
+<text class="tx-s" x="602.0" y="136.0" text-anchor="start" fill="var(--ink-2)">· 進行中的大包怎麼拆</text>
+<text class="tx-lbl" x="20.0" y="212.0" text-anchor="start" fill="var(--ink-2)">patch 怎麼交</text>
+<rect x="20.0" y="222.0" width="196.0" height="70.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="32.0" y="244.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">每個 patch 一個 shelved CL</text>
+<text class="tx-s" x="32.0" y="263.0" text-anchor="start" fill="var(--ink-3)">或 MR</text>
+<line x1="219.0" y1="257.0" x2="231.0" y2="257.0" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="234.0" y="222.0" width="196.0" height="70.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="246.0" y="244.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">說明寫四件事</text>
+<text class="tx-s" x="246.0" y="263.0" text-anchor="start" fill="var(--ink-3)">查了什麼、發現什麼</text>
+<text class="tx-s" x="246.0" y="279.0" text-anchor="start" fill="var(--ink-3)">讓哪個檢驗做得到、哪些是猜的</text>
+<line x1="433.0" y1="257.0" x2="445.0" y2="257.0" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="448.0" y="222.0" width="196.0" height="70.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="460.0" y="244.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">owner 採用＝submit</text>
+<text class="tx-s" x="460.0" y="263.0" text-anchor="start" fill="var(--ink-3)">不採用＝回一句為什麼</text>
+<line x1="647.0" y1="257.0" x2="659.0" y2="257.0" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="662.0" y="222.0" width="196.0" height="70.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="674.0" y="244.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">結果記進 PROJECT_MAP</text>
+<text class="tx-s" x="674.0" y="263.0" text-anchor="start" fill="var(--ink-3)">採用了什麼、為什麼不採用</text>
+<text class="tx-lbl" x="20.0" y="322.0" text-anchor="start" fill="var(--warn)">從頭到尾守住的</text>
+<rect x="20.0" y="332.0" width="133.9" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="87.0" y="346.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">不碰別人的 workspace</text>
+<rect x="161.9" y="332.0" width="81.1" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="202.5" y="346.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">不刪任何東西</text>
+<rect x="251.0" y="332.0" width="136.3" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="319.2" y="346.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">owner 採用才進 depot</text>
+<rect x="395.4" y="332.0" width="91.3" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="441.0" y="346.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">猜的一律標出來</text>
+<line x1="20.0" y1="370.0" x2="860.0" y2="370.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="396.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">多數缺口靠通用常識就補得出第一版；owner 的工作從回答問題變成採用或修正 patch。</text>
+<text class="tx" x="20.0" y="420.0" text-anchor="start" fill="var(--ink-2)">三類事只有 owner 知道；問的時候附上你已經查到的部分。</text>
+</svg></div><div class="pn">7 / 7</div></section>
+</body>
+</html>

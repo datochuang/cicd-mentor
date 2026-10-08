@@ -45,6 +45,29 @@ PDF 版：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agen
 
 </details>
 
+### 第一次進 workspace：照五個原則檢查，不過就先補一版
+
+人或 AI agent 進到一個沒看過的 workspace，具體怎麼檢查它有沒有 CI/CD；每個檢查點不過時自己先補什麼，只有哪些事才問 owner。七頁。PDF：[docs/slides/check-then-patch-before-asking-owner.pdf](docs/slides/check-then-patch-before-asking-owner.pdf)
+
+<details>
+<summary>展開七頁</summary>
+
+![流程：五個檢查各驗一個原則，不過就先補一版給 owner 採用](docs/slides/img/check-then-patch-before-asking-owner/p-1.png)
+
+![Self-documenting：只讀 repo 說不出目錄用途，就先寫一版地圖](docs/slides/img/check-then-patch-before-asking-owner/p-2.png)
+
+![SSOT：乾淨的 workspace 跑不起來，缺的先補成 script 進 depot](docs/slides/img/check-then-patch-before-asking-owner/p-3.png)
+
+![Traceability：交付物說不出來源，就補一份 manifest 跟著它走](docs/slides/img/check-then-patch-before-asking-owner/p-4.png)
+
+![CI：submit 後沒有機器檢查，就先把 smoke check 排上去跑](docs/slides/img/check-then-patch-before-asking-owner/p-5.png)
+
+![Small batches：歷史改不了，補的是說明模板與拆包的示範](docs/slides/img/check-then-patch-before-asking-owner/p-6.png)
+
+![分工：自己能補的直接交 patch，只有三類事才問 owner](docs/slides/img/check-then-patch-before-asking-owner/p-7.png)
+
+</details>
+
 ## 這個 repo 裡有什麼
 
 目前是規劃階段，還沒有 agent 的程式碼。
