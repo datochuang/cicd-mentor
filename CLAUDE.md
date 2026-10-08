@@ -12,7 +12,7 @@
 
 # 目前方向
 
-上面「背景」描述的是最初的構想，已經修正：現在不追求全自主的 agent，而是**由一位人類 PM 定方向與成功定義，agent 負責轉化成行動、與工程師溝通、產出技術成果，並幫 PM 成長**。細節以 [direction.md](direction.md) 為準。
+上面「背景」描述的是最初的構想，已經修正：**agent 自主運行，但方向由一位人類 PM 決定**。Agent 不眠不休地主動發現問題、構思方案、與工程師溝通、產出技術成果；它形成的決定和方針要主動向 PM 匯報，確認 PM 真的理解之後由 PM approve。Agent 同時幫 PM 成長，並提供團隊的 holistic view。細節以 [direction.md](direction.md) 為準。
 
 `../cicd-introduction-and-promotion/cicd-mentor-guide/` 是較早的相關成果，只供參考，不是這個專案的起點或預設前提。
 

@@ -23,4 +23,16 @@
 
 **取代：** 最初構想中「自主運行、自行掃描 repo 並直接向工程師提出建議」的 agent 定位。
 
+> 註：這筆的措辭把「自主運行」和「自主決定方向」混在一起，已由 D3 澄清。agent 仍然自主運行，受限制的只有方向與方針。
+
 **討論脈絡：** [research/industry-practices-and-risks.md](research/industry-practices-and-risks.md)、[research/consulting-analogy.md](research/consulting-analogy.md)
+
+---
+
+## D3｜2026-10-08｜澄清 D2：自主運行，方針由 PM 理解後核准
+
+**決定：** Agent 是 autonomous 在運行的，像一位不眠不休的同事：主動觀察、發現問題、構思方案、溝通、實作，不必等指令。受限制的不是運行，而是方向：agent 形成的各種決定和方針，必須主動向 PM 匯報，確認 PM 真的理解了提案和行動方針，再由 PM approve。
+
+**理由：** D2 要解決的是「不知道 agent 要帶我往哪裡去」，不是 agent 不夠被動。限制運行會浪費 agent 不眠不休的優勢；限制方向才真正把方向和責任留在人手上。強調「確認理解」是因為 PM 可能觀念不夠準確，若核准流於蓋章，等於方向還是由 agent 決定。
+
+**取代：** D2 中「不追求全自主運行的 agent」的說法。D2 其餘內容（PM 定方向與成功定義、agent 轉化與執行）不變。
