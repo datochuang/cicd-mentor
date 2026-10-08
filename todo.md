@@ -25,7 +25,8 @@
 | T9 | 10-08 | 圖形文件第 6 頁「對的掌舵人」四個條件 | 我歸納的，確認是否符合你心中的人選 | 同上 |
 | T10 | 10-08 | 圖形文件要不要做盲讀驗收 | 派沒看過討論的 subagent 扮成讀者只讀 PDF，回報看不懂的地方 | |
 | T11 | 10-08 | 舊文字版說明文件的 Artifact 連結要不要刪 | 檔案已移到 docs/archive/；連結 https://claude.ai/artifact/GqNg8P9QN569RFvVhb1Yme 仍在 | |
-| T14 | 10-08 | 圖形文件《把版控當備份的團隊》初稿等你修正 | 八頁全部是我創作的，情境與細節（submit 的時機、五個散落的地方、下游的問題等）都要你對照實際狀況修正 | docs/slides/repo-as-backup-keeps-files-not-answers.pdf |
+| T16 | 10-08 | **五個定錨原則**（小步常進、SSOT、可追溯、變更即驗證、自我描述）等你確認 | 我提的；之後所有對策都要對應其中一個，所以名單與檢驗的寫法要先定下來。記在 direction.md「問題的定錨點」與圖形文件第 9 頁 | direction.md |
+| T14 | 10-08 | 圖形文件《把版控當備份的團隊》初稿等你修正 | 九頁全部是我創作的，情境與細節（submit 的時機、五個散落的地方、下游的問題等）都要你對照實際狀況修正 | docs/slides/repo-as-backup-keeps-files-not-answers.pdf |
 
 ## 其他
 
