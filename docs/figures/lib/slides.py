@@ -144,4 +144,8 @@ def build(name, doc_title, kicker, pages):
     shutil.rmtree(png_dir, ignore_errors=True)
     png_dir.mkdir(parents=True)
     subprocess.run(["pdftoppm", "-png", "-r", "110", str(pdf), str(png_dir / "p")], check=True)
+    # pdftoppm 超過九頁會補零（p-01.png）；統一成 p-1.png，README 的連結才不會隨頁數變
+    for f in sorted(png_dir.glob("p-*.png")):
+        n = int(f.stem.split("-")[1])
+        f.rename(png_dir / ("p-%d.png" % n))
     print(h.relative_to(ROOT), pdf.relative_to(ROOT), png_dir.relative_to(ROOT), sep="\n")

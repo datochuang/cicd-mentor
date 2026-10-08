@@ -6,7 +6,7 @@
 # 讀完要能：在圖裡認出自己團隊的做法，說出哪些問題是從這些做法長出來的。
 # 主旨：把版控當備份的團隊，depot 裡有檔案，但結果的來源、跑法、環境與理由都在人身上；
 #       問題在整合、交接與人員異動時浮現。
-# 脈絡：1–3 具體怎麼運作 → 4–7 造成什麼問題 → 8 總結 → 9 收斂成五個原則（之後對策的定錨點）。
+# 脈絡：1–3 具體怎麼運作 → 4–8 造成什麼問題 → 9 總結 → 10 收斂成五個原則（之後對策的定錨點）。
 # 所有路徑、CL 號碼、label 名稱都是示意，不對應任何實際專案。
 import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
@@ -353,23 +353,74 @@ def p7():
     return svg(s, 880, 480, aria)
 
 
-# ── 圖 8：總結 ──────────────────────────────────────────────────────
-DONE = ["檔案的最新版在哪", "誰在什麼時候改過哪個檔案", "舊版救得回來", "里程碑那天的檔案清單（label）"]
-NOT = [("這個結果是哪一版做的？", "跑的人"), ("從乾淨的機器能重現嗎？", "沒人試過"), ("哪一次改動弄壞了它？", "大家一起猜"),
-       ("下游收到的跟上一版差在哪？", "上游工程師"), ("跑的步驟與環境在哪裡？", "CAD 加跑的人"), ("這個檔案還有人在用嗎？", "最資深的人"),
-       ("這個目錄裝什麼、靠哪些東西？", "帶你的那個人")]
+# ── 圖 8：沒有 branch ───────────────────────────────────────────────
+SUBMITS_ON_MAIN = [(110, "A：半成品", True), (230, "B：修 bug", False), (350, "A：半成品", True), (470, "C：改 .f", False),
+                   (590, "B：半成品", True), (710, "A：做完了", False), (810, "C：半成品", True)]
+NO_BRANCH_HARMS = ["半成品留在 workspace，隔很久才進一大包（圖 1）", "半成品直接進 main，sync 到的人一起壞",
+                   "沒有「做完、驗過」的關卡，CI 沒有觸發點", "一段工作和別人的改動混在 main 上，撤不回來",
+                   "第二個版本靠複製目錄：rtl_new2/（圖 7）"]
 
 
 def p8():
     s = []
+    T(s, 20, 24, "今天：只有一條 main，所有人直接往上 submit", cls="tx-lbl", fill=INK2)
+    for x, label, half in SUBMITS_ON_MAIN:
+        col = WARN if half else "var(--rule-2)"
+        if half:
+            rect(s, x - 46, 38, 92, 24, col=WARN, fill=WARN, op=".06", sw=1.2, dash="4 3")
+        else:
+            rect(s, x - 46, 38, 92, 24, col="var(--rule-2)", fill="var(--surface-2)", sw=1.1)
+        T(s, x, 54, label, anchor="middle", fill=WARN if half else INK2)
+        arrow(s, x, 66, x, 82, col=WARN if half else INK2, ar="ar-w" if half else "ar", sw=1.2)
+    arrow(s, 20, 88, 860, 88, col=INK2, ar="ar", sw=2)
+    T(s, 24, 108, "main", cls="tx", fill=INK2, w=700)
+    T(s, 150, 108, "✗ main 壞了，sync 到的人一起壞", fill=WARN)
+    T(s, 630, 108, "✗ 又壞了", fill=WARN)
+    # 少了的那條線
+    rect(s, 20, 128, 380, 132, col=GOAL, fill=GOAL, op=".05", sw=1.4, dash="6 4")
+    T(s, 34, 150, "少了的那條線：一段工作做完、驗過，再併回 main", cls="tx", fill=GOAL, w=700)
+    line(s, 40, 182, 380, 182, col="var(--rule-2)", sw=1.6)
+    T(s, 40, 174, "main", fill=GRAY)
+    path(s, "M90,182 C110,182 110,216 130,216 L300,216 C320,216 320,182 340,182", col=GOAL, ar="ar-g", sw=1.8)
+    for x in (165, 205, 245):
+        s.append('<circle cx="%d" cy="216" r="4" fill="%s"/>' % (x, GOAL))
+        T(s, x, 238, "小包", anchor="middle", fill=GOAL)
+    rect(s, 266, 204, 36, 24, col="var(--surface)", fill="var(--surface)", sw=0)
+    pill(s, 268, 206, "驗", GOAL, h=20)
+    T(s, 346, 174, "併回", fill=GOAL)
+    T(s, 34, 254, "branch 或 stream：Perforce 本來就有，團隊習慣上不用", fill=GRAY)
+    # 沒有這條線的時候
+    T(s, 440, 150, "沒有這條線的時候", cls="tx-lbl", fill=WARN)
+    for j, t in enumerate(NO_BRANCH_HARMS):
+        check(s, 452, 176 + 24 * j, False, t)
+    bottom(s, 300, [
+        ("branch 給半成品一個可以常常 submit、又不會弄壞 main 的地方；少了它，Small batches 和 CI 都沒有地方發生。", True),
+        ("複製目錄成了 branch 的代替品，repo 因此越來越看不懂。", False),
+    ])
+    aria = ("上半：一條 main 的時間軸，A、B、C 三個人直接往上 submit，其中四包是半成品，標示 main 壞了、sync 到的人一起壞。"
+            "左下是少了的那條線：從 main 分出一條 branch，上面三個小包、一個驗的關卡，再併回 main；Perforce 本來就有 branch 與 stream，團隊習慣上不用。"
+            "右下列出沒有這條線的時候：半成品留在 workspace 隔很久才進一大包、半成品直接進 main 大家一起壞、沒有做完驗過的關卡 CI 沒有觸發點、"
+            "一段工作和別人的改動混在 main 上撤不回來、第二個版本靠複製目錄。")
+    return svg(s, 880, 480, aria)
+
+
+# ── 圖 9：總結 ──────────────────────────────────────────────────────
+DONE = ["檔案的最新版在哪", "誰在什麼時候改過哪個檔案", "舊版救得回來", "里程碑那天的檔案清單（label）"]
+NOT = [("這個結果是哪一版做的？", "跑的人"), ("從乾淨的機器能重現嗎？", "沒人試過"), ("哪一次改動弄壞了它？", "大家一起猜"),
+       ("下游收到的跟上一版差在哪？", "上游工程師"), ("跑的步驟與環境在哪裡？", "CAD 加跑的人"), ("這個檔案還有人在用嗎？", "最資深的人"),
+       ("這個目錄裝什麼、靠哪些東西？", "帶你的那個人"), ("main 現在能用嗎？", "sync 了才知道")]
+
+
+def p9():
+    s = []
     T(s, 20, 40, "depot 做到的", cls="tx-lbl", fill=GOAL)
     for j, t in enumerate(DONE):
-        check(s, 32, 72 + 30 * j, True, t)
+        check(s, 32, 72 + 27 * j, True, t)
     T(s, 20, 206, "備份要做的事，它都做到了", fill=GRAY)
     T(s, 440, 40, "depot 答不出來的", cls="tx-lbl", fill=WARN)
     T(s, 760, 40, "今天誰在回答", cls="tx-lbl", fill=GRAY)
     for j, (q, who) in enumerate(NOT):
-        y = 72 + 30 * j
+        y = 72 + 27 * j
         check(s, 452, y, False, q)
         pill(s, 760, y - 14, who, GRAY, h=20)
     bottom(s, 300, [
@@ -378,26 +429,26 @@ def p8():
     ])
     aria = ("左欄 depot 做到的，四個打勾：檔案的最新版在哪、誰在什麼時候改過哪個檔案、舊版救得回來、里程碑那天的檔案清單。"
             "右欄 depot 答不出來的，六個打叉，各附今天誰在回答：這個結果是哪一版做的（跑的人）、從乾淨的機器能重現嗎（沒人試過）、哪一次改動弄壞了它（大家一起猜）、"
-            "下游收到的跟上一版差在哪（上游工程師）、跑的步驟與環境在哪裡（CAD 加跑的人）、這個檔案還有人在用嗎（最資深的人）、這個目錄裝什麼靠哪些東西（帶你的那個人）。")
+            "下游收到的跟上一版差在哪（上游工程師）、跑的步驟與環境在哪裡（CAD 加跑的人）、這個檔案還有人在用嗎（最資深的人）、這個目錄裝什麼靠哪些東西（帶你的那個人）、main 現在能用嗎（sync 了才知道）。")
     return svg(s, 880, 480, aria)
 
-# ── 圖 9：收斂成五個原則 ─────────────────────────────────────────────
+# ── 圖 10：收斂成五個原則 ─────────────────────────────────────────────
 # 原則一律用英文專有名詞（2026-10-09 使用者定），中文只是註解。
 ANCHORS = [
     ("Small batches", "小步常進", "改動小而頻繁地進到共用的地方，每一包說得出改了哪一件事",
-     "隨便挑一包 submit，說得出它改了哪一件事", ["圖 1", "圖 5"]),
+     "隨便挑一包 submit，說得出它改了哪一件事", ["圖 1", "圖 5", "圖 8"]),
     ("Single Source of Truth", "SSOT　單一事實來源", "跑得起來需要的一切都在版控裡，而且只有一份",
      "換一台乾淨的機器，只靠版控的內容做出同一個結果", ["圖 2", "圖 3", "圖 6"]),
     ("Traceability", "可追溯", "每個結果與交付物都連得回產生它的版本、工具、環境與步驟",
      "隨便拿一份結果，說得出它的版本、工具、環境與步驟", ["圖 3", "圖 4", "圖 6"]),
-    ("Continuous Integration", "CI　變更即驗證", "改動進來的當下就被機器檢查",
-     "改壞的那一包進來時就被標出來，用不著等到整合", ["圖 5"]),
+    ("Continuous Integration", "CI　變更即驗證", "改動進來的當下就被機器檢查，共用的 main 隨時可用",
+     "改壞的那一包進來時就被標出來，用不著等到整合", ["圖 5", "圖 8"]),
     ("Self-documenting", "自我描述", "目錄的用途、相依、怎麼跑，寫在 repo 裡",
      "第一次來的人或 AI agent 只讀 repo，就說得出每個目錄的用途與相依", ["圖 6", "圖 7"]),
 ]
 
 
-def p9():
+def p10():
     s = []
     T(s, 20, 34, "原則", cls="tx-lbl", fill=GOAL)
     T(s, 260, 34, "意思，以及做得到／做不到的檢驗", cls="tx-lbl", fill=INK2)
@@ -417,8 +468,8 @@ def p9():
         ("五個原則都是 repo 該有的性質，各有一個做得到或做不到的檢驗。", True),
         ("之後談對策，每一條只回答一個問題：它讓哪一個檢驗從做不到變成做得到。", False),
     ])
-    aria = ("五列原則，各附意思、檢驗與對應的問題頁：Small batches（圖 1、5）；Single Source of Truth, SSOT（圖 2、3、6）；Traceability（圖 3、4、6）；"
-            "Continuous Integration, CI（圖 5）；Self-documenting（圖 6、7）。")
+    aria = ("五列原則，各附意思、檢驗與對應的問題頁：Small batches（圖 1、5、8）；Single Source of Truth, SSOT（圖 2、3、6）；Traceability（圖 3、4、6）；"
+            "Continuous Integration, CI（圖 5、8）；Self-documenting（圖 6、7）。")
     return svg(s, 880, 480, aria)
 
 
@@ -430,8 +481,9 @@ PAGES = [
     ("問題：壞掉被發現時，離改壞它的那次 submit 已經很遠", p5()),
     ("問題：下游說不出收到了什麼，人走了流程跟著走", p6()),
     ("問題：目錄的用途靠人帶路，AI agent 每個 workspace 都要另寫指引", p7()),
-    ("總結：備份做到了，關於檔案的問題一個都答不出", p8()),
-    ("收斂：七個問題歸到五個原則，之後的對策各自對應其中一個", p9()),
+    ("問題：沒有 branch，半成品留在 workspace 或進 main，main 隨時會壞", p8()),
+    ("總結：備份做到了，關於檔案的問題一個都答不出", p9()),
+    ("收斂：八個問題歸到五個原則，之後的對策各自對應其中一個", p10()),
 ]
 
 if __name__ == "__main__":
