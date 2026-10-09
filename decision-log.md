@@ -100,3 +100,20 @@
 **取代：** 無；補 D4 的做法層。
 
 **出處：** [agent-operating-model.md](agent-operating-model.md)「依據」做法層表；[direction.md](direction.md)。
+
+---
+
+## D9｜2026-10-09｜PM 是角色：使用者起頭、之後交棒，任何人都可能接，可以多位 PM 各推一部分
+
+**決定：** PM（負責把 CI/CD 導入團隊的人）是角色，不綁定某個人。由使用者（技術主管）起頭，之後交棒；任何人都可能接；也可以同時有多位 PM 各推專案的不同部分。規矩：
+1. 一個 design 任何時候只有一位 PM；登記表記 design → 實例 → PM。
+2. 多位 PM 共用 core 的規則，各自只定自己那部分的方針；PM 之間的衝突（例如共用的 flow 目錄）由 sponsor 裁決。
+3. sponsor 是使用者，在 PM 之上：裁決、給資源（T34 那張清單由 sponsor 談）。
+4. PM 換人，agent 不換行為（規則從 core 來）；agent 從工作區的決定紀錄、狀態板、採用率產一頁現況交接給新 PM；新 PM 重新核准授權表。
+5. 第一階段（使用者自己當 PM）授權表可以放開；交棒後的預設授權表保守，影響別人的事往上請示 sponsor。
+
+**理由：** 使用者：「選 C，任何人都可能是 PM，或是有多個 PM 去推動專案的不同部分。」PM 手冊因此寫給角色，附交棒與多 PM 的一節；agent 的工作區正好是 PM 交接的依據。
+
+**取代：** 無；補 D2、D3 裡「一位人類 PM」的說法：仍是一個 design 一位，但不是全公司一位、不是固定一人。
+
+**出處：** [direction.md](direction.md)「PM（人）」；[agent-operating-model.md](agent-operating-model.md) 7.8。

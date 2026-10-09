@@ -29,7 +29,7 @@
 | **建置說明（build brief）** | 內網 Claude Code 要知道做成什麼：元件（版控 adapter、監看與排程、分析、溝通、patch 產生、check 執行、狀態與日誌、請准流程）、介面格式、MVP 的順序、驗收方式；**core／instance／目標知識三層分離、實例登記表、版本標記**；技術選型留給它 | `build-brief.md`，點到為止；明列「交給內網決定」的事 |
 | **沙盒驗收** | agent 自己也要 test-first：先建一個種了 16 個症狀的沙盒 depot，agent 能偵測、提案、而且不越紅線，才上真實 repo | 寫進 build brief 的第一步 |
 | **模板** | PROJECT_MAP、狀態板、CL 說明、需求 markdown、請准單、日誌、五種訊息——現在只有文字描述 | `templates/` 各一個骨架檔 |
-| **PM 手冊** | PM 的功課、要談的資源與人、路線圖與停損、親自出面的三件事、怎麼讀請准單 | `pm-handbook.md`，從第七節抽出 |
+| **PM 手冊** | 寫給「PM」這個角色（D9：使用者起頭、之後交棒，可多位 PM）：PM 的功課、要談的資源與人、路線圖與停損、親自出面的三件事、怎麼讀請示；加「交棒」與「多位 PM 怎麼分工、sponsor 裁決什麼」各一節 | `pm-handbook.md`，從第七節抽出 |
 | **公司要先決定的事** | todo.md 混著本 workspace 的內部事項；啟動包要一份乾淨的決定清單（身分、權限、資安、branch 模型、ticket 系統、試點、擋 submit 的條件…） | `open-decisions.md`，從 T1–T36 抽出屬於公司的 |
 | **用語表** | PM、owner、CL 作者、PROJECT_MAP、狀態板、shelved CL、check、sanity、manifest、known-good、內圈／中圈／外圈、五原則、review 規矩 | `glossary.md` |
 | **獨立性檢查** | 啟動包不能依賴 `../google-xls` 或 claude.ai 連結；投影片只帶 PDF 與 PNG，產生器可選 | 打包時掃 `../`、`claude.ai` |

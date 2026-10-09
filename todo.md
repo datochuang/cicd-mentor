@@ -8,7 +8,6 @@
 
 | # | 加入 | 議題 | 現況／下一步 | 相關 |
 |---|---|---|---|---|
-| T1 | 10-08 | **PM 是誰？** 你本人，還是另一個人 | 問過多次還沒回答。答案會影響「觀念不準」的程度、實權大小、授權表要多保守 | direction.md |
 | T2 | 10-08 | **方針層與執行層的界線**：哪些事 agent 自己做、哪些先告知 PM、哪些只有 PM 能做（授權表） | 只列了大方向，要逐項訂 | direction.md 設計要點 6 |
 | T3 | 10-08 | **Sponsor 與試點團隊的對口人**是誰 | 未討論 | research/consulting-analogy.md |
 | T4 | 10-08 | **試點團隊與範圍**怎麼選 | 建議挑自願的團隊、一個專案、一兩種高價值檢查；未討論 | research/industry-practices-and-risks.md |
@@ -63,6 +62,7 @@
 | T12 | 10-08 | 推上 GitHub 前檢查公開範圍 | 使用者說明 repo 是個人專用，不需檢查；已推上 datochuang/cicd-mentor |
 | T16 | 10-09 | 五個定錨原則等你確認 | 全部同意，改用英文專有名詞：Small batches、SSOT、Traceability、CI、Self-documenting。記為 D4 |
 | T39 | 10-09 | 《agent 自己的版控》第 3–10 頁照 D5 改、加「換手」一頁、換手的接法誰選 | 接法由 PM 選（使用者：「這很明顯」）。全份十一頁已照 D5 改，第 5 頁換手；檔名改為 agent-own-version-control-and-instances；標題再盲讀一次（docs/reviews/titles-blind-read-agent-versioning-20261009.md 第二輪） |
+| T1 | 10-08 | PM 是誰 | 選 C：使用者起頭、之後交棒；任何人都可能是 PM，也可以多位 PM 各推一部分。記為 D9（一個 design 一位 PM、sponsor 裁決、交接包從工作區產生、手冊寫給角色） |
 | T31 | 10-09 | 做法層八條等你確認 | 照提案全採用：Test-first、Executable spec、Evidence-based delivery、Definition of Done、Flow as code、Blameless postmortem、量化（DORA 四指標 IC 版）、Review policy per directory。記為 D8 |
 | T19 | 10-09 | 第六個原則 Code review | 不採用。使用者：review 非必要，由各 design 自行決定、過程中可變，定成規矩「每個目錄都要講好需不需要 code review」，掛在 Self-documenting，做法層加 Review policy per directory。記為 D7 |
 | T18 | 10-09 | CI 的意思補「結果由機器寫下；共用的 main 隨時可用」 | 使用者同意。記在 D7 |
