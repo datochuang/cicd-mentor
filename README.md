@@ -170,7 +170,7 @@ agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張
 
 ### agent 自己的版控與多實例：實例從 agent 的 repo clone、工作區回到它；depot 只收流程在用的工具
 
-系統有兩種 repo：agent 自己的一個 git repo，和很多個目標 depot（Perforce 為主，也可能是 git）。第 1 頁一張圖分三帶：上帶是 agent 的 git repo，內容隨時間長（core/ 一直在；每個實例的工作區 `designs/<名>/` 從加入那天起就在裡面），master 線上有 release；中間是實例的 lane——從某個 release clone 出來、建自己的工作區、工作區加入 repo 並定期 merge 回 master、更好的機制走 feature branch 與 MR、舊實例停了新版實例 clone 就拿到工作區接手；下帶是目標 depot，agent 只讀它，只有團隊流程裡真的在用的工具（check、flow 的修正、trigger、CL 說明模板）才以 shelved CL 或 MR 交進去，文件（PROJECT_MAP、狀態板）主本在工作區、副本 owner 要才交（D5：像顧問，工作記錄和簡報留在顧問公司，用在客戶流程裡的工具必須在客戶那裡）。第 2–6 頁講 core（三層、為什麼 git、改版、沙盒、安全），第 7–10 頁講實例（多實例、換手、版號、代價），第 11 頁三件要公司定。內容來自 [agent-operating-model.md](agent-operating-model.md) 第八節。十一頁。PDF：[docs/slides/agent-own-version-control-and-instances.pdf](docs/slides/agent-own-version-control-and-instances.pdf)
+系統有兩種 repo：agent 自己的一個 git repo，和很多個目標 depot（Perforce 為主，也可能是 git）。第 1 頁一張圖分三帶：上帶是 agent 的 git repo，內容隨時間長（core/ 一直在；每個實例的工作區 `designs/<名>/` 從加入那天起就在裡面），master 線上有 release；中間是實例的 lane（每個實例一個小機器人，lane 上的刻度是它自己的小版號 v0.3.1、v0.3.2…）——從某個 release clone 出來、建自己的工作區、工作區加入 repo 並定期 merge 回 master、更好的機制走 feature branch 與 MR、舊實例停了新版實例 clone 就拿到工作區接手；下帶是目標 depot，agent 只讀它，只有團隊流程裡真的在用的工具（check、flow 的修正、trigger、CL 說明模板）才以 shelved CL 或 MR 交進去，文件（PROJECT_MAP、狀態板）主本在工作區、副本 owner 要才交（D5：像顧問，工作記錄和簡報留在顧問公司，用在客戶流程裡的工具必須在客戶那裡）。第 2–6 頁講 core（三層、為什麼 git、改版、沙盒、安全），第 7–10 頁講實例（多實例、換手、版號、代價），第 11 頁三件要公司定。內容來自 [agent-operating-model.md](agent-operating-model.md) 第八節。十一頁。PDF：[docs/slides/agent-own-version-control-and-instances.pdf](docs/slides/agent-own-version-control-and-instances.pdf)
 
 <details>
 <summary>展開十一頁</summary>

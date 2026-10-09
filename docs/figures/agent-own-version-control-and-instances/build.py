@@ -34,14 +34,29 @@ def box(s, x, y, w, h, title, lines=(), col=INK2, kind="solid", title_cls="tx"):
         T(s, x + 12, y + 40 + 17 * k, l, fill=INK2)
 
 
-# ── 圖 1：總覽（兩種 repo：上帶 agent 的 git repo 隨時間長；中間實例 clone、建工作區、工作區加入 repo、換手；下帶目標的 repo 只收交付）──
+# ── 圖 1：總覽（兩種 repo：上帶 agent 的 git repo 隨時間長；中間實例 clone、建工作區、工作區加入 repo、小版號、換手；下帶目標 depot 只收流程在用的工具）──
+def robot(s, x, y, col):
+    """小機器人：中心在 (x, y)，蓋在 lane 線上。"""
+    s.append('<line x1="%d" y1="%d" x2="%d" y2="%d" stroke="%s" stroke-width="1.4"/>' % (x, y - 17, x, y - 11, col))
+    s.append('<circle cx="%d" cy="%d" r="2.2" fill="%s"/>' % (x, y - 18, col))
+    rect(s, x - 10, y - 11, 20, 16, col=col, fill="var(--surface)", sw=1.6, rx=4)
+    s.append('<circle cx="%d" cy="%d" r="2" fill="%s"/>' % (x - 4, y - 3, col))
+    s.append('<circle cx="%d" cy="%d" r="2" fill="%s"/>' % (x + 4, y - 3, col))
+    rect(s, x - 6, y + 5, 12, 7, col=col, fill=col, op=".35", sw=0, rx=2)
+
+
+def tick(s, x, y, label, col):
+    line(s, x, y - 4, x, y + 4, col=col, sw=1.6)
+    T(s, x, y + 16, label, anchor="middle", fill=GRAY)
+
+
 def p_overview():
     s = []
-    T(s, 20, 20, "這份文件回答：系統有兩種 repo——agent 自己的一個 git repo，和目標 design 的很多個；實例怎麼 clone 出來、工作區怎麼回去、怎麼換手", cls="tx-lbl", fill=INK2)
+    T(s, 20, 20, "這份文件回答：agent 自己的 repo 和目標的 depot 是什麼關係；實例怎麼 clone 出來、工作區怎麼回去、怎麼換手", cls="tx-lbl", fill=INK2)
     # ① agent 的 git repo：內容隨時間長
     rect(s, 20, 34, 836, 106, col=CORE, fill=CORE, op=".05", sw=1.4, dash="6 4")
     T(s, 32, 52, "① agent 的 git repo（只有一個）：core ＋ 每個實例的工作區；repo 的內容隨時間長 →", cls="tx-lbl", fill=CORE)
-    for x, y, t, c in [(32, 58, "core/：程式、規則、模板、通用 check", CORE), (260, 76, "designs/dma/：agent-dma 的工作區，從加入那天起就在 repo 裡", INST), (520, 94, "designs/top/：agent-top 的工作區", INST)]:
+    for x, y, t, c in [(32, 58, "core/：程式、規則、模板、通用 check", CORE), (260, 76, "designs/dma/：agent-dma 的工作區", INST), (520, 94, "designs/top/：agent-top 的工作區", INST)]:
         rect(s, x, y, 846 - x, 14, col=c, fill=c, op=".22", sw=0)
         T(s, x + 4, y + 11, t, fill=c, w=700)
     arrow(s, 32, 122, 846, 122, col=CORE, ar="ar-a", sw=2.2)
@@ -49,63 +64,70 @@ def p_overview():
     for x, t, c in [(80, "v0.3", GRAY), (340, "v0.4", CORE), (600, "v0.5", CORE)]:
         rect(s, x, 112, width(t, 10.5) + 20, 20, col="var(--surface)", fill="var(--surface)", sw=0, rx=10)
         pill(s, x, 112, t, c, h=20)
-    # 實例 1：agent-dma v0.3——clone、建工作區、工作區加入 repo
-    L1 = 180
-    arrow(s, 100, 134, 100, L1 - 6, col=INST, ar="ar-a", sw=1.4)
-    T(s, 106, 160, "clone", fill=INST)
-    line(s, 100, L1, 364, L1, col=INST, sw=2.2)
+    L1, L2 = 190, 270
+    # 實例 1：agent-dma（core v0.3）——clone、建工作區、工作區加入 repo、小版號
+    arrow(s, 100, 134, 100, L1 - 21, col=INST, ar="ar-a", sw=1.4)
+    T(s, 106, 158, "clone", fill=INST)
+    line(s, 112, L1, 364, L1, col=INST, sw=2.2)
     line(s, 376, L1, 514, L1, col=INST, sw=2.2)
     line(s, 526, L1, 580, L1, col=INST, sw=2.2)
     arrow(s, 260, L1 - 2, 260, 134, col=INST, ar="ar-a", sw=2.2)
     T(s, 252, 160, "工作區加入 repo", anchor="end", cls="tx", fill=INST, w=700)
-    T(s, 130, 196, "agent-dma v0.3：看 dma", cls="tx", fill=INST, w=700)
-    T(s, 130, 212, "建工作區 designs/dma/：PROJECT_MAP 草稿", fill=INK2)
-    T(s, 130, 228, "關係人、決定紀錄、日誌、HANDOVER", fill=INK2)
+    robot(s, 100, L1, INST)
+    T(s, 116, L1 + 16, "agent-dma", cls="tx", fill=INST, w=700)
+    for x, v in ((260, "v0.3.1"), (330, "v0.3.2"), (580, "v0.3.3")):
+        tick(s, x, L1, v, INST)
+    T(s, 116, L1 + 32, "看 dma；建工作區 designs/dma/", fill=INK2)
+    T(s, 116, L1 + 48, "PROJECT_MAP 草稿、關係人、決定、日誌", fill=INK2)
     # feature branch：更好的機制 merge 回 master
-    path(s, "M390,178 L398,160 L440,160 L456,134", col=CORE, ar="ar-a", sw=1.4)
-    T(s, 386, 196, "↑ feature branch", fill=CORE)
-    T(s, 386, 212, "→ MR → merge", fill=CORE)
+    path(s, "M390,188 L398,160 L440,160 L456,134", col=CORE, ar="ar-a", sw=1.4)
+    T(s, 386, L1 + 16, "↑ feature branch", fill=CORE)
+    T(s, 386, L1 + 32, "→ MR → merge", fill=CORE)
     # 最後一次 merge、換手
     arrow(s, 580, L1 - 2, 580, 134, col=INST, ar="ar-a", sw=1.2, dash="4 3")
-    T(s, 580, 196, "merge 紀錄，停", anchor="middle", fill=WARN)
+    T(s, 580, L1 + 32, "merge 紀錄後停", anchor="middle", fill=WARN)
     arrow(s, 588, L1, 620, L1, col=PM, ar="ar-p", sw=1.4, dash="4 3")
-    T(s, 604, 172, "換手", anchor="middle", fill=PM)
-    arrow(s, 625, 134, 625, L1 - 6, col=INST, ar="ar-a", sw=1.4)
-    T(s, 631, 160, "clone", fill=INST)
-    line(s, 625, L1, 846, L1, col=INST, sw=2.2)
-    T(s, 636, 196, "agent-dma v0.5 接手", cls="tx", fill=INST, w=700)
-    T(s, 636, 212, "clone 就拿到工作區，讀它續做", fill=INK2)
-    T(s, 636, 228, "或當全新 design 重新盤點", fill=INK2)
-    # 實例 2：agent-top v0.4
-    L2 = 248
-    arrow(s, 370, 134, 370, L2 - 6, col=INST, ar="ar-a", sw=1.4)
-    T(s, 364, 160, "clone", anchor="end", fill=INST)
-    line(s, 370, L2, 846, L2, col=INST, sw=2.2)
+    T(s, 604, L1 - 8, "換手", anchor="middle", fill=PM)
+    arrow(s, 625, 134, 625, L1 - 21, col=INST, ar="ar-a", sw=1.4)
+    T(s, 631, 158, "clone", fill=INST)
+    line(s, 637, L1, 846, L1, col=INST, sw=2.2)
+    robot(s, 625, L1, INST)
+    T(s, 641, L1 + 16, "agent-dma 接手", cls="tx", fill=INST, w=700)
+    for x, v in ((775, "v0.5.1"), (835, "v0.5.2")):
+        tick(s, x, L1, v, INST)
+    T(s, 641, L1 + 32, "clone 就拿到工作區，續做", fill=INK2)
+    T(s, 641, L1 + 48, "或當全新 design 重新盤點", fill=INK2)
+    # 實例 2：agent-top（core v0.4）
+    arrow(s, 370, 134, 370, L2 - 21, col=INST, ar="ar-a", sw=1.4)
+    T(s, 364, 158, "clone", anchor="end", fill=INST)
+    line(s, 382, L2, 846, L2, col=INST, sw=2.2)
     arrow(s, 520, L2 - 2, 520, 134, col=INST, ar="ar-a", sw=2.2)
     T(s, 528, 160, "加入", cls="tx", fill=INST, w=700)
-    T(s, 380, 264, "agent-top v0.4：看 top 與 flow；工作區 designs/top/，同樣加入 repo", fill=INST)
-    # ② 目標的 repo：只收交付
-    for x, y0 in ((112, L1 + 2), (800, L2 + 2)):
-        arrow(s, x, y0, x, 286, col=TGT, ar="ar-g", sw=1.2, dash="4 3")
-    T(s, 118, 262, "讀、交 shelved CL", fill=TGT)
-    T(s, 794, 280, "讀、交 shelved CL", anchor="end", fill=TGT)
-    rect(s, 20, 290, 836, 70, col=TGT, fill=TGT, op=".05", sw=1.4, dash="6 4")
-    T(s, 32, 308, "② 目標 design 的 depot（不只一個；Perforce 為主，也可能是 git）：agent 只讀它；只有團隊流程裡真的在用的工具才進去", cls="tx-lbl", fill=TGT)
+    robot(s, 370, L2, INST)
+    T(s, 386, L2 + 16, "agent-top", cls="tx", fill=INST, w=700)
+    for x, v in ((520, "v0.4.1"), (700, "v0.4.2")):
+        tick(s, x, L2, v, INST)
+    T(s, 386, L2 + 32, "看 top 與 flow；建工作區 designs/top/，同樣加入 repo", fill=INK2)
+    # ② 目標 depot：只收流程在用的工具
+    arrow(s, 112, L1 + 2, 112, 322, col=TGT, ar="ar-g", sw=1.2, dash="4 3")
+    T(s, 118, 296, "讀、交 shelved CL", fill=TGT)
+    arrow(s, 800, L2 + 2, 800, 322, col=TGT, ar="ar-g", sw=1.2, dash="4 3")
+    T(s, 794, 318, "讀、交 shelved CL", anchor="end", fill=TGT)
+    rect(s, 20, 326, 836, 72, col=TGT, fill=TGT, op=".05", sw=1.4, dash="6 4")
+    T(s, 32, 344, "② 目標 design 的 depot（不只一個；Perforce 為主）：agent 只讀；只有流程在用的工具才進去，走 shelved CL、owner 收", cls="tx-lbl", fill=TGT)
     for x, w, t in ((32, 300, "//depot/chipA（Perforce）：dma、top、flow"), (348, 230, "//depot/chipB（Perforce）"), (594, 250, "chipC 的 GitLab repo（git）")):
-        rect(s, x, 316, w, 24, col=TGT, fill=TGT, op=".12", sw=1.4)
-        T(s, x + 10, 332, t, cls="tx", fill=TGT, w=700)
-    T(s, 32, 354, "進去的：check、flow 的修正、trigger、CL 說明模板，owner 收了才算；文件（PROJECT_MAP、狀態板）主本在工作區，副本 owner 要才交", fill=INK2)
-    bottom(s, 370, [
-        ("兩種 repo：agent 的一個 git repo，和很多個目標 depot。實例從前者 clone、建工作區、工作區回到前者；對後者只讀，只交流程在用的工具。", True),
-        ("第 2–6 頁講 core：三層、為什麼 git、改版、沙盒、安全；第 7–10 頁講實例：多實例、換手、版號、代價；第 11 頁待決。", False),
-    ])
-    T(s, 20, 442, "用語：core＝master 上的程式與規則　實例＝從 agent 的 repo clone 出來的一份 agent（不是 RTL 的 instance）　工作區＝designs/<名>/（不是 p4 workspace）", fill=GRAY)
-    T(s, 20, 460, "　　　改版＝core 出新 release　升級＝換手：停舊實例，新版實例接手　design＝實例負責的設計（一個實例可看多個）　PM＝負責把 CI/CD 導入團隊的主管，不是專案 PM", fill=GRAY)
-    aria = ("上帶是 agent 的 git repo，只有一個：三條橫向的內容列顯示 repo 隨時間長——core/ 一直在；designs/dma/ 是 agent-dma 的工作區，從加入那天起就在 repo 裡；designs/top/ 是 agent-top 的工作區。"
-            "列下方是 master 線，有 v0.3、v0.4、v0.5 三個 release。中間兩條實例的 lane：agent-dma v0.3 從 v0.3 clone 出來看 dma，建工作區 designs/dma/（PROJECT_MAP 草稿、關係人、決定紀錄、日誌、HANDOVER），"
-            "粗箭頭把工作區加入 repo；中途開 feature branch 經 MR merge 回 master；最後一次 merge 紀錄後停，換手給從 v0.5 clone 的 agent-dma v0.5，它 clone 就拿到工作區，讀它續做或當全新 design 重新盤點。"
-            "agent-top v0.4 從 v0.4 clone 出來看 top 與 flow，建工作區 designs/top/ 同樣加入 repo。下帶是目標 design 的 repo，不只一個：chipA、chipB 兩個 Perforce depot 和 chipC 的 GitLab repo；"
-            "實例對它們只讀；只有團隊流程裡真的在用的工具才進去：check、flow 的修正、trigger、CL 說明模板，走 shelved CL 或 MR，owner 收了才算；文件如 PROJECT_MAP、狀態板主本在工作區，副本 owner 要才交。最下方用語定義 core、實例、工作區、design、換手、PM。")
+        rect(s, x, 352, w, 24, col=TGT, fill=TGT, op=".12", sw=1.4)
+        T(s, x + 10, 368, t, cls="tx", fill=TGT, w=700)
+    T(s, 32, 390, "進去的：check、flow 的修正、trigger、CL 說明模板　　不進去的：文件（PROJECT_MAP、狀態板）主本在工作區，副本 owner 要才交", fill=INK2)
+    T(s, 20, 420, "用語：core＝master 上的程式與規則　實例＝從 agent 的 repo clone 出來的一份 agent（不是 RTL 的 instance）　工作區＝designs/<名>/（不是 p4 workspace）", fill=GRAY)
+    T(s, 20, 438, "　　　小版號＝core 版號後面再加一位，實例每次把工作區 merge 回 master 就加一：agent-dma v0.3.2　改版＝core 出新 release　升級＝換手：停舊實例，新版接手", fill=GRAY)
+    T(s, 20, 456, "　　　design＝實例負責的設計（一個實例可看多個）　PM＝負責把 CI/CD 導入團隊的主管，不是專案 PM", fill=GRAY)
+    aria = ("上帶是 agent 的 git repo，只有一個：三條橫向的內容列顯示 repo 隨時間長——core/ 一直在；designs/dma/ 是 agent-dma 的工作區，從加入那天起就在；designs/top/ 是 agent-top 的工作區。"
+            "列下方是 master 線，有 v0.3、v0.4、v0.5 三個 release。中間兩條實例的 lane，每個實例畫成一個小機器人：agent-dma 從 v0.3 clone 出來看 dma，建工作區 designs/dma/（PROJECT_MAP 草稿、關係人、決定、日誌），"
+            "粗箭頭把工作區加入 repo，lane 上的刻度是它自己的小版號 v0.3.1、v0.3.2、v0.3.3；中途開 feature branch 經 MR merge 回 master；最後一次 merge 紀錄後停，換手給從 v0.5 clone 的新機器人 agent-dma，"
+            "它 clone 就拿到工作區，續做或當全新 design 重新盤點，小版號從 v0.5.1 起。agent-top 從 v0.4 clone 出來看 top 與 flow，建工作區 designs/top/ 同樣加入 repo，小版號 v0.4.1、v0.4.2。"
+            "下帶是目標 design 的 depot，不只一個：chipA、chipB 兩個 Perforce depot 和 chipC 的 GitLab repo；實例對它們只讀，只有流程在用的工具才進去（check、flow 的修正、trigger、CL 說明模板，shelved CL、owner 收）；"
+            "文件如 PROJECT_MAP、狀態板主本在工作區，副本 owner 要才交。最下方用語定義 core、實例、工作區、小版號、改版、升級、design、PM。")
     return svg(s, 880, 480, aria)
 
 
@@ -273,7 +295,7 @@ def p_safety():
     arrow(s, 264, 70, 326, 70, col=CORE, ar="ar-a", sw=1.8)
     T(s, 295, 60, "規則", anchor="middle", fill=CORE)
     rect(s, 330, 36, 200, 70, col=INST, fill=INST, op=".12", sw=1.6)
-    T(s, 342, 58, "agent-dma v0.4", cls="tx", fill=INST, w=700)
+    T(s, 342, 58, "agent-dma v0.4.2", cls="tx", fill=INST, w=700)
     T(s, 342, 78, "只照 core 的規則做", fill=INK2)
     box(s, 600, 36, 260, 70, "目標 depot 裡的文字", ["CL 說明、檔案內容、slack 訊息"], col=WARN, kind="dash")
     arrow(s, 596, 70, 534, 70, col=WARN, ar="ar-w", sw=1.6)
@@ -312,8 +334,8 @@ def p_instances():
     box(s, 460, 36, 400, 100, "登記表（在 agent 的 repo 裡）", ["//chipA/dma → agent-dma", "//chipA/top、flow、ip、top.f → agent-top", "//chipA/tb → 無"], col=INK2, kind="plain")
     T(s, 460, 160, "每則訊息、每個 CL、每筆日誌都標實例名與版號", cls="tx-lbl", fill=INST)
     rect(s, 460, 170, 400, 56, col=INST, fill="var(--surface)", sw=1.2)
-    T(s, 472, 192, "[agent-dma v0.4] 這包看起來是改 DMA 的 burst，對嗎？", fill=INK2)
-    T(s, 472, 212, "CL 48977 的說明結尾：(agent-top v0.4, registry r12)", fill=INK2)
+    T(s, 472, 192, "[agent-dma v0.4.2] 這包看起來是改 DMA 的 burst，對嗎？", fill=INK2)
+    T(s, 472, 212, "CL 48977 的說明結尾：(agent-top v0.4.3, registry r12)", fill=INK2)
     T(s, 20, 252, "沒有登記表會怎樣", cls="tx-lbl", fill=WARN)
     for k, t in enumerate(["兩個實例都去私訊同一個 owner 問同一件事", "同一個缺口開了兩個 shelved CL", "同一個 design 的狀態板兩邊各記一份，互相矛盾"]):
         check(s, 32, 276 + 22 * k, False, t, cls="tx")
@@ -339,7 +361,8 @@ def p_versions():
         T(s, x + 10, 58, n, cls="tx", fill=col, w=700)
         T(s, x + 10, 78, v, fill=INK2)
     T(s, 20, 118, "全公司的實例保持同一個 major（v0.x 都是 0）；落後的先排進升級", fill=GRAY)
-    box(s, 480, 36, 380, 120, "規矩", ["每則訊息與日誌標版號：[agent-dma v0.4]", "designs/<名>/ 的格式有 schema 版本，新版讀得懂舊紀錄", "升級就是換手：先換一個實例試跑（canary），沒事再換其他", "release note 寫「行為改了什麼」，PM 看了才排"], col=INST)
+    T(s, 20, 134, "小版號（v0.4.2 的 .2）是實例自己的：每 merge 一次工作區加一", fill=GRAY)
+    box(s, 480, 36, 380, 120, "規矩", ["標版號：[agent-dma v0.4.2]＝core v0.4＋實例的小版號 2", "designs/<名>/ 的格式有 schema 版本，新版讀得懂舊紀錄", "升級就是換手：先換一個實例試跑（canary），沒事再換其他", "release note 寫「行為改了什麼」，PM 看了才排"], col=INST)
     T(s, 20, 180, "為什麼要標版號", cls="tx-lbl", fill=WARN)
     for k, t in enumerate(["團隊看到兩個 agent 行為不一致，會問哪個才對", "出了事要查是哪一版的規則做的", "換手時新版讀不懂舊工作區的格式"]):
         check(s, 32, 204 + 22 * k, False, t, cls="tx")
