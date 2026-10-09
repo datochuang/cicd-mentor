@@ -7,9 +7,9 @@
 # 主旨：CI/CD 把一個行動的「查、判」交給機器，inner loop 才自己轉；outer loop（比較 N 個候選）靠許多 inner loop 平行轉；
 #       沒有 CI/CD，AI 只能加速「改」，判還是人，倍數歸一。
 # 消化與來源：research/loops-and-ai-multiplier.md。軟體業的 inner/outer 以 commit 為界，與這裡的用法不同，第 1 頁有註明。
-# 順序：1 一個改動的內圈 → 2 IC 的迴圈分層 → 3 沒有 CI/CD 時內圈的樣子 → 4 外圈 → 5 agent 平行後瓶頸在判 → 6 務實的上限
-#       → 7 迭代相對 waterfall 的時間與風險 → 8 交接（下游能不能是 agent）→ 9 沒有 CI/CD 的連鎖 → 10 六個原則各撐住迴圈的哪個條件。
-# 2026-10-09 第二次盲讀後：迭代、交接兩頁移到 agent 之後（agent 先登場，交接頁才提得到它）；「一包」「棒子」兩個比喻換成「改動」「交接」。
+# 脊椎：三層套在一起的迴圈。1 總覽（地圖）→ 2–4 第一層內圈（定義、在 IC 分層落實、沒有 CI/CD 的現狀）→ 5–6 第二層迭代（進 main、交接）
+#       → 7 第三層外圈 → 8–9 AI（三層都加速「改」、瓶頸在判；務實的上限）→ 10 結論（鏈照三層排）→ 11 六個條件對應六個原則。
+# 2026-10-09 使用者說順序不通順，重排成這條脊椎：先給三層的地圖，再一層一層講，AI 放在三層之後。
 # 括號裡的「圖 N」指《把版控當備份的團隊》的頁碼；長條與次數都是示意。
 import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
@@ -60,10 +60,61 @@ def loop(s, x0, y0, steps, back_label="不過", pass_label="過", w=96, h=44, ga
     return xl + 36
 
 
-# ── 圖 1：一個行動的迴圈 ─────────────────────────────────────────────
-def p1():
+# ── 圖 1：總覽，三層迴圈套在一起（2026-10-09 重排後加）────────────────
+OVERVIEW_ROWS = [("內圈", ["查和判由機器做", "每圈一樣的環境"], ["每圈等人跑、等人判"]),
+                 ("迭代", ["每個改動進 main 前都查過", "交出去的東西可查"], ["問題留到大整合才出", "交接靠文件和記憶"]),
+                 ("外圈", ["每個方案同環境跑", "PPA 由機器讀回來"], ["方案比不了"])]
+
+
+def p_overview():
     s = []
     T(s, 20, 20, "這份文件回答：CI/CD 對這個團隊的意義是什麼；《把版控當備份的團隊》裡的症狀，代價到底多大 ↓", cls="tx-lbl", fill=INK2)
+    rect(s, 20, 40, 400, 290, col=GOAL, fill=GOAL, op=".04", sw=1.4, dash="6 4")
+    T(s, 32, 62, "外圈：N 個方案各跑一整圈，比 PPA", cls="tx", fill=GOAL, w=700)
+    T(s, 32, 80, "第 7 頁", fill=GRAY)
+    rect(s, 50, 92, 340, 212, col="var(--rule-2)", fill="var(--surface)", sw=1.2)
+    T(s, 62, 114, "迭代：許多改動依序進 main，main 隨時可交付", cls="tx", fill=INK2, w=700)
+    T(s, 62, 132, "交接給下游也在這一層　第 5–6 頁", fill=GRAY)
+    rect(s, 80, 146, 280, 134, col=GOAL, fill=GOAL, op=".10", sw=1.6)
+    T(s, 92, 168, "內圈：一個改動", cls="tx", fill=GOAL, w=700)
+    for i, t in enumerate(["改", "查", "判"]):
+        x = 92 + i * 90
+        c = GOAL if i else INK2
+        rect(s, x, 184, 70, 32, col=c, fill="var(--surface)", sw=1.2)
+        T(s, x + 35, 205, t, cls="tx", anchor="middle", fill=c, w=700)
+        if i < 2:
+            arrow(s, x + 73, 200, x + 87, 200, col=INK2, ar="ar", sw=1.2)
+    path(s, "M307,218 L307,236 L127,236 L127,220", col=WARN, ar="ar-w", sw=1.2)
+    T(s, 217, 252, "不過就繞回去；過了就進 main", anchor="middle", fill=INK2)
+    T(s, 92, 272, "第 2–4 頁", fill=GRAY)
+    T(s, 450, 60, "每一層", cls="tx-lbl", fill=INK2)
+    T(s, 540, 60, "CI/CD 做的事", cls="tx-lbl", fill=GOAL)
+    T(s, 720, 60, "沒有的時候", cls="tx-lbl", fill=WARN)
+    y = 84
+    for name, does, without in OVERVIEW_ROWS:
+        T(s, 450, y + 16, name, cls="tx", fill=INK2, w=700)
+        for k, d in enumerate(does):
+            T(s, 540, y + 16 + 18 * k, d, fill=GOAL)
+        for k, w_ in enumerate(without):
+            T(s, 720, y + 16 + 18 * k, w_, fill=WARN)
+        line(s, 450, y + 46, 860, y + 46)
+        y += 56
+    T(s, 450, y + 20, "AI 加速的只有「改」，三層都一樣；查和判仍要機器做（第 8 頁）", cls="tx", fill=AGENT, w=600)
+    bottom(s, 352, [
+        ("三層做的是同一件事：改交給人或 agent，查和判交給機器；少了機器的查和判，哪一層都轉不起來。", True),
+        ("後面照三層的順序各講一到三頁，再講 AI 為什麼三層都要、上限在哪，最後收成結論。", False),
+    ])
+    aria = ("左邊三層套疊：最外是外圈，N 個方案各跑一整圈比 PPA；中間是迭代，許多改動依序進 main，main 隨時可交付，交接給下游也在這一層；"
+            "最裡面是內圈，一個改動的改、查、判，不過就繞回去，過了就進 main。右邊一張表：每一層 CI/CD 做的事與沒有的時候——"
+            "內圈：查和判由機器做、每圈一樣的環境，沒有時每圈等人跑等人判；迭代：每個改動進 main 前都查過、交出去的東西可查，沒有時問題留到大整合才出、交接靠文件和記憶；"
+            "外圈：每個方案同環境跑、PPA 由機器讀回來，沒有時方案比不了。AI 加速的只有改，三層都一樣。")
+    return svg(s, 880, 480, aria)
+
+
+# ── 圖 2：一個行動的迴圈 ─────────────────────────────────────────────
+def p1():
+    s = []
+    T(s, 20, 20, "第一層", cls="tx-lbl", fill=GOAL)
     T(s, 20, 50, "內圈（inner loop）：一個改動（加功能、修 bug）= 改、查、判，轉到過為止", cls="tx-lbl", fill=INK2)
     xr = loop(s, 20, 64, [("改", "人或 agent", None), ("查", "lint、sim", GOAL), ("判", "全 PASS 才過", GOAL)], w=104, gap=30)
     nbox(s, xr, 64, 92, 44, "改動完成", "下一個改動", col=GOAL, kind="solid")
@@ -77,7 +128,7 @@ def p1():
     # 用語註記
     rect(s, 20, 212, 840, 64, col="var(--rule-2)", fill="var(--surface)", sw=1, dash="4 3")
     T(s, 32, 234, "用語：軟體業把 commit 前叫 inner loop（本機的改、lint、unit test），commit 後的整合與 CI/CD 叫 outer loop。", fill=GRAY)
-    T(s, 32, 254, "這份文件的內圈（inner loop）指「一個改動的迴圈」，外圈（outer loop）指第 4 頁的「探索」：比 N 個方案的 PPA。", fill=GRAY)
+    T(s, 32, 254, "這份文件的內圈（inner loop）指「一個改動的迴圈」，外圈（outer loop）指第 7 頁的「探索」：比 N 個方案的 PPA。", fill=GRAY)
     bottom(s, 300, [
         ("CI/CD 把查和判交給機器：每一圈一樣的環境、一樣的標準、不用人在旁邊。", True),
         ("人或 agent 只負責改；內圈什麼時候轉、轉幾圈，都和人的空檔無關。", False),
@@ -173,7 +224,7 @@ def p_iter():
             s.append('<circle cx="%d" cy="160" r="4" fill="%s"/>' % (x + 52, WARN))
     line(s, 20, 212, 680, 212, col=GOAL, sw=2)
     T(s, 690, 216, "main", cls="tx", fill=GOAL, w=700)
-    T(s, 20, 236, "問題小、早、就在那個改動裡（紅點）；DV 與 synthesis 的檢查分層跟著每個改動跑（第 2 頁）", fill=INK2)
+    T(s, 20, 236, "問題小、早、就在那個改動裡（紅點）；DV 與 synthesis 的檢查分層跟著每個改動跑（第 3 頁）", fill=INK2)
     T(s, 20, 254, "能交付的狀態：每個改動進 main 之後都有一個；進度 = 通過檢查的功能數", fill=GRAY)
     T(s, 20, 288, "時間上", cls="tx-lbl", fill=GOAL)
     T(s, 440, 288, "風險上", cls="tx-lbl", fill=GOAL)
@@ -286,7 +337,7 @@ def p4():
 # ── 圖 7：agent 平行之後，瓶頸在判 ───────────────────────────────────
 def p5():
     s = []
-    T(s, 20, 30, "N 個 agent 平行做「改」：產生候選、改 RTL、寫 testbench", cls="tx-lbl", fill=AGENT)
+    T(s, 20, 30, "agent 加速的是「改」：自己轉內圈、接交接、平行跑 N 個方案（產生候選、改 RTL、寫 testbench）", cls="tx-lbl", fill=AGENT)
     for i in range(4):
         x = 20 + i * 100
         rect(s, x, 40, 88, 36, col=AGENT, fill=AGENT, op=".10", sw=1.4)
@@ -356,7 +407,7 @@ def p6():
 
 
 # ── 圖 9：沒有 CI/CD 的連鎖 ──────────────────────────────────────────
-CHAIN = [["沒有 CI/CD"], ["內圈", "每圈等人查判"], ["交接", "下游等人驗"], ["agent", "每一步等人"], ["N 個 agent", "排成一條人龍"], ["外圈轉不完", "方案比不了"]]
+CHAIN = [["沒有 CI/CD"], ["內圈", "每圈等人查判"], ["迭代", "交接等人驗"], ["外圈", "方案比不了"], ["agent", "每一步等人"], ["N 個 agent", "排成一條人龍"]]
 BREAKS = [("圖 2、3", "環境散在 depot 外", "每圈要人設環境"), ("圖 14", "兩台機器結果不同", "圈與圈不可比"), ("圖 15", "狀態靠人填 Excel", "判靠人"),
           ("圖 5", "壞了很久才發現", "圈沒有閉合"), ("圖 8", "main 隨時會壞", "agent sync 到壞的")]
 
@@ -395,7 +446,7 @@ def p7():
         ("沒有 CI/CD，每圈、每次交接、每個方案都要等人查判；AI 加速的只有「改」，N 個 agent 的效果等於一個。", True),
         ("《把版控當備份的團隊》裡的每個症狀，都在這條鏈上打斷一環。", False),
     ])
-    aria = ("連鎖：沒有 CI/CD、內圈每圈等人查判、交接時下游等人驗、agent 每一步等人、N 個 agent 排成一條人龍、外圈轉不完方案比不了，N 個 agent 的效果變成 ×1。"
+    aria = ("連鎖：沒有 CI/CD、內圈每圈等人查判、迭代的交接等人驗、外圈方案比不了、agent 每一步等人、N 個 agent 排成一條人龍，N 個 agent 的效果變成 ×1。"
             "長條示意：同樣 N 個 agent 與 license，有 CI/CD 一段時間內轉完的圈數多而且可比；沒有 CI/CD 等於一個人的速度而且不可比。"
             "症狀各打斷哪一環：環境散在 depot 外（圖 2、3）讓每圈要人設環境；兩台機器結果不同（圖 14）讓圈與圈不可比；狀態靠人填 Excel（圖 15）讓判靠人；壞了很久才發現（圖 5）讓圈沒有閉合；main 隨時會壞（圖 8）讓 agent sync 到壞的。")
     return svg(s, 880, 480, aria)
@@ -432,14 +483,15 @@ def p8():
 
 
 PAGES = [
+    ("總覽：三層迴圈，CI/CD 在每一層做同一件事：查和判交給機器", p_overview()),
     ("內圈（inner loop）：一個改動是改、查、判轉到過為止，查和判交給機器", p1()),
-    ("分層：IC 的一圈有快有慢，CI/CD 按快慢分層跑，哪一層都由機器判", p2()),
+    ("內圈在 IC：一圈有快有慢，CI/CD 按快慢分層跑，哪一層都由機器判", p2()),
     ("現狀的內圈：每圈靠人設環境、人跑、人看 log，轉得慢、判法還不一", p3()),
-    ("外圈（outer loop）：比 N 個方案的 PPA，每個方案都要先跑完一圈內圈", p4()),
-    ("Agentic AI：N 個 agent 平行「改」很便宜，瓶頸變成誰來查、誰來判", p5()),
-    ("上限：平行幾個由 license 與算力決定；CI/CD 讓 license 不用人顧也排得滿", p6()),
     ("迭代：小改動過了內圈就進 main，問題早、小；waterfall 留到最後整合才全出", p_iter()),
-    ("交接：交出的改動小且查過，下游不用等；這種交接 agent 才接得了", p_baton()),
+    ("交接：交出的改動小且查過，下游（人或 agent）不用等人解釋就能接", p_baton()),
+    ("外圈（outer loop）：比 N 個方案的 PPA，每個方案都要先跑完一圈內圈", p4()),
+    ("Agentic AI：agent 在三層都加速「改」，瓶頸變成誰來查、誰來判", p5()),
+    ("上限：平行幾個由 license 與算力決定；CI/CD 讓 license 不用人顧也排得滿", p6()),
     ("結論：沒有 CI/CD，每圈、每次交接、每個方案都要等人查判，N 個 agent 等於一個", p7()),
     ("對應：前面講到的六個條件，各由《把版控當備份的團隊》的一個原則撐住", p8()),
 ]
