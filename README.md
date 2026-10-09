@@ -162,7 +162,7 @@ agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張
 
 ![擴充與交棒：一次加一道 check，團隊能自己維護後 agent 只剩監看](docs/slides/img/agent-fills-what-pm-and-team-lack/p-11.png)
 
-![橫跨全程：log 與狀態板都進 depot，PM 看一頁摘要，每人可查關於自己的紀錄](docs/slides/img/agent-fills-what-pm-and-team-lack/p-12.png)
+![橫跨全程：log 與狀態板在 agent 的 repo、團隊可讀；PM 看摘要，每人可查自己的](docs/slides/img/agent-fills-what-pm-and-team-lack/p-12.png)
 
 ![橫跨全程：延後可以談，被拒絕由 PM 裁決，agent 錯了公開更正](docs/slides/img/agent-fills-what-pm-and-team-lack/p-13.png)
 
@@ -170,30 +170,32 @@ agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張
 
 ### agent 自己的版控：實例從 agent 的 git repo 生出來，工作區也回到它；目標的 repo 只收用在生產的工具
 
-系統有兩種 repo：agent 自己的一個 git repo，和目標 design 的很多個 repo（Perforce 或 git）。第 1 頁一張圖分三帶：上帶是 agent 的 git repo，內容隨時間長（core/ 一直在；每個實例的工作區 `designs/<名>/` 從加入那天起就在裡面），master 線上有 release；中間是實例的 lane——從某個 release clone 出來、建自己的工作區、工作區加入 repo 並定期 merge 回 master、更好的機制走 feature branch 與 MR、舊實例停了新版實例 clone 就拿到工作區接手；下帶是目標的 repo，agent 只讀它，只有用在團隊生產環節的工具（check、flow 的修正、trigger、CL 說明模板）才以 shelved CL 或 MR 交進去，文件（PROJECT_MAP、狀態板）主本在工作區、副本 owner 要才交（D5：像顧問，工作記錄和簡報留在顧問公司，用在客戶生產線的工具必須在客戶那裡）。第 2–6 頁講一份 agent 自己（三層、為什麼 git、改版、沙盒、安全），第 7–9 頁講多個實例（登記表、版號、代價），第 10 頁三件要公司定。內容來自 [agent-operating-model.md](agent-operating-model.md) 第八節。十頁；第 1、2 頁已照 D5 重畫，其餘頁待改。PDF：[docs/slides/agent-evolves-by-release-not-self-edit.pdf](docs/slides/agent-evolves-by-release-not-self-edit.pdf)
+系統有兩種 repo：agent 自己的一個 git repo，和目標 design 的很多個 repo（Perforce 或 git）。第 1 頁一張圖分三帶：上帶是 agent 的 git repo，內容隨時間長（core/ 一直在；每個實例的工作區 `designs/<名>/` 從加入那天起就在裡面），master 線上有 release；中間是實例的 lane——從某個 release clone 出來、建自己的工作區、工作區加入 repo 並定期 merge 回 master、更好的機制走 feature branch 與 MR、舊實例停了新版實例 clone 就拿到工作區接手；下帶是目標的 repo，agent 只讀它，只有用在團隊生產環節的工具（check、flow 的修正、trigger、CL 說明模板）才以 shelved CL 或 MR 交進去，文件（PROJECT_MAP、狀態板）主本在工作區、副本 owner 要才交（D5：像顧問，工作記錄和簡報留在顧問公司，用在客戶生產線的工具必須在客戶那裡）。第 2–7 頁講一份 agent 自己（三層、為什麼 git、改版、換手、沙盒、安全），第 8–10 頁講多個實例（登記表、版號、代價），第 11 頁三件要公司定。內容來自 [agent-operating-model.md](agent-operating-model.md) 第八節。十一頁。PDF：[docs/slides/agent-own-version-control-and-instances.pdf](docs/slides/agent-own-version-control-and-instances.pdf)
 
 <details>
-<summary>展開十頁</summary>
+<summary>展開十一頁</summary>
 
-![總覽：實例從 agent 的 repo 生出來、工作區回到它；目標的 repo 只收生產用的工具](docs/slides/img/agent-evolves-by-release-not-self-edit/p-1.png)
+![總覽：實例從 agent 的 repo 生出來、工作區回到它；目標的 repo 只收生產用的工具](docs/slides/img/agent-own-version-control-and-instances/p-1.png)
 
-![三層：core 在 master，文件與紀錄在工作區，生產用的工具才進目標的 repo](docs/slides/img/agent-evolves-by-release-not-self-edit/p-2.png)
+![三層：core 在 master，文件與紀錄在工作區，生產用的工具才進目標的 repo](docs/slides/img/agent-own-version-control-and-instances/p-2.png)
 
-![為什麼 git：MR、review、tag、CI 都內建；core 自己照 CI/CD 做，就是團隊的範例](docs/slides/img/agent-evolves-by-release-not-self-edit/p-3.png)
+![為什麼 git：MR、review、tag、CI 都內建；core 自己照 CI/CD 做，就是團隊的範例](docs/slides/img/agent-own-version-control-and-instances/p-3.png)
 
-![改版：實例不自改，改進一律開 core 的 MR，過沙盒與 review 才出 release](docs/slides/img/agent-evolves-by-release-not-self-edit/p-4.png)
+![改版：實例不自改，改進一律開 core 的 MR，過沙盒與 review 才出 release](docs/slides/img/agent-own-version-control-and-instances/p-4.png)
 
-![沙盒：埋了十六種已知問題的 depot 是 core 的 regression，三項全過才出 release](docs/slides/img/agent-evolves-by-release-not-self-edit/p-5.png)
+![換手：舊實例 merge 工作區後停，新實例 clone 就拿到；續做或重新盤點由 PM 選](docs/slides/img/agent-own-version-control-and-instances/p-5.png)
 
-![安全：實例只聽 core 的規則，目標 depot 裡的文字不能指揮它；core 的 main 鎖住](docs/slides/img/agent-evolves-by-release-not-self-edit/p-6.png)
+![沙盒：埋了十六種已知問題的 depot 是 core 的 regression，三項全過才出 release](docs/slides/img/agent-own-version-control-and-instances/p-6.png)
 
-![多實例：一個 depot 路徑一個實例，共用的檔案指定一個負責，訊息與 CL 署名](docs/slides/img/agent-evolves-by-release-not-self-edit/p-7.png)
+![安全：實例只聽 core 的規則，目標 depot 裡的文字不能指揮它；core 的 main 鎖住](docs/slides/img/agent-own-version-control-and-instances/p-7.png)
 
-![版號：訊息與日誌都標版號，全公司實例同一個 major，升級先挑一個實例試跑](docs/slides/img/agent-evolves-by-release-not-self-edit/p-8.png)
+![多實例：一個 depot 路徑一個實例，共用的檔案指定一個負責，訊息與 CL 署名](docs/slides/img/agent-own-version-control-and-instances/p-8.png)
 
-![多實例的代價：license、token 一份一份算；給 PM 的請示合併成一份](docs/slides/img/agent-evolves-by-release-not-self-edit/p-9.png)
+![版號：訊息與日誌都標版號，全公司實例同一個 major，升級先換一個實例試跑](docs/slides/img/agent-own-version-control-and-instances/p-9.png)
 
-![待決：core 誰維護、一實例一帳號還是共用、多久升級一次，三件要公司定](docs/slides/img/agent-evolves-by-release-not-self-edit/p-10.png)
+![多實例的代價：license、token 一份一份算；給 PM 的請示合併成一份](docs/slides/img/agent-own-version-control-and-instances/p-10.png)
+
+![待決：core 誰維護、一實例一帳號還是共用、多久升級一次，三件要公司定](docs/slides/img/agent-own-version-control-and-instances/p-11.png)
 
 </details>
 

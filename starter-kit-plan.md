@@ -48,7 +48,7 @@ starter-kit/
   05-behavior-guidelines.md agent 行為指導原則（乾淨版）
   06-pm-handbook.md
   07-build-brief.md         元件、介面、MVP 順序、沙盒驗收、交給內網決定的事
-  07-build-brief/           agent-evolves-by-release-not-self-edit.pdf（三層分離、改版迴路、登記表、版號、沙盒）
+  07-build-brief/           agent-own-version-control-and-instances.pdf（兩種 repo、三層、改版、換手、沙盒、登記表、版號）
   08-templates/
   09-open-decisions.md
   10-decision-log.md        D1–D4 與理由（讓內網知道為什麼這樣定）

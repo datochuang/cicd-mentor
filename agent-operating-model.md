@@ -505,7 +505,7 @@ agent 的義務：請准單裡每個概念第一次出現都附一句解釋和�
 
 ### 8.5 圖形版與用語
 
-本節的圖形版是 `docs/slides/agent-evolves-by-release-not-self-edit.pdf`（十頁，第 1 頁總覽）。盲讀審稿（`docs/reviews/titles-blind-read-agent-versioning-20261009.md`）指出 core、實例、目標都和 IC 用語撞名，所以投影片第 1 頁定義了用語，並把本節幾個詞換成更直述的：
+本節的圖形版是 `docs/slides/agent-own-version-control-and-instances.pdf`（十一頁，第 1 頁總覽，第 5 頁換手；檔名照「講問題不講答案」的規則，2026-10-09 從 agent-evolves-by-release-not-self-edit 改過來）。盲讀審稿（`docs/reviews/titles-blind-read-agent-versioning-20261009.md`）指出 core、實例、目標都和 IC 用語撞名，所以投影片第 1 頁定義了用語，並把本節幾個詞換成更直述的：
 
 | 本節的詞 | 投影片用的詞 | 為什麼 |
 |---|---|---|

@@ -138,7 +138,7 @@ GRID = {
     "PM": ["給範圍、帳號|與預算", "選候選目標", "看進度", "懂了才核准", "看進度", "同意擋不擋", "看一頁摘要", "定交棒條件"],
     "agent": ["bot 上線|自我介紹", "只讀掃|一頁現況", "先讀懂|再問 owner", "附取捨|請核准", "做成|shelved CL", "附證據|提議升級", "看 CL、私訊|登記開工", "提下一道|只剩監看"],
     "工程團隊": ["知道 agent 在|看得到什麼", "", "owner 答只有|他知道的", "owner 同意|動範圍", "負責人|補強 script", "同意升級", "回一句|照流程開工", "自己維護|pipeline"],
-    "repo": ["日誌、狀態板|的位置", "唯讀", "乾淨 workspace|實跑", "決定進 depot", "shelved CL|＋證據", "報告→警告→擋", "跑 check|狀態板", "check 穩定|趨勢"],
+    "repo": ["唯讀；紀錄在|agent 的 repo", "唯讀", "乾淨 workspace|實跑", "決定記在|agent 的 repo", "shelved CL|＋證據", "報告→警告→擋", "跑 check|狀態板", "check 穩定|趨勢"],
 }
 
 
@@ -168,7 +168,7 @@ def p_overview():
         x += w_ + 6 + width(desc, 10.5) + 24
     T(s, 20, ya + 62, "用語", cls="tx-lbl", fill=GRAY)
     T(s, 140, ya + 62, "PM＝負責把團隊開發流程導入 CI/CD 的人（和 project 的 PM 無關）　owner＝目標目錄或模組的負責人，決定 agent 交的 CL 收不收", fill=INK2)
-    T(s, 140, ya + 80, "CL 作者＝submit 那一包的工程師　PROJECT_MAP＝agent 寫在 depot 裡的目錄用途與相依說明　狀態板＝每個模組休止／進行中哪些任務的表", fill=INK2)
+    T(s, 140, ya + 80, "CL 作者＝submit 那一包的工程師　PROJECT_MAP＝agent 寫的目錄地圖，主本在它自己的 repo　狀態板＝每個模組休止／進行中哪些任務的表", fill=INK2)
     T(s, 140, ya + 98, "subagent＝agent 分出去做事的子程式　shelved CL＝給人看、還沒 submit 的改動（git 的 PR）", fill=INK2)
     bottom(s, ya + 114, [
         ("agent 先讀懂再問，改動做成 shelved CL；方向與影響別人的事，PM 懂了才算核准；CL 收不收是 owner 的事。", True),
@@ -178,7 +178,7 @@ def p_overview():
             "PM：給範圍帳號預算、選切入目標、看進度、懂了才核准、看進度、同意擋不擋、看一頁摘要、定退場條件。"
             "agent：bot 上線自我介紹、只讀掃一頁報告、先讀懂再問 owner、附取捨請准、做成 shelved CL、附證據提議升級、看 CL 私訊登記開工、提下一道退到看守。"
             "工程團隊：知道 agent 在、owner 答只有他知道的、owner 同意動範圍、負責人補強 script、同意升級、回一句照流程開工、自己維護 pipeline。"
-            "repo：日誌與狀態板的位置、唯讀、乾淨 workspace 實跑、決定進 depot、shelved CL 加證據、報告警告擋、trigger 跑 check 與狀態板、check 穩定與趨勢。"
+            "repo：唯讀且紀錄在 agent 的 repo、唯讀、乾淨 workspace 實跑、決定記在 agent 的 repo、shelved CL 加證據、報告警告擋、trigger 跑 check 與狀態板、check 穩定與趨勢。"
             "下方是授權三級：自主、告知、請准；以及用語：PM 指負責把團隊開發流程導入 CI/CD 的人、和 project 的 PM 無關；owner 是目標目錄或模組的負責人；CL 作者是 submit 那一包的工程師；PROJECT_MAP、狀態板、subagent、shelved CL 各一句定義。")
     return svg(s, 880, 480, aria)
 
@@ -211,13 +211,13 @@ def p_start():
             ("agent", x[1], 140, "以 bot 帳號上線", "先只讀，之後分階段加"),
             ("agent", x[2], 140, "自我介紹", "私訊 PL 與 owner"),
             ("工程團隊", x[3], 140, "知道 agent 在", "它看得到什麼、紀錄放哪"),
-            ("repo", x[4], 140, "日誌與狀態板的位置", "進 depot，所有人看得到")]
-    flows = [("PM", "agent", x[0] + 70, "給範圍"), ("agent", "工程團隊", x[2] + 70, "「我是 agent，向 PM 報告」"), ("agent", "repo", x[4] + 70, "建目錄")]
+            ("repo", x[4], 140, "只被讀", "紀錄在 agent 的 repo")]
+    flows = [("PM", "agent", x[0] + 70, "給範圍"), ("agent", "工程團隊", x[2] + 70, "「我是 agent，向 PM 報告」"), ("agent", "repo", x[4] + 70, "只讀")]
     return scenario("什麼時候：PM 決定開始的第一天", "授權：PM 請准", acts, flows,
         [("agent 用自己的 bot 帳號、只讀權限上線；第一件事是向團隊說自己是誰、向誰報告、會看什麼、紀錄放哪。", True),
          ("權限分階段：先只讀，要交 shelved CL 時加寫入，要開 stream 時再加；每一階 PM 給，agent 不自己擴。", False)],
-        "啟動：PM 指定範圍與帳號；agent 以 bot 帳號先只讀上線，之後按需要分階段加權限，私訊 PL 與 owner 自我介紹；工程團隊知道 agent 在、看得到什麼；repo 裡建好日誌與狀態板的位置。",
-        notes=["示意的自我介紹：「我是 CI/CD mentor agent，向 PM 某某報告。我會看 //depot/chipA/dma 的 CL 與 check 結果，", "紀錄在 //depot/chipA/agent-log。有問題直接私訊我。」"])
+        "啟動：PM 指定範圍與帳號；agent 以 bot 帳號先只讀上線，之後按需要分階段加權限，私訊 PL 與 owner 自我介紹；工程團隊知道 agent 在、看得到什麼；目標的 repo 只被讀，紀錄在 agent 自己的 repo。",
+        notes=["示意的自我介紹：「我是 CI/CD mentor agent，向 PM 某某報告。我會看 //depot/chipA/dma 的 CL 與 check 結果，", "紀錄在我自己的 git repo，你們有讀的權限。有問題直接私訊我。」"])
 
 
 # ── 圖 3：情勢判斷 ──────────────────────────────────────────────────
@@ -262,12 +262,12 @@ def p_approve():
             ("PM", x[2], W, "理解後核准", "說得出影響誰"),
             ("agent", x[3], W, "請 owner 同意", "做什麼、怎麼退"),
             ("工程團隊", x[4], W, "owner 同意", "或改範圍"),
-            ("repo", x[5], W, "決定進 depot", "決定紀錄、地圖")]
+            ("repo", x[5], W, "決定有紀錄", "在 agent 的 repo")]
     flows = [("agent", "PM", x[1] + W / 2, "請准"), ("PM", "agent", x[2] + W / 2, "核准"), ("agent", "工程團隊", x[3] + W / 2, "請同意"), ("工程團隊", "repo", x[4] + W / 2, "")]
     return scenario("什麼時候：目標分析完成，要開始動之前", "授權：PM 請准 ＋ owner 同意", acts, flows,
         [("方向、優先順序、對團隊的新要求是方針層：PM 懂了才算核准，owner 同意才動他的範圍。", True),
          ("請准要分批、附取捨；PM 不懂就問，蓋章不算核准。", False)],
-        "計畫請准：agent 列出缺口與 patch 計畫，每個缺口掛一個原則；向 PM 請准方向與優先順序，附原則、取捨、替代方案、影響誰；PM 理解後核准；agent 再請 owner 同意動他的範圍；決定記進 depot。",
+        "計畫請准：agent 列出缺口與 patch 計畫，每個缺口掛一個原則；向 PM 請准方向與優先順序，附原則、取捨、替代方案、影響誰；PM 理解後核准；agent 再請 owner 同意動他的範圍；決定記在 agent 的 repo。",
         notes=["計畫裡每條 patch 標三類之一：agent 自己能補、補了要 owner 決定、只有 owner 知道。"])
 
 
@@ -341,16 +341,16 @@ def p_kickoff():
 def p_transparent():
     x = xs(6)
     acts = [("agent", x[0], W, "每個動作寫日誌", "訊息、判斷、不確定的"),
-            ("repo", x[1], W, "日誌、狀態板、地圖", "都在 depot"),
+            ("repo", x[1], W, "日誌、狀態板、地圖", "在 agent 的 repo，團隊可讀"),
             ("agent", x[2], W, "定期一頁摘要", "做了什麼、發現什麼、等誰"),
             ("PM", x[3], W, "看摘要", "要細節就讀日誌"),
             ("工程團隊", x[4], W, "看得到關於自己的紀錄", "狀態板記任務不記人"),
             ("agent", x[5], W, "報告以模組為單位", "不排名、不用於考核")]
     flows = [("agent", "repo", x[0] + W / 2, "寫"), ("agent", "PM", x[2] + W / 2, "摘要"), ("repo", "工程團隊", x[4] + W / 2, "可讀")]
     return scenario("橫跨全程：一直都在", "授權：自主", acts, flows,
-        [("agent 的日誌與狀態板放在 depot，PM 和工程師都讀得到；PM 平時看一頁摘要。", True),
+        [("agent 的日誌與狀態板放在它自己的 repo，PM 和工程師都讀得到；要副本進 depot，owner 說了算；PM 平時看一頁摘要。", True),
          ("關於某人的紀錄那個人看得到；報告以模組和流程為單位，不排名個人。", False)],
-        "透明：agent 每個動作、訊息、判斷寫日誌，和狀態板、PROJECT_MAP 一起放在 depot；定期給 PM 一頁摘要，PM 要細節就讀日誌；工程師看得到關於自己的紀錄；報告以模組為單位，不排名、不用於考核。")
+        "透明：agent 每個動作、訊息、判斷寫日誌，和狀態板、PROJECT_MAP 一起放在它自己的 repo，團隊可讀，要副本進 depot 由 owner 決定；定期給 PM 一頁摘要，PM 要細節就讀日誌；工程師看得到關於自己的紀錄；報告以模組為單位，不排名、不用於考核。")
 
 
 # ── 圖 11：擱置、拒絕、誤報 ──────────────────────────────────────────
@@ -410,7 +410,7 @@ PAGES = [
     ("日常監看：每筆 CL agent 讀 description 與 check，看不出目的就私訊作者並示範寫法", p_watch()),
     ("有人開新工作：agent 察覺就先問，確認後登記狀態板、代開 stream 與 check", p_kickoff()),
     ("擴充與交棒：一次加一道 check，團隊能自己維護後 agent 只剩監看", p_exit()),
-    ("橫跨全程：log 與狀態板都進 depot，PM 看一頁摘要，每人可查關於自己的紀錄", p_transparent()),
+    ("橫跨全程：log 與狀態板在 agent 的 repo、團隊可讀；PM 看摘要，每人可查自己的", p_transparent()),
     ("橫跨全程：延後可以談，被拒絕由 PM 裁決，agent 錯了公開更正", p_friction()),
 ]
 

@@ -28,9 +28,8 @@
 | T35 | 10-09 | **分階段路線圖與每階段的成功定義、停損**要不要照我寫的 | 準備 → 試點 → 擴散 → 常態；試點的成功：owner 採用了 shelved CL、check 每天跑有人看、至少一個檢驗從做不到變做得到 | agent-operating-model.md 7.3 |
 | T36 | 10-09 | **紅線清單**（不刪、不碰別人 workspace、沒共識不擋、不報個人活動量、design 資料不出核准的模型、不假裝是人、不對 design 下判斷）有沒有要加減 | | agent-operating-model.md 7.4 |
 | T37 | 10-09 | **啟動包的目錄與缺件**（README、啟動包版 CLAUDE.md、乾淨版行為指導原則、build brief、沙盒驗收、模板、PM 手冊、open decisions、用語表、獨立性檢查）要不要照 starter-kit-plan.md 做 | 內容面大致齊了，缺的是包裝層；做之前要先定 T19、T31 | starter-kit-plan.md |
-| T38 | 10-09 | **agent 自己的版控與多實例**：core 由誰維護、一實例一帳號還是共用、升級的節奏 | 三層分離（core／實例設定／對目標的筆記）、登記表、實例名與版號署名、沙盒當 core 的 regression 已寫進 operating model 第八節，並做成投影片《agent 自己的版控》；這三件要公司決定 | agent-operating-model.md 第八節、docs/slides/agent-evolves-by-release-not-self-edit.pdf |
-| T39 | 10-09 | **《agent 自己的版控》第 3–10 頁照 D5 改、加一頁「換手」、再盲讀一次標題**；還有一件要你定：換手時「續做」或「重新盤點」誰選（我傾向 PM 選，預設重新盤點再比對） | D5 定了分法（用在客戶生產環節的才進目標的 repo，文件主本在工作區、副本 owner 定）；第 1、2 頁已照 D5 重畫；第五至七輪原文在 operating model 第一節，機制在 8.6–8.8 | decision-log.md D5、agent-operating-model.md 8.6–8.8、docs/slides/agent-evolves-by-release-not-self-edit.pdf |
-| T40 | 10-09 | **D5 影響的舊投影片要改**：《進到陌生 workspace》「答案存成 depot 內的 PROJECT_MAP」、《agent 補 PM 與團隊各缺的》第 5 頁「答案進 PROJECT_MAP」與第 12 頁「log 與狀態板都進 depot」，改成「主本在 agent 的工作區，副本 owner 要才交」；README 的 alt 一起改 | 等 T39 的那份改完一起做，免得來回 | decision-log.md D5 |
+| T38 | 10-09 | **agent 自己的版控與多實例**：core 由誰維護、一實例一帳號還是共用、升級的節奏 | 三層分離（core／實例的工作區／生產用的工具）、登記表、實例名與版號署名、沙盒當 core 的 regression、換手已寫進 operating model 第八節，並做成投影片《agent 自己的版控》；這三件要公司決定 | agent-operating-model.md 第八節、docs/slides/agent-own-version-control-and-instances.pdf |
+| T41 | 10-09 | **前五份投影片的檔名要不要照新規則改**（檔名講問題不講答案）：ai-agent-and-pm-make-cicd-happen、repo-as-backup-keeps-files-not-answers、check-then-patch-before-asking-owner、loops-need-cicd-before-ai-multiplies、agent-fills-what-pm-and-team-lack | 你只點名了《agent 自己的版控》那份，已改成 agent-own-version-control-and-instances；其餘五份沿用舊名，改的話 README、reviews、圖目錄一起動 | CLAUDE.md 圖形化文件的規則 |
 | T7 | 10-08 | **轉型的終點**：流程存在就好，還是要團隊真正理解並自己維護 | D2 給了初步答案（先改變 PM，由他帶動團隊），細節待討論 | decision-log.md D2 |
 | T15 | 10-08 | **目錄用途與相依關係沒有文件，對 agent 設計的影響**：通用 agent 每個 workspace 都要另寫指引，那這個 agent 要不要自己建立並維護每個專案的目錄說明與相依關係（並放進版控）？ | 你在討論第二份圖形文件時提出這個問題；只寫進了文件第 7 頁，還沒討論對 agent 本身的設計意涵 | docs/slides/repo-as-backup-keeps-files-not-answers.pdf 第 7 頁 |
 
@@ -65,3 +64,5 @@
 |---|---|---|---|
 | T12 | 10-08 | 推上 GitHub 前檢查公開範圍 | 使用者說明 repo 是個人專用，不需檢查；已推上 datochuang/cicd-mentor |
 | T16 | 10-09 | 五個定錨原則等你確認 | 全部同意，改用英文專有名詞：Small batches、SSOT、Traceability、CI、Self-documenting。記為 D4 |
+| T39 | 10-09 | 《agent 自己的版控》第 3–10 頁照 D5 改、加「換手」一頁、換手的接法誰選 | 接法由 PM 選（使用者：「這很明顯」）。全份十一頁已照 D5 改，第 5 頁換手；檔名改為 agent-own-version-control-and-instances；標題再盲讀一次（docs/reviews/titles-blind-read-agent-versioning-20261009.md 第二輪） |
+| T40 | 10-09 | D5 影響的舊投影片要改 | 照我的判斷做了：《agent 補 PM 與團隊各缺的》第 2 頁用語、第 3 頁啟動（目標的 repo 只被讀，紀錄在 agent 的 repo）、第 6 頁（決定記在 agent 的 repo）、第 12 頁（log 與狀態板在 agent 的 repo、團隊可讀，副本進 depot 由 owner 定）；《進到陌生 workspace》講的是 setup script、manifest 這類生產用的東西進 depot，符合 D5，不用改 |

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # 《agent 自己的版控：實例從 agent 的 git repo 生出來，工作區也回到它；目標的 repo 只收用在生產的工具》
-# docs/slides/agent-evolves-by-release-not-self-edit.{html,pdf}
-# 執行：python3 docs/figures/agent-evolves-by-release-not-self-edit/build.py
+# docs/slides/agent-own-version-control-and-instances.{html,pdf}
+# 執行：python3 docs/figures/agent-own-version-control-and-instances/build.py
 #
 # 讀者：要接手製作與部署這個 agent 的人：內網的 Claude Code、負責 core 的人、PM。懂 git 與 Perforce。
 # 讀完要能：說出系統的兩種 repo 各是什麼、關係怎麼不對稱；一個實例怎麼生出來、工作區怎麼回到 agent 的 repo、怎麼換手；什麼東西才進目標的 repo。
@@ -11,13 +11,13 @@
 # 用語（第 1 頁定義）：core＝master 上的程式與規則；實例＝從 agent 的 git repo clone 出來的一份 agent，看一個或多個 design；
 #       工作區＝designs/<名>/，實例建的、回到 repo 的；design＝實例負責的那個設計與它的 repo；換手＝新版實例接手同一個 design；PM＝負責把 CI/CD 導入團隊的主管。
 # 內容來源：agent-operating-model.md 第八節（8.6、8.7）。實例名、版號、路徑都是示意。
-# 狀態：第 1、2 頁已照第五、六輪重畫；第 3–10 頁等使用者確認分法後再改（換手要加一頁）。
+# 狀態：第五至七輪（D5）全份已改；第 5 頁換手，接法由 PM 選（使用者定）。
 # 盲讀審稿：docs/reviews/titles-blind-read-agent-versioning-20261009.md
 import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
 from slides import *
 
-NAME = "agent-evolves-by-release-not-self-edit"
+NAME = "agent-own-version-control-and-instances"
 KICKER = "agent 自己的版控與多實例"
 CORE, INST, TGT = AGENT, AGENT, GOAL
 
@@ -97,7 +97,7 @@ def p_overview():
     T(s, 32, 354, "進去的：check、flow 的修正、trigger、CL 說明模板，owner 收了才算；文件（PROJECT_MAP、狀態板）主本在工作區，副本 owner 要才交", fill=INK2)
     bottom(s, 370, [
         ("兩種 repo：agent 的一個 git repo，和目標 design 的很多個。實例從前者生出來、建工作區、工作區回到前者；對後者只讀，只交生產用的工具。", True),
-        ("第 2–6 頁講一份 agent 自己：三層、為什麼 git、改版、沙盒、安全；第 7–9 頁講多個實例：登記表、版號、代價；第 10 頁待決。", False),
+        ("第 2–7 頁講一份 agent 自己：三層、為什麼 git、改版、換手、沙盒、安全；第 8–10 頁講多個實例：登記表、版號、代價；第 11 頁待決。", False),
     ])
     T(s, 20, 442, "用語：core＝master 上的程式與規則　實例＝從 agent 的 git repo clone 出來的一份 agent　工作區＝designs/<名>/，實例建的、回到 repo 的", fill=GRAY)
     T(s, 20, 460, "　　　design＝實例負責的設計與它的 repo（一個實例可看多個）　換手＝新版實例接手同一個 design　PM＝負責把 CI/CD 導入團隊的主管，不是專案 PM", fill=GRAY)
@@ -147,7 +147,7 @@ DOG = [("Small batches", "一個 MR 一件事；說明寫改了什麼、為什�
 def p_why_git():
     s = []
     T(s, 20, 34, "為什麼 core 放 git，不放 depot", cls="tx-lbl", fill=CORE)
-    for k, (t, sub) in enumerate([("改版要 MR、review、tag、每個 MR 跑 CI", "git 平台內建；Perforce 要自己拼"), ("core 是軟體，生命週期和設計資料不同", "幾週一版 vs 隨專案走"), ("目標的 depot 仍是團隊的唯一真相", "agent 只讀它；交付給團隊的走 shelved CL")]):
+    for k, (t, sub) in enumerate([("改版要 MR、review、tag、每個 MR 跑 CI", "git 平台內建；Perforce 要自己拼"), ("core 是軟體，生命週期和設計資料不同", "幾週一版 vs 隨專案走"), ("目標的 depot 仍是團隊的唯一真相", "agent 只讀它；生產用的工具走 shelved CL 交進去")]):
         y = 56 + k * 66
         rect(s, 20, y, 3, 44, col=CORE, fill=CORE, sw=0)
         T(s, 32, y + 18, t, cls="tx", fill=INK2, w=600)
@@ -173,7 +173,7 @@ def p_why_git():
 def p_evolve():
     s = []
     steps = [("實例跑 v0.4", ["發現：新的壞樣本、", "更好的訊息模板"], INST), ("對 core 開 MR", ["一包一件事", "附為什麼"], CORE), ("沙盒跑一遍", ["十六種已知問題", "的 regression"], GOAL),
-             ("review", ["core 維護者看"], PM), ("出 v0.5", ["release note", "寫行為改了什麼"], CORE), ("先升一個實例", ["試跑一段沒事"], INST), ("全部升級", ["PM 定節奏"], INST)]
+             ("review", ["core 維護者看"], PM), ("出 v0.5", ["release note", "寫行為改了什麼"], CORE), ("先換一個實例", ["換手，試跑一段"], INST), ("全部換", ["PM 定節奏"], INST)]
     for i, (t, subs, col) in enumerate(steps):
         x = 20 + i * 121
         rect(s, x, 56, 106, 72, col=col, fill=col, op=".10", sw=1.4)
@@ -197,7 +197,41 @@ def p_evolve():
     return svg(s, 880, 480, aria)
 
 
-# ── 圖 5：沙盒 ──────────────────────────────────────────────────────
+# ── 圖 5：換手 ──────────────────────────────────────────────────────
+def p_handover():
+    s = []
+    steps = [("舊實例", ["最後一次 merge 工作區", "寫 HANDOVER，停"], INST), ("新實例", ["從 master 的 release", "clone，工作區就在裡面"], INST),
+             ("讀工作區", ["格式有 schema 版本", "新版讀得懂舊的"], INST), ("宣布接手", ["「[agent-dma v0.5]", "接手 dma」；改登記表"], INST),
+             ("PM 選接法", ["續做，或", "重新盤點再比對"], PM)]
+    for i, (t, subs, col) in enumerate(steps):
+        x = 20 + i * 170
+        rect(s, x, 40, 158, 72, col=col, fill=col, op=".10", sw=1.4)
+        T(s, x + 8, 62, t, cls="tx", fill=col, w=700)
+        for k, sub in enumerate(subs):
+            T(s, x + 8, 82 + 17 * k, sub, fill=INK2)
+        if i < 4:
+            arrow(s, x + 160, 76, x + 168, 76, col=INK2, ar="ar", sw=1.3)
+    box(s, 20, 132, 400, 130, "HANDOVER 寫什麼", ["做到哪：採用了什麼、還在等 owner 的、被拒的", "進行中的事與下一步", "關係人：owner、PL、誰懂 tb、誰常拒", "未解的問題、猜的（標「推測」）", "採用率、誤報率的數字"], col=INST, kind="dash")
+    box(s, 440, 132, 420, 130, "兩種接法，PM 選；預設重新盤點", [], col=PM)
+    pill(s, 452, 168, "續做", PM, h=20)
+    T(s, 510, 182, "照 HANDOVER 繼續；省時間，但舊實例看錯的會一直錯下去", fill=INK2)
+    pill(s, 452, 212, "重新盤點", PM, h=20)
+    T(s, 540, 226, "當全新 design 盤一次，再和舊工作區比對；差異回報 PM", fill=INK2)
+    T(s, 452, 252, "差異就是檢查舊實例有沒有看錯的機會", fill=GRAY)
+    T(s, 20, 286, "規矩", cls="tx-lbl", fill=INK2)
+    for k, t in enumerate(["換手期間一個 design 只有一個實例在動：舊的停了新的才動手（登記表保證）", "升級就是換手：新版實例接手，舊的停；不在跑著的實例身上改程式", "團隊看到的只有一句「[agent-dma v0.5] 接手 dma」，之後的訊息都署名新版"]):
+        T(s, 32, 306 + 18 * k, "· " + t, fill=INK2)
+    bottom(s, 362, [
+        ("換手靠工作區：舊實例最後一次 merge、寫 HANDOVER 後停；新實例 clone 就拿到，宣布接手；續做或重新盤點由 PM 選。", True),
+        ("升級就是換手。一個 design 任何時候只有一個實例在動。", False),
+    ])
+    aria = ("五步：舊實例最後一次 merge 工作區、寫 HANDOVER、停；新實例從 master 的 release clone，工作區就在裡面；讀工作區，格式有 schema 版本；宣布接手並改登記表；PM 選接法。"
+            "左框 HANDOVER 寫什麼：做到哪、進行中的事、關係人、未解的問題與推測、採用率誤報率。右框兩種接法：續做（省時間但舊的錯會延續）、重新盤點再比對（差異回報 PM，是檢查舊實例的機會）。"
+            "規矩：換手期間一個 design 只有一個實例在動；升級就是換手；團隊只看到一句接手的宣布。")
+    return svg(s, 880, 480, aria)
+
+
+# ── 圖 6：沙盒 ──────────────────────────────────────────────────────
 SYMPTOMS = ["大包 submit", "說明只寫 update", "五個地方散落", "label 只有檔案", "壞了很久才發現", "下游沒清單", "目錄沒說明", "沒有 branch",
             "沒有 review", "resolve 整份收", "產物進 depot", "IP 解壓覆蓋", "flow 複本", "兩台機器不同", "Excel 狀態表", "退不回去"]
 
@@ -275,16 +309,16 @@ def p_instances():
         yk = 80 + 22 * k
         T(s, 32, yk, t, fill=INK2)
         T(s, 150, yk, who, fill=col)
-    box(s, 460, 36, 400, 100, "登記表（instances/registry）", ["//chipA/dma → agent-dma", "//chipA/top、flow、ip、top.f → agent-top", "//chipA/tb → 無"], col=INK2, kind="plain")
+    box(s, 460, 36, 400, 100, "登記表（在 agent 的 repo 裡）", ["//chipA/dma → agent-dma", "//chipA/top、flow、ip、top.f → agent-top", "//chipA/tb → 無"], col=INK2, kind="plain")
     T(s, 460, 160, "每則訊息、每個 CL、每筆日誌都署名實例與版號", cls="tx-lbl", fill=INST)
     rect(s, 460, 170, 400, 56, col=INST, fill="var(--surface)", sw=1.2)
     T(s, 472, 192, "[agent-dma v0.4] 這包看起來是改 DMA 的 burst，對嗎？", fill=INK2)
     T(s, 472, 212, "CL 48977 的說明結尾：(agent-top v0.4, registry r12)", fill=INK2)
     T(s, 20, 252, "沒有登記表會怎樣", cls="tx-lbl", fill=WARN)
-    for k, t in enumerate(["兩個實例都去私訊同一個 owner 問同一件事", "同一個缺口開了兩個 shelved CL", "兩個實例的狀態板互相覆蓋"]):
+    for k, t in enumerate(["兩個實例都去私訊同一個 owner 問同一件事", "同一個缺口開了兩個 shelved CL", "同一個 design 的狀態板兩邊各記一份，互相矛盾"]):
         check(s, 32, 276 + 22 * k, False, t, cls="tx")
     T(s, 460, 252, "動作之前", cls="tx-lbl", fill=INST)
-    for k, t in enumerate(["查登記表：這個路徑歸我嗎", "查狀態板：有沒有別的實例已經在處理", "共用的檔案不歸我就通知負責的實例，不自己動"]):
+    for k, t in enumerate(["查登記表：這個路徑歸我嗎", "查狀態板（都在同一個 repo）：有沒有別的實例在處理", "共用的檔案不歸我就通知負責的實例，不自己動"]):
         T(s, 472, 276 + 22 * k, "· " + t, fill=INK2)
     bottom(s, 350, [
         ("一個 depot 路徑一個實例；跨路徑共用的檔案（flow、IP、top 的 filelist）指定一個實例負責；每則訊息與 CL 署名實例與版號。", True),
@@ -305,15 +339,15 @@ def p_versions():
         T(s, x + 10, 58, n, cls="tx", fill=col, w=700)
         T(s, x + 10, 78, v, fill=INK2)
     T(s, 20, 118, "全公司的實例保持同一個 major（v0.x 都是 0）；落後的先排進升級", fill=GRAY)
-    box(s, 480, 36, 380, 120, "規矩", ["每則訊息與日誌標版號：[agent-dma v0.4]", "designs/<名>/ 的格式有 schema 版本，新版讀得懂舊紀錄", "升級先挑一個實例試跑（canary），一段時間沒事再全部升", "release note 寫「行為改了什麼」，PM 看了才排"], col=INST)
+    box(s, 480, 36, 380, 120, "規矩", ["每則訊息與日誌標版號：[agent-dma v0.4]", "designs/<名>/ 的格式有 schema 版本，新版讀得懂舊紀錄", "升級就是換手：先換一個實例試跑（canary），沒事再換其他", "release note 寫「行為改了什麼」，PM 看了才排"], col=INST)
     T(s, 20, 180, "為什麼要標版號", cls="tx-lbl", fill=WARN)
-    for k, t in enumerate(["團隊看到兩個 agent 行為不一致，會問哪個才對", "出了事要查是哪一版的規則做的", "換手時新版讀不懂舊紀錄的格式"]):
+    for k, t in enumerate(["團隊看到兩個 agent 行為不一致，會問哪個才對", "出了事要查是哪一版的規則做的", "換手時新版讀不懂舊工作區的格式"]):
         check(s, 32, 204 + 22 * k, False, t, cls="tx")
-    T(s, 480, 180, "先升哪一個", cls="tx-lbl", fill=INST)
-    for k, t in enumerate(["先升風險最低、owner 最願意的那個實例", "看一段時間：誤報率、採用率、有沒有做不可做的事", "沒事才升其他實例；有事就退回上一個 release"]):
+    T(s, 480, 180, "先換哪一個", cls="tx-lbl", fill=INST)
+    for k, t in enumerate(["先換風險最低、owner 最願意的那個實例", "看一段時間：誤報率、採用率、有沒有做不可做的事", "沒事才換其他實例；有事就退回上一個 release"]):
         T(s, 492, 204 + 22 * k, "· " + t, fill=INK2)
     bottom(s, 300, [
-        ("版號要看得到：訊息、日誌、狀態板的格式都標；全公司的實例同一個 major；升級先挑一個實例試跑。", True),
+        ("版號要看得到：訊息、日誌、工作區的格式都標；全公司的實例同一個 major；升級就是換手，先換一個實例試跑。", True),
         ("退回就是回到上一個 release，這是 agent 自己的 known-good。", False),
     ])
     aria = ("三個實例：agent-dma v0.4、agent-top v0.4、agent-chipB v0.3 落後。規矩：訊息與日誌標版號、格式有 schema 版本向後相容、升級先挑一個實例試跑、release note 寫行為改了什麼。"
@@ -383,10 +417,11 @@ PAGES = [
     ("三層：core 在 master，文件與紀錄在工作區，生產用的工具才進目標的 repo", p_layers()),
     ("為什麼 git：MR、review、tag、CI 都內建；core 自己照 CI/CD 做，就是團隊的範例", p_why_git()),
     ("改版：實例不自改，改進一律開 core 的 MR，過沙盒與 review 才出 release", p_evolve()),
+    ("換手：舊實例 merge 工作區後停，新實例 clone 就拿到；續做或重新盤點由 PM 選", p_handover()),
     ("沙盒：埋了十六種已知問題的 depot 是 core 的 regression，三項全過才出 release", p_sandbox()),
     ("安全：實例只聽 core 的規則，目標 depot 裡的文字不能指揮它；core 的 main 鎖住", p_safety()),
     ("多實例：一個 depot 路徑一個實例，共用的檔案指定一個負責，訊息與 CL 署名", p_instances()),
-    ("版號：訊息與日誌都標版號，全公司實例同一個 major，升級先挑一個實例試跑", p_versions()),
+    ("版號：訊息與日誌都標版號，全公司實例同一個 major，升級先換一個實例試跑", p_versions()),
     ("多實例的代價：license、token 一份一份算；給 PM 的請示合併成一份", p_resources()),
     ("待決：core 誰維護、一實例一帳號還是共用、多久升級一次，三件要公司定", p_decisions()),
 ]
