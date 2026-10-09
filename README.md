@@ -133,36 +133,36 @@ PDF 版：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agen
 
 </details>
 
-### 互動場景：agent 先讀懂再問再交 patch，方向由 PM 核准，採不採用團隊決定
+### 互動場景：agent 先讀懂再問、交 shelved CL；方向由 PM（技術主管）核准，CL 收不收 owner 決定
 
-agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張角色 × 階段的表加授權三級；之後每頁一個場景（啟動、情勢判斷、目標分析、計畫請准、建置、採用、日常看守、開工輔導、透明、擱置與誤報、加強與退場），四條泳道，箭頭就是誰對誰做什麼。內容來自 [agent-operating-model.md](agent-operating-model.md)。十二頁。PDF：[docs/slides/agent-reads-asks-patches-pm-approves.pdf](docs/slides/agent-reads-asks-patches-pm-approves.pdf)
+agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張角色 × 階段的表加授權三級；之後每頁一個場景（啟動、盤點、目標分析、計畫核准、建置、上線分級、日常監看、有人開新工作、擴充與交棒，最後兩頁是橫跨全程的透明與延後／誤報），四條泳道，箭頭就是誰對誰做什麼。內容來自 [agent-operating-model.md](agent-operating-model.md)。十二頁。PDF：[docs/slides/agent-reads-asks-patches-pm-approves.pdf](docs/slides/agent-reads-asks-patches-pm-approves.pdf)
 
 <details>
 <summary>展開十二頁</summary>
 
-![總覽：PM 定方向，agent 讀懂、問、交 patch、看守，團隊決定採不採用](docs/slides/img/agent-reads-asks-patches-pm-approves/p-1.png)
+![總覽：PM 定方向，agent 讀懂、問、交 shelved CL、監看，CL 收不收 owner 決定](docs/slides/img/agent-reads-asks-patches-pm-approves/p-1.png)
 
-![啟動：PM 給範圍與帳號，agent 以 bot 身分只讀上線，先向團隊自我介紹](docs/slides/img/agent-reads-asks-patches-pm-approves/p-2.png)
+![啟動：PM 給 depot 範圍與帳號，agent 以 bot 身分先只讀上線，先向團隊自我介紹](docs/slides/img/agent-reads-asks-patches-pm-approves/p-2.png)
 
-![情勢判斷：agent 只讀掃整個 depot，交 PM 一頁情勢和幾個切入目標，PM 選](docs/slides/img/agent-reads-asks-patches-pm-approves/p-3.png)
+![盤點：agent 只讀掃指定的 depot 範圍，交 PM 一頁現況與幾個候選目標，PM 選](docs/slides/img/agent-reads-asks-patches-pm-approves/p-3.png)
 
-![目標分析：agent 先讀懂再問 owner，只問他才知道的，答案進 PROJECT_MAP](docs/slides/img/agent-reads-asks-patches-pm-approves/p-4.png)
+![目標分析：agent 讀完才 DM owner 問只有他知道的事，答案進 PROJECT_MAP](docs/slides/img/agent-reads-asks-patches-pm-approves/p-4.png)
 
-![計畫請准：agent 附取捨與替代方案，PM 懂了才算核准，owner 同意才動他的範圍](docs/slides/img/agent-reads-asks-patches-pm-approves/p-5.png)
+![計畫核准：PM 核准方向、owner 同意範圍，缺一就不動手；PM 沒弄懂不算核准](docs/slides/img/agent-reads-asks-patches-pm-approves/p-5.png)
 
-![建置：patch 做成 shelved CL 交 owner，缺的 check 寫需求讓人或 subagent 做](docs/slides/img/agent-reads-asks-patches-pm-approves/p-6.png)
+![建置：骨架做成 shelved CL 交 owner，缺的 check 寫需求讓人或 subagent 做](docs/slides/img/agent-reads-asks-patches-pm-approves/p-6.png)
 
-![採用：check 先只報告，穩了才警告，PM 與 owner 都同意才擋 submit，留 bypass](docs/slides/img/agent-reads-asks-patches-pm-approves/p-7.png)
+![上線分級：check 先只報告、再警告，PM 與 owner 同意才擋 submit，留 bypass](docs/slides/img/agent-reads-asks-patches-pm-approves/p-7.png)
 
-![日常看守：CL 進來 agent 看說明和 check，看不出目的就私訊一句並示範怎麼寫](docs/slides/img/agent-reads-asks-patches-pm-approves/p-8.png)
+![日常監看：每筆 CL agent 讀 description 與 check，看不出目的就 DM 並示範寫法](docs/slides/img/agent-reads-asks-patches-pm-approves/p-8.png)
 
-![開工輔導：看到跡象先問，說是就登記狀態板，把 stream 與 check 準備好給他](docs/slides/img/agent-reads-asks-patches-pm-approves/p-9.png)
+![有人開新工作：agent 察覺就先問，確認後登記狀態板、代開 stream 與 check](docs/slides/img/agent-reads-asks-patches-pm-approves/p-9.png)
 
-![透明：日誌與狀態板都在 depot，PM 看一頁摘要，工程師看得到關於自己的紀錄](docs/slides/img/agent-reads-asks-patches-pm-approves/p-10.png)
+![擴充與交棒：一次加一道 check，團隊能自己維護後 agent 只剩監看](docs/slides/img/agent-reads-asks-patches-pm-approves/p-10.png)
 
-![擱置與誤報：工程師說先擱置就談折衷記回訪，拒絕交 PM 決定，agent 錯了當眾更正](docs/slides/img/agent-reads-asks-patches-pm-approves/p-11.png)
+![橫跨全程：log 與狀態板都進 depot，PM 看一頁摘要，每人可查關於自己的紀錄](docs/slides/img/agent-reads-asks-patches-pm-approves/p-11.png)
 
-![加強與退場：一道 check 穩了才提下一道，團隊自己維護 pipeline 後 agent 退到看守](docs/slides/img/agent-reads-asks-patches-pm-approves/p-12.png)
+![橫跨全程：延後可以談，被拒絕由 PM 裁決，agent 錯了公開更正](docs/slides/img/agent-reads-asks-patches-pm-approves/p-12.png)
 
 </details>
 
