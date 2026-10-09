@@ -2,7 +2,44 @@
 
 在 IC 設計團隊導入迭代式開發與 CI/CD 的 AI agent 構想。Agent 自主運行，方向由一位人類 PM 掌握（PM 指負責把團隊開發流程導入 CI/CD 的人，和 project 的 PM 無關）：PM 決定要去哪裡，agent 補上 CI/CD 的知識與執行力，兩邊一起把事情做成。
 
-PDF 版：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agent-and-pm-make-cicd-happen.pdf)
+## 六張圖看完整個構想
+
+每張都是一份圖形文件的總覽頁；標題後面的連結是那份的全文。
+
+**1. 地基：AI 的三種效益站在同一塊地基 CI/CD 上，而這塊地基現在是空的**（[為什麼非要 CI/CD](docs/slides/loops-need-cicd-before-ai-multiplies.pdf)）
+
+![總覽：AI 的三種效益站在同一塊地基 CI/CD 上，而這塊地基現在是空的](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-1.png)
+
+**2. 現狀：depot 留得住檔案、答不出哪一版跑的；十六個問題歸成六個原則**（[把版控當備份的團隊](docs/slides/repo-as-backup-keeps-files-not-answers.pdf)）
+
+![總覽：depot 留得住檔案、答不出哪一版跑的；十六個問題歸成六個原則](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-1.png)
+
+**3. 誰來做：AI 出 CI/CD 知識與動手能力，人類 PM 定方向與優先序**（[AI agent 與人類 PM 搭檔](docs/slides/ai-agent-and-pm-make-cicd-happen.pdf)）
+
+![搭配：AI 出 CI/CD 知識與動手能力，人類 PM 定方向與優先序](docs/slides/img/ai-agent-and-pm-make-cicd-happen/p-5.png)
+
+**4. 怎麼一起做：PM 有決心沒經驗，團隊不堅決也不知怎麼做；agent 補這兩個缺**（[互動場景](docs/slides/agent-fills-what-pm-and-team-lack.pdf)）
+
+![總覽：PM 有決心沒經驗，團隊不堅決也不知怎麼做；agent 補這兩個缺](docs/slides/img/agent-fills-what-pm-and-team-lack/p-1.png)
+
+**5. 進到一個目錄做什麼：六個檢查各驗一個原則，不過就做 patch，由 owner 決定收不收**（[進到陌生的 workspace](docs/slides/check-then-patch-before-asking-owner.pdf)）
+
+![流程：六個檢查各驗一個原則，不過就做 patch，由專案 owner 決定收不收](docs/slides/img/check-then-patch-before-asking-owner/p-1.png)
+
+**6. agent 自己怎麼活、怎麼長：實例從 agent 的 repo clone、工作區回到它；depot 只收流程在用的工具**（[agent 自己的版控與多實例](docs/slides/agent-own-version-control-and-instances.pdf)）
+
+![總覽：實例從 agent 的 repo clone、工作區回到它；depot 只收流程在用的工具](docs/slides/img/agent-own-version-control-and-instances/p-1.png)
+
+串起來一句話：AI 的效益要靠 CI/CD 這塊地基；我們的地基是空的；有共識但沒人有經驗，所以 agent 出知識與手、PM 定方向；四方這樣互動；agent 進到任一目錄就做這三步；而 agent 本身這樣版控、clone、換手。
+
+## 六份圖形文件（逐頁）
+
+### AI agent 與人類 PM 搭檔：AI 出 CI/CD 知識與動手能力，人類 PM 定方向與優先序
+
+為什麼要做、為什麼做不起來、誰來做：方向（AI 要跨部門發揮效益，前提是先有迭代式開發與 CI/CD）→ 背景（CI/CD 假設的小步 submit、自動驗證等習慣，IC 團隊多半沒有）→ 心態（認同，卻懷疑非做不可、也懷疑做得到）→ 推動者（想推的主管知道目標，說不出第一步）→ 搭配（AI 出知識與動手能力，PM 定方向與優先序）→ 協作（agent 自己觀察、提案、執行、回報，方向由 PM 弄懂後核准）。六頁。PDF：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agent-and-pm-make-cicd-happen.pdf)
+
+<details>
+<summary>展開六頁</summary>
 
 ![方向：AI 要跨部門發揮效益，前提是先有迭代式開發與 CI/CD](docs/slides/img/ai-agent-and-pm-make-cicd-happen/p-1.png)
 
@@ -16,50 +53,52 @@ PDF 版：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agen
 
 ![協作：agent 自己觀察、提案、執行、回報，方向由 PM 弄懂後核准](docs/slides/img/ai-agent-and-pm-make-cicd-happen/p-6.png)
 
-## 其他圖形文件
+</details>
 
 ### 把版控當備份的團隊：depot 留得住檔案，答不出哪一版跑的
 
-這類團隊每天具體怎麼做事，問題從哪裡長出來，最後收斂成六個原則。十八頁。PDF：[docs/slides/repo-as-backup-keeps-files-not-answers.pdf](docs/slides/repo-as-backup-keeps-files-not-answers.pdf)
+這類團隊每天具體怎麼做事，問題從哪裡長出來，最後收斂成六個原則。十九頁。PDF：[docs/slides/repo-as-backup-keeps-files-not-answers.pdf](docs/slides/repo-as-backup-keeps-files-not-answers.pdf)
 
 <details>
-<summary>展開十八頁</summary>
+<summary>展開十九頁</summary>
 
-![日常：改動在個人 workspace 累積，depot 隔很久才收到一大包](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-1.png)
+![總覽：depot 留得住檔案、答不出哪一版跑的；十六個問題歸成六個原則](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-1.png)
 
-![散落：跑 regression 要的東西分在五個地方，depot 只是其中之一](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-2.png)
+![日常：改動在個人 workspace 累積，depot 隔很久才收到一大包](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-2.png)
 
-![交付：結果靠 email 貼路徑，label 記得檔案版本，記不得工具與環境](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-3.png)
+![散落：跑 regression 要的東西分在五個地方，depot 只是其中之一](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-3.png)
 
-![問題：「這份結果是哪一版跑的」要問好幾個人，答案仍是大概](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-4.png)
+![交付：結果靠 email 貼路徑，label 記得檔案版本，記不得工具與環境](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-4.png)
 
-![問題：壞掉被發現時，離改壞它的那次 submit 已經很遠](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-5.png)
+![問題：「這份結果是哪一版跑的」要問好幾個人，答案仍是大概](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-5.png)
 
-![問題：下游收到的包沒有清單；流程只在人腦裡，人走了就斷](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-6.png)
+![問題：壞掉被發現時，離改壞它的那次 submit 已經很遠](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-6.png)
 
-![問題：目錄用途沒寫在 depot，新人要人帶，AI agent 也要人另寫說明](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-7.png)
+![問題：下游收到的包沒有清單；流程只在人腦裡，人走了就斷](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-7.png)
 
-![問題：沒有開發 branch，半成品留在 workspace 或進 main，main 隨時會壞](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-8.png)
+![問題：目錄用途沒寫在 depot，新人要人帶，AI agent 也要人另寫說明](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-8.png)
 
-![問題：submit 就算完成，沒有任何 CL 在進 depot 前被第二個人看過](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-9.png)
+![問題：沒有開發 branch，半成品留在 workspace 或進 main，main 隨時會壞](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-9.png)
 
-![問題：兩人改同一個檔，resolve 整份收下，另一人的改動消失](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-10.png)
+![問題：submit 就算完成，沒有任何 CL 在進 depot 前被第二個人看過](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-10.png)
 
-![問題：netlist 等產物和來源一起進 depot，改哪一份才算數沒人說得清](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-11.png)
+![問題：兩人改同一個檔，resolve 整份收下，另一人的改動消失](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-11.png)
 
-![問題：第三方 IP 解壓覆蓋，晶片裡是哪一版沒人說得出](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-12.png)
+![問題：netlist 等產物和來源一起進 depot，改哪一份才算數沒人說得清](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-12.png)
 
-![問題：flow script 每個專案複製一份改，修好的 bug 傳不出去](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-13.png)
+![問題：第三方 IP 解壓覆蓋，晶片裡是哪一版沒人說得出](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-13.png)
 
-![問題：同一份 RTL 兩台機器跑出不同結果，分不出哪個才對](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-14.png)
+![問題：flow script 每個專案複製一份改，修好的 bug 傳不出去](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-14.png)
 
-![問題：regression 狀態靠人填 Excel，表和實際結果對不上](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-15.png)
+![問題：同一份 RTL 兩台機器跑出不同結果，分不出哪個才對](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-15.png)
 
-![問題：想退回上次能跑的狀態，檔案回得去，環境回不去](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-16.png)
+![問題：regression 狀態靠人填 Excel，表和實際結果對不上](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-16.png)
 
-![總結：備份做到了，「哪一版跑的、能不能重跑」一個都答不出](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-17.png)
+![問題：想退回上次能跑的狀態，檔案回得去，環境回不去](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-17.png)
 
-![收斂：前面的問題歸成 SSOT、CI 等六個原則，對策照原則一一對應](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-18.png)
+![總結：備份做到了，「哪一版跑的、能不能重跑」一個都答不出](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-18.png)
+
+![收斂：前面的問題歸成 SSOT、CI 等六個原則，對策照原則一一對應](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-19.png)
 
 </details>
 

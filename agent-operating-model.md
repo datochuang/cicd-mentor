@@ -71,7 +71,7 @@ agent 的每個行為都要能說出依據。依據分三層：
 | 層 | 內容 | 出處 |
 |---|---|---|
 | 目標（為什麼） | 讓三層迴圈（內圈、中圈、外圈）自己轉、能平行、能比較，Agentic AI 的效益才拿得到 | 《為什麼非要 CI/CD》 |
-| 原則（repo 該有的性質） | Small batches、Single Source of Truth、Traceability、Continuous Integration、Self-documenting、Code review，各有一個做得到／做不到的檢驗 | D4，《把版控當備份的團隊》第 18 頁 |
+| 原則（repo 該有的性質） | Small batches、Single Source of Truth、Traceability、Continuous Integration、Self-documenting、Code review，各有一個做得到／做不到的檢驗 | D4，《把版控當備份的團隊》第 19 頁 |
 | 做法（怎麼做到） | 下表七條；每條掛在某個原則上，寫清楚 agent 自己怎麼遵守、怎麼推動團隊、怎麼檢驗 | 本節提議 |
 
 ### 做法層（提議）
@@ -369,12 +369,12 @@ D3 說核准要建立在理解上。PM 不用懂實作，但這七個概念不�
 | 概念 | 一句話 | 核准時會碰到的判斷 | 看哪一頁 |
 |---|---|---|---|
 | check（查）與判 | 機器跑一個 script 回 PASS／FAIL；判是「全 PASS 才過」 | 這道 check 查的是什麼？誤報會多嗎？ | 《為什麼非要 CI/CD》第 2–3 頁 |
-| main 隨時可用 | 共用的那條線任何時候 sync 下來都編得過、跑得過 | 要不要讓半成品進 main？ | 《把版控當備份的團隊》第 8 頁 |
+| main 隨時可用 | 共用的那條線任何時候 sync 下來都編得過、跑得過 | 要不要讓半成品進 main？ | 《把版控當備份的團隊》第 9 頁 |
 | 只報告／警告／擋 | check 的三種上線等級；擋會真的讓人 submit 不了 | 同意擋之前，誤報率是多少、bypass 給誰 | 《互動場景》第 7 頁 |
 | stream／branch | 一件任務一條線，做完、查過再併回 main | 一任務一條還是一人一條 | 《互動場景》第 9 頁 |
 | shelved CL | 給人看、還沒 submit 的改動；也是備份 | agent 交的東西長這樣，owner 決定收不收 | 《互動場景》第 6 頁 |
 | manifest | 跟著結果走的一張清單：CL、工具版本、環境、指令 | 交付物要不要強制附 | 《進到陌生 workspace》第 5 頁 |
-| 六個原則與檢驗 | repo 該有的性質，各有一個做得到／做不到的檢驗 | agent 的每個提案掛在哪一條 | 《把版控當備份的團隊》第 18 頁 |
+| 六個原則與檢驗 | repo 該有的性質，各有一個做得到／做不到的檢驗 | agent 的每個提案掛在哪一條 | 《把版控當備份的團隊》第 19 頁 |
 
 agent 的義務：請准單裡每個概念第一次出現都附一句解釋和那一頁的連結；PM 說不出「這會影響誰」就先不核准，agent 再講一次。
 

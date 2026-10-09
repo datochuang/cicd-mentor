@@ -31,7 +31,7 @@
 | T38 | 10-09 | **agent 自己的版控與多實例**：core 由誰維護、一實例一帳號還是共用、升級的節奏 | 三層分離（core／實例的工作區／生產用的工具）、登記表、實例名與版號署名、沙盒當 core 的 regression、換手已寫進 operating model 第八節，並做成投影片《agent 自己的版控》；這三件要公司決定 | agent-operating-model.md 第八節、docs/slides/agent-own-version-control-and-instances.pdf |
 | T41 | 10-09 | **前五份投影片的檔名要不要照新規則改**（檔名講問題不講答案）：ai-agent-and-pm-make-cicd-happen、repo-as-backup-keeps-files-not-answers、check-then-patch-before-asking-owner、loops-need-cicd-before-ai-multiplies、agent-fills-what-pm-and-team-lack | 你只點名了《agent 自己的版控》那份，已改成 agent-own-version-control-and-instances；其餘五份沿用舊名，改的話 README、reviews、圖目錄一起動 | CLAUDE.md 圖形化文件的規則 |
 | T7 | 10-08 | **轉型的終點**：流程存在就好，還是要團隊真正理解並自己維護 | D2 給了初步答案（先改變 PM，由他帶動團隊），細節待討論 | decision-log.md D2 |
-| T15 | 10-08 | **目錄用途與相依關係沒有文件，對 agent 設計的影響**：通用 agent 每個 workspace 都要另寫指引，那這個 agent 要不要自己建立並維護每個專案的目錄說明與相依關係（並放進版控）？ | 你在討論第二份圖形文件時提出這個問題；只寫進了文件第 7 頁，還沒討論對 agent 本身的設計意涵 | docs/slides/repo-as-backup-keeps-files-not-answers.pdf 第 7 頁 |
+| T15 | 10-08 | **目錄用途與相依關係沒有文件，對 agent 設計的影響**：通用 agent 每個 workspace 都要另寫指引，那這個 agent 要不要自己建立並維護每個專案的目錄說明與相依關係（並放進版控）？ | 你在討論第二份圖形文件時提出這個問題；只寫進了文件第 8 頁（加總覽頁後的頁碼），還沒討論對 agent 本身的設計意涵 | docs/slides/repo-as-backup-keeps-files-not-answers.pdf 第 8 頁 |
 
 ## 等你確認的產出
 

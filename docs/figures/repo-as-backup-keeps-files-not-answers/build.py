@@ -6,7 +6,7 @@
 # 讀完要能：在圖裡認出自己團隊的做法，說出哪些問題是從這些做法長出來的。
 # 主旨：把版控當備份的團隊，depot 裡有檔案，但結果的來源、跑法、環境與理由都在人身上；
 #       問題在整合、交接與人員異動時浮現。
-# 脈絡：1–3 具體怎麼運作 → 4–16 造成什麼問題（9–16 為 2026-10-09 追加）→ 17 總結 → 18 收斂成六個原則（之後對策的定錨點；第六個 Code review 待使用者確認）。
+# 脈絡：1 總覽（一張圖：depot 留得住的、答不出的；十六個問題歸成六個原則；2026-10-09 加）→ 2–4 具體怎麼運作 → 5–17 造成什麼問題（10–17 為 2026-10-09 追加）→ 18 總結 → 19 收斂成六個原則（之後對策的定錨點；第六個 Code review 待使用者確認）。
 # 所有路徑、CL 號碼、label 名稱都是示意，不對應任何實際專案。
 import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
@@ -22,7 +22,58 @@ def check(s, x, y, ok, text, col=None, cls="tx"):
     T(s, x + 20, y, text, cls=cls, fill=INK2 if cls == "tx" else c)
 
 
-# ── 圖 1：日常 ──────────────────────────────────────────────────────
+
+# ── 圖 1：總覽（一張圖：depot 留得住的、答不出的；十六個問題歸成六個原則）──
+# 每個問題只掛在一個最直接的原則下（圖 19 的對應是多對多，這裡為了一眼看懂只取一個）；數字是那個問題的頁。
+OVERVIEW = [
+    ("Small batches", [("大包 submit", 2), ("說明只寫 update", 2)]),
+    ("Single Source of Truth", [("五個地方散落", 3), ("產物進 depot", 12), ("IP 解壓覆蓋", 13), ("flow 每案複製一份", 14)]),
+    ("Traceability", [("label 只有檔案", 4), ("哪一版跑的要問人", 5), ("兩台機器不同結果", 15), ("退不回去", 17)]),
+    ("Continuous Integration", [("壞了很久才發現", 6), ("沒有 branch，main 會壞", 9), ("Excel 狀態表", 16)]),
+    ("Self-documenting", [("流程只在人腦", 7), ("下游沒清單", 7), ("目錄沒說明", 8)]),
+    ("Code review", [("沒有 review", 10), ("resolve 整份收", 11)]),
+]
+
+
+def p0():
+    s = []
+    T(s, 20, 20, "這份文件回答：把版控當備份的團隊每天怎麼運作、長出哪些問題、這些問題歸成哪幾個原則", cls="tx-lbl", fill=INK2)
+    rect(s, 20, 34, 230, 150, col=GOAL, fill=GOAL, op=".06", sw=1.4)
+    T(s, 32, 54, "depot 留得住的", cls="tx", fill=GOAL, w=700)
+    for j, t in enumerate(["每個檔案的最新版與歷史", "誰在什麼時候改了哪個檔", "舊版救得回來", "label 那天的檔案清單"]):
+        check(s, 32, 80 + 24 * j, True, t)
+    rect(s, 20, 196, 230, 150, col=WARN, fill=WARN, op=".06", sw=1.4, dash="6 4")
+    T(s, 32, 216, "depot 答不出的", cls="tx", fill=WARN, w=700)
+    for j, t in enumerate(["這份結果是哪一版跑的", "乾淨的機器能不能重跑", "哪一次改動弄壞的", "併入前誰看過"]):
+        check(s, 32, 242 + 24 * j, False, t)
+    T(s, 20, 366, "今天這些都由某個人的記憶回答", fill=GRAY)
+    arrow(s, 256, 190, 286, 190, col=WARN, ar="ar-w", sw=2)
+    T(s, 290, 24, "", fill=GRAY)
+    for i, (name, items) in enumerate(OVERVIEW):
+        col_, row = i % 3, i // 3
+        bx, by, bw, bh = 290 + col_ * 192, 34 + row * 162, 184, 150
+        rect(s, bx, by, bw, bh, col="var(--rule-2)", fill="var(--surface-2)", sw=1.2)
+        T(s, bx + 10, by + 20, name, cls="tx", fill=GOAL, w=700)
+        x, y = bx + 10, by + 32
+        for t, pg in items:
+            w_ = width(t, 10.5) + 20
+            if x + w_ > bx + bw - 8:
+                x, y = bx + 10, y + 26
+            pill(s, x, y, t, WARN, h=20)
+            x += w_ + 6
+        T(s, bx + 10, by + bh - 10, "圖 " + "、".join(str(pg) for pg in sorted({pg for _, pg in items})), fill=GRAY)
+    bottom(s, 380, [
+        ("備份做到了：檔案留得住；「哪一版跑的、能不能重跑、誰看過」答不出。十六個問題歸成六個原則，之後的對策一一對應。", True),
+        ("右邊每個框是一個原則，框裡是沒做到它時長出的問題，圖號是講那個問題的頁。", False),
+    ])
+    aria = ("左上 depot 留得住的四個打勾：每個檔案的最新版與歷史、誰在什麼時候改了哪個檔、舊版救得回來、label 那天的檔案清單。左下 depot 答不出的四個打叉：這份結果是哪一版跑的、乾淨的機器能不能重跑、哪一次改動弄壞的、併入前誰看過；今天都由某個人的記憶回答。"
+            "右邊六個框，各一個原則與沒做到時的問題：Small batches（大包 submit、說明只寫 update）；Single Source of Truth（五個地方散落、產物進 depot、IP 解壓覆蓋、flow 每案複製一份）；"
+            "Traceability（label 只有檔案、哪一版跑的要問人、兩台機器不同結果、退不回去）；Continuous Integration（壞了很久才發現、沒有 branch main 會壞、Excel 狀態表）；"
+            "Self-documenting（流程只在人腦、下游沒清單、目錄沒說明）；Code review（沒有 review、resolve 整份收）。每框附圖號。")
+    return svg(s, 880, 480, aria)
+
+
+# ── 圖 2：日常 ──────────────────────────────────────────────────────
 EDITS = ["改 RTL", "跑 sim", "改 tb", "改 RTL", "改 .f", "跑 sim", "改 script", "改 RTL",
          "跑 sim", "改 tb", "改 RTL", "跑 regression", "改 RTL", "跑 sim"]
 SUBMITS = [(340, "CL 48211", "update"), (590, "CL 48977", "fix"), (790, "CL 49340", "before freeze")]
@@ -703,18 +754,19 @@ def p_principles():
         T(s, 250, y + 42, "檢驗：" + test, fill=GRAY)
         for k, f in enumerate(figs):
             row, col_ = divmod(k, 4)
-            pill(s, 640 + col_ * 52, y + 8 + 22 * row, "圖 %d" % f, WARN, h=18)
+            pill(s, 640 + col_ * 52, y + 8 + 22 * row, "圖 %d" % (f + 1), WARN, h=18)
         line(s, 20, y + 54, 860, y + 54)
     bottom(s, 394, [
         ("六個原則都是 repo 該有的性質，各有一個做得到或做不到的檢驗。", True),
         ("之後談對策，每一條只回答一個問題：它讓哪一個檢驗從做不到變成做得到。", False),
     ])
-    aria = ("六列原則，各附意思、檢驗與對應的問題頁：Small batches（圖 1、5、8、10）；Single Source of Truth, SSOT（圖 2、3、6、11、12、13、14）；"
-            "Traceability（圖 3、4、6、14、15、16）；Continuous Integration, CI（圖 5、8、15）；Self-documenting（圖 6、7、13）；Code review（圖 8、9、10）。")
+    aria = ("六列原則，各附意思、檢驗與對應的問題頁：Small batches（圖 2、6、9、11）；Single Source of Truth, SSOT（圖 3、4、7、12、13、14、15）；"
+            "Traceability（圖 4、5、7、15、16、17）；Continuous Integration, CI（圖 6、9、16）；Self-documenting（圖 7、8、14）；Code review（圖 9、10、11）。")
     return svg(s, 880, 480, aria)
 
 
 PAGES = [
+    ("總覽：depot 留得住檔案、答不出哪一版跑的；十六個問題歸成六個原則", p0()),
     ("日常：改動在個人 workspace 累積，depot 隔很久才收到一大包", p1()),
     ("散落：跑 regression 要的東西分在五個地方，depot 只是其中之一", p2()),
     ("交付：結果靠 email 貼路徑，label 記得檔案版本，記不得工具與環境", p3()),
