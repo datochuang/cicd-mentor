@@ -92,7 +92,7 @@ PDF 版：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agen
 
 ### 為什麼非要 CI/CD：查和判不交給機器，N 個 agent 等於一個
 
-為什麼《把版控當備份的團隊》裡的症狀代價很大。脊椎是三層套在一起的迴圈：一個改動的內圈（inner loop）、一個專案的迭代（含交接）、N 個方案比 PPA 的外圈（outer loop）；CI/CD 在每一層做同一件事（查和判交給機器），AI 在每一層加速的也只有「改」。沒有 CI/CD，每圈、每次交接、每個方案都要等人查判，N 個 agent 等於一個。十一頁，附務實的上限（license、算力、可比性）。PDF：[docs/slides/loops-need-cicd-before-ai-multiplies.pdf](docs/slides/loops-need-cicd-before-ai-multiplies.pdf)
+為什麼《把版控當備份的團隊》裡的症狀代價很大。脊椎是三層套在一起的迴圈：一個改動的內圈（inner loop）、一個專案的中圈（迭代與交接）、N 個方案比 PPA 的外圈（outer loop）；CI/CD 在每一層做同一件事（查和判交給機器），AI 在每一層加速的也只有「改」。沒有 CI/CD，每圈、每次交接、每個方案都要等人查判，N 個 agent 等於一個。十一頁，附務實的上限（license、算力、可比性）。PDF：[docs/slides/loops-need-cicd-before-ai-multiplies.pdf](docs/slides/loops-need-cicd-before-ai-multiplies.pdf)
 
 <details>
 <summary>展開十一頁</summary>
@@ -101,23 +101,23 @@ PDF 版：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agen
 
 ![內圈（inner loop）：一個改動是改、查、判轉到過為止，查和判交給機器](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-2.png)
 
-![內圈在 IC：一圈有快有慢，CI/CD 按快慢分層跑，哪一層都由機器判](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-3.png)
+![內圈在 IC：一圈有快有慢，CI/CD 照快慢排成幾道檢查，每道機器判](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-3.png)
 
 ![現狀的內圈：每圈靠人設環境、人跑、人看 log，轉得慢、判法還不一](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-4.png)
 
-![迭代：小改動過了內圈就進 main，問題早、小；waterfall 留到最後整合才全出](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-5.png)
+![中圈：改動機器查過就進 main，問題早且小；waterfall 把整合留到最後](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-5.png)
 
-![交接：交出的改動小且查過，下游（人或 agent）不用等人解釋就能接](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-6.png)
+![中圈的交接：交出的改動小、機器查過，下游人或 agent 不必等人解釋](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-6.png)
 
-![外圈（outer loop）：比 N 個方案的 PPA，每個方案都要先跑完一圈內圈](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-7.png)
+![外圈（outer loop）：N 個方案比 PPA，每個先各自轉完內圈、機器判過才比](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-7.png)
 
 ![Agentic AI：agent 在三層都加速「改」，瓶頸變成誰來查、誰來判](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-8.png)
 
-![上限：平行幾個由 license 與算力決定；CI/CD 讓 license 不用人顧也排得滿](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-9.png)
+![上限：同時轉幾個方案看 license 與算力；交給機器排，license 才排得滿](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-9.png)
 
 ![結論：沒有 CI/CD，每圈、每次交接、每個方案都要等人查判，N 個 agent 等於一個](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-10.png)
 
-![對應：前面講到的六個條件，各由《把版控當備份的團隊》的一個原則撐住](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-11.png)
+![對應：三層各要的條件，對到《把版控當備份的團隊》的六個原則](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-11.png)
 
 ![現狀的內圈：每圈靠人設環境、人跑、人看 log，轉得慢、判法還不一](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-3.png)
 
