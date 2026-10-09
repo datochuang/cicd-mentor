@@ -2,7 +2,7 @@
 <html lang="zh-Hant" data-theme="light">
 <head>
 <meta charset="utf-8">
-<title>agent 自己的版控：一個 git repo，master 出 release，實例從它 clone，design 的紀錄回到它</title>
+<title>agent 自己的版控：實例從 agent 的 git repo 生出來，工作區也回到它；目標的 repo 只收交付</title>
 <style>
 :root{--paper:#fff;--surface:#fff;--surface-2:#eef2f5;--ink:#17212b;--ink-2:#48596a;--ink-3:#78889a;--rule:#cfd9e1;--rule-2:#aebbc7;
 --goal:#116b64;--warn:#a0580f;--agent:#2f6f9f;--pm:#7a4f9a;
@@ -26,63 +26,75 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 </style>
 </head>
 <body>
-<section class="slide"><div class="kicker">agent 自己的版控與多實例　·　圖 1 ／ 10</div><h1>總覽：一個 git repo：master 出 release、實例從它 clone、design 的紀錄回到它</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="一條水平線是 agent 的 git repo 的 master，上面有 v0.3、v0.4、v0.5 三個 release。agent-dma v0.3 從 v0.3 clone 出來看 dma，紀錄累積在 designs/dma/（PROJECT_MAP 草稿、關係人、決定、日誌），虛線箭頭定期把紀錄 merge 回 master；中途開一條 feature branch 做更好的 CL 說明 check，經 MR、沙盒、review merge 回 master 進 v0.5；最後一次 merge 紀錄後停，換手給從 v0.5 clone 的 agent-dma v0.5，它讀 designs/dma/ 續做，或當全新 design 重新盤點。agent-top v0.4 從 v0.4 clone 出來看 top 與 flow，紀錄在 designs/top/ 同樣回 master。兩個實例各有一條虛線往下指向目標的 depot：只有交付給團隊的才進 depot，走 shelved CL、owner submit：PROJECT_MAP 定稿、check、flow、狀態板、CL 說明模板；交付後以 depot 為準。左下登記表也在 repo 裡：dma 歸 agent-dma，top、flow 歸 agent-top，一個 design 一個實例。最下方用語定義 core、實例、design、designs 目錄、換手、PM。" xmlns="http://www.w3.org/2000/svg">
+<section class="slide"><div class="kicker">agent 自己的版控與多實例　·　圖 1 ／ 10</div><h1>總覽：實例從 agent 的 git repo 生出來，工作區也回到它；目標的 repo 只收交付</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="上帶是 agent 的 git repo，只有一個：三條橫向的內容列顯示 repo 隨時間長——core/ 一直在；designs/dma/ 是 agent-dma 的工作區，從加入那天起就在 repo 裡；designs/top/ 是 agent-top 的工作區。列下方是 master 線，有 v0.3、v0.4、v0.5 三個 release。中間兩條實例的 lane：agent-dma v0.3 從 v0.3 clone 出來看 dma，建工作區 designs/dma/（PROJECT_MAP 草稿、關係人、決定紀錄、日誌、HANDOVER），粗箭頭把工作區加入 repo；中途開 feature branch 經 MR merge 回 master；最後一次 merge 紀錄後停，換手給從 v0.5 clone 的 agent-dma v0.5，它 clone 就拿到工作區，讀它續做或當全新 design 重新盤點。agent-top v0.4 從 v0.4 clone 出來看 top 與 flow，建工作區 designs/top/ 同樣加入 repo。下帶是目標 design 的 repo，不只一個：chipA、chipB 兩個 Perforce depot 和 chipC 的 GitLab repo；實例對它們只讀、交 shelved CL 或 MR，只交付它們要維護的：PROJECT_MAP 定稿、check、flow、狀態板、CL 說明模板，owner 收了才算。最下方用語定義 core、實例、工作區、design、換手、PM。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
-<text class="tx-lbl" x="20.0" y="20.0" text-anchor="start" fill="var(--ink-2)">這份文件回答：agent 的程式與每個 design 的紀錄怎麼在一個 git repo 裡版控；實例怎麼 clone 出來、怎麼把更好的機制 merge 回去、怎麼換手</text>
-<text class="tx-lbl" x="20.0" y="44.0" text-anchor="start" fill="var(--agent)">agent 的 git repo：master</text>
-<line x1="20.0" y1="58.0" x2="856.0" y2="58.0" stroke="var(--agent)" stroke-width="2.2" marker-end="url(#ar-a)"/>
-<rect x="95.0" y="48.0" width="45.2" height="20.0" rx="10" fill="var(--surface)" stroke="var(--surface)" stroke-width="0"/>
-<rect x="95.0" y="48.0" width="45.2" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
-<text class="tx-s" x="117.6" y="62.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">v0.3</text>
-<rect x="385.0" y="48.0" width="45.2" height="20.0" rx="10" fill="var(--surface)" stroke="var(--surface)" stroke-width="0"/>
-<rect x="385.0" y="48.0" width="45.2" height="20.0" rx="10" fill="var(--agent)" stroke="var(--agent)" stroke-width="1" fill-opacity=".14"/>
-<text class="tx-s" x="407.6" y="62.0" text-anchor="middle" fill="var(--agent)" style="font-weight:700">v0.4</text>
-<rect x="625.0" y="48.0" width="45.2" height="20.0" rx="10" fill="var(--surface)" stroke="var(--surface)" stroke-width="0"/>
-<rect x="625.0" y="48.0" width="45.2" height="20.0" rx="10" fill="var(--agent)" stroke="var(--agent)" stroke-width="1" fill-opacity=".14"/>
-<text class="tx-s" x="647.6" y="62.0" text-anchor="middle" fill="var(--agent)" style="font-weight:700">v0.5</text>
-<line x1="120.0" y1="70.0" x2="120.0" y2="112.0" stroke="var(--agent)" stroke-width="1.4" marker-end="url(#ar-a)"/>
-<text class="tx-s" x="128.0" y="92.0" text-anchor="start" fill="var(--agent)">clone</text>
-<line x1="120.0" y1="118.0" x2="439.0" y2="118.0" stroke="var(--agent)" stroke-width="2.2"/>
-<line x1="451.0" y1="118.0" x2="590.0" y2="118.0" stroke="var(--agent)" stroke-width="2.2"/>
-<line x1="230.0" y1="116.0" x2="230.0" y2="70.0" stroke="var(--agent)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ar-a)"/>
-<line x1="330.0" y1="116.0" x2="330.0" y2="70.0" stroke="var(--agent)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ar-a)"/>
-<text class="tx-s" x="280.0" y="92.0" text-anchor="middle" fill="var(--agent)">紀錄回 master</text>
-<text class="tx" x="150.0" y="134.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">agent-dma v0.3：看 dma</text>
-<text class="tx-s" x="150.0" y="150.0" text-anchor="start" fill="var(--ink-2)">紀錄累積在 designs/dma/：</text>
-<text class="tx-s" x="150.0" y="166.0" text-anchor="start" fill="var(--ink-2)">PROJECT_MAP 草稿、關係人、決定、日誌</text>
-<path d="M470,120 L478,176 L525,176 L545,70" fill="none" stroke="var(--agent)" stroke-width="1.4" marker-end="url(#ar-a)"/>
-<text class="tx-s" x="500.0" y="194.0" text-anchor="start" fill="var(--agent)">feature branch：更好的 CL 說明 check</text>
-<text class="tx-s" x="500.0" y="210.0" text-anchor="start" fill="var(--agent)">→ MR → 沙盒 → review → merge，進 v0.5</text>
-<line x1="590.0" y1="116.0" x2="590.0" y2="70.0" stroke="var(--agent)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ar-a)"/>
-<text class="tx-s" x="590.0" y="134.0" text-anchor="middle" fill="var(--warn)">merge 紀錄，停</text>
-<line x1="598.0" y1="118.0" x2="652.0" y2="118.0" stroke="var(--pm)" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#ar-p)"/>
-<text class="tx-s" x="625.0" y="110.0" text-anchor="middle" fill="var(--pm)">換手</text>
-<line x1="660.0" y1="70.0" x2="660.0" y2="112.0" stroke="var(--agent)" stroke-width="1.4" marker-end="url(#ar-a)"/>
-<text class="tx-s" x="668.0" y="92.0" text-anchor="start" fill="var(--agent)">clone</text>
-<line x1="660.0" y1="118.0" x2="856.0" y2="118.0" stroke="var(--agent)" stroke-width="2.2"/>
-<text class="tx" x="672.0" y="134.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">agent-dma v0.5 接手</text>
-<text class="tx-s" x="672.0" y="150.0" text-anchor="start" fill="var(--ink-2)">讀 designs/dma/ 續做，</text>
-<text class="tx-s" x="672.0" y="166.0" text-anchor="start" fill="var(--ink-2)">或當全新 design 重新盤點</text>
-<line x1="445.0" y1="70.0" x2="445.0" y2="226.0" stroke="var(--agent)" stroke-width="1.4" marker-end="url(#ar-a)"/>
-<text class="tx-s" x="453.0" y="92.0" text-anchor="start" fill="var(--agent)">clone</text>
-<line x1="445.0" y1="232.0" x2="856.0" y2="232.0" stroke="var(--agent)" stroke-width="2.2"/>
-<text class="tx-s" x="455.0" y="248.0" text-anchor="start" fill="var(--agent)">agent-top v0.4：看 top 與 flow；紀錄在 designs/top/，同樣回 master</text>
-<line x1="420.0" y1="120.0" x2="420.0" y2="268.0" stroke="var(--goal)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ar-g)"/>
-<line x1="850.0" y1="234.0" x2="850.0" y2="268.0" stroke="var(--goal)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ar-g)"/>
-<rect x="300.0" y="272.0" width="556.0" height="66.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.6" fill-opacity=".10"/>
-<text class="tx" x="312.0" y="292.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">目標的 depot（Perforce）：只有交付給團隊的進來，走 shelved CL，owner submit</text>
-<text class="tx-s" x="312.0" y="310.0" text-anchor="start" fill="var(--ink-2)">PROJECT_MAP 定稿、check、flow、狀態板、CL 說明模板</text>
-<text class="tx-s" x="312.0" y="326.0" text-anchor="start" fill="var(--ink-2)">交付後以 depot 為準；agent 只留交了什麼、CL 幾號</text>
-<rect x="20.0" y="272.0" width="264.0" height="66.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
-<text class="tx" x="32.0" y="292.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">登記表（也在 repo 裡）</text>
-<text class="tx-s" x="32.0" y="310.0" text-anchor="start" fill="var(--ink-2)">dma → agent-dma；top、flow → agent-top</text>
-<text class="tx-s" x="32.0" y="326.0" text-anchor="start" fill="var(--ink-2)">一個 design 一個實例</text>
-<line x1="20.0" y1="350.0" x2="860.0" y2="350.0" stroke="var(--rule)" stroke-width="1"/>
-<text class="tx" x="20.0" y="376.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">一個 git repo：core 在 master 出 release；實例從 master clone，紀錄累積在 designs/&lt;名&gt;/ 並 merge 回 master。</text>
-<text class="tx" x="20.0" y="400.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">更好的機制走 feature branch 與 MR；換手靠 designs/&lt;名&gt;/；交付給團隊的才進 depot。</text>
-<text class="tx" x="20.0" y="424.0" text-anchor="start" fill="var(--ink-2)">第 2–6 頁講一份 agent 自己：三層、為什麼 git、改版、沙盒、安全；第 7–9 頁講多個實例：登記表、版號、代價；第 10 頁待決。</text>
-<text class="tx-s" x="20.0" y="446.0" text-anchor="start" fill="var(--ink-3)">用語：core＝master 上的程式與規則　實例＝從 master clone 出來、看一個或多個 design 的一份 agent　design＝實例負責的那個設計</text>
-<text class="tx-s" x="20.0" y="464.0" text-anchor="start" fill="var(--ink-3)">　　　designs/&lt;名&gt;/＝每個 design 的紀錄，在同一個 repo　換手＝新版實例接手同一個 design　PM＝負責把 CI/CD 導入團隊的主管，不是專案 PM</text>
+<text class="tx-lbl" x="20.0" y="20.0" text-anchor="start" fill="var(--ink-2)">這份文件回答：系統有兩種 repo——agent 自己的一個 git repo，和目標 design 的很多個；實例怎麼生出來、工作區怎麼回去、怎麼換手</text>
+<rect x="20.0" y="34.0" width="836.0" height="106.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".05"/>
+<text class="tx-lbl" x="32.0" y="52.0" text-anchor="start" fill="var(--agent)">① agent 的 git repo（只有一個）：core ＋ 每個實例的工作區；repo 的內容隨時間長 →</text>
+<rect x="32.0" y="58.0" width="814.0" height="14.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0" fill-opacity=".22"/>
+<text class="tx-s" x="36.0" y="69.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">core/：程式、規則、模板、通用 check</text>
+<rect x="260.0" y="76.0" width="586.0" height="14.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0" fill-opacity=".22"/>
+<text class="tx-s" x="264.0" y="87.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">designs/dma/：agent-dma 的工作區，從加入那天起就在 repo 裡</text>
+<rect x="520.0" y="94.0" width="326.0" height="14.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0" fill-opacity=".22"/>
+<text class="tx-s" x="524.0" y="105.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">designs/top/：agent-top 的工作區</text>
+<line x1="32.0" y1="122.0" x2="846.0" y2="122.0" stroke="var(--agent)" stroke-width="2.2" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="36.0" y="136.0" text-anchor="start" fill="var(--agent)">master</text>
+<rect x="80.0" y="112.0" width="45.2" height="20.0" rx="10" fill="var(--surface)" stroke="var(--surface)" stroke-width="0"/>
+<rect x="80.0" y="112.0" width="45.2" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="102.6" y="126.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">v0.3</text>
+<rect x="340.0" y="112.0" width="45.2" height="20.0" rx="10" fill="var(--surface)" stroke="var(--surface)" stroke-width="0"/>
+<rect x="340.0" y="112.0" width="45.2" height="20.0" rx="10" fill="var(--agent)" stroke="var(--agent)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="362.6" y="126.0" text-anchor="middle" fill="var(--agent)" style="font-weight:700">v0.4</text>
+<rect x="600.0" y="112.0" width="45.2" height="20.0" rx="10" fill="var(--surface)" stroke="var(--surface)" stroke-width="0"/>
+<rect x="600.0" y="112.0" width="45.2" height="20.0" rx="10" fill="var(--agent)" stroke="var(--agent)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="622.6" y="126.0" text-anchor="middle" fill="var(--agent)" style="font-weight:700">v0.5</text>
+<line x1="100.0" y1="134.0" x2="100.0" y2="174.0" stroke="var(--agent)" stroke-width="1.4" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="106.0" y="160.0" text-anchor="start" fill="var(--agent)">clone</text>
+<line x1="100.0" y1="180.0" x2="364.0" y2="180.0" stroke="var(--agent)" stroke-width="2.2"/>
+<line x1="376.0" y1="180.0" x2="514.0" y2="180.0" stroke="var(--agent)" stroke-width="2.2"/>
+<line x1="526.0" y1="180.0" x2="580.0" y2="180.0" stroke="var(--agent)" stroke-width="2.2"/>
+<line x1="260.0" y1="178.0" x2="260.0" y2="134.0" stroke="var(--agent)" stroke-width="2.2" marker-end="url(#ar-a)"/>
+<text class="tx" x="252.0" y="160.0" text-anchor="end" fill="var(--agent)" style="font-weight:700">工作區加入 repo</text>
+<text class="tx" x="130.0" y="196.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">agent-dma v0.3：看 dma</text>
+<text class="tx-s" x="130.0" y="212.0" text-anchor="start" fill="var(--ink-2)">建工作區 designs/dma/：PROJECT_MAP 草稿</text>
+<text class="tx-s" x="130.0" y="228.0" text-anchor="start" fill="var(--ink-2)">關係人、決定紀錄、日誌、HANDOVER</text>
+<path d="M390,178 L398,160 L440,160 L456,134" fill="none" stroke="var(--agent)" stroke-width="1.4" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="386.0" y="196.0" text-anchor="start" fill="var(--agent)">↑ feature branch</text>
+<text class="tx-s" x="386.0" y="212.0" text-anchor="start" fill="var(--agent)">→ MR → merge</text>
+<line x1="580.0" y1="178.0" x2="580.0" y2="134.0" stroke="var(--agent)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="580.0" y="196.0" text-anchor="middle" fill="var(--warn)">merge 紀錄，停</text>
+<line x1="588.0" y1="180.0" x2="620.0" y2="180.0" stroke="var(--pm)" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#ar-p)"/>
+<text class="tx-s" x="604.0" y="172.0" text-anchor="middle" fill="var(--pm)">換手</text>
+<line x1="625.0" y1="134.0" x2="625.0" y2="174.0" stroke="var(--agent)" stroke-width="1.4" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="631.0" y="160.0" text-anchor="start" fill="var(--agent)">clone</text>
+<line x1="625.0" y1="180.0" x2="846.0" y2="180.0" stroke="var(--agent)" stroke-width="2.2"/>
+<text class="tx" x="636.0" y="196.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">agent-dma v0.5 接手</text>
+<text class="tx-s" x="636.0" y="212.0" text-anchor="start" fill="var(--ink-2)">clone 就拿到工作區，讀它續做</text>
+<text class="tx-s" x="636.0" y="228.0" text-anchor="start" fill="var(--ink-2)">或當全新 design 重新盤點</text>
+<line x1="370.0" y1="134.0" x2="370.0" y2="242.0" stroke="var(--agent)" stroke-width="1.4" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="364.0" y="160.0" text-anchor="end" fill="var(--agent)">clone</text>
+<line x1="370.0" y1="248.0" x2="846.0" y2="248.0" stroke="var(--agent)" stroke-width="2.2"/>
+<line x1="520.0" y1="246.0" x2="520.0" y2="134.0" stroke="var(--agent)" stroke-width="2.2" marker-end="url(#ar-a)"/>
+<text class="tx" x="528.0" y="160.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">加入</text>
+<text class="tx-s" x="380.0" y="264.0" text-anchor="start" fill="var(--agent)">agent-top v0.4：看 top 與 flow；工作區 designs/top/，同樣加入 repo</text>
+<line x1="112.0" y1="182.0" x2="112.0" y2="286.0" stroke="var(--goal)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ar-g)"/>
+<line x1="800.0" y1="250.0" x2="800.0" y2="286.0" stroke="var(--goal)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ar-g)"/>
+<text class="tx-s" x="118.0" y="262.0" text-anchor="start" fill="var(--goal)">讀、交 shelved CL</text>
+<text class="tx-s" x="794.0" y="280.0" text-anchor="end" fill="var(--goal)">讀、交 shelved CL</text>
+<rect x="20.0" y="290.0" width="836.0" height="70.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".05"/>
+<text class="tx-lbl" x="32.0" y="308.0" text-anchor="start" fill="var(--goal)">② 目標 design 的 repo（不只一個；Perforce 或 git）：agent 只讀它，只交付它要維護的東西</text>
+<rect x="32.0" y="316.0" width="300.0" height="24.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".12"/>
+<text class="tx" x="42.0" y="332.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">//depot/chipA（Perforce）：dma、top、flow</text>
+<rect x="348.0" y="316.0" width="230.0" height="24.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".12"/>
+<text class="tx" x="358.0" y="332.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">//depot/chipB（Perforce）</text>
+<rect x="594.0" y="316.0" width="250.0" height="24.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".12"/>
+<text class="tx" x="604.0" y="332.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">chipC 的 GitLab repo（git）</text>
+<text class="tx-s" x="32.0" y="354.0" text-anchor="start" fill="var(--ink-2)">交付的：PROJECT_MAP 定稿、check、flow、狀態板、CL 說明模板；走 shelved CL（Perforce）或 MR（git），owner 收了才算</text>
+<line x1="20.0" y1="370.0" x2="860.0" y2="370.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="396.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">兩種 repo：agent 的一個 git repo，和目標 design 的很多個。實例從前者生出來、建工作區、工作區回到前者；對後者只讀與交付。</text>
+<text class="tx" x="20.0" y="420.0" text-anchor="start" fill="var(--ink-2)">第 2–6 頁講一份 agent 自己：三層、為什麼 git、改版、沙盒、安全；第 7–9 頁講多個實例：登記表、版號、代價；第 10 頁待決。</text>
+<text class="tx-s" x="20.0" y="442.0" text-anchor="start" fill="var(--ink-3)">用語：core＝master 上的程式與規則　實例＝從 agent 的 git repo clone 出來的一份 agent　工作區＝designs/&lt;名&gt;/，實例建的、回到 repo 的</text>
+<text class="tx-s" x="20.0" y="460.0" text-anchor="start" fill="var(--ink-3)">　　　design＝實例負責的設計與它的 repo（一個實例可看多個）　換手＝新版實例接手同一個 design　PM＝負責把 CI/CD 導入團隊的主管，不是專案 PM</text>
 </svg></div><div class="pn">1 / 10</div></section>
 <section class="slide"><div class="kicker">agent 自己的版控與多實例　·　圖 2 ／ 10</div><h1>三層：core 在 master，每個 design 的紀錄在 designs/，交付給團隊的進 depot</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="三欄：core 在 master（程式、行為原則、提示詞、模板、check script；同一個 repo 的根目錄；MR 沙盒 review merge release；幾週一版所有實例一致；所有實例共用）；designs 目錄（實例設定、累積的認知：PROJECT_MAP 草稿、關係人、決定、日誌、狀態、待辦、HANDOVER；同一個 repo 每個 design 一個目錄；實例自己 commit 定期 merge 回 master；每天長；換手的交接包）；交付給團隊的（PROJECT_MAP 定稿、狀態板、check、flow、CL 說明模板、需求 markdown；目標的 depot；shelved CL owner submit 之後以 depot 為準；owner 收了才算；屬於團隊、agent 走了還在）。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
@@ -100,12 +112,12 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx-lbl" x="20.0" y="316.0" text-anchor="start" fill="var(--ink-3)">為什麼分開</text>
 <text class="tx" x="20.0" y="336.0" text-anchor="start" fill="var(--agent)">所有實例共用；實例不能直接改</text>
 <rect x="304.0" y="30.0" width="272.0" height="110.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".05"/>
-<text class="tx-b" x="316.0" y="51.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">designs/&lt;名&gt;/</text>
+<text class="tx-b" x="316.0" y="51.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">designs/&lt;名&gt;/（實例的工作區）</text>
 <text class="tx-s" x="316.0" y="70.0" text-anchor="start" fill="var(--ink-2)">實例設定：看哪些 design、PM、預算、授權表</text>
 <text class="tx-s" x="316.0" y="87.0" text-anchor="start" fill="var(--ink-2)">累積的認知：PROJECT_MAP 草稿、關係人、決定</text>
 <text class="tx-s" x="316.0" y="104.0" text-anchor="start" fill="var(--ink-2)">日誌、狀態、待辦、HANDOVER</text>
 <text class="tx-lbl" x="304.0" y="166.0" text-anchor="start" fill="var(--ink-3)">放哪</text>
-<text class="tx" x="304.0" y="186.0" text-anchor="start" fill="var(--ink-2)">同一個 repo，每個 design 一個目錄</text>
+<text class="tx" x="304.0" y="186.0" text-anchor="start" fill="var(--ink-2)">實例自己建，加入同一個 repo</text>
 <text class="tx-lbl" x="304.0" y="216.0" text-anchor="start" fill="var(--ink-3)">誰能改、怎麼改</text>
 <text class="tx" x="304.0" y="236.0" text-anchor="start" fill="var(--ink-2)">實例自己 commit，定期 merge 回 master</text>
 <text class="tx-lbl" x="304.0" y="266.0" text-anchor="start" fill="var(--ink-3)">多久改一次</text>

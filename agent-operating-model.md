@@ -33,6 +33,10 @@
 
 - **一個 git repo 與換手**：第一頁的總覽不夠具體。我想像的是，agent 本身開發和運行會有一個 git repo，而每個實體運行的 agent，剛開始是從這個 repo 去 clone 出來；每個 agent 也許看一個 design 或多個 design，過程中累積對目標 design 的認知，而且中途也有可能換手，交由更新版本的 agent 接手，而這個換手必須藉由良好的機制確保可以順利進行；當然也可以新接手的 agent 當成全新目標介入，這都有可能。所以第一頁必須畫一個水平直線代表這個 git repo 的運行，每個 agent 可能是從當下的 master clone 出來去做任務，或是開一個 feature branch，視情況把更好的機制 merge 進去。而所謂的針對每個 design 的工作產物和紀錄也必須同一個 git repo 維護。你想想看這樣跟你的規劃有沒有符合。
 
+### 2026-10-09 第六輪
+
+- **兩種 repo 與實例的工作區**：想像中，一個 agent 被從 git repo「創造」出來後，會自己創建一個工作區，而且這個工作區也會加入 agent git repo。所以系統有兩種 repo：一個是這個 agent 的 git repo，另外一種是目標 design／project 的 Perforce 或 git repo（而這種不會只有一個）。第一頁的圖要更強調「生出來的 agent 有自己的工作區，且工作區會被加入 agent git repo」。
+
 ---
 
 ## 二、拼出來的整體樣態（骨架，隨輪次修）
@@ -540,6 +544,15 @@ agent 的義務：請准單裡每個概念第一次出現都附一句解釋和�
 **對其他文件的影響**（確認後改）：行為原則 21 已改寫；《agent 補 PM 與團隊各缺的》第 12 頁「log 與狀態板都進 depot」要改成「狀態板進 depot、日誌在 agent 的 repo，團隊可查」；啟動包 build brief 的三層分離照這版；投影片《agent 自己的版控》第 1、2 頁已照這版重畫，其餘頁待確認後改。
 
 **待你確認**：(1) 「紀錄在 git、交付進 depot」的分法；(2) 狀態板算交付（進 depot）還是紀錄（留 git）——它是團隊要看的，我傾向交付；(3) 換手時「續做」和「重新盤點」誰選——我傾向 PM 選，預設重新盤點再比對。
+
+### 8.7 第六輪補充：兩種 repo，實例的工作區回到 agent 的 repo（2026-10-09）
+
+使用者把 8.6 再講白一點（原文見第一節「兩種 repo 與實例的工作區」）：
+
+- **系統裡有兩種 repo**：① agent 自己的 git repo，只有一個；② 目標 design／project 的 repo，Perforce 或 git，不只一個。兩種的關係不對稱：實例從 ① 生出來、工作區回到 ①；對 ② 只讀，只交付它要維護的東西（shelved CL 或 MR，owner 收）。
+- **實例的生命**：從 ① clone（「創造」）→ 自己建一個工作區 `designs/<名>/` → 工作區加入 ①（第一次 merge 回 master 之後，這個目錄就永遠在 repo 裡，之後定期 merge）→ 對 ② 讀、分析、交付 → 停的時候最後一次 merge，寫 HANDOVER → 新版實例從 ① clone 就拿到工作區，接手。
+- 8.6 的 `designs/<名>/` 就是這個「工作區」；兩個詞指同一個東西，投影片用「工作區」，因為它說出了「實例自己建的」這層意思。
+- 第 1 頁重畫成兩個帶：上帶是 ①，master 線加上「repo 的內容隨時間長」（core/ 一直在；designs/dma/ 從 agent-dma 加入那天起；designs/top/ 從 agent-top 加入那天起）；中間是實例的 lane（clone、工作區加入、feature branch、換手）；下帶是 ②，三個目標 repo（兩個 Perforce 一個 git），只收交付。
 
 ## 六、這一輪冒出的待決問題
 

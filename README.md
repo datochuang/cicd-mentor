@@ -168,14 +168,14 @@ agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張
 
 </details>
 
-### agent 自己的版控：一個 git repo，master 出 release，實例從它 clone，design 的紀錄回到它
+### agent 自己的版控：實例從 agent 的 git repo 生出來，工作區也回到它；目標的 repo 只收交付
 
-agent 本身的程式與每個 design 的紀錄怎麼在一個 git repo 裡版控、實例怎麼 clone 出來、怎麼把更好的機制 merge 回去、怎麼換手。第 1 頁一張圖：一條 master 線，實例從某個 release clone 出來看一個或多個 design，紀錄累積在 `designs/<名>/` 並 merge 回 master，更好的機制走 feature branch 與 MR，舊實例停了新版實例 clone 接手；只有交付給團隊的（PROJECT_MAP 定稿、check、狀態板）才以 shelved CL 進目標的 depot。第 2–6 頁講一份 agent 自己（三層、為什麼 git、改版、沙盒、安全），第 7–9 頁講多個實例（登記表、版號、代價），第 10 頁三件要公司定。內容來自 [agent-operating-model.md](agent-operating-model.md) 第八節。十頁；第 1、2 頁已照 8.6 的修正重畫，其餘頁待確認後改。PDF：[docs/slides/agent-evolves-by-release-not-self-edit.pdf](docs/slides/agent-evolves-by-release-not-self-edit.pdf)
+系統有兩種 repo：agent 自己的一個 git repo，和目標 design 的很多個 repo（Perforce 或 git）。第 1 頁一張圖分三帶：上帶是 agent 的 git repo，內容隨時間長（core/ 一直在；每個實例的工作區 `designs/<名>/` 從加入那天起就在裡面），master 線上有 release；中間是實例的 lane——從某個 release clone 出來、建自己的工作區、工作區加入 repo 並定期 merge 回 master、更好的機制走 feature branch 與 MR、舊實例停了新版實例 clone 就拿到工作區接手；下帶是目標的 repo，agent 只讀它、只交付它要維護的（PROJECT_MAP 定稿、check、狀態板），走 shelved CL 或 MR。第 2–6 頁講一份 agent 自己（三層、為什麼 git、改版、沙盒、安全），第 7–9 頁講多個實例（登記表、版號、代價），第 10 頁三件要公司定。內容來自 [agent-operating-model.md](agent-operating-model.md) 第八節。十頁；第 1、2 頁已照 8.6、8.7 重畫，其餘頁待確認後改。PDF：[docs/slides/agent-evolves-by-release-not-self-edit.pdf](docs/slides/agent-evolves-by-release-not-self-edit.pdf)
 
 <details>
 <summary>展開十頁</summary>
 
-![總覽：一個 git repo：master 出 release、實例從它 clone、design 的紀錄回到它](docs/slides/img/agent-evolves-by-release-not-self-edit/p-1.png)
+![總覽：實例從 agent 的 git repo 生出來，工作區也回到它；目標的 repo 只收交付](docs/slides/img/agent-evolves-by-release-not-self-edit/p-1.png)
 
 ![三層：core 在 master，每個 design 的紀錄在 designs/，交付給團隊的進 depot](docs/slides/img/agent-evolves-by-release-not-self-edit/p-2.png)
 

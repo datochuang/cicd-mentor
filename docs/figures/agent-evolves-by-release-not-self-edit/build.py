@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-# 《agent 自己的版控：一個 git repo，master 出 release，實例從它 clone，design 的紀錄回到它》
+# 《agent 自己的版控：實例從 agent 的 git repo 生出來，工作區也回到它；目標的 repo 只收交付》
 # docs/slides/agent-evolves-by-release-not-self-edit.{html,pdf}
 # 執行：python3 docs/figures/agent-evolves-by-release-not-self-edit/build.py
 #
 # 讀者：要接手製作與部署這個 agent 的人：內網的 Claude Code、負責 core 的人、PM。懂 git 與 Perforce。
-# 讀完要能：說出 agent 的東西分哪三層、各放哪、誰能改；一個實例怎麼 clone 出來、怎麼把紀錄與改進 merge 回去、怎麼換手。
-# 主旨：一個 git repo：core 在 master 出 release；實例從 master clone，紀錄累積在 designs/<名>/ 並 merge 回 master；
-#       更好的機制走 feature branch 與 MR；換手靠 designs/<名>/；交付給團隊的才進 depot（shelved CL）。
-# 用語（第 1 頁定義）：core＝master 上的程式與規則；實例＝從 master clone 出來、看一個或多個 design 的一份 agent；
-#       design＝實例負責的那個設計；designs/<名>/＝每個 design 的紀錄；換手＝新版實例接手同一個 design；PM＝負責把 CI/CD 導入團隊的主管。
-# 內容來源：agent-operating-model.md 第八節（8.6 第五輪修正）。實例名、版號、路徑都是示意。
-# 狀態：第 1、2 頁已照第五輪重畫；第 3–10 頁等使用者確認分法後再改（換手要加一頁）。
+# 讀完要能：說出系統的兩種 repo 各是什麼、關係怎麼不對稱；一個實例怎麼生出來、工作區怎麼回到 agent 的 repo、怎麼換手；對目標的 repo 只做什麼。
+# 主旨：兩種 repo——agent 自己的一個 git repo，和目標 design 的很多個 repo（Perforce 或 git）。實例從前者 clone 出來、建自己的工作區
+#       designs/<名>/、工作區加入前者並定期 merge 回 master；更好的機制走 feature branch 與 MR；換手靠工作區；對後者只讀、只交付（shelved CL 或 MR）。
+# 用語（第 1 頁定義）：core＝master 上的程式與規則；實例＝從 agent 的 git repo clone 出來的一份 agent，看一個或多個 design；
+#       工作區＝designs/<名>/，實例建的、回到 repo 的；design＝實例負責的那個設計與它的 repo；換手＝新版實例接手同一個 design；PM＝負責把 CI/CD 導入團隊的主管。
+# 內容來源：agent-operating-model.md 第八節（8.6、8.7）。實例名、版號、路徑都是示意。
+# 狀態：第 1、2 頁已照第五、六輪重畫；第 3–10 頁等使用者確認分法後再改（換手要加一頁）。
 # 盲讀審稿：docs/reviews/titles-blind-read-agent-versioning-20261009.md
 import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
@@ -33,79 +33,85 @@ def box(s, x, y, w, h, title, lines=(), col=INK2, kind="solid", title_cls="tx"):
         T(s, x + 12, y + 40 + 17 * k, l, fill=INK2)
 
 
-# ── 圖 1：總覽（一條 master 線；實例 clone、紀錄回 master、feature branch、換手；交付進 depot）──
+# ── 圖 1：總覽（兩種 repo：上帶 agent 的 git repo 隨時間長；中間實例 clone、建工作區、工作區加入 repo、換手；下帶目標的 repo 只收交付）──
 def p_overview():
     s = []
-    T(s, 20, 20, "這份文件回答：agent 的程式與每個 design 的紀錄怎麼在一個 git repo 裡版控；實例怎麼 clone 出來、怎麼把更好的機制 merge 回去、怎麼換手", cls="tx-lbl", fill=INK2)
-    # master
-    T(s, 20, 44, "agent 的 git repo：master", cls="tx-lbl", fill=CORE)
-    arrow(s, 20, 58, 856, 58, col=CORE, ar="ar-a", sw=2.2)
-    for x, t, c in [(95, "v0.3", GRAY), (385, "v0.4", CORE), (625, "v0.5", CORE)]:
-        rect(s, x, 48, width(t, 10.5) + 20, 20, col="var(--surface)", fill="var(--surface)", sw=0, rx=10)
-        pill(s, x, 48, t, c, h=20)
-    # 實例 1：agent-dma v0.3
-    L1 = 118
-    arrow(s, 120, 70, 120, L1 - 6, col=INST, ar="ar-a", sw=1.4)
-    T(s, 128, 92, "clone", fill=INST)
-    line(s, 120, L1, 439, L1, col=INST, sw=2.2)
-    line(s, 451, L1, 590, L1, col=INST, sw=2.2)
-    for x in (230, 330):
-        arrow(s, x, L1 - 2, x, 70, col=INST, ar="ar-a", sw=1.2, dash="4 3")
-    T(s, 280, 92, "紀錄回 master", anchor="middle", fill=INST)
-    T(s, 150, 134, "agent-dma v0.3：看 dma", cls="tx", fill=INST, w=700)
-    T(s, 150, 150, "紀錄累積在 designs/dma/：", fill=INK2)
-    T(s, 150, 166, "PROJECT_MAP 草稿、關係人、決定、日誌", fill=INK2)
+    T(s, 20, 20, "這份文件回答：系統有兩種 repo——agent 自己的一個 git repo，和目標 design 的很多個；實例怎麼生出來、工作區怎麼回去、怎麼換手", cls="tx-lbl", fill=INK2)
+    # ① agent 的 git repo：內容隨時間長
+    rect(s, 20, 34, 836, 106, col=CORE, fill=CORE, op=".05", sw=1.4, dash="6 4")
+    T(s, 32, 52, "① agent 的 git repo（只有一個）：core ＋ 每個實例的工作區；repo 的內容隨時間長 →", cls="tx-lbl", fill=CORE)
+    for x, y, t, c in [(32, 58, "core/：程式、規則、模板、通用 check", CORE), (260, 76, "designs/dma/：agent-dma 的工作區，從加入那天起就在 repo 裡", INST), (520, 94, "designs/top/：agent-top 的工作區", INST)]:
+        rect(s, x, y, 846 - x, 14, col=c, fill=c, op=".22", sw=0)
+        T(s, x + 4, y + 11, t, fill=c, w=700)
+    arrow(s, 32, 122, 846, 122, col=CORE, ar="ar-a", sw=2.2)
+    T(s, 36, 136, "master", fill=CORE)
+    for x, t, c in [(80, "v0.3", GRAY), (340, "v0.4", CORE), (600, "v0.5", CORE)]:
+        rect(s, x, 112, width(t, 10.5) + 20, 20, col="var(--surface)", fill="var(--surface)", sw=0, rx=10)
+        pill(s, x, 112, t, c, h=20)
+    # 實例 1：agent-dma v0.3——clone、建工作區、工作區加入 repo
+    L1 = 180
+    arrow(s, 100, 134, 100, L1 - 6, col=INST, ar="ar-a", sw=1.4)
+    T(s, 106, 160, "clone", fill=INST)
+    line(s, 100, L1, 364, L1, col=INST, sw=2.2)
+    line(s, 376, L1, 514, L1, col=INST, sw=2.2)
+    line(s, 526, L1, 580, L1, col=INST, sw=2.2)
+    arrow(s, 260, L1 - 2, 260, 134, col=INST, ar="ar-a", sw=2.2)
+    T(s, 252, 160, "工作區加入 repo", anchor="end", cls="tx", fill=INST, w=700)
+    T(s, 130, 196, "agent-dma v0.3：看 dma", cls="tx", fill=INST, w=700)
+    T(s, 130, 212, "建工作區 designs/dma/：PROJECT_MAP 草稿", fill=INK2)
+    T(s, 130, 228, "關係人、決定紀錄、日誌、HANDOVER", fill=INK2)
     # feature branch：更好的機制 merge 回 master
-    path(s, "M470,120 L478,176 L525,176 L545,70", col=CORE, ar="ar-a", sw=1.4)
-    T(s, 500, 194, "feature branch：更好的 CL 說明 check", fill=CORE)
-    T(s, 500, 210, "→ MR → 沙盒 → review → merge，進 v0.5", fill=CORE)
-    # 換手
-    arrow(s, 590, L1 - 2, 590, 70, col=INST, ar="ar-a", sw=1.2, dash="4 3")
-    T(s, 590, 134, "merge 紀錄，停", anchor="middle", fill=WARN)
-    arrow(s, 598, L1, 652, L1, col=PM, ar="ar-p", sw=1.4, dash="4 3")
-    T(s, 625, 110, "換手", anchor="middle", fill=PM)
-    arrow(s, 660, 70, 660, L1 - 6, col=INST, ar="ar-a", sw=1.4)
-    T(s, 668, 92, "clone", fill=INST)
-    line(s, 660, L1, 856, L1, col=INST, sw=2.2)
-    T(s, 672, 134, "agent-dma v0.5 接手", cls="tx", fill=INST, w=700)
-    T(s, 672, 150, "讀 designs/dma/ 續做，", fill=INK2)
-    T(s, 672, 166, "或當全新 design 重新盤點", fill=INK2)
+    path(s, "M390,178 L398,160 L440,160 L456,134", col=CORE, ar="ar-a", sw=1.4)
+    T(s, 386, 196, "↑ feature branch", fill=CORE)
+    T(s, 386, 212, "→ MR → merge", fill=CORE)
+    # 最後一次 merge、換手
+    arrow(s, 580, L1 - 2, 580, 134, col=INST, ar="ar-a", sw=1.2, dash="4 3")
+    T(s, 580, 196, "merge 紀錄，停", anchor="middle", fill=WARN)
+    arrow(s, 588, L1, 620, L1, col=PM, ar="ar-p", sw=1.4, dash="4 3")
+    T(s, 604, 172, "換手", anchor="middle", fill=PM)
+    arrow(s, 625, 134, 625, L1 - 6, col=INST, ar="ar-a", sw=1.4)
+    T(s, 631, 160, "clone", fill=INST)
+    line(s, 625, L1, 846, L1, col=INST, sw=2.2)
+    T(s, 636, 196, "agent-dma v0.5 接手", cls="tx", fill=INST, w=700)
+    T(s, 636, 212, "clone 就拿到工作區，讀它續做", fill=INK2)
+    T(s, 636, 228, "或當全新 design 重新盤點", fill=INK2)
     # 實例 2：agent-top v0.4
-    L2 = 232
-    arrow(s, 445, 70, 445, L2 - 6, col=INST, ar="ar-a", sw=1.4)
-    T(s, 453, 92, "clone", fill=INST)
-    line(s, 445, L2, 856, L2, col=INST, sw=2.2)
-    T(s, 455, 248, "agent-top v0.4：看 top 與 flow；紀錄在 designs/top/，同樣回 master", fill=INST)
-    # 交付進 depot
-    for x, y0 in ((420, L1 + 2), (850, L2 + 2)):
-        arrow(s, x, y0, x, 268, col=TGT, ar="ar-g", sw=1.2, dash="4 3")
-    rect(s, 300, 272, 556, 66, col=TGT, fill=TGT, op=".10", sw=1.6)
-    T(s, 312, 292, "目標的 depot（Perforce）：只有交付給團隊的進來，走 shelved CL，owner submit", cls="tx", fill=TGT, w=700)
-    T(s, 312, 310, "PROJECT_MAP 定稿、check、flow、狀態板、CL 說明模板", fill=INK2)
-    T(s, 312, 326, "交付後以 depot 為準；agent 只留交了什麼、CL 幾號", fill=INK2)
-    rect(s, 20, 272, 264, 66, col="var(--rule-2)", fill="var(--surface-2)", sw=1.2)
-    T(s, 32, 292, "登記表（也在 repo 裡）", cls="tx", fill=INK2, w=700)
-    T(s, 32, 310, "dma → agent-dma；top、flow → agent-top", fill=INK2)
-    T(s, 32, 326, "一個 design 一個實例", fill=INK2)
-    bottom(s, 350, [
-        ("一個 git repo：core 在 master 出 release；實例從 master clone，紀錄累積在 designs/<名>/ 並 merge 回 master。", True),
-        ("更好的機制走 feature branch 與 MR；換手靠 designs/<名>/；交付給團隊的才進 depot。", True),
+    L2 = 248
+    arrow(s, 370, 134, 370, L2 - 6, col=INST, ar="ar-a", sw=1.4)
+    T(s, 364, 160, "clone", anchor="end", fill=INST)
+    line(s, 370, L2, 846, L2, col=INST, sw=2.2)
+    arrow(s, 520, L2 - 2, 520, 134, col=INST, ar="ar-a", sw=2.2)
+    T(s, 528, 160, "加入", cls="tx", fill=INST, w=700)
+    T(s, 380, 264, "agent-top v0.4：看 top 與 flow；工作區 designs/top/，同樣加入 repo", fill=INST)
+    # ② 目標的 repo：只收交付
+    for x, y0 in ((112, L1 + 2), (800, L2 + 2)):
+        arrow(s, x, y0, x, 286, col=TGT, ar="ar-g", sw=1.2, dash="4 3")
+    T(s, 118, 262, "讀、交 shelved CL", fill=TGT)
+    T(s, 794, 280, "讀、交 shelved CL", anchor="end", fill=TGT)
+    rect(s, 20, 290, 836, 70, col=TGT, fill=TGT, op=".05", sw=1.4, dash="6 4")
+    T(s, 32, 308, "② 目標 design 的 repo（不只一個；Perforce 或 git）：agent 只讀它，只交付它要維護的東西", cls="tx-lbl", fill=TGT)
+    for x, w, t in ((32, 300, "//depot/chipA（Perforce）：dma、top、flow"), (348, 230, "//depot/chipB（Perforce）"), (594, 250, "chipC 的 GitLab repo（git）")):
+        rect(s, x, 316, w, 24, col=TGT, fill=TGT, op=".12", sw=1.4)
+        T(s, x + 10, 332, t, cls="tx", fill=TGT, w=700)
+    T(s, 32, 354, "交付的：PROJECT_MAP 定稿、check、flow、狀態板、CL 說明模板；走 shelved CL（Perforce）或 MR（git），owner 收了才算", fill=INK2)
+    bottom(s, 370, [
+        ("兩種 repo：agent 的一個 git repo，和目標 design 的很多個。實例從前者生出來、建工作區、工作區回到前者；對後者只讀與交付。", True),
         ("第 2–6 頁講一份 agent 自己：三層、為什麼 git、改版、沙盒、安全；第 7–9 頁講多個實例：登記表、版號、代價；第 10 頁待決。", False),
     ])
-    T(s, 20, 446, "用語：core＝master 上的程式與規則　實例＝從 master clone 出來、看一個或多個 design 的一份 agent　design＝實例負責的那個設計", fill=GRAY)
-    T(s, 20, 464, "　　　designs/<名>/＝每個 design 的紀錄，在同一個 repo　換手＝新版實例接手同一個 design　PM＝負責把 CI/CD 導入團隊的主管，不是專案 PM", fill=GRAY)
-    aria = ("一條水平線是 agent 的 git repo 的 master，上面有 v0.3、v0.4、v0.5 三個 release。agent-dma v0.3 從 v0.3 clone 出來看 dma，紀錄累積在 designs/dma/（PROJECT_MAP 草稿、關係人、決定、日誌），"
-            "虛線箭頭定期把紀錄 merge 回 master；中途開一條 feature branch 做更好的 CL 說明 check，經 MR、沙盒、review merge 回 master 進 v0.5；最後一次 merge 紀錄後停，換手給從 v0.5 clone 的 agent-dma v0.5，"
-            "它讀 designs/dma/ 續做，或當全新 design 重新盤點。agent-top v0.4 從 v0.4 clone 出來看 top 與 flow，紀錄在 designs/top/ 同樣回 master。"
-            "兩個實例各有一條虛線往下指向目標的 depot：只有交付給團隊的才進 depot，走 shelved CL、owner submit：PROJECT_MAP 定稿、check、flow、狀態板、CL 說明模板；交付後以 depot 為準。"
-            "左下登記表也在 repo 裡：dma 歸 agent-dma，top、flow 歸 agent-top，一個 design 一個實例。最下方用語定義 core、實例、design、designs 目錄、換手、PM。")
+    T(s, 20, 442, "用語：core＝master 上的程式與規則　實例＝從 agent 的 git repo clone 出來的一份 agent　工作區＝designs/<名>/，實例建的、回到 repo 的", fill=GRAY)
+    T(s, 20, 460, "　　　design＝實例負責的設計與它的 repo（一個實例可看多個）　換手＝新版實例接手同一個 design　PM＝負責把 CI/CD 導入團隊的主管，不是專案 PM", fill=GRAY)
+    aria = ("上帶是 agent 的 git repo，只有一個：三條橫向的內容列顯示 repo 隨時間長——core/ 一直在；designs/dma/ 是 agent-dma 的工作區，從加入那天起就在 repo 裡；designs/top/ 是 agent-top 的工作區。"
+            "列下方是 master 線，有 v0.3、v0.4、v0.5 三個 release。中間兩條實例的 lane：agent-dma v0.3 從 v0.3 clone 出來看 dma，建工作區 designs/dma/（PROJECT_MAP 草稿、關係人、決定紀錄、日誌、HANDOVER），"
+            "粗箭頭把工作區加入 repo；中途開 feature branch 經 MR merge 回 master；最後一次 merge 紀錄後停，換手給從 v0.5 clone 的 agent-dma v0.5，它 clone 就拿到工作區，讀它續做或當全新 design 重新盤點。"
+            "agent-top v0.4 從 v0.4 clone 出來看 top 與 flow，建工作區 designs/top/ 同樣加入 repo。下帶是目標 design 的 repo，不只一個：chipA、chipB 兩個 Perforce depot 和 chipC 的 GitLab repo；"
+            "實例對它們只讀、交 shelved CL 或 MR，只交付它們要維護的：PROJECT_MAP 定稿、check、flow、狀態板、CL 說明模板，owner 收了才算。最下方用語定義 core、實例、工作區、design、換手、PM。")
     return svg(s, 880, 480, aria)
 
 
 # ── 圖 2：三層 ──────────────────────────────────────────────────────
 LAYERS = [
     ("core（master）", CORE, "solid", ["程式、版控 adapter", "行為指導原則、提示詞", "模板、通用 check script"], "同一個 repo 的根目錄", "MR → 沙盒 → review → merge → release", "幾週一版；所有實例一致", "所有實例共用；實例不能直接改"),
-    ("designs/<名>/", INST, "dash", ["實例設定：看哪些 design、PM、預算、授權表", "累積的認知：PROJECT_MAP 草稿、關係人、決定", "日誌、狀態、待辦、HANDOVER"], "同一個 repo，每個 design 一個目錄", "實例自己 commit，定期 merge 回 master", "每天長", "換手的交接包：clone master 就拿到"),
+    ("designs/<名>/（實例的工作區）", INST, "dash", ["實例設定：看哪些 design、PM、預算、授權表", "累積的認知：PROJECT_MAP 草稿、關係人、決定", "日誌、狀態、待辦、HANDOVER"], "實例自己建，加入同一個 repo", "實例自己 commit，定期 merge 回 master", "每天長", "換手的交接包：clone master 就拿到"),
     ("交付給團隊的", TGT, "solid", ["PROJECT_MAP 定稿、狀態板", "check、flow、CL 說明模板", "需求 markdown"], "目標的 depot", "shelved CL，owner submit；depot 為準", "owner 收了才算", "屬於團隊；agent 走了還在"),
 ]
 
@@ -372,7 +378,7 @@ def p_decisions():
 
 
 PAGES = [
-    ("總覽：一個 git repo：master 出 release、實例從它 clone、design 的紀錄回到它", p_overview()),
+    ("總覽：實例從 agent 的 git repo 生出來，工作區也回到它；目標的 repo 只收交付", p_overview()),
     ("三層：core 在 master，每個 design 的紀錄在 designs/，交付給團隊的進 depot", p_layers()),
     ("為什麼 git：MR、review、tag、CI 都內建；core 自己照 CI/CD 做，就是團隊的範例", p_why_git()),
     ("改版：實例不自改，改進一律開 core 的 MR，過沙盒與 review 才出 release", p_evolve()),
@@ -385,4 +391,4 @@ PAGES = [
 ]
 
 if __name__ == "__main__":
-    build(NAME, "agent 自己的版控：一個 git repo，master 出 release，實例從它 clone，design 的紀錄回到它", KICKER, PAGES)
+    build(NAME, "agent 自己的版控：實例從 agent 的 git repo 生出來，工作區也回到它；目標的 repo 只收交付", KICKER, PAGES)
