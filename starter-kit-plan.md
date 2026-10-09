@@ -25,7 +25,7 @@
 | **入口與讀的順序** | 內網 Claude Code 與 PM 打開第一個檔要知道這是什麼、先讀什麼、第一週做什麼 | `README.md` |
 | **給內網 Claude Code 的工作規則** | 它接手時要有自己的 CLAUDE.md：紅線、什麼先問 PM、交付的形式（shelved CL＋證據）、不深入哪些事 | `CLAUDE.md`（啟動包版，和本 workspace 的不同） |
 | **乾淨版的行為指導原則** | 現在 20 條散在累積體裡，還夾著「待你確認」；啟動包要一份獨立、可直接遵守的 | `behavior-guidelines.md`：從 operating model 收斂，每條指回依據 |
-| **建置說明（build brief）** | 內網 Claude Code 要知道做成什麼：元件（版控 adapter、監看與排程、分析、溝通、patch 產生、check 執行、狀態與日誌、請准流程）、介面格式、MVP 的順序、驗收方式；技術選型留給它 | `build-brief.md`，點到為止；明列「交給內網決定」的事 |
+| **建置說明（build brief）** | 內網 Claude Code 要知道做成什麼：元件（版控 adapter、監看與排程、分析、溝通、patch 產生、check 執行、狀態與日誌、請准流程）、介面格式、MVP 的順序、驗收方式；**core／instance／目標知識三層分離、實例登記表、版本標記**；技術選型留給它 | `build-brief.md`，點到為止；明列「交給內網決定」的事 |
 | **沙盒驗收** | agent 自己也要 test-first：先建一個種了 16 個症狀的沙盒 depot，agent 能偵測、提案、而且不越紅線，才上真實 repo | 寫進 build brief 的第一步 |
 | **模板** | PROJECT_MAP、狀態板、CL 說明、需求 markdown、請准單、日誌、五種訊息——現在只有文字描述 | `templates/` 各一個骨架檔 |
 | **PM 手冊** | PM 的功課、要談的資源與人、路線圖與停損、親自出面的三件事、怎麼讀請准單 | `pm-handbook.md`，從第七節抽出 |

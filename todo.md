@@ -28,6 +28,7 @@
 | T35 | 10-09 | **分階段路線圖與每階段的成功定義、停損**要不要照我寫的 | 準備 → 試點 → 擴散 → 常態；試點的成功：owner 採用了 shelved CL、check 每天跑有人看、至少一個檢驗從做不到變做得到 | agent-operating-model.md 7.3 |
 | T36 | 10-09 | **紅線清單**（不刪、不碰別人 workspace、沒共識不擋、不報個人活動量、design 資料不出核准的模型、不假裝是人、不對 design 下判斷）有沒有要加減 | | agent-operating-model.md 7.4 |
 | T37 | 10-09 | **啟動包的目錄與缺件**（README、啟動包版 CLAUDE.md、乾淨版行為指導原則、build brief、沙盒驗收、模板、PM 手冊、open decisions、用語表、獨立性檢查）要不要照 starter-kit-plan.md 做 | 內容面大致齊了，缺的是包裝層；做之前要先定 T19、T31 | starter-kit-plan.md |
+| T38 | 10-09 | **agent 自己的版控與多實例**：core 由誰維護、一實例一帳號還是共用、升級的節奏 | 三層分離（core／instance 設定／目標知識）、登記表、實例名與版本標記、沙盒當 core 的 CI 已寫進 operating model 第八節；這三件要公司決定 | agent-operating-model.md 第八節 |
 | T7 | 10-08 | **轉型的終點**：流程存在就好，還是要團隊真正理解並自己維護 | D2 給了初步答案（先改變 PM，由他帶動團隊），細節待討論 | decision-log.md D2 |
 | T15 | 10-08 | **目錄用途與相依關係沒有文件，對 agent 設計的影響**：通用 agent 每個 workspace 都要另寫指引，那這個 agent 要不要自己建立並維護每個專案的目錄說明與相依關係（並放進版控）？ | 你在討論第二份圖形文件時提出這個問題；只寫進了文件第 7 頁，還沒討論對 agent 本身的設計意涵 | docs/slides/repo-as-backup-keeps-files-not-answers.pdf 第 7 頁 |
 
