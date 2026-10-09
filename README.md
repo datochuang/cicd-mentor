@@ -16,9 +16,9 @@
 
 ![總覽：PM 有決心沒經驗，團隊不堅決也不知怎麼做；agent 補這兩個缺](docs/slides/img/agent-pm-team-repo-interactions/p-1.png)
 
-**3. 進到一個目錄做什麼：六個檢查各驗一個原則，不過就做 patch，由 owner 決定收不收**（[進到陌生的 workspace](docs/slides/agent-entering-unknown-workspace.pdf)）
+**3. 進到一個目錄做什麼：七個檢查對六個原則，不過就做 patch，由 owner 決定收不收**（[進到陌生的 workspace](docs/slides/agent-entering-unknown-workspace.pdf)）
 
-![流程：六個檢查對五個原則，不過就做 patch，由專案 owner 決定收不收](docs/slides/img/agent-entering-unknown-workspace/p-1.png)
+![流程：七個檢查對六個原則，不過就做 patch，由專案 owner 決定收不收](docs/slides/img/agent-entering-unknown-workspace/p-1.png)
 
 **4. agent 自己怎麼活、怎麼長：實例從 agent 的 repo clone、工作區回到它；depot 只收流程在用的工具**（[agent 自己的版控與多實例](docs/slides/agent-own-version-control-and-instances.pdf)）
 
@@ -53,12 +53,12 @@
 
 ### 把版控當備份的團隊：depot 留得住檔案，答不出哪一版跑的
 
-這類團隊每天具體怎麼做事，問題從哪裡長出來，最後收斂成五個原則。十九頁。PDF：[docs/slides/team-treating-vc-as-backup.pdf](docs/slides/team-treating-vc-as-backup.pdf)
+這類團隊每天具體怎麼做事，問題從哪裡長出來，最後收斂成六個原則。十九頁。PDF：[docs/slides/team-treating-vc-as-backup.pdf](docs/slides/team-treating-vc-as-backup.pdf)
 
 <details>
 <summary>展開十九頁</summary>
 
-![總覽：depot 留得住檔案、答不出哪一版跑的；十六個問題歸成五個原則](docs/slides/img/team-treating-vc-as-backup/p-1.png)
+![總覽：depot 留得住檔案、答不出哪一版跑的；十六個問題歸成六個原則](docs/slides/img/team-treating-vc-as-backup/p-1.png)
 
 ![日常：改動在個人 workspace 累積，depot 隔很久才收到一大包](docs/slides/img/team-treating-vc-as-backup/p-2.png)
 
@@ -94,18 +94,18 @@
 
 ![總結：備份做到了，「哪一版跑的、能不能重跑」一個都答不出](docs/slides/img/team-treating-vc-as-backup/p-18.png)
 
-![收斂：前面的問題歸成 SSOT、CI 等五個原則，對策照原則一一對應](docs/slides/img/team-treating-vc-as-backup/p-19.png)
+![收斂：前面的問題歸成 SSOT、CI、CD 等六個原則，對策照原則一一對應](docs/slides/img/team-treating-vc-as-backup/p-19.png)
 
 </details>
 
 ### 進到陌生的 workspace：人或 agent 照五個原則檢查，不過就先做 patch
 
-人或 AI agent 進到一個沒看過的 workspace，具體怎麼檢查它有沒有 CI/CD；每個檢查點不過時自己先補什麼，只有哪些事才問 owner。九頁。PDF：[docs/slides/agent-entering-unknown-workspace.pdf](docs/slides/agent-entering-unknown-workspace.pdf)
+人或 AI agent 進到一個沒看過的 workspace，具體怎麼檢查它有沒有 CI/CD；每個檢查點不過時自己先補什麼，只有哪些事才問 owner。十頁（第 7 頁是 CD：幫 owner 定出交付物）。PDF：[docs/slides/agent-entering-unknown-workspace.pdf](docs/slides/agent-entering-unknown-workspace.pdf)
 
 <details>
-<summary>展開九頁</summary>
+<summary>展開十頁</summary>
 
-![流程：六個檢查對五個原則，不過就做 patch，由專案 owner 決定收不收](docs/slides/img/agent-entering-unknown-workspace/p-1.png)
+![流程：七個檢查對六個原則，不過就做 patch，由專案 owner 決定收不收](docs/slides/img/agent-entering-unknown-workspace/p-1.png)
 
 ![Self-documenting：光看 depot 說不出每個目錄做什麼，就先補一份目錄說明](docs/slides/img/agent-entering-unknown-workspace/p-2.png)
 
@@ -117,11 +117,13 @@
 
 ![CI：submit 後沒有機器檢查，就先掛一個 sanity check 跟著 submit 跑](docs/slides/img/agent-entering-unknown-workspace/p-6.png)
 
-![Review 規矩：目錄沒講好要不要 review，先補一份規矩初稿給 owner 定](docs/slides/img/agent-entering-unknown-workspace/p-7.png)
+![CD：交付靠 email 貼路徑，先幫 owner 定出交付物，出包做成 script 跟著 check 跑](docs/slides/img/agent-entering-unknown-workspace/p-7.png)
 
-![Small batches：過去的大 CL 改不了，先給 CL 說明模板和拆小 CL 的示範](docs/slides/img/agent-entering-unknown-workspace/p-8.png)
+![Review 規矩：目錄沒講好要不要 review，先補一份規矩初稿給 owner 定](docs/slides/img/agent-entering-unknown-workspace/p-8.png)
 
-![分工：agent 能補的直接送 patch，只有 owner 才知道的事才開口問](docs/slides/img/agent-entering-unknown-workspace/p-9.png)
+![Small batches：過去的大 CL 改不了，先給 CL 說明模板和拆小 CL 的示範](docs/slides/img/agent-entering-unknown-workspace/p-9.png)
+
+![分工：agent 能補的直接送 patch，只有 owner 才知道的事才開口問](docs/slides/img/agent-entering-unknown-workspace/p-10.png)
 
 </details>
 
@@ -142,7 +144,7 @@
 
 ![中圈：改動機器查過就進 main，問題早且小；waterfall 把整合留到最後](docs/slides/img/loops-and-ai-multiplier/p-5.png)
 
-![中圈的交接：交出的改動小、機器查過，下游人或 agent 不必等人解釋](docs/slides/img/loops-and-ai-multiplier/p-6.png)
+![中圈的交接（CD）：改動機器查過就自動交到下一棒，下游人或 agent 不必等人](docs/slides/img/loops-and-ai-multiplier/p-6.png)
 
 ![外圈（outer loop）：N 個方案比 PPA，每個先各自轉完內圈、機器判過才比](docs/slides/img/loops-and-ai-multiplier/p-7.png)
 
@@ -152,7 +154,7 @@
 
 ![結論：沒有 CI/CD，每圈、每次交接、每個方案都要等人查判，N 個 agent 等於一個](docs/slides/img/loops-and-ai-multiplier/p-10.png)
 
-![對應：三層各要的條件，對到《把版控當備份的團隊》的五個原則](docs/slides/img/loops-and-ai-multiplier/p-11.png)
+![對應：三層各要的條件，對到《把版控當備份的團隊》的六個原則](docs/slides/img/loops-and-ai-multiplier/p-11.png)
 
 ![內圈在 IC：一圈有快有慢，CI/CD 照快慢排成幾道檢查，每道機器判](docs/slides/img/loops-and-ai-multiplier/p-3.png)
 
@@ -160,7 +162,7 @@
 
 ![中圈：改動機器查過就進 main，問題早且小；waterfall 把整合留到最後](docs/slides/img/loops-and-ai-multiplier/p-5.png)
 
-![中圈的交接：交出的改動小、機器查過，下游人或 agent 不必等人解釋](docs/slides/img/loops-and-ai-multiplier/p-6.png)
+![中圈的交接（CD）：改動機器查過就自動交到下一棒，下游人或 agent 不必等人](docs/slides/img/loops-and-ai-multiplier/p-6.png)
 
 ![外圈（outer loop）：N 個方案比 PPA，每個先各自轉完內圈、機器判過才比](docs/slides/img/loops-and-ai-multiplier/p-7.png)
 
@@ -170,10 +172,10 @@
 
 ### 互動場景：agent 先讀懂再問、交 shelved CL；方向由 PM（導入 CI/CD 的負責人）核准，CL 收不收 owner 決定
 
-agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張圖講 PM 有決心沒經驗、團隊不堅決也不知怎麼做、agent 補這兩個缺；第 2 頁角色 × 階段的總表加授權三級與用語；之後每頁一個場景（啟動、盤點、目標分析、計畫核准、建置、上線分級、日常監看、有人開新工作、擴充與交棒，最後兩頁是橫跨全程的透明與延後／誤報），四條泳道，箭頭就是誰對誰做什麼。內容來自 [agent-operating-model.md](agent-operating-model.md)。十三頁。PDF：[docs/slides/agent-pm-team-repo-interactions.pdf](docs/slides/agent-pm-team-repo-interactions.pdf)
+agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張圖講 PM 有決心沒經驗、團隊不堅決也不知怎麼做、agent 補這兩個缺；第 2 頁角色 × 階段的總表加授權三級與用語；之後每頁一個場景（啟動、盤點、目標分析、計畫核准、建置、上線分級、日常監看、有人開新工作、擴充與交棒，最後兩頁是橫跨全程的透明與延後／誤報），四條泳道，箭頭就是誰對誰做什麼。內容來自 [agent-operating-model.md](agent-operating-model.md)。十四頁（第 9 頁是交付：agent 幫 owner 定出交付物）。PDF：[docs/slides/agent-pm-team-repo-interactions.pdf](docs/slides/agent-pm-team-repo-interactions.pdf)
 
 <details>
-<summary>展開十三頁</summary>
+<summary>展開十四頁</summary>
 
 ![總覽：PM 有決心沒經驗，團隊不堅決也不知怎麼做；agent 補這兩個缺](docs/slides/img/agent-pm-team-repo-interactions/p-1.png)
 
@@ -191,15 +193,17 @@ agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張
 
 ![上線分級：check 先只報告、再警告，PM 與 owner 同意才擋 submit，留 bypass](docs/slides/img/agent-pm-team-repo-interactions/p-8.png)
 
-![日常監看：每筆 CL agent 讀 description 與 check，看不出目的就私訊作者並示範寫法](docs/slides/img/agent-pm-team-repo-interactions/p-9.png)
+![交付：agent 幫 owner 定出交付物；check 過就自動出包附 manifest，下游自己拿](docs/slides/img/agent-pm-team-repo-interactions/p-9.png)
 
-![有人開新工作：agent 察覺就先問，確認後登記狀態板、代開 stream 與 check](docs/slides/img/agent-pm-team-repo-interactions/p-10.png)
+![日常監看：每筆 CL agent 讀 description 與 check，看不出目的就私訊作者並示範寫法](docs/slides/img/agent-pm-team-repo-interactions/p-10.png)
 
-![擴充與交棒：一次加一道 check，團隊能自己維護後 agent 只剩監看](docs/slides/img/agent-pm-team-repo-interactions/p-11.png)
+![有人開新工作：agent 察覺就先問，確認後登記狀態板、代開 stream 與 check](docs/slides/img/agent-pm-team-repo-interactions/p-11.png)
 
-![橫跨全程：log 與狀態板在 agent 的 repo、團隊可讀；PM 看摘要，每人可查自己的](docs/slides/img/agent-pm-team-repo-interactions/p-12.png)
+![擴充與交棒：一次加一道 check，團隊能自己維護後 agent 只剩監看](docs/slides/img/agent-pm-team-repo-interactions/p-12.png)
 
-![橫跨全程：延後可以談，被拒絕由 PM 裁決，agent 錯了公開更正](docs/slides/img/agent-pm-team-repo-interactions/p-13.png)
+![橫跨全程：log 與狀態板在 agent 的 repo、團隊可讀；PM 看摘要，每人可查自己的](docs/slides/img/agent-pm-team-repo-interactions/p-13.png)
+
+![橫跨全程：延後可以談，被拒絕由 PM 裁決，agent 錯了公開更正](docs/slides/img/agent-pm-team-repo-interactions/p-14.png)
 
 </details>
 

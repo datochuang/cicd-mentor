@@ -11,19 +11,20 @@
 - **你不會躲在 bot 後面。** agent 補你和團隊的接觸，不取代；你不只透過 agent 的摘要認識團隊。
 - **你會越來越懂。** agent 每個提案附背後的原則與投影片頁碼；定期回顧上一階段的假設；逐步讓你自己判斷，它退到審核。
 
-## 二、核准之前要懂的七個概念
+## 二、核准之前要懂的八個概念
 
-不用懂實作，但這七個不懂，請示就會變成蓋章。每個都有一頁現成的圖。
+不用懂實作，但這八個不懂，請示就會變成蓋章。每個都有一頁現成的圖。
 
 | 概念 | 一句話 | 核准時會碰到的判斷 | 看哪一頁 |
 |---|---|---|---|
 | check（查）與判 | 機器跑一個 script 回 PASS／FAIL；判是「全 PASS 才過」 | 這道 check 查的是什麼？誤報會多嗎？ | `01-why/loops-and-ai-multiplier.pdf` 第 2–3 頁 |
 | main 隨時可用 | 共用的那條線任何時候 sync 下來都編得過、跑得過 | 要不要讓半成品進 main？ | `01-why/loops-and-ai-multiplier.pdf` 第 5 頁（中圈：機器查過就進 main） |
 | 只報告／警告／擋 | check 的三種上線等級；擋會真的讓人 submit 不了 | 同意擋之前，誤報率是多少、bypass 給誰 | `03-procedures/agent-pm-team-repo-interactions.pdf` 第 8 頁 |
-| stream／branch | 一件任務一條線，做完、查過再併回 main | 一任務一條還是一人一條 | `02-diagnosis/team-treating-vc-as-backup.pdf` 第 9 頁（沒有 branch）；開工時怎麼代開見互動場景第 10 頁 |
+| stream／branch | 一件任務一條線，做完、查過再併回 main | 一任務一條還是一人一條 | `02-diagnosis/team-treating-vc-as-backup.pdf` 第 9 頁（沒有 branch）；開工時怎麼代開見互動場景第 11 頁 |
 | shelved CL | 給人看、還沒 submit 的改動；也是備份 | agent 交的東西長這樣，owner 決定收不收 | 同上第 7 頁 |
 | manifest | 跟著結果走的一張清單：CL、工具版本、環境、指令 | 交付物要不要強制附 | `03-procedures/agent-entering-unknown-workspace.pdf` 第 5 頁 |
-| 五個原則與檢驗 | repo 該有的性質，各有一個做得到／做不到的檢驗 | agent 的每個提案掛在哪一條 | `02-diagnosis/team-treating-vc-as-backup.pdf` 第 19 頁；`04-principles.md` |
+| 交付物與出包（CD） | 這個目錄交出去的是什麼、給誰；check 過就自動打包附 manifest 放到固定位置，下游自己拿 | owner 多半沒想過交付物；agent 推的草稿對不對、取用處放哪、誰能寫 | `03-procedures/agent-pm-team-repo-interactions.pdf` 第 9 頁 |
+| 六個原則與檢驗 | repo 該有的性質，各有一個做得到／做不到的檢驗 | agent 的每個提案掛在哪一條 | `02-diagnosis/team-treating-vc-as-backup.pdf` 第 19 頁；`04-principles.md` |
 
 agent 的義務：請示裡每個概念第一次出現都附一句解釋和那一頁。
 
@@ -49,11 +50,11 @@ agent 的義務：請示裡每個概念第一次出現都附一句解釋和那�
 | 階段 | 做什麼 | 成功的樣子 | 停損 |
 |---|---|---|---|
 | 準備 | 第三節的表談完；agent 在沙盒驗收過；以只讀上線；盤點；選一個自願的試點模組 | 你手上有一頁現況與一個試點 | 資安或 admin 不同意 → 先解決，不硬上 |
-| 試點 | 一個模組：PROJECT_MAP、第一道 sanity check（只報告）、狀態板、CL 說明模板；版控常規教前三件 | owner 採用了 agent 交的 shelved CL；check 每天在跑、結果有人看；五個檢驗至少一個從做不到變做得到 | owner 不採用任何東西、或團隊明確反對 → 停，agent 寫一頁原因給你 |
+| 試點 | 一個模組：PROJECT_MAP、第一道 sanity check（只報告）、狀態板、CL 說明模板；版控常規教前三件；交付物草稿給 owner 確認 | owner 採用了 agent 交的 shelved CL；check 每天在跑、結果有人看；六個檢驗至少一個從做不到變做得到 | owner 不採用任何東西、或團隊明確反對 → 停，agent 寫一頁原因給你 |
 | 擴散 | 第二、三個模組；check 升到警告；交付附 manifest；開工輔導開始 | 新模組的上手比第一個快；有人自己開 stream | 誤報率壓不下來 → 退回只報告 |
 | 常態 | 有共識的 check 才擋；團隊自己維護 pipeline；agent 退到監看與維運 | 四個指標的趨勢向好；agent 的私訊變少 | — |
 
-每個階段結束，agent 給你一頁：做到了什麼、五個檢驗的狀態、四個指標、下一階段要談的資源。
+每個階段結束，agent 給你一頁：做到了什麼、六個檢驗的狀態、四個指標、下一階段要談的資源。
 
 ## 五、怎麼讀請示
 
@@ -94,7 +95,7 @@ Code review 不是原則，要不要由各目錄自己定、可以改。agent �
 
 ## 九、你要看的數字
 
-- **五個檢驗**：每個試點模組，哪幾個從做不到變成做得到（`04-principles.md`）。動任何東西之前先量基線。
+- **六個檢驗**：每個試點模組，哪幾個從做不到變成做得到（`04-principles.md`）。動任何東西之前先量基線。
 - **四個指標**（DORA 的 IC 版）：submit 到進 main 的時間、進 main 的頻率、check 失敗率（改壞的比例）、壞掉到修好的時間。只看趨勢、以模組為單位，不排名個人。
 - **agent 自己的**：交的 shelved CL 被採用的比例、誤報率、私訊的量（該越來越少）。
 

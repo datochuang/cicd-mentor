@@ -15,7 +15,7 @@
 | 9 | **任務的來源**：有沒有 ticket／任務系統可接 | 狀態板要知道任務從哪來 | 有就接；沒有，狀態板就是唯一登記處 | PM |
 | 10 | **目標分析的計畫誰同意** | 動 owner 的範圍要不要他點頭 | PM 核准方向，owner 同意範圍，缺一不動手 | PM |
 | 11 | **盤點報告的形式與預算** | PM 想看一頁還是一份；時間與算力誰給 | 一頁現況＋一到三個候選目標；預算由 PM 給，到了就交 | PM |
-| 12 | **成功指標與門檻** | 沒有指標講不出效益 | 五個檢驗從做不到變做得到的數目；DORA 四指標的 IC 版看趨勢；試點成功＝owner 採用了 shelved CL、check 每天跑有人看、至少一個檢驗翻正 | PM、sponsor |
+| 12 | **成功指標與門檻** | 沒有指標講不出效益 | 六個檢驗從做不到變做得到的數目；DORA 四指標的 IC 版看趨勢；試點成功＝owner 採用了 shelved CL、check 每天跑有人看、至少一個檢驗翻正 | PM、sponsor |
 | 13 | **版控常規先教哪三件** | 一次一條，先教每天用到的 | 一包一件事＋寫目的、改前 sync、resolve 要看 | PM、owner |
 | 14 | **退場（交棒）的條件**：某個目標什麼時候算交回團隊 | 不定就永遠不退 | 團隊自己維護 pipeline 一段時間、四個指標趨勢向好、agent 的私訊明顯變少 → agent 只剩監看 | PM |
 | 15 | **core 由誰維護**：review MR、出 release、看 release note | 沒有這個人，改版的迴路不轉 | 提 MR 的可以是建置 agent 的 Claude Code session，也可以是實例；review 與出 release 由 PM 或 PM 指定的工程師 | PM、sponsor |
@@ -27,5 +27,6 @@
 | 21 | **沙盒能不能用真的 EDA 工具與 license** | 決定沙盒驗得到什麼 | 先 mock；上真實 depot 前用真的跑一次 | CAD |
 | 22 | **check 的結果放哪、誰看得到** | 「結果可見」做不到等於沒做 | depot 裡團隊看得到的路徑，或公司既有的結果頁；試點團隊都看得到 | CAD／IT、PM |
 | 23 | **slack 還是 mail** | 溝通元件做哪個 | slack；沒 slack 的人用 mail | PM |
+| 24 | **交付物的取用處**：release 區放哪、誰能寫、下游怎麼被通知 | CD 的出包要放到固定位置；agent 不 submit，所以誰按最後那一下要定 | `//depot/<chip>/release/<目錄>/`；出包 script 產生 shelved CL 由 owner submit，或 owner 授權 trigger 直接寫；通知走 slack channel | owner、CAD、PM |
 
 定了的項目移到 `10-decision-log.md`，這張表只留沒定的。

@@ -226,14 +226,14 @@ def p_survey():
     acts = [("PM", x[0], W, "指定 depot 範圍", "附預算"),
             ("agent", x[1], W, "只讀掃描", "結構、歷史、既有自動化"),
             ("repo", x[2], W, "depot（唯讀）", "stream、CL 歷史、trigger"),
-            ("agent", x[3], W, "一頁現況報告", "五原則打分、熱點、風險"),
+            ("agent", x[3], W, "一頁現況報告", "六原則打分、熱點、風險"),
             ("agent", x[4], W, "建議切入目標", "一到三個，附理由"),
             ("PM", x[5], W, "選目標", "痛點、owner 願意")]
     flows = [("PM", "agent", x[0] + W / 2, "指定"), ("agent", "repo", x[2] + W / 2, "不逐檔讀"), ("agent", "PM", x[4] + W / 2, "報告")]
     return scenario("什麼時候：PM 要整體盤點，還沒決定從哪裡開始", "授權：自主（只讀）", acts, flows,
         [("盤點只讀、有預算、看不完就寫清楚看了什麼沒看什麼；交出去的是一頁現況和幾個候選目標，選哪個是 PM 的事。", True),
          ("推測的東西（負責人、目的）一律標「推測」，等目標分析時再問本人。", False)],
-        "盤點：PM 指定 depot 範圍附預算；agent 只讀掃描結構、歷史、既有自動化；交一頁現況報告（五原則打分、熱點、風險）並建議一到三個切入目標；PM 選目標。",
+        "盤點：PM 指定 depot 範圍附預算；agent 只讀掃描結構、歷史、既有自動化；交一頁現況報告（六原則打分、熱點、風險）並建議一到三個切入目標；PM 選目標。",
         notes=["報告裡每個判斷都附依據：擷取（從檔案或歷史讀到）、實跑（在乾淨 workspace 跑過）、推測。"])
 
 
@@ -241,7 +241,7 @@ def p_survey():
 def p_analyze():
     x = xs(6)
     acts = [("PM", x[0], W, "指定一個目標", "module 或子目錄"),
-            ("agent", x[1], W, "先讀懂", "地圖、五原則檢查"),
+            ("agent", x[1], W, "先讀懂", "地圖、六原則檢查"),
             ("repo", x[2], W, "乾淨 workspace", "只靠 depot 編、跑 sanity"),
             ("agent", x[3], W, "私訊目錄 owner", "只問他才知道的"),
             ("工程團隊", x[4], W, "owner 回答", "或說先擱置"),
@@ -250,7 +250,7 @@ def p_analyze():
     return scenario("什麼時候：PM 指定了一個目標，agent 第一次進去", "授權：自主（讀、問）", acts, flows,
         [("問之前先查，問的時候附證據；只問只有 owner 知道的事，一次一批。", True),
          ("owner 說先擱置，agent 聽理由、談折衷、記下什麼時候回來問。", False)],
-        "目標分析與訪談：PM 指定一個 module 或子目錄；agent 先讀懂，寫 PROJECT_MAP 初稿、做五原則檢查，在乾淨 workspace 實跑；再私訊 owner 只問他才知道的事並附已查到的；owner 回答或說先擱置；回答記進 PROJECT_MAP 標告知。",
+        "目標分析與訪談：PM 指定一個 module 或子目錄；agent 先讀懂，寫 PROJECT_MAP 初稿、做六原則檢查，在乾淨 workspace 實跑；再私訊 owner 只問他才知道的事並附已查到的；owner 回答或說先擱置；回答記進 PROJECT_MAP 標告知。",
         notes=["示意的私訊：「這個目錄是 DMA 的 RTL，由 tb/dma 驗，交給 top 整合，對嗎？top.f 引用的 dma_ctrl.v 我找不到，在你那裡嗎？」", "只有 owner 知道的事：缺的檔在誰那裡、猜的用途對不對、交付物給誰、進行中的大包怎麼拆、flow 的正本誰維護。"])
 
 
@@ -301,6 +301,23 @@ def p_adopt():
         [("採用是階梯：只報告 → 警告 → 擋；每升一級都要證據，擋要 PM 與 owner 都同意。", True),
          ("沒有共識就停在警告；誤報多就退一級。", False)],
         "採用階梯：check 先只報告；團隊用一段時間看穩不穩；agent 附誤報率與抓到什麼提議升級；升到警告，submit 時提示不擋；PM 與 owner 都同意才擋 submit，而且留 bypass、有負責人。")
+
+
+# ── 圖 8b：交付（CD）：agent 幫 owner 定出交付物，check 過就自動出包 ─────────
+def p_deliver():
+    x = xs(6)
+    acts = [("agent", x[0], W, "推出交付物草稿", "CL 歷史、label、引用"),
+            ("工程團隊", x[1], W, "owner 確認", "多半沒想過，改幾個字"),
+            ("agent", x[2], W, "出包做成 script", "打包＋manifest＋label"),
+            ("repo", x[3], W, "過 check 就出包", "放到固定位置"),
+            ("工程團隊", x[4], W, "下游自己拿", "top／DV／PD，不等人"),
+            ("PM", x[5], W, "看交接的趨勢", "多久拿到、退幾次")]
+    flows = [("agent", "工程團隊", x[0] + W / 2, "草稿，請確認"), ("agent", "repo", x[2] + W / 2, "shelved CL"), ("repo", "工程團隊", x[4] + W / 2, "拿")]
+    return scenario("什麼時候：第一道 check 穩定之後；每個目錄一次", "授權：定交付物是告知；出包的 script 自主", acts, flows,
+        [("owner 多半沒有「交付物」的概念：agent 推出草稿，owner 只要確認；出包做成 script，main 過 check 就自動出包附 manifest。", True),
+         ("這是 CD 的 IC 版：交到下一棒，而且下一棒拿了就能跑。", False)],
+        "交付：agent 從 CL 歷史、label、下游的引用推出交付物草稿；owner 確認，多半沒想過，改幾個字就好；agent 把打包、manifest、label 做成 script 交 shelved CL；main 過 check 就自動出包放到固定位置；下游 top、DV、PD 自己拿不等人；PM 看每次交接多久拿到、退回幾次。",
+        notes=["示意的草稿：「dma 交出去的是 rtl/*.v＋dma.f＋manifest，給 top 整合；main 過 sanity 就打 label 放 //depot/chipA/release/dma/。對嗎？」"])
 
 
 # ── 圖 8：日常看守 ──────────────────────────────────────────────────
@@ -387,14 +404,14 @@ def p_exit():
     acts = [("repo", x[0], W, "某道 check 穩定通過", "一段時間"),
             ("agent", x[1], W, "提議下一道", "附證據：為什麼現在加得起"),
             ("工程團隊", x[2], W, "同意，或先不要", ""),
-            ("agent", x[3], W, "量趨勢", "五原則檢驗、四個指標"),
+            ("agent", x[3], W, "量趨勢", "六原則檢驗、四個指標"),
             ("工程團隊", x[4], W, "自己維護 pipeline", "做完的定義成了習慣"),
             ("agent", x[5], W, "只剩監看與維運", "交棒條件達成")]
     flows = [("repo", "agent", x[0] + W / 2, ""), ("agent", "工程團隊", x[1] + W / 2, "提議"), ("agent", "PM", x[3] + W / 2, "趨勢"), ("工程團隊", "agent", x[4] + W / 2, "交回")]
     return scenario("什麼時候：機制跑穩之後", "授權：加一道告知；交棒 PM 決定", acts, flows,
         [("一次只加一道，穩定了才加；量的是模組的趨勢，不是個人。", True),
          ("團隊自己維護 pipeline 之後，agent 只剩監看與維運；這就是交棒。", False)],
-        "擴充與交棒：某道 check 穩定通過一段時間；agent 附證據提議下一道；團隊同意或先不要；agent 量五原則檢驗與四個指標的趨勢給 PM；團隊自己維護 pipeline 之後，agent 只剩監看與維運。",
+        "擴充與交棒：某道 check 穩定通過一段時間；agent 附證據提議下一道；團隊同意或先不要；agent 量六原則檢驗與四個指標的趨勢給 PM；團隊自己維護 pipeline 之後，agent 只剩監看與維運。",
         notes=["四個指標的 IC 版：submit 頻率、改動到進 main 的時間、check 失敗率、壞掉到修好的時間；以模組為單位。"])
 
 
@@ -407,6 +424,7 @@ PAGES = [
     ("計畫核准：PM 核准方向、owner 同意範圍，缺一就不動手；PM 沒弄懂不算核准", p_approve()),
     ("建置：骨架做成 shelved CL 交 owner，缺的 check 寫需求讓人或 subagent 做", p_build()),
     ("上線分級：check 先只報告、再警告，PM 與 owner 同意才擋 submit，留 bypass", p_adopt()),
+    ("交付：agent 幫 owner 定出交付物；check 過就自動出包附 manifest，下游自己拿", p_deliver()),
     ("日常監看：每筆 CL agent 讀 description 與 check，看不出目的就私訊作者並示範寫法", p_watch()),
     ("有人開新工作：agent 察覺就先問，確認後登記狀態板、代開 stream 與 check", p_kickoff()),
     ("擴充與交棒：一次加一道 check，團隊能自己維護後 agent 只剩監看", p_exit()),

@@ -20,9 +20,9 @@
 
 ![總覽：PM 有決心沒經驗，團隊不堅決也不知怎麼做；agent 補這兩個缺](03-procedures/img/agent-pm-team-repo-interactions/p-1.png)
 
-**3. 進到一個目錄做什麼：六個檢查對五個原則，不過就做 patch，由 owner 決定收不收**（[進到陌生的 workspace](03-procedures/agent-entering-unknown-workspace.pdf)）
+**3. 進到一個目錄做什麼：七個檢查對六個原則，不過就做 patch，由 owner 決定收不收**（[進到陌生的 workspace](03-procedures/agent-entering-unknown-workspace.pdf)）
 
-![流程：六個檢查對五個原則，不過就做 patch，由專案 owner 決定收不收](03-procedures/img/agent-entering-unknown-workspace/p-1.png)
+![流程：七個檢查對六個原則，不過就做 patch，由專案 owner 決定收不收](03-procedures/img/agent-entering-unknown-workspace/p-1.png)
 
 **4. agent 自己怎麼活、怎麼長：實例從 agent 的 repo clone、工作區回到它；depot 只收流程在用的工具**（[agent 自己的版控與多實例](07-build-brief/agent-own-version-control-and-instances.pdf)）
 
@@ -39,7 +39,7 @@
 | 01-why/why-cicd-needs-ai-agent-and-pm | AI agent 與人類 PM 搭檔 | CI/CD Mentor Agent | ai-agent-and-pm-make-cicd-happen |
 | 01-why/loops-and-ai-multiplier | 為什麼非要 CI/CD：查和判不交給機器，N 個 agent 等於一個 | CI/CD 的意義 | loops-need-cicd-before-ai-multiplies |
 | 02-diagnosis/team-treating-vc-as-backup | 把版控當備份的團隊：depot 留住檔案，留不住答案 | 版控只當備份的團隊 | repo-as-backup-keeps-files-not-answers |
-| 03-procedures/agent-entering-unknown-workspace | 進到陌生的 workspace：人或 agent 照五個原則檢查，不過就先做 patch | 進到陌生 workspace 的檢查 | check-then-patch-before-asking-owner |
+| 03-procedures/agent-entering-unknown-workspace | 進到陌生的 workspace：人或 agent 照六個原則檢查，不過就先做 patch | 進到陌生 workspace 的檢查 | check-then-patch-before-asking-owner |
 | 03-procedures/agent-pm-team-repo-interactions | 互動場景：agent 補 PM 與團隊各缺的 | agent 與 PM、團隊、repo 的互動 | agent-fills-what-pm-and-team-lack |
 | 07-build-brief/agent-own-version-control-and-instances | agent 自己的版控：實例從 agent 的 repo clone、工作區回到它；depot 只收流程在用的工具 | agent 自己的版控與多實例 | agent-evolves-by-release-not-self-edit |
 
@@ -50,8 +50,8 @@
 | 1 | [CLAUDE.md](CLAUDE.md) | 內網的 Claude Code | 說出這個專案的目的與框架，以及自己的工作規則 |
 | 2 | [glossary.md](glossary.md) | 所有人 | 用語一致：PM、owner、實例、工作區、shelved CL、check、manifest… |
 | 3 | [01-why/](01-why/) | PM、sponsor | 為什麼要做、為什麼一直做不起來、AI agent 與 PM 怎麼搭 |
-| 4 | [02-diagnosis/](02-diagnosis/) | PM、團隊；Claude Code 讀 [sixteen-problems.md](02-diagnosis/sixteen-problems.md) | 把版控當備份的團隊長什麼樣、十六個問題怎麼歸成五個原則；沙盒要埋的清單 |
-| 5 | [04-principles.md](04-principles.md) | 所有人 | 五個原則與檢驗、八條做法、版控的常規、review 規矩 |
+| 4 | [02-diagnosis/](02-diagnosis/) | PM、團隊；Claude Code 讀 [sixteen-problems.md](02-diagnosis/sixteen-problems.md) | 把版控當備份的團隊長什麼樣、十六個問題怎麼歸成六個原則；沙盒要埋的清單 |
+| 5 | [04-principles.md](04-principles.md) | 所有人 | 六個原則與檢驗、九條做法、版控的常規、review 規矩 |
 | 6 | [03-procedures/](03-procedures/) | Claude Code、PM | agent 進到一個目錄做什麼；四方在每個階段的互動 |
 | 7 | [05-behavior-guidelines.md](05-behavior-guidelines.md) | Claude Code（這是 agent 的規矩） | 可以直接照著做的行為指導原則，每條指回依據 |
 | 8 | [06-pm-handbook.md](06-pm-handbook.md) | PM | PM 的功課、要談的資源與人、路線圖與停損、怎麼讀請示、交棒 |

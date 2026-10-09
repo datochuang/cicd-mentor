@@ -173,7 +173,7 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx" x="20.0" y="398.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">判斷只問一句：團隊的流程有沒有真的在用它？有，就必須進目標的 depot；沒有，主本在工作區，副本 owner 要才交。</text>
 <text class="tx" x="20.0" y="422.0" text-anchor="start" fill="var(--ink-2)">像顧問：工作記錄和給客戶的簡報留在顧問公司的資料庫；親手做、用在客戶生產線的工具，當然必須在客戶那裡。</text>
 </svg></div><div class="pn">2 / 11</div></section>
-<section class="slide"><div class="kicker">agent 自己的版控與多實例　·　圖 3 ／ 11</div><h1>為什麼 git：MR、review、tag、CI 都內建；core 自己照 CI/CD 做，就是團隊的範例</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左：為什麼 core 放 git：改版要 MR、review、tag、CI，git 平台內建；core 是軟體，和設計資料生命週期不同；目標的 depot 仍是唯一真相，core 只讀它、交 shelved CL、submit 筆記。右：五個原則加 review 規矩，六列：Small batches 一個 MR 一件事；SSOT 規則模板 script 都在 core；Traceability 訊息標版號、release note、核准有紀錄；CI 每個 MR 跑沙盒；Self-documenting core 的 README 讓內網 Claude Code 能接手；review 規矩：core 要 master 鎖住、MR 有人看，工作區不用。" xmlns="http://www.w3.org/2000/svg">
+<section class="slide"><div class="kicker">agent 自己的版控與多實例　·　圖 3 ／ 11</div><h1>為什麼 git：MR、review、tag、CI 都內建；core 自己照 CI/CD 做，就是團隊的範例</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左：為什麼 core 放 git：改版要 MR、review、tag、CI，git 平台內建；core 是軟體，和設計資料生命週期不同；目標的 depot 仍是唯一真相，core 只讀它、交 shelved CL、submit 筆記。右：六個原則加 review 規矩，七列：Small batches 一個 MR 一件事；SSOT 規則模板 script 都在 core；Traceability 訊息標版號、release note、核准有紀錄；CI 每個 MR 跑沙盒；Self-documenting core 的 README 讓內網 Claude Code 能接手；review 規矩：core 要 master 鎖住、MR 有人看，工作區不用。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
 <text class="tx-lbl" x="20.0" y="34.0" text-anchor="start" fill="var(--agent)">為什麼 core 放 git，不放 depot</text>
 <rect x="20.0" y="56.0" width="3.0" height="44.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
@@ -185,7 +185,7 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <rect x="20.0" y="188.0" width="3.0" height="44.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
 <text class="tx" x="32.0" y="206.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">目標的 depot 仍是團隊的唯一真相</text>
 <text class="tx-s" x="32.0" y="226.0" text-anchor="start" fill="var(--ink-3)">agent 只讀它；流程在用的工具走 shelved CL 交進去</text>
-<text class="tx-lbl" x="340.0" y="34.0" text-anchor="start" fill="var(--goal)">五個原則＋review 規矩</text>
+<text class="tx-lbl" x="340.0" y="34.0" text-anchor="start" fill="var(--goal)">六個原則＋review 規矩</text>
 <text class="tx-lbl" x="540.0" y="34.0" text-anchor="start" fill="var(--ink-2)">core 的 repo 自己怎麼做到</text>
 <rect x="340.0" y="52.0" width="3.0" height="28.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="0"/>
 <text class="tx" x="352.0" y="71.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">Small batches</text>
@@ -208,12 +208,16 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx-s" x="540.0" y="231.0" text-anchor="start" fill="var(--ink-2)">core 的 README 讓內網的 Claude Code 讀了就能接手</text>
 <line x1="340.0" y1="246.0" x2="860.0" y2="246.0" stroke="var(--rule)" stroke-width="1"/>
 <rect x="340.0" y="252.0" width="3.0" height="28.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="0"/>
-<text class="tx" x="352.0" y="271.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">Review 規矩（每個目錄講好）</text>
-<text class="tx-s" x="540.0" y="271.0" text-anchor="start" fill="var(--ink-2)">core 要：master 鎖住、MR 至少一人看過；工作區不用</text>
+<text class="tx" x="352.0" y="271.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">Continuous Delivery</text>
+<text class="tx-s" x="540.0" y="271.0" text-anchor="start" fill="var(--ink-2)">release 流程：tag → note → 實例換手，按一下就出</text>
 <line x1="340.0" y1="286.0" x2="860.0" y2="286.0" stroke="var(--rule)" stroke-width="1"/>
-<line x1="20.0" y1="310.0" x2="860.0" y2="310.0" stroke="var(--rule)" stroke-width="1"/>
-<text class="tx" x="20.0" y="336.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">core 放 git 是因為改版要 MR、review、tag、CI；core 的 repo 自己守五個原則、講好 review 規矩，就是團隊第一個 CI/CD 範例。</text>
-<text class="tx" x="20.0" y="360.0" text-anchor="start" fill="var(--ink-2)">agent 要求別人的，先在自己身上做到；團隊問「CI/CD 做起來長什麼樣」就指給他們看。</text>
+<rect x="340.0" y="292.0" width="3.0" height="28.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="0"/>
+<text class="tx" x="352.0" y="311.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">Review 規矩（每個目錄講好）</text>
+<text class="tx-s" x="540.0" y="311.0" text-anchor="start" fill="var(--ink-2)">core 要：master 鎖住、MR 至少一人看過；工作區不用</text>
+<line x1="340.0" y1="326.0" x2="860.0" y2="326.0" stroke="var(--rule)" stroke-width="1"/>
+<line x1="20.0" y1="340.0" x2="860.0" y2="340.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="366.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">core 放 git 是因為改版要 MR、review、tag、CI；core 的 repo 自己守六個原則、講好 review 規矩，就是團隊第一個 CI/CD 範例。</text>
+<text class="tx" x="20.0" y="390.0" text-anchor="start" fill="var(--ink-2)">agent 要求別人的，先在自己身上做到；團隊問「CI/CD 做起來長什麼樣」就指給他們看。</text>
 </svg></div><div class="pn">3 / 11</div></section>
 <section class="slide"><div class="kicker">agent 自己的版控與多實例　·　圖 4 ／ 11</div><h1>改版：實例不改程式，改進一律開 core 的 MR，過沙盒與 review 才出 release</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="七步迴路：實例跑 v0.4 發現新的壞樣本或更好的模板；對 core 開 MR；沙盒 regression；review；出 release v0.5；先升一個實例試跑；全部升級；升級後再發現再開 MR。下方打叉的框：不走的路是實例直接改自己運行中的程式或規則，後果是各實例行為不同、事後查不出哪一版做了什麼、目標 depot 的文字可能夾帶指令改掉規則。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>

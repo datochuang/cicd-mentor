@@ -47,7 +47,7 @@ schema: project-map/1
 | CL 說明 | 照 cl-description.md | 提案中 |
 | 產物 | run/ 不進 depot | 提案中 |
 
-## 五個檢驗的狀態
+## 六個檢驗的狀態
 
 | 檢驗 | 做得到／做不到／部分 | 徵兆與證據 |
 |---|---|---|
@@ -56,6 +56,7 @@ schema: project-map/1
 | Traceability | 做不到 | label 只有檔案清單（擷取） |
 | CI | 做不到 | 沒有任何 trigger 或排程（擷取） |
 | Self-documenting | 部分 | 有 README 但寫的是上一個專案（擷取） |
+| Continuous Delivery | 做不到 | 交付靠 email 貼 run 目錄路徑；交付物沒定義（擷取） |
 
 ## 缺口與計畫
 

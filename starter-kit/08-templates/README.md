@@ -18,3 +18,4 @@
 | [config.md](config.md) | 實例設定：看什麼、授權表、預算、例外清單 |
 | [people.md](people.md) | 關係人的主本：找誰、怎麼問 |
 | [decisions.md](decisions.md) | 這個 design 的方針：誰核准、哪張請示 |
+| [deliverable.md](deliverable.md) | 交付物與出包：agent 推的草稿、owner 確認、make_release 的規格 |

@@ -4,7 +4,7 @@
 #
 # 讀者：第一次進到一個沒看過的 workspace 的人或 AI agent。懂 Perforce 基本操作、會寫 script，不認識這個專案。
 # 讀完要能：照順序把 workspace 檢查一遍；每個檢查點知道怎麼判定、不過時自己先補什麼、哪些才需要問 owner。
-# 主旨：檢查有沒有 CI/CD，就是逐一驗證五個原則（D4）的檢驗；多數缺口靠通用常識就能先補一版 patch，
+# 主旨：檢查有沒有 CI/CD，就是逐一驗證六個原則（D4、D12）的檢驗；多數缺口靠通用常識就能先補一版 patch，
 #       owner 只要決定採不採用。
 # 脈絡：1 流程與前置 → 2–8 六個檢查（各對應一個原則：怎麼查／判定／先補什麼／只需要問 owner 的；SSOT 兩頁）→ 9 分工與 patch 怎麼交。
 # 2026-10-09：SSOT 多一頁談產物、flow、IP；原本的 Code review 一頁改成「review 規矩：目錄有沒有講好要不要 review」（D7：Code review 不是原則，是規矩，歸 Self-documenting）。
@@ -25,7 +25,8 @@ def mark(s, x, y, ok, text, fill=None):
 
 # ── 圖 1：流程 ──────────────────────────────────────────────────────
 CHECKS = [("Self-documenting", "看得懂嗎", "圖 2"), ("SSOT（環境／複本）", "跑得起來嗎；只有一份嗎", "圖 3–4"), ("Traceability", "連得回來源嗎", "圖 5"),
-          ("Continuous Integration", "每次變更有機器檢查嗎", "圖 6"), ("Review 規矩", "目錄講好要不要 review 了嗎", "圖 7"), ("Small batches", "一包一件事嗎", "圖 8")]
+          ("Continuous Integration", "每次變更有機器檢查嗎", "圖 6"), ("Continuous Delivery", "交付能不靠人產生嗎", "圖 7"),
+          ("Review 規矩", "目錄講好要不要 review 了嗎", "圖 8"), ("Small batches", "一包一件事嗎", "圖 9")]
 
 
 def p1():
@@ -38,17 +39,16 @@ def p1():
         T(s, 34, 96 + 22 * j, "· " + t, fill=INK2)
     arrow(s, 224, 120, 254, 120, col=INK2, ar="ar", sw=1.4)
     # 五個檢查
-    T(s, 260, 36, "六個檢查，照這個順序", cls="tx-lbl", fill=GOAL)
+    T(s, 260, 36, "七個檢查，照這個順序", cls="tx-lbl", fill=GOAL)
     for i, (name, q, fig) in enumerate(CHECKS):
         y = 44 + 46 * i
         rect(s, 260, y, 270, 38, col=GOAL, fill=GOAL, op=".08", sw=1.4)
         T(s, 272, y + 16, "%d  %s" % (i + 1, name), cls="tx", fill=GOAL, w=700)
         T(s, 272, y + 31, q, fill=INK2)
         pill(s, 530 - 12, y + 9, fig, WARN, h=20, anchor="end")
-        if i < 5:
+        if i < 6:
             arrow(s, 395, y + 40, 395, y + 44, col=GOAL, ar="ar-g", sw=1.2)
-    T(s, 260, 336, "圖 6 的 check 直接用圖 3 的 script", fill=GRAY)
-    T(s, 260, 352, "圖 6 的結果附上圖 5 的 manifest", fill=GRAY)
+    T(s, 260, 374, "圖 6 的 check 直接用圖 3 的 script；圖 7 的出包用圖 5 的 manifest", fill=GRAY)
     # 每個檢查的循環
     T(s, 580, 36, "每個檢查都走一遍", cls="tx-lbl", fill=INK2)
     steps = [("查", INK2, "plain"), ("判定", INK2, "plain"), ("不過：先補一版 patch", GOAL, "dash"),
@@ -65,13 +65,13 @@ def p1():
         if i < 4:
             arrow(s, 720, y + 40, 720, y + 48, col=INK2, ar="ar", sw=1.2)
     T(s, 740, 115, "過：記錄，下一個", anchor="start", fill=GRAY)
-    bottom(s, 376, [
-        ("六個檢查對應五個原則的檢驗（review 規矩歸 Self-documenting）；不過的時候，多數缺口靠通用常識就能先補一版。", True),
+    bottom(s, 396, [
+        ("七個檢查對應六個原則的檢驗（review 規矩歸 Self-documenting）；不過的時候，多數缺口靠通用常識就能先補一版。", True),
         ("owner 拿到的是可以直接採用的 patch，只有少數幾件事需要他回答。", False),
     ])
     aria = ("左邊是進去之前要做的事：開專用乾淨的 workspace、只 sync 不碰別人的目錄、先記基線、指令以站上 p4 help 為準。"
             "中間是六個檢查的順序：Self-documenting 看得懂嗎（圖 2）、SSOT 跑得起來嗎只有一份嗎（圖 3、4）、Traceability 連得回來源嗎（圖 5）、"
-            "Continuous Integration 每次變更有機器檢查嗎（圖 6）、review 規矩：目錄講好要不要 review 了嗎（圖 7）、Small batches 一包一件事嗎（圖 8）。"
+            "Continuous Integration 每次變更有機器檢查嗎（圖 6）、Continuous Delivery 交付能不靠人產生嗎（圖 7）、review 規矩：目錄講好要不要 review 了嗎（圖 8）、Small batches 一包一件事嗎（圖 9）。"
             "右邊是每個檢查都走一遍的循環：查、判定、不過就先補一版 patch、交 owner 採用或修正、結果記進地圖。")
     return svg(s, 880, 480, aria)
 
@@ -199,6 +199,23 @@ def p5():
         "先補：最小 check 用圖 3 的 run_sanity.sh、先定時跑再每個 CL 跑、結果寫到看得到的地方附 CL 號與 manifest；只需要問 owner：觸發裝在哪誰有權限、算力與 license 配額、壞了通知誰。")
 
 
+def p_cd():
+    return check_page(
+        "Continuous Delivery (CD)", "任何時候不用問人，就拿得到最新一份附 manifest 的交付包，下游拿了就能跑",
+        ["找交付物：label、release 目錄、下游引用的路徑", "問下游：從哪裡拿、怎麼知道更新了", "看 release 怎麼出：script 還是人手打包"],
+        ["交付物有定義：交什麼、給誰、什麼形式", "出包是 script，main 過 check 就跑", "下游從固定位置拿，不用等通知"],
+        ["交付靠 email 貼路徑", "release 包手動打、README 靠回想", "下游不知道哪一版能用"],
+        [("交付物草稿", "從 CL 歷史、label、下游引用推出：交什麼、給誰、什麼形式"),
+         ("make_release.sh", "打包＋manifest＋label＋放到取用處"),
+         ("取用處與通知", "release/<目錄>/ 一個固定位置；出包時通知下游")],
+        ["交付物的定義對不對（owner 多半沒想過，給草稿）", "取用處放哪、誰能寫"],
+        [("owner 多半沒有「交付物」的概念：agent 先推出草稿給他確認，再把出包做成 script，main 過 check 就自動跑。", True),
+         ("這一步做完，中圈的交接才不用等人；下游拿了就能跑。", False)],
+        "Continuous Delivery 的檢查：怎麼查（找 label、release 目錄、下游引用的路徑；問下游從哪裡拿、怎麼知道更新；看 release 是 script 還是人手打包）；"
+        "判定（交付物有定義、出包是 script 且 main 過 check 就跑、下游從固定位置拿；不過的徵兆：交付靠 email 貼路徑、release 手動打、下游不知道哪一版能用）；"
+        "先補：交付物草稿、make_release.sh、取用處與通知；只需要問 owner：交付物的定義對不對、取用處放哪誰能寫。")
+
+
 def p_review():
     return check_page(
         "Review 規矩（每個目錄講好要不要 review）", "隨便挑一個目錄，說得出它要不要 review、誰看；說要的目錄，隨便挑一包說得出誰看過",
@@ -280,16 +297,17 @@ def p7():
 
 
 PAGES = [
-    ("流程：六個檢查對五個原則，不過就做 patch，由專案 owner 決定收不收", p1()),
+    ("流程：七個檢查對六個原則，不過就做 patch，由專案 owner 決定收不收", p1()),
     ("Self-documenting：光看 depot 說不出每個目錄做什麼，就先補一份目錄說明", p2()),
     ("SSOT（環境）：乾淨的 workspace 跑不起來，缺的先補成 script 進 depot", p3()),
     ("SSOT（複本）：產物、複製的 flow、解壓的 IP 各只留一份來源，其餘改成產生", p3b()),
     ("Traceability：結果說不出哪個 CL 跑的，就附一份 manifest 記來源", p4()),
     ("CI：submit 後沒有機器檢查，就先掛一個 sanity check 跟著 submit 跑", p5()),
+    ("CD：交付靠 email 貼路徑，先幫 owner 定出交付物，出包做成 script 跟著 check 跑", p_cd()),
     ("Review 規矩：目錄沒講好要不要 review，先補一份規矩初稿給 owner 定", p_review()),
     ("Small batches：過去的大 CL 改不了，先給 CL 說明模板和拆小 CL 的示範", p6()),
     ("分工：agent 能補的直接送 patch，只有 owner 才知道的事才開口問", p7()),
 ]
 
 if __name__ == "__main__":
-    build(NAME, "進到陌生的 workspace：人或 agent 照五個原則檢查，不過就先做 patch", KICKER, PAGES)
+    build(NAME, "進到陌生的 workspace：人或 agent 照六個原則檢查，不過就先做 patch", KICKER, PAGES)

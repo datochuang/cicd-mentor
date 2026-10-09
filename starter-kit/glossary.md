@@ -71,12 +71,16 @@
 
 | 詞 | 意思 |
 |---|---|
-| **五個原則** | Small batches、Single Source of Truth (SSOT)、Traceability、Continuous Integration (CI)、Self-documenting；各一個做得到／做不到的檢驗。見 `04-principles.md` |
+| **六個原則** | Small batches、Single Source of Truth (SSOT)、Traceability、Continuous Integration (CI)、Self-documenting、Continuous Delivery (CD)；各一個做得到／做不到的檢驗。見 `04-principles.md` |
+| **Continuous Delivery (CD)** | 每個過 check 的改動，機器自動打包、附 manifest、打 label、放到固定位置、通知下游，下游不等人；IC 版的「部署」＝交到下一棒，而且下一棒拿了就能跑 |
+| **交付物** | 一個目錄交出去的東西：交什麼、給誰、什麼形式、多久一次。owner 多半沒想過，agent 從 CL 歷史、label、下游引用推出草稿請他確認 |
+| **取用處** | 交付物放的固定位置（例如 //depot/<chip>/release/<目錄>/），下游從這裡拿，不靠 email 貼路徑 |
 | **review 規矩** | Code review 不是原則：每個目錄都要講好需不需要 review（要／不要、誰看、什麼時候），寫在 PROJECT_MAP，可以改；歸 Self-documenting |
-| **八條做法** | Test-first、Executable spec、Evidence-based delivery、Definition of Done、Flow as code、Blameless postmortem、量化（DORA 四指標的 IC 版）、Review policy per directory |
+| **九條做法** | Test-first、Executable spec、Evidence-based delivery、Definition of Done、Flow as code、Blameless postmortem、量化（DORA 四指標的 IC 版）、Review policy per directory、Release pipeline |
+| **Release pipeline** | 打包、manifest、label、放到取用處、通知全是 script，每次 main 過 check 就跑；release／tape-out 的包是按鈕不是工程 |
 | **版控的常規** | CI/CD 站在這些習慣上：一包一件事、說明寫目的、改前 sync、resolve 要看、給人看用 shelve、用 stream 不複製目錄、產物不進 depot、檔案進 depot 才算存在、label 附 manifest、workspace 乾淨、IP drop 走流程 |
 | **授權三級** | 自主（讀、分析、寫地圖、開 shelved CL、私訊）／告知（建議、第二次提醒、交 shelved CL）／請示（方向、新規範、裝 trigger、擋 submit、拉 PL 群聊、超預算要再花）。表的主本在 `09-open-decisions.md` #5，核准後移到 10 |
-| **六個檢查** | 《進到陌生 workspace》的六個檢查＝五個原則的檢驗＋review 規矩（SSOT 分環境與複本兩頁） |
+| **七個檢查** | 《進到陌生 workspace》的七個檢查＝六個原則的檢驗＋review 規矩（SSOT 分環境與複本兩頁） |
 | **內圈／中圈／外圈** | 一個改動的改、查、判 ／ 迭代進 main 與交接 ／ N 個方案平行比較 |
 | **改、查、判** | 改是人或 agent 做的；查是機器跑 check；判是看結果決定過不過。AI 加速的只有改 |
 | **patch** | 投影片《進到陌生 workspace》沿用的泛稱；對 Perforce 的團隊一律說 shelved CL。同樣地，投影片 lane 上的「repo」指目標的 depot |

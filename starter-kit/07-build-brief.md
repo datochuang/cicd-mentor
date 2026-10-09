@@ -4,7 +4,7 @@
 
 ## 一、做成什麼
 
-一個自主運行的 agent：看團隊的 depot、照五個原則檢查、先做 shelved CL、owner 收；持續監看每個模組的狀態、輔導開工、教版控的常規；一次加一道 check。方針由 PM 理解後核准。它有自己的 git repo，可以 clone 成多個實例各看一個或多個 design，實例可以換手。
+一個自主運行的 agent：看團隊的 depot、照六個原則檢查、先做 shelved CL、owner 收；幫 owner 定出交付物、check 過就自動出包；持續監看每個模組的狀態、輔導開工、教版控的常規；一次加一道 check。方針由 PM 理解後核准。它有自己的 git repo，可以 clone 成多個實例各看一個或多個 design，實例可以換手。
 
 不是什麼：不是 CI server（公司有 Jenkins、GitLab CI 就接，不自己蓋）；不是 lint 工具（既有的找負責人補強，沒有的寫需求讓人或 subagent 做）；不對 design 下判斷。
 
@@ -14,9 +14,10 @@
 |---|---|---|
 | 版控 adapter | 讀 depot 結構、CL 歷史、pending／shelved CL、label；寫入只做 shelve；Perforce 為主，git 可選，同一套介面 | 權限分階段：先只讀；要 shelve 時加寫入；要開 stream 時再加 |
 | 監看與排程 | 定時巡檢目標路徑：新 CL、main 的 check 結果、被繞過的機制、交接（label／release／IP drop）、開工的跡象 | 頻率 PM 定；動作 idempotent：做之前先查有沒有做過 |
-| 分析 | 盤點（結構、歷史、既有自動化、熱點、人的地圖、十六個問題對照、候選目標）；目標分析（PROJECT_MAP、六個檢查、既有工具清單、缺口與計畫） | 只讀、抽樣、寫清楚「看了什麼、沒看什麼」；有時間與算力的預算 |
+| 分析 | 盤點（結構、歷史、既有自動化、熱點、人的地圖、十六個問題對照、候選目標）；目標分析（PROJECT_MAP、七個檢查、既有工具清單、缺口與計畫） | 只讀、抽樣、寫清楚「看了什麼、沒看什麼」；有時間與算力的預算 |
 | 溝通 | slack 私訊當事人（沒 slack 的人用 mail）、群聊（要 PM 核准）；五種訊息（自我介紹、問 owner、交 shelved CL、提醒、更正）與兩種文件（請示、一頁摘要） | 自報身分；每則標實例名與版號；每人每天訊息上限 |
 | shelved CL 產生與證據 | 把缺口做成 shelved CL：PROJECT_MAP 副本、setup script、run_sanity.sh、make_manifest.sh、CL 說明模板、check 與排程；附在乾淨 workspace 實跑的證據與 manifest | 不 submit；owner 收；三類分工：自己能補／要 owner 決定／只有 owner 知道 |
+| 交付流水線（CD） | 交付物草稿（從 CL 歷史、label、下游引用推出：交什麼、給誰、什麼形式）、make_release（打包＋manifest＋label＋放到取用處＋通知） | owner 多半沒概念，agent 主動推草稿請他確認；出包 script 交 shelved CL；第一道 check 穩定後 main 過 check 就跑 |
 | check 執行與結果發佈 | 跑 sanity、regression 子集；結果寫到團隊看得到的地方，附 CL 號與 manifest；上線分級：只報告 → 警告 → 擋 | 擋要 PM 與 owner 同意、有 bypass、有 kill switch |
 | 狀態與日誌 | 工作區 `designs/<名>/`：PROJECT_MAP 主本、狀態板、日誌、決定紀錄、關係人、HANDOVER；格式有 schema 版本 | 團隊可讀；日誌不放 design 內容 |
 | 請示與摘要 | 請示一頁（七項）；定期一頁摘要；多實例合併成一份給同一位 PM | 一段時間沒處理不自動通過 |
@@ -78,19 +79,20 @@
 | 0 | — | 這一包放進 agent 的 repo 的 `docs/`；master 鎖住、MR 流程、release 流程 | 出 v0.1（只有文件層，沙盒還不存在，這一版免跑沙盒；之後每一版都要） |
 | 1 | — | 沙盒 depot＋十六種問題與期望結果＋假的人與假的 slack | 沙盒跑得起來；期望結果寫完；MR 的 CI 跑得了它 |
 | 2 | 啟動、盤點 | 版控 adapter（只讀）；自我介紹；盤點報告 | 在沙盒產出一頁現況：十六種都標出來、候選目標有理由；自我介紹照模板、標實例名與版號 |
-| 3 | 目標分析 | PROJECT_MAP、六個檢查、既有工具清單、缺口與計畫、三類分工 | 沙盒的每個缺口掛對原則、分對三類；只問 owner 的問題附已查到的 |
+| 3 | 目標分析 | PROJECT_MAP、七個檢查、既有工具清單、缺口與計畫、三類分工 | 沙盒的每個缺口掛對原則、分對三類；只問 owner 的問題附已查到的 |
 | 4 | 計畫核准 | 請示（七項、兩個問題）、PM 的回覆比對、owner 同意範圍；一頁摘要 | 假 PM 答不到「影響誰」時 agent 會再問；缺一不動手這條驗得到 |
 | 5 | 建置 | shelved CL 產生與證據：setup、run_sanity、make_manifest、PROJECT_MAP 副本、CL 說明模板；問 owner、提醒、更正三種訊息 | 在乾淨 workspace 實跑過、附 manifest；沒 submit；沙盒三項過 → 出 release，可以上真實 depot（只讀）盤點 |
 | 6 | 上線分級（只報告） | check 執行與結果發佈：sanity＋版控常規的提醒級 check（說明太短、一包太多、產物進 CL、filelist 引用不存在的檔）；狀態與日誌的 schema | 結果看得到、附 CL 號；重啟不重複；常規從第一道 check 就在教 |
-| 7 | 日常監看與開工輔導 | 狀態板、開工跡象、代開 stream／workspace／CL 模板、教法（示範、一次一條、私下） | 看到跡象先問再登記；本人不想登記只記「有活動，未登記」 |
-| 8 | 上線分級（警告、擋）、擴充 | 警告級、擋 submit（PM＋owner 同意）、bypass、kill switch、預算 | kill switch 按下去 trigger 全停；沒 bypass 不擋；超預算先停 |
-| 9 | 多實例與換手 | 登記表（MR）、第二個實例、換手、PM 的合併摘要 | 兩個實例不互相私訊同一個 owner；換手後新實例說得出前任做到哪 |
+| 7 | 交付（CD） | 交付物草稿（從 CL 歷史、label、下游引用推）、owner 確認、make_release（打包＋manifest＋label＋取用處＋通知）、下游拿 | 沙盒裡：草稿照模板、owner 改幾個字就能確認；main 過 check 自動出一包附 manifest 放到固定位置；下游不問人拿得到 |
+| 8 | 日常監看與開工輔導 | 狀態板、開工跡象、代開 stream／workspace／CL 模板、教法（示範、一次一條、私下） | 看到跡象先問再登記；本人不想登記只記「有活動，未登記」 |
+| 9 | 上線分級（警告、擋）、擴充 | 警告級、擋 submit（PM＋owner 同意）、bypass、kill switch、預算 | kill switch 按下去 trigger 全停；沒 bypass 不擋；超預算先停 |
+| 10 | 多實例與換手 | 登記表（MR）、第二個實例、換手、PM 的合併摘要 | 兩個實例不互相私訊同一個 owner；換手後新實例說得出前任做到哪 |
 
-元件對步驟：版控 adapter → 2；監看與排程 → 6（排程）、7（監看）；分析 → 2、3；溝通 → 2、4、5；shelved CL 與證據 → 5；check 執行 → 6、8；狀態與日誌 → 6、7；請示與摘要 → 4；登記表 → 9；預算與 kill switch → 8。
+元件對步驟：版控 adapter → 2；監看與排程 → 6（排程）、8（監看）；分析 → 2、3；溝通 → 2、4、5、7；shelved CL 與證據 → 5、7；交付流水線 → 7；check 執行 → 6、9；狀態與日誌 → 6、8；請示與摘要 → 4；登記表 → 10；預算與 kill switch → 9。
 
 ## 七、介面格式
 
-骨架在 `08-templates/`：PROJECT_MAP、狀態板、CL 說明、需求 markdown、請示、一頁摘要、五種訊息、日誌、HANDOVER、登記表、manifest。所有格式有 schema 版本，新版讀得懂舊的；格式改動走 core 的 MR。
+骨架在 `08-templates/`：PROJECT_MAP、狀態板、CL 說明、需求 markdown、請示、一頁摘要、五種訊息、日誌、HANDOVER、登記表、manifest、交付物與出包。所有格式有 schema 版本，新版讀得懂舊的；格式改動走 core 的 MR。
 
 需求 markdown 是給 subagent、其他 AI agent 或人的共同介面：目的、input、output、通過的定義、時間與資源預算、在哪跑、owner、怎麼測它自己；交付一律是「shelved CL（或 MR）＋測試證據＋需求的對照」。
 

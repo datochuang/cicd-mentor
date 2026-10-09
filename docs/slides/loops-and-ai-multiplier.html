@@ -26,7 +26,7 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 </style>
 </head>
 <body>
-<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 1 ／ 11</div><h1>總覽：AI 的三種效益站在同一塊地基 CI/CD 上，而這塊地基現在是空的</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="三根柱子是 Agentic AI 的三種效益：內圈自己轉（時間：每圈不等人；風險：每個改動都查過才進 main）、外圈平行跑（時間：N 個方案一起跑；風險：同環境比選錯機會小）、上下游接棒（時間：下游不必等人解釋；風險：問題早小用不著大整合）。三根柱子站在一塊地基上：CI/CD，查和判交給機器，含 SSOT、Traceability、CI、review 規矩。地基下方一塊虛線的空框是現狀：查判靠人、環境靠記憶、main 隨時會壞，三種效益各變成每圈等人、PPA 比不了、下游等人，N 個 agent 等於一個。" xmlns="http://www.w3.org/2000/svg">
+<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 1 ／ 11</div><h1>總覽：AI 的三種效益站在同一塊地基 CI/CD 上，而這塊地基現在是空的</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="三根柱子是 Agentic AI 的三種效益：內圈自己轉（時間：每圈不等人；風險：每個改動都查過才進 main）、外圈平行跑（時間：N 個方案一起跑；風險：同環境比選錯機會小）、上下游接棒（時間：下游不必等人解釋；風險：問題早小用不著大整合）。三根柱子站在一塊地基上：CI/CD，查和判交給機器，含 SSOT、Traceability、CI、CD。地基下方一塊虛線的空框是現狀：查判靠人、環境靠記憶、main 隨時會壞，三種效益各變成每圈等人、PPA 比不了、下游等人，N 個 agent 等於一個。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
 <text class="tx-lbl" x="20.0" y="20.0" text-anchor="start" fill="var(--agent)">Agentic AI 帶來的三種效益（對開發時間與風險）</text>
 <text class="tx-lbl" x="860.0" y="20.0" text-anchor="end" fill="var(--ink-3)">後面十頁是這一頁的展開</text>
@@ -82,7 +82,7 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <path d="M800,184 L793,196 L807,196 Z" fill="var(--goal)"/>
 <rect x="20.0" y="198.0" width="840.0" height="62.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="2" fill-opacity=".14"/>
 <text class="tx" x="34.0" y="222.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">地基：CI/CD，查和判交給機器</text>
-<text class="tx-s" x="34.0" y="246.0" text-anchor="start" fill="var(--ink-2)">每圈環境一樣（SSOT）・結果由機器寫下、連得回來源（Traceability）・進 main 前機器查過（CI）、要不要人看講好（review 規矩）・main 隨時可用</text>
+<text class="tx-s" x="34.0" y="246.0" text-anchor="start" fill="var(--ink-2)">每圈環境一樣（SSOT）・結果連得回來源（Traceability）・進 main 前機器查過（CI）・過了就自動交到下一棒（CD）・main 隨時可用</text>
 <rect x="20.0" y="276.0" width="840.0" height="86.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.6" stroke-dasharray="8 5" fill-opacity=".05"/>
 <text class="tx" x="34.0" y="298.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">現狀：這塊地基是空的。查判靠人、環境靠記憶、main 隨時會壞；上面三種效益各變成——</text>
 <text class="tx" x="34.0" y="326.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
@@ -296,7 +296,7 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx" x="20.0" y="402.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">迭代把整合和驗證攤到每個改動，問題在小的時候就被看見；waterfall 把它們留到最後整合才全出。</text>
 <text class="tx" x="20.0" y="426.0" text-anchor="start" fill="var(--ink-2)">迭代的是改動怎麼整合，tape-out 本身還是一次性的。</text>
 </svg></div><div class="pn">5 / 11</div></section>
-<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 6 ／ 11</div><h1>中圈的交接：交出的改動小、機器查過，下游人或 agent 不必等人解釋</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左邊 waterfall 的交接：上游做完全部才交，交的是 spec 文件加 tarball 加人的記憶，下游要等全部做完、等人解釋、等環境；agent 接不了。右邊迭代加 CI/CD 的交接：上游每個改動進 main 就交，交的是版控裡查過、跑得起來的狀態，附 manifest，下游馬上開跑；人或 agent 都接得了，晚上交給 agent 跑 regression、修 lint，早上人接回來。下方：agent 接得了的那一段是打包、跑 check、修 lint、讓測試過、附 manifest，以及人不在時讓內圈繼續轉；還是人的那一段是設計對不對、取捨怎麼選、下游接下來做什麼。" xmlns="http://www.w3.org/2000/svg">
+<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 6 ／ 11</div><h1>中圈的交接（CD）：改動機器查過就自動交到下一棒，下游人或 agent 不必等人</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左邊 waterfall 的交接：上游做完全部才交，交的是 spec 文件加 tarball 加人的記憶，下游要等全部做完、等人解釋、等環境；agent 接不了。右邊迭代加 CI/CD 的交接：上游每個改動進 main 就交，交的是版控裡查過、跑得起來的狀態，附 manifest，下游馬上開跑；人或 agent 都接得了，晚上交給 agent 跑 regression、修 lint，早上人接回來。下方：agent 接得了的那一段是打包、跑 check、修 lint、讓測試過、附 manifest，以及人不在時讓內圈繼續轉；還是人的那一段是設計對不對、取捨怎麼選、下游接下來做什麼。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
 <rect x="728.0" y="8.0" width="132.0" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
 <text class="tx-s" x="794.0" y="24.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">第二層　中圈：一個專案</text>
@@ -536,7 +536,7 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx" x="20.0" y="356.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">沒有 CI/CD，每圈、每次交接、每個方案都要等人查判；AI 加速的只有「改」，N 個 agent 的效果等於一個。</text>
 <text class="tx" x="20.0" y="380.0" text-anchor="start" fill="var(--ink-2)">《把版控當備份的團隊》裡的每個症狀，都在這條鏈上打斷一環。</text>
 </svg></div><div class="pn">10 / 11</div></section>
-<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 11 ／ 11</div><h1>對應：三層各要的條件，對到《把版控當備份的團隊》的五個原則</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="六列，依層分組：內圈要一圈一件事（Small batches）與查和判由機器做（Continuous Integration）；中圈要人判放在進 main 前一次做完且每個目錄講好要不要（review 規矩，歸 Self-documenting）與交接時 agent 不用人帶（Self-documenting）；外圈要每個方案的環境一樣（Single Source of Truth）與每個結果連得回方案與環境（Traceability）。各附少了會怎樣。" xmlns="http://www.w3.org/2000/svg">
+<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 11 ／ 11</div><h1>對應：三層各要的條件，對到《把版控當備份的團隊》的六個原則</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="六列，依層分組：內圈要一圈一件事（Small batches）與查和判由機器做（Continuous Integration）；中圈要人判放在進 main 前一次做完且每個目錄講好要不要（review 規矩，歸 Self-documenting）與交接時 agent 不用人帶（Self-documenting）、過了 check 就自動交到下一棒（Continuous Delivery）；外圈要每個方案的環境一樣（Single Source of Truth）與每個結果連得回方案與環境（Traceability）。各附少了會怎樣。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
 <text class="tx-lbl" x="20.0" y="34.0" text-anchor="start" fill="var(--ink-2)">哪一層　要的條件</text>
 <text class="tx-lbl" x="390.0" y="34.0" text-anchor="start" fill="var(--goal)">撐住它的原則（出自《把版控當備份的團隊》）</text>
@@ -566,20 +566,26 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx-s" x="640.0" y="204.0" text-anchor="start" fill="var(--warn)">少了：每個 workspace 要人寫說明</text>
 <line x1="20.0" y1="220.0" x2="860.0" y2="220.0" stroke="var(--rule)" stroke-width="1"/>
 <rect x="20.0" y="233.0" width="40.4" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
-<text class="tx-s" x="40.2" y="247.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">外圈</text>
-<text class="tx" x="80.0" y="248.0" text-anchor="start" fill="var(--ink-2)">每個方案的環境一樣，agent 進得去就能跑</text>
-<text class="tx" x="390.0" y="248.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">Single Source of Truth</text>
-<text class="tx-s" x="640.0" y="248.0" text-anchor="start" fill="var(--warn)">少了：方案不可比，agent 要人設環境</text>
+<text class="tx-s" x="40.2" y="247.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">中圈</text>
+<text class="tx" x="80.0" y="248.0" text-anchor="start" fill="var(--ink-2)">過了 check 就自動交到下一棒，下游拿了就能跑</text>
+<text class="tx" x="390.0" y="248.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">Continuous Delivery</text>
+<text class="tx-s" x="640.0" y="248.0" text-anchor="start" fill="var(--warn)">少了：交接靠 email 與人解釋</text>
 <line x1="20.0" y1="264.0" x2="860.0" y2="264.0" stroke="var(--rule)" stroke-width="1"/>
 <rect x="20.0" y="277.0" width="40.4" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
 <text class="tx-s" x="40.2" y="291.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">外圈</text>
-<text class="tx" x="80.0" y="292.0" text-anchor="start" fill="var(--ink-2)">每個結果連得回方案與環境</text>
-<text class="tx" x="390.0" y="292.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">Traceability</text>
-<text class="tx-s" x="640.0" y="292.0" text-anchor="start" fill="var(--warn)">少了：比較表是假的</text>
+<text class="tx" x="80.0" y="292.0" text-anchor="start" fill="var(--ink-2)">每個方案的環境一樣，agent 進得去就能跑</text>
+<text class="tx" x="390.0" y="292.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">Single Source of Truth</text>
+<text class="tx-s" x="640.0" y="292.0" text-anchor="start" fill="var(--warn)">少了：方案不可比，agent 要人設環境</text>
 <line x1="20.0" y1="308.0" x2="860.0" y2="308.0" stroke="var(--rule)" stroke-width="1"/>
-<line x1="20.0" y1="330.0" x2="860.0" y2="330.0" stroke="var(--rule)" stroke-width="1"/>
-<text class="tx" x="20.0" y="356.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">三層各要兩個條件，都是前面幾頁講過的事；撐住它們的五個原則（加一條 review 規矩），另一份文件已經收斂出來。</text>
-<text class="tx" x="20.0" y="380.0" text-anchor="start" fill="var(--ink-2)">這就是 CI/CD 對這個團隊的意義，也是 N 個 agent 要有 N 倍效果的前提。</text>
+<rect x="20.0" y="321.0" width="40.4" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="40.2" y="335.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">外圈</text>
+<text class="tx" x="80.0" y="336.0" text-anchor="start" fill="var(--ink-2)">每個結果連得回方案與環境</text>
+<text class="tx" x="390.0" y="336.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">Traceability</text>
+<text class="tx-s" x="640.0" y="336.0" text-anchor="start" fill="var(--warn)">少了：比較表是假的</text>
+<line x1="20.0" y1="352.0" x2="860.0" y2="352.0" stroke="var(--rule)" stroke-width="1"/>
+<line x1="20.0" y1="372.0" x2="860.0" y2="372.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="398.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">三層各要的條件，都是前面幾頁講過的事；撐住它們的六個原則（加一條 review 規矩），另一份文件已經收斂出來。</text>
+<text class="tx" x="20.0" y="422.0" text-anchor="start" fill="var(--ink-2)">這就是 CI/CD 對這個團隊的意義，也是 N 個 agent 要有 N 倍效果的前提。</text>
 </svg></div><div class="pn">11 / 11</div></section>
 </body>
 </html>

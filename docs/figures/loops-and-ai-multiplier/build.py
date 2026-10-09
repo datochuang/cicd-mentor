@@ -8,7 +8,7 @@
 #       沒有 CI/CD，AI 只能加速「改」，判還是人，倍數歸一。
 # 消化與來源：research/loops-and-ai-multiplier.md。軟體業的 inner/outer 以 commit 為界，與這裡的用法不同，第 1 頁有註明。
 # 脊椎：三層套在一起的迴圈。1 總覽（地圖）→ 2–4 第一層內圈（定義、在 IC 分層落實、沒有 CI/CD 的現狀）→ 5–6 第二層迭代（進 main、交接）
-#       → 7 第三層外圈 → 8–9 AI（三層都加速「改」、瓶頸在判；務實的上限）→ 10 結論（鏈照三層排）→ 11 六個條件對應五個原則與 review 規矩。
+#       → 7 第三層外圈 → 8–9 AI（三層都加速「改」、瓶頸在判；務實的上限）→ 10 結論（鏈照三層排）→ 11 七個條件對應六個原則與 review 規矩。
 # 2026-10-09 使用者說順序不通順，重排成這條脊椎：先給三層的地圖，再一層一層講，AI 放在三層之後。
 # 括號裡的「圖 N」指《把版控當備份的團隊》的頁碼；長條與次數都是示意。
 import pathlib, sys
@@ -124,7 +124,7 @@ def p_overview():
     # 地基
     rect(s, 20, 198, 840, 62, col=GOAL, fill=GOAL, op=".14", sw=2)
     T(s, 34, 222, "地基：CI/CD，查和判交給機器", cls="tx", fill=GOAL, w=700)
-    T(s, 34, 246, "每圈環境一樣（SSOT）・結果由機器寫下、連得回來源（Traceability）・進 main 前機器查過（CI）、要不要人看講好（review 規矩）・main 隨時可用", fill=INK2)
+    T(s, 34, 246, "每圈環境一樣（SSOT）・結果連得回來源（Traceability）・進 main 前機器查過（CI）・過了就自動交到下一棒（CD）・main 隨時可用", fill=INK2)
     # 現狀：空的地基
     rect(s, 20, 276, 840, 86, col=WARN, fill=WARN, op=".05", sw=1.6, dash="8 5")
     T(s, 34, 298, "現狀：這塊地基是空的。查判靠人、環境靠記憶、main 隨時會壞；上面三種效益各變成——", cls="tx", fill=WARN, w=700)
@@ -139,7 +139,7 @@ def p_overview():
     ])
     aria = ("三根柱子是 Agentic AI 的三種效益：內圈自己轉（時間：每圈不等人；風險：每個改動都查過才進 main）、"
             "外圈平行跑（時間：N 個方案一起跑；風險：同環境比選錯機會小）、上下游接棒（時間：下游不必等人解釋；風險：問題早小用不著大整合）。"
-            "三根柱子站在一塊地基上：CI/CD，查和判交給機器，含 SSOT、Traceability、CI、review 規矩。"
+            "三根柱子站在一塊地基上：CI/CD，查和判交給機器，含 SSOT、Traceability、CI、CD。"
             "地基下方一塊虛線的空框是現狀：查判靠人、環境靠記憶、main 隨時會壞，三種效益各變成每圈等人、PPA 比不了、下游等人，N 個 agent 等於一個。")
     return svg(s, 880, 480, aria)
 
@@ -490,11 +490,12 @@ def p7():
     return svg(s, 880, 480, aria)
 
 
-# ── 圖 10：五個原則（加 review 規矩）各撐住迴圈的哪個條件 ───────────────────────────────
+# ── 圖 10：六個原則（加 review 規矩）各撐住迴圈的哪個條件 ───────────────────────────────
 MAP = [("內圈", "Small batches", "一圈一件事", "判出來的差異才歸得到某個改動"),
        ("內圈", "Continuous Integration", "查和判由機器做", "少了：每圈要人"),
        ("中圈", "Self-documenting（review 規矩）", "人判放在進 main 前一次做完，每個目錄講好要不要", "少了：人判散在每一圈，或沒人知道要不要看"),
        ("中圈", "Self-documenting", "交接時 agent 不用人帶就看得懂", "少了：每個 workspace 要人寫說明"),
+       ("中圈", "Continuous Delivery", "過了 check 就自動交到下一棒，下游拿了就能跑", "少了：交接靠 email 與人解釋"),
        ("外圈", "Single Source of Truth", "每個方案的環境一樣，agent 進得去就能跑", "少了：方案不可比，agent 要人設環境"),
        ("外圈", "Traceability", "每個結果連得回方案與環境", "少了：比較表是假的")]
 
@@ -511,11 +512,11 @@ def p8():
         T(s, 390, y + 26, en, cls="tx", fill=GOAL, w=700)
         T(s, 640, y + 26, miss, fill=WARN)
         line(s, 20, y + 42, 860, y + 42)
-    bottom(s, 330, [
-        ("三層各要兩個條件，都是前面幾頁講過的事；撐住它們的五個原則（加一條 review 規矩），另一份文件已經收斂出來。", True),
+    bottom(s, 372, [
+        ("三層各要的條件，都是前面幾頁講過的事；撐住它們的六個原則（加一條 review 規矩），另一份文件已經收斂出來。", True),
         ("這就是 CI/CD 對這個團隊的意義，也是 N 個 agent 要有 N 倍效果的前提。", False),
     ])
-    aria = ("六列，依層分組：內圈要一圈一件事（Small batches）與查和判由機器做（Continuous Integration）；中圈要人判放在進 main 前一次做完且每個目錄講好要不要（review 規矩，歸 Self-documenting）與交接時 agent 不用人帶（Self-documenting）；"
+    aria = ("六列，依層分組：內圈要一圈一件事（Small batches）與查和判由機器做（Continuous Integration）；中圈要人判放在進 main 前一次做完且每個目錄講好要不要（review 規矩，歸 Self-documenting）與交接時 agent 不用人帶（Self-documenting）、過了 check 就自動交到下一棒（Continuous Delivery）；"
             "外圈要每個方案的環境一樣（Single Source of Truth）與每個結果連得回方案與環境（Traceability）。各附少了會怎樣。")
     return svg(s, 880, 480, aria)
 
@@ -526,12 +527,12 @@ PAGES = [
     ("內圈在 IC：一圈有快有慢，CI/CD 照快慢排成幾道檢查，每道機器判", p2()),
     ("現狀的內圈：每圈靠人設環境、人跑、人看 log，轉得慢、判法還不一", p3()),
     ("中圈：改動機器查過就進 main，問題早且小；waterfall 把整合留到最後", p_iter()),
-    ("中圈的交接：交出的改動小、機器查過，下游人或 agent 不必等人解釋", p_baton()),
+    ("中圈的交接（CD）：改動機器查過就自動交到下一棒，下游人或 agent 不必等人", p_baton()),
     ("外圈（outer loop）：N 個方案比 PPA，每個先各自轉完內圈、機器判過才比", p4()),
     ("Agentic AI：agent 在三層都加速「改」，瓶頸變成誰來查、誰來判", p5()),
     ("上限：同時轉幾個方案看 license 與算力；交給機器排，license 才排得滿", p6()),
     ("結論：沒有 CI/CD，每圈、每次交接、每個方案都要等人查判，N 個 agent 等於一個", p7()),
-    ("對應：三層各要的條件，對到《把版控當備份的團隊》的五個原則", p8()),
+    ("對應：三層各要的條件，對到《把版控當備份的團隊》的六個原則", p8()),
 ]
 
 if __name__ == "__main__":
