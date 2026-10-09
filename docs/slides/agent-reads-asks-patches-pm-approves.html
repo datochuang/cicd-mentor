@@ -2,7 +2,7 @@
 <html lang="zh-Hant" data-theme="light">
 <head>
 <meta charset="utf-8">
-<title>互動場景：agent 先讀懂再問、交 shelved CL；方向由 PM（技術主管）核准，CL 收不收 owner 決定</title>
+<title>互動場景：agent 先讀懂再問、交 shelved CL；方向由 PM（導入 CI/CD 的負責人）核准，CL 收不收 owner 決定</title>
 <style>
 :root{--paper:#fff;--surface:#fff;--surface-2:#eef2f5;--ink:#17212b;--ink-2:#48596a;--ink-3:#78889a;--rule:#cfd9e1;--rule-2:#aebbc7;
 --goal:#116b64;--warn:#a0580f;--agent:#2f6f9f;--pm:#7a4f9a;
@@ -26,7 +26,7 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 </style>
 </head>
 <body>
-<section class="slide"><div class="kicker">agent 與 PM、團隊、repo 的互動　·　圖 1 ／ 12</div><h1>總覽：PM 定方向，agent 讀懂、問、交 shelved CL、監看，CL 收不收 owner 決定</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="角色乘階段的表。階段：啟動、情勢判斷、目標分析與訪談、計畫請准、建置、採用、看守與開工、加強與退場。PM：給範圍帳號預算、選切入目標、看進度、懂了才核准、看進度、同意擋不擋、看一頁摘要、定退場條件。agent：bot 上線自我介紹、只讀掃一頁報告、先讀懂再問 owner、附取捨請准、做成 shelved CL、附證據提議升級、看 CL 私訊登記開工、提下一道退到看守。工程團隊：知道 agent 在、owner 答只有他知道的、owner 同意動範圍、負責人補強 script、同意升級、回一句照流程開工、自己維護 pipeline。repo：日誌與狀態板的位置、唯讀、乾淨 workspace 實跑、決定進 depot、shelved CL 加證據、報告警告擋、trigger 跑 check 與狀態板、check 穩定與趨勢。下方是授權三級：自主、告知、請准；以及用語：PM 指推動 CI/CD 的技術主管，PROJECT_MAP、狀態板、subagent、shelved CL 各一句定義。" xmlns="http://www.w3.org/2000/svg">
+<section class="slide"><div class="kicker">agent 與 PM、團隊、repo 的互動　·　圖 1 ／ 12</div><h1>總覽：PM 定方向，agent 讀懂、問、交 shelved CL、監看，CL 收不收 owner 決定</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="角色乘階段的表。階段：啟動、情勢判斷、目標分析與訪談、計畫請准、建置、採用、看守與開工、加強與退場。PM：給範圍帳號預算、選切入目標、看進度、懂了才核准、看進度、同意擋不擋、看一頁摘要、定退場條件。agent：bot 上線自我介紹、只讀掃一頁報告、先讀懂再問 owner、附取捨請准、做成 shelved CL、附證據提議升級、看 CL 私訊登記開工、提下一道退到看守。工程團隊：知道 agent 在、owner 答只有他知道的、owner 同意動範圍、負責人補強 script、同意升級、回一句照流程開工、自己維護 pipeline。repo：日誌與狀態板的位置、唯讀、乾淨 workspace 實跑、決定進 depot、shelved CL 加證據、報告警告擋、trigger 跑 check 與狀態板、check 穩定與趨勢。下方是授權三級：自主、告知、請准；以及用語：PM 指負責把團隊開發流程導入 CI/CD 的人、和 project 的 PM 無關，PROJECT_MAP、狀態板、subagent、shelved CL 各一句定義。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
 <text class="tx-lbl" x="20.0" y="20.0" text-anchor="start" fill="var(--ink-2)">這份文件回答：agent 和 PM、工程團隊、repo 在每個階段各做什麼；agent 自己能做什麼、什麼要問、什麼要 PM 決定 ↓</text>
 <text class="tx-s" x="157.0" y="50.0" text-anchor="middle" fill="var(--ink-3)">啟動</text>
@@ -115,7 +115,7 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx-s" x="546.0" y="318.0" text-anchor="middle" fill="var(--pm)" style="font-weight:700">請准</text>
 <text class="tx-s" x="572.2" y="318.0" text-anchor="start" fill="var(--ink-2)">方向、新規範、裝 trigger、擋 submit、拉 PL 群聊</text>
 <text class="tx-lbl" x="20.0" y="346.0" text-anchor="start" fill="var(--ink-3)">用語</text>
-<text class="tx-s" x="60.0" y="346.0" text-anchor="start" fill="var(--ink-2)">PM＝推動 CI/CD 的那位技術主管（本專案用語）　PROJECT_MAP＝agent 寫在 depot 裡的目錄用途與相依說明</text>
+<text class="tx-s" x="60.0" y="346.0" text-anchor="start" fill="var(--ink-2)">PM＝負責把團隊開發流程導入 CI/CD 的人（和 project 的 PM 無關）　PROJECT_MAP＝agent 寫在 depot 裡的目錄用途與相依說明</text>
 <text class="tx-s" x="60.0" y="364.0" text-anchor="start" fill="var(--ink-2)">狀態板＝每個模組休止／進行中哪些任務的表，也在 depot　subagent＝agent 分出去做一件事的子程式　shelved CL＝給人看、還沒 submit 的改動（git 的 PR）</text>
 <line x1="20.0" y1="380.0" x2="860.0" y2="380.0" stroke="var(--rule)" stroke-width="1"/>
 <text class="tx" x="20.0" y="406.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">agent 先讀懂再問，改動做成 shelved CL；方向與影響別人的事，PM 懂了才算核准；CL 收不收是 owner 的事。</text>

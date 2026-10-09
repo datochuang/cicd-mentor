@@ -97,7 +97,7 @@ def p_overview():
         T(s, x + w_ + 6, ya + 34, desc, fill=INK2)
         x += w_ + 6 + width(desc, 10.5) + 24
     T(s, 20, ya + 62, "用語", cls="tx-lbl", fill=GRAY)
-    T(s, 60, ya + 62, "PM＝推動 CI/CD 的那位技術主管（本專案用語）　PROJECT_MAP＝agent 寫在 depot 裡的目錄用途與相依說明", fill=INK2)
+    T(s, 60, ya + 62, "%s　PROJECT_MAP＝agent 寫在 depot 裡的目錄用途與相依說明" % "PM＝負責把團隊開發流程導入 CI/CD 的人（和 project 的 PM 無關）", fill=INK2)
     T(s, 60, ya + 80, "狀態板＝每個模組休止／進行中哪些任務的表，也在 depot　subagent＝agent 分出去做一件事的子程式　shelved CL＝給人看、還沒 submit 的改動（git 的 PR）", fill=INK2)
     bottom(s, ya + 96, [
         ("agent 先讀懂再問，改動做成 shelved CL；方向與影響別人的事，PM 懂了才算核准；CL 收不收是 owner 的事。", True),
@@ -108,7 +108,7 @@ def p_overview():
             "agent：bot 上線自我介紹、只讀掃一頁報告、先讀懂再問 owner、附取捨請准、做成 shelved CL、附證據提議升級、看 CL 私訊登記開工、提下一道退到看守。"
             "工程團隊：知道 agent 在、owner 答只有他知道的、owner 同意動範圍、負責人補強 script、同意升級、回一句照流程開工、自己維護 pipeline。"
             "repo：日誌與狀態板的位置、唯讀、乾淨 workspace 實跑、決定進 depot、shelved CL 加證據、報告警告擋、trigger 跑 check 與狀態板、check 穩定與趨勢。"
-            "下方是授權三級：自主、告知、請准；以及用語：PM 指推動 CI/CD 的技術主管，PROJECT_MAP、狀態板、subagent、shelved CL 各一句定義。")
+            "下方是授權三級：自主、告知、請准；以及用語：PM 指負責把團隊開發流程導入 CI/CD 的人、和 project 的 PM 無關，PROJECT_MAP、狀態板、subagent、shelved CL 各一句定義。")
     return svg(s, 880, 480, aria)
 
 
@@ -343,4 +343,4 @@ PAGES = [
 ]
 
 if __name__ == "__main__":
-    build(NAME, "互動場景：agent 先讀懂再問、交 shelved CL；方向由 PM（技術主管）核准，CL 收不收 owner 決定", KICKER, PAGES)
+    build(NAME, "互動場景：agent 先讀懂再問、交 shelved CL；方向由 PM（導入 CI/CD 的負責人）核准，CL 收不收 owner 決定", KICKER, PAGES)

@@ -1,6 +1,6 @@
 # CI/CD Mentor Agent
 
-在 IC 設計團隊導入迭代式開發與 CI/CD 的 AI agent 構想。Agent 自主運行，方向由一位人類 PM 掌握：PM 決定要去哪裡，agent 補上 CI/CD 的知識與執行力，兩邊一起把事情做成。
+在 IC 設計團隊導入迭代式開發與 CI/CD 的 AI agent 構想。Agent 自主運行，方向由一位人類 PM 掌握（PM 指負責把團隊開發流程導入 CI/CD 的人，和 project 的 PM 無關）：PM 決定要去哪裡，agent 補上 CI/CD 的知識與執行力，兩邊一起把事情做成。
 
 PDF 版：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agent-and-pm-make-cicd-happen.pdf)
 
@@ -133,7 +133,7 @@ PDF 版：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agen
 
 </details>
 
-### 互動場景：agent 先讀懂再問、交 shelved CL；方向由 PM（技術主管）核准，CL 收不收 owner 決定
+### 互動場景：agent 先讀懂再問、交 shelved CL；方向由 PM（導入 CI/CD 的負責人）核准，CL 收不收 owner 決定
 
 agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張角色 × 階段的表加授權三級；之後每頁一個場景（啟動、盤點、目標分析、計畫核准、建置、上線分級、日常監看、有人開新工作、擴充與交棒，最後兩頁是橫跨全程的透明與延後／誤報），四條泳道，箭頭就是誰對誰做什麼。內容來自 [agent-operating-model.md](agent-operating-model.md)。十二頁。PDF：[docs/slides/agent-reads-asks-patches-pm-approves.pdf](docs/slides/agent-reads-asks-patches-pm-approves.pdf)
 
