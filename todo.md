@@ -28,7 +28,7 @@
 | T17 | 10-09 | 圖形文件《第一次進 workspace：照五個原則檢查，不過就先補一版》初稿等你修正 | 九頁（10-09 晚上加了 SSOT 第二頁：產物、flow、IP；Code review 一頁；分工頁加了對應項目）。特別要看：六個檢查的順序、每頁「先補什麼」的 patch 名單、第 9 頁三類分工與「owner 採用才進 depot」這個預設 | docs/slides/check-then-patch-before-asking-owner.pdf |
 | T19 | 10-09 | **第六個原則 Code review**（併入前有人看過並留紀錄）等你確認 | 追加的「沒有 review」「resolve 整份收下」兩頁掛不進原來五個：CI 是機器把關，review 是人把關，對策不同。已寫進圖形文件收斂頁、direction.md、檢查文件第 7 頁；不採用的話這三處要改 | direction.md 定錨點 |
 | T20 | 10-09 | **《把版控當備份的團隊》p4–p16 冒號前全是「問題」**，審稿說 13 頁下來那格沒有資訊，建議改放原則名或分組詞 | 我沒動，因為這會改變「主題：結論」裡主題詞的用法。我的建議：改成「問題（Traceability）：…」這種形式，讀者翻到收斂頁前就看過六個詞；你決定 | docs/reviews/titles-blind-read-20261009.md |
-| T21 | 10-09 | 圖形文件《為什麼非要 CI/CD：查和判不交給機器，N 個 agent 等於一個》初稿等你修正 | 十頁。順序：內圈 → 分層 → 現狀的內圈 → 迭代相對 waterfall（時間與風險）→ 接棒（下一棒能不能是 agent）→ 外圈 → agent 平行後瓶頸在判 → 務實的上限 → 結論 → 六個原則對應。特別要看：第 1 頁對軟體業 inner/outer 用語的註記、第 5 頁 agent 接得了／接不了的那一段分得對不對、第 6 頁 DSO.ai 的引用與「前提是推論」、第 8 頁三個上限 | docs/slides/loops-need-cicd-before-ai-multiplies.pdf；research/loops-and-ai-multiplier.md |
+| T21 | 10-09 | 圖形文件《為什麼非要 CI/CD：查和判不交給機器，N 個 agent 等於一個》初稿等你修正 | 十頁。順序：內圈 → 分層 → 現狀的內圈 → 外圈 → agent 平行後瓶頸在判 → 務實的上限 → 迭代相對 waterfall（時間與風險）→ 交接（下游能不能是 agent）→ 結論 → 六個原則對應。特別要看：第 1 頁對軟體業 inner/outer 用語的註記、第 4 頁 DSO.ai 的引用與「前提是推論」、第 6 頁三個上限、第 8 頁 agent 接得了／接不了的那一段分得對不對 | docs/slides/loops-need-cicd-before-ai-multiplies.pdf；research/loops-and-ai-multiplier.md |
 | T18 | 10-09 | **CI 原則的意思補了「共用的 main 隨時可用」「結果由機器寫下」**（D4 微調） | 加「沒有 branch」那頁時，它的危害要掛到 CI 上，原本的定義只講「改動進來時被檢查」，沒講檢查的目的是讓 main 隨時可用。請確認這個補法，不然就要考慮第六個原則 | direction.md 定錨點 |
 | T14 | 10-08 | 圖形文件《把版控當備份的團隊》初稿等你修正 | 十八頁全部是我創作的（10-09 晚上追加圖 9–16：沒有 review、resolve 整份收下、產物進 depot、IP 解壓覆蓋、flow 複製、兩台機器結果不同、Excel 狀態表、退不回去）。情境與細節都要你對照實際狀況修正 | docs/slides/repo-as-backup-keeps-files-not-answers.pdf |
 
