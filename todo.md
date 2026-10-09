@@ -14,7 +14,7 @@
 | T4 | 10-08 | **試點團隊與範圍**怎麼選 | 建議挑自願的團隊、一個專案、一兩種高價值檢查；未討論 | research/industry-practices-and-risks.md |
 | T5 | 10-08 | **資安與 IP**：design 資料能否交給 LLM、用哪種模型與部署方式；agent 在版控上用誰的身分、有哪些權限 | 未討論，可能最早卡關 | research/industry-practices-and-risks.md |
 | T6 | 10-08 | **成功指標**怎麼定 | 圖形文件只有方向示意，具體指標與門檻未定 | |
-| T23 | 10-09 | **情勢判斷（U1）的報告形式與預算** | PM 想看一頁還是一份；時間與算力的預算誰給 | agent-operating-model.md 情勢判斷 |
+| T23 | 10-09 | **情勢判斷的報告形式與預算** | PM 想看一頁還是一份；時間與算力的預算誰給 | agent-operating-model.md 情勢判斷 |
 | T24 | 10-09 | **目標分析的計畫要誰同意**：只 PM 核准，還是 owner 也要同意才動他的範圍 | 我的建議：兩個都要 | agent-operating-model.md 目標分析 |
 | T25 | 10-09 | **agent 在 slack／mail 與 Perforce 上的身分**：bot 帳號代表 PM，還是用 PM 或工程師的名義 | 我強烈建議 bot 帳號＋「代表 PM」；和 T5 綁在一起 | agent-operating-model.md 訪談關係人、啟動與身分 |
 | T26 | 10-09 | **agent 什麼情況可以自己 submit；擋 submit 的條件** | 是 T2 授權表的核心；初稿：只動自己的 script 目錄可自己 submit；擋 submit 要 PM 與 owner 同意、有 bypass | agent-operating-model.md 建置機制、透明與授權 |
