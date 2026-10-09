@@ -109,6 +109,13 @@ def box(s, x, y, w, h, title, sub=None, col=INK2, kind="plain", sub2=None):
         T(s, x + 14, y + 56, sub2, fill=INK2)
 
 
+def check(s, x, y, ok, text, col=None, cls="tx"):
+    """✓／✗ 加一行字。cls 是字的樣式（tx 或 tx-s）。"""
+    c = col or (GOAL if ok else WARN)
+    T(s, x, y, "✓" if ok else "✗", cls="tx", fill=c, w=700)
+    T(s, x + 20, y, text, cls=cls, fill=INK2 if cls == "tx" else c)
+
+
 def bottom(s, y, lines):
     """圖下方的結語：一條分隔線，最多兩三句。lines: [(文字, 是否粗體)]"""
     line(s, 20, y, 860, y)

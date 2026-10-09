@@ -90,6 +90,31 @@ PDF 版：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agen
 
 </details>
 
+### CI/CD 的意義：讓迴圈自己轉，AI 的倍數才成立
+
+為什麼《把版控當備份的團隊》裡的症狀代價很大：一個行動是改、查、判的迴圈（inner loop），探索是比較 N 個候選（outer loop）；CI/CD 把查和判交給機器，迴圈才自己轉、能平行、能比較。沒有它，AI 只能加速「改」，倍數歸一。八頁，附務實的上限（license、算力、可比性）。PDF：[docs/slides/loops-need-cicd-before-ai-multiplies.pdf](docs/slides/loops-need-cicd-before-ai-multiplies.pdf)
+
+<details>
+<summary>展開八頁</summary>
+
+![迴圈：一個行動是改、查、判轉到過為止，CI/CD 把查和判交給機器](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-1.png)
+
+![半徑：IC 的一圈有快有慢，CI/CD 把它們分層排程，結果由機器判](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-2.png)
+
+![沒有 CI/CD 的 inner loop：每圈都要人設環境、人跑、人判，轉得慢又判不準](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-3.png)
+
+![Outer loop：真正要比的是 N 個候選的 PPA，每個候選都是一整圈 inner loop](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-4.png)
+
+![Agentic AI：便宜的是「改」，平行 N 個 agent 之後，瓶頸移到「判」](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-5.png)
+
+![上限：平行的寬度由 license 與算力決定，比較要在同一環境下才算數](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-6.png)
+
+![連鎖：沒有 CI/CD，inner loop 要人顧，outer loop 轉不完，倍數歸一](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-7.png)
+
+![對應：六個原則各自撐住迴圈的一個條件](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-8.png)
+
+</details>
+
 ## 這個 repo 裡有什麼
 
 目前是規劃階段，還沒有 agent 的程式碼。
