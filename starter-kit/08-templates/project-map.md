@@ -28,6 +28,16 @@ schema: project-map/1
 - 被引用：tb/dma 引用 rtl/（擷取）
 - 工具：vcs 2023.03、Python 3.9（實跑）
 
+## 既有工具清單
+
+| 工具 | 在哪 | 狀態 | 依據 |
+|---|---|---|---|
+| lint（spyglass） | /proj/chipA/scripts/lint.csh | 只在某人目錄，不在 depot | 擷取 |
+| run_sanity.sh | scripts/ | 能用 | 實跑 |
+| regression harness | tb/regress.py | 要修（路徑寫死） | 實跑 |
+| trigger／排程 | 無 | — | 擷取 |
+| 公司既有的 CI（Jenkins、GitLab CI） | 軟體部門有 Jenkins | 可接，等 CAD 回 | 告知 |
+
 ## 規矩
 
 | 項目 | 內容 | 依據 |

@@ -254,8 +254,8 @@ def p_handover():
 
 
 # ── 圖 6：沙盒 ──────────────────────────────────────────────────────
-SYMPTOMS = ["大包 submit", "說明只寫 update", "五個地方散落", "label 只有檔案", "壞了很久才發現", "下游沒清單", "目錄沒說明", "沒有 branch",
-            "沒有 review", "resolve 整份收", "產物進 depot", "IP 解壓覆蓋", "flow 複本", "兩台機器不同", "Excel 狀態表", "退不回去"]
+SYMPTOMS = ["大包 submit", "五個地方散落", "label 只有檔案", "哪一版跑的要問人", "壞了很久才發現", "下游沒清單", "目錄沒說明", "沒有 branch",
+            "沒講好要不要 review", "resolve 整份收", "產物進 depot", "IP 解壓覆蓋", "flow 複本", "兩台機器不同", "Excel 狀態表", "退不回去"]
 
 
 def p_sandbox():
@@ -283,7 +283,7 @@ def p_sandbox():
         ("沙盒是 core 的 regression，也是 agent 自己的 Definition of Done：偵測、提案、不可做的事三項都過才 release。", True),
         ("第一版的 agent 先在沙盒上長出來，再上真實的 depot；內網做的第一件事就是建這個沙盒。", False),
     ])
-    aria = ("左邊沙盒 depot，故意埋了十六種已知問題：大包 submit、說明只寫 update、五個地方散落、label 只有檔案、壞了很久才發現、下游沒清單、目錄沒說明、沒有 branch、沒有 review、resolve 整份收、產物進 depot、IP 解壓覆蓋、flow 複本、兩台機器不同、Excel 狀態表、退不回去。"
+    aria = ("左邊沙盒 depot，故意埋了十六種已知問題：大包 submit、五個地方散落、label 只有檔案、哪一版跑的要問人、壞了很久才發現、下游沒清單、目錄沒說明、沒有 branch、沒講好要不要 review、resolve 整份收、產物進 depot、IP 解壓覆蓋、flow 複本、兩台機器不同、Excel 狀態表、退不回去。"
             "每個 MR 讓 agent 在沙盒跑一遍，三項要過：偵測（各種標出來、誤報幾個）、提案（掛對原則、交付是 shelved CL 加證據）、不可做的事（沒刪、沒 submit、沒私訊真人、沒越預算）；過了才出 release。")
     return svg(s, 880, 480, aria)
 

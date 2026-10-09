@@ -12,7 +12,7 @@ agent 的每個提案、每道 check、每則提醒，都要能指回這裡的�
 
 ## 五個原則
 
-原則一律用英文專有名詞，中文只是註解。「圖 N」指《把版控當備份的團隊》講那個問題的頁。
+原則一律用英文專有名詞，中文只是註解。「圖 N」指《把版控當備份的團隊》講那個問題的頁；十六個問題的清單（編號、頁、徵兆、應偵測、應提案）在 `02-diagnosis/sixteen-problems.md`。
 
 | 原則 | 意思 | 檢驗（做得到／做不到） | 沒做到時的問題 |
 |---|---|---|---|
@@ -38,7 +38,7 @@ agent 自己交的東西不在此限：shelved CL 一律 owner 收了才進 depo
 | **Definition of Done**（做完的定義） | 一件任務完成＝改動都進 main、check 過、照目錄的規矩 review 過、交付物有 manifest、狀態板關閉 | 五個都有 | 自己的任務照這個關 | 狀態板的關閉條件 | 狀態板上「完成」的任務，五項都勾得起來 |
 | **Flow as code** | script、trigger、環境設定、filelist 都進版控，像 code 一樣 review、測試；沒有「某人目錄裡的正本」 | SSOT、Self-documenting | 自己裝的機制全部進版控 | flow 複本收成一份；環境寫成 setup script | 換一台乾淨的機器，flow 跑得起來 |
 | **Blameless postmortem**（不究責的事後檢討） | main 壞了、擋錯人、誤報，寫經過、原因、改法，不寫誰的錯 | CI、透明 | agent 的日誌與更正照這個寫 | 壞掉之後寫一頁檢討，附在狀態板 | 每次 main 壞掉都有一頁，沒有人名當主詞 |
-| **量化**（DORA 四指標的 IC 版） | submit 到進 main 的時間、進 main 的頻率、check 失敗率、壞掉到修好的時間；只看趨勢、以模組為單位 | CI、Traceability | 定期算、給 PM 看 | 不排名個人，不拿來考核 | 四個數字每個模組都算得出來 |
+| **量化**（DORA 四指標的 IC 版） | submit 到進 main 的時間、進 main 的頻率、check 失敗率（D8 寫作「改壞的比例」，同一件事）、壞掉到修好的時間；只看趨勢、以模組為單位 | CI、Traceability | 定期算、給 PM 看 | 不排名個人，不拿來考核 | 四個數字每個模組都算得出來 |
 | **Review policy per directory**（每個目錄講好要不要 review） | 要不要 review 由各目錄自己決定，可以改；決定（要／不要、誰看、什麼時候、改了留紀錄）寫在 PROJECT_MAP | Self-documenting | agent 自己交的東西一律要人看：shelved CL 由 owner 收，core 的 MR 要 review | 盤點時問 owner 定一個，寫進 PROJECT_MAP；說要的目錄，CL 沒 review 就提醒，說不要的不提醒 | 隨便挑一個目錄，說得出它要不要 review；說要的目錄，隨便挑一包說得出誰看過 |
 
 **不納入的**：Shift left（口號，CI 已涵蓋）；Trunk-based development（和 Small batches 重疊；branch 模型待公司定）；Pair programming、DevOps culture（太泛，agent 無從落實）；Formal、property-based verification（是 DV 的方法不是流程，agent 不對 design 下判斷）。

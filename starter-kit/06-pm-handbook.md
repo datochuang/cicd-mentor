@@ -18,9 +18,9 @@
 | 概念 | 一句話 | 核准時會碰到的判斷 | 看哪一頁 |
 |---|---|---|---|
 | check（查）與判 | 機器跑一個 script 回 PASS／FAIL；判是「全 PASS 才過」 | 這道 check 查的是什麼？誤報會多嗎？ | `01-why/loops-and-ai-multiplier.pdf` 第 2–3 頁 |
-| main 隨時可用 | 共用的那條線任何時候 sync 下來都編得過、跑得過 | 要不要讓半成品進 main？ | `02-diagnosis/team-treating-vc-as-backup.pdf` 第 9 頁 |
+| main 隨時可用 | 共用的那條線任何時候 sync 下來都編得過、跑得過 | 要不要讓半成品進 main？ | `01-why/loops-and-ai-multiplier.pdf` 第 5 頁（中圈：機器查過就進 main） |
 | 只報告／警告／擋 | check 的三種上線等級；擋會真的讓人 submit 不了 | 同意擋之前，誤報率是多少、bypass 給誰 | `03-procedures/agent-pm-team-repo-interactions.pdf` 第 8 頁 |
-| stream／branch | 一件任務一條線，做完、查過再併回 main | 一任務一條還是一人一條 | 同上第 10 頁 |
+| stream／branch | 一件任務一條線，做完、查過再併回 main | 一任務一條還是一人一條 | `02-diagnosis/team-treating-vc-as-backup.pdf` 第 9 頁（沒有 branch）；開工時怎麼代開見互動場景第 10 頁 |
 | shelved CL | 給人看、還沒 submit 的改動；也是備份 | agent 交的東西長這樣，owner 決定收不收 | 同上第 7 頁 |
 | manifest | 跟著結果走的一張清單：CL、工具版本、環境、指令 | 交付物要不要強制附 | `03-procedures/agent-entering-unknown-workspace.pdf` 第 5 頁 |
 | 五個原則與檢驗 | repo 該有的性質，各有一個做得到／做不到的檢驗 | agent 的每個提案掛在哪一條 | `02-diagnosis/team-treating-vc-as-backup.pdf` 第 19 頁；`04-principles.md` |
@@ -33,6 +33,8 @@ agent 的義務：請示裡每個概念第一次出現都附一句解釋和那�
 |---|---|---|
 | 哪些目錄、哪些資料可以給 LLM 看；用內網模型還是外部 | 資安、法務 | 整個專案被叫停——**第一件談** |
 | agent 的 Perforce 帳號與權限（先只讀）、slack bot 帳號 | CAD／IT | 第一天就動不了 |
+| agent 的 git repo 放哪（GitLab？）、誰建、團隊的讀權限、MR 的 CI 在哪跑（要跑得起沙盒） | CAD／IT | 第一步（沙盒）做不了；自我介紹說的「你們有讀的權限」會跳票 |
+| 沙盒能不能用真的 EDA 工具與 license | CAD | 不能就用 mock，上真實 depot 前再用真的跑一次 |
 | sponsor：誰在上面撐 | 部門主管 | 第一次衝突就沒了 |
 | 第一個自願的試點團隊與 owner | PL | 沒人願意當第一個 |
 | 裝 trigger 的權限、Swarm 有沒有 | Perforce admin | 建置那一步卡住；只能做定時 job |
@@ -67,6 +69,8 @@ agent 的請示永遠是一頁（格式在 `08-templates/request-for-approval.md
 
 你要做的：回答那兩個問題；說得出「這會影響誰」再核准；看不懂就說看不懂，agent 會換個講法。一段時間沒處理的請示不會自動通過。請示會分批，不會一天十件。
 
+**「懂了」的操作定義**：你在請示的回覆裡（slack 或 MR 的留言）寫兩個問題的答案和一句「核准」；agent 比對答案和請示的內容，答案碰不到「影響誰」或「退回怎麼做」就回一則補充、再問一次；三次還不行，標「未核准」，請 sponsor 看。你不必寫得長，答得對就行。
+
 ## 六、紅線與失敗模式——你要守的那一半
 
 agent 絕不做的事在 `05-behavior-guidelines.md` 第三節。其中幾件要你先做到位：
@@ -91,7 +95,7 @@ Code review 不是原則，要不要由各目錄自己定、可以改。agent �
 ## 九、你要看的數字
 
 - **五個檢驗**：每個試點模組，哪幾個從做不到變成做得到（`04-principles.md`）。動任何東西之前先量基線。
-- **四個指標**（DORA 的 IC 版）：submit 到進 main 的時間、進 main 的頻率、check 失敗率、壞掉到修好的時間。只看趨勢、以模組為單位，不排名個人。
+- **四個指標**（DORA 的 IC 版）：submit 到進 main 的時間、進 main 的頻率、check 失敗率（改壞的比例）、壞掉到修好的時間。只看趨勢、以模組為單位，不排名個人。
 - **agent 自己的**：交的 shelved CL 被採用的比例、誤報率、私訊的量（該越來越少）。
 
 ## 十、第一週

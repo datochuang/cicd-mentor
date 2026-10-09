@@ -30,6 +30,19 @@
 
 串起來一句話：AI 的效益要靠 CI/CD 這塊地基，而地基現在是空的；PM 有決心沒經驗、團隊不堅決也不知怎麼做，agent 補這兩個缺，四方這樣互動；agent 進到任一目錄就做這三步；而 agent 本身這樣版控、clone、換手。為什麼要這樣搭檔，在 [AI agent 與人類 PM 搭檔](01-why/why-cicd-needs-ai-agent-and-pm.pdf)；現狀的細節（版控只當備份會長出哪些問題）在 [把版控當備份的團隊](02-diagnosis/team-treating-vc-as-backup.pdf)。
 
+## 六份投影片的名字
+
+投影片的檔名講它回答什麼問題；頁眉（kicker）和標題是另一套說法；10、11 裡偶爾用舊名或標題稱呼它們，對照如下。
+
+| 檔名 | 文件標題 | 頁眉 | 舊名或別稱 |
+|---|---|---|---|
+| 01-why/why-cicd-needs-ai-agent-and-pm | AI agent 與人類 PM 搭檔 | CI/CD Mentor Agent | ai-agent-and-pm-make-cicd-happen |
+| 01-why/loops-and-ai-multiplier | 為什麼非要 CI/CD：查和判不交給機器，N 個 agent 等於一個 | CI/CD 的意義 | loops-need-cicd-before-ai-multiplies |
+| 02-diagnosis/team-treating-vc-as-backup | 把版控當備份的團隊：depot 留住檔案，留不住答案 | 版控只當備份的團隊 | repo-as-backup-keeps-files-not-answers |
+| 03-procedures/agent-entering-unknown-workspace | 進到陌生的 workspace：人或 agent 照五個原則檢查，不過就先做 patch | 進到陌生 workspace 的檢查 | check-then-patch-before-asking-owner |
+| 03-procedures/agent-pm-team-repo-interactions | 互動場景：agent 補 PM 與團隊各缺的 | agent 與 PM、團隊、repo 的互動 | agent-fills-what-pm-and-team-lack |
+| 07-build-brief/agent-own-version-control-and-instances | agent 自己的版控：實例從 agent 的 repo clone、工作區回到它；depot 只收流程在用的工具 | agent 自己的版控與多實例 | agent-evolves-by-release-not-self-edit |
+
 ## 這包裡有什麼，照什麼順序讀
 
 | 順序 | 檔案 | 給誰 | 讀完要能 |
@@ -37,7 +50,7 @@
 | 1 | [CLAUDE.md](CLAUDE.md) | 內網的 Claude Code | 說出這個專案的目的與框架，以及自己的工作規則 |
 | 2 | [glossary.md](glossary.md) | 所有人 | 用語一致：PM、owner、實例、工作區、shelved CL、check、manifest… |
 | 3 | [01-why/](01-why/) | PM、sponsor | 為什麼要做、為什麼一直做不起來、AI agent 與 PM 怎麼搭 |
-| 4 | [02-diagnosis/](02-diagnosis/) | PM、團隊 | 把版控當備份的團隊長什麼樣、十六個問題怎麼歸成五個原則 |
+| 4 | [02-diagnosis/](02-diagnosis/) | PM、團隊；Claude Code 讀 [sixteen-problems.md](02-diagnosis/sixteen-problems.md) | 把版控當備份的團隊長什麼樣、十六個問題怎麼歸成五個原則；沙盒要埋的清單 |
 | 5 | [04-principles.md](04-principles.md) | 所有人 | 五個原則與檢驗、八條做法、版控的常規、review 規矩 |
 | 6 | [03-procedures/](03-procedures/) | Claude Code、PM | agent 進到一個目錄做什麼；四方在每個階段的互動 |
 | 7 | [05-behavior-guidelines.md](05-behavior-guidelines.md) | Claude Code（這是 agent 的規矩） | 可以直接照著做的行為指導原則，每條指回依據 |
@@ -51,7 +64,7 @@
 ## 第一週做什麼
 
 1. **PM** 讀 [06-pm-handbook.md](06-pm-handbook.md)，拿 [09-open-decisions.md](09-open-decisions.md) 去談最前面幾件：design 資料能不能給 LLM、用哪個模型；agent 的 Perforce 與 slack 帳號（先只讀）；sponsor 是誰；第一個自願的試點團隊。這幾件沒談好，agent 動不了。
-2. **內網的 Claude Code** 讀 [CLAUDE.md](CLAUDE.md) → [04-principles.md](04-principles.md) → [05-behavior-guidelines.md](05-behavior-guidelines.md) → [07-build-brief.md](07-build-brief.md)；照 07 的第一步建**沙盒 depot**（埋十六種已知問題），讓第一版 agent 在沙盒上長出來。
+2. **內網的 Claude Code** 照 [CLAUDE.md](CLAUDE.md) 裡的讀序讀完；照 [07-build-brief.md](07-build-brief.md) 的第一步建**沙盒 depot**（埋 [02-diagnosis/sixteen-problems.md](02-diagnosis/sixteen-problems.md) 的十六種問題），讓第一版 agent 在沙盒上長出來。
 3. 沙盒三項驗收過了（偵測、提案、不可做的事）、第 1 步的資源談好了，agent 才以只讀帳號上真實的 depot，從盤點開始。
 
 ## 這包不做的
@@ -63,4 +76,4 @@
 
 - 這包進了 agent 的 repo 之後，就是 core 的文件層：改它走 MR，和程式一樣。
 - 決定了什麼，記進 [10-decision-log.md](10-decision-log.md)（只增不改）；[09-open-decisions.md](09-open-decisions.md) 的項目定了就移到 10。
-- 這包裡所有連結都在包內；若發現指到外面的路徑，是打包的錯，請修。
+- 這包裡所有連結都在包內。文字裡提到的「規劃 repo」「operating model」「T 編號」是這包討論出來時的歷史脈絡，不需要也拿不到；對應關係在 [10-decision-log.md](10-decision-log.md) 的 D11。

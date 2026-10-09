@@ -129,3 +129,22 @@
 **取代：** 無；把原本只寫在 CLAUDE.md「產出」一節的意思，提到每份重要文件的開頭。
 
 **出處：** README.md 開頭；CLAUDE.md「產出」。
+
+
+---
+
+## D11｜2026-10-09｜帶進內網時的註記：舊編號、舊章節、已改的「待改」
+
+**決定：** 這一包是從公司外的規劃 repo 打包出來的，上面 D1–D10 的文字裡有幾種只在那個 repo 才有意義的指涉，對照如下，不再逐筆改（只增不改）：
+1. **T 編號**（T13、T31、T34…）是規劃 repo 的待辦編號；內容都已併進 `09-open-decisions.md` 或已結案。
+2. **operating model 的章節**（8.1–8.9、7.8、第一節第五至七輪原文）：8.x 併進 `07-build-brief.md` 第三、四節與 `05-behavior-guidelines.md` 第六節；7.8 併進 `06-pm-handbook.md` 第八節；第一節的原文不在包內。
+3. **direction.md** 併進 `README.md`、`04-principles.md`、`05-behavior-guidelines.md` 的設計要點。
+4. **D1 的 `cicd-introduction-and-promotion/cicd-mentor-guide/`** 是規劃 repo 之前的舊文件，不在包內，也不需要。
+5. **D4 寫「第 10 頁」**：之後加了總覽頁，五個原則那頁現在是《把版控當備份的團隊》第 19 頁。
+6. **D5、D7 裡說「待改」的投影片**都已改好（review 規矩、log 在 agent 的 repo、五個原則）；包裡的 PDF 是改好的版本。
+7. **投影片的舊名**（agent-evolves-by-release-not-self-edit、repo-as-backup-keeps-files-not-answers 等）對照見 `README.md`「六份投影片的名字」。
+8. D7 裡的「我」指規劃時的 Claude Code。
+
+**理由：** 驗收盲讀指出這些指涉會讓內網的讀者去找不存在的東西。
+
+**取代：** 無。從 D12 起由內網接著記。

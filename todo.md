@@ -27,7 +27,6 @@
 | T36 | 10-09 | **紅線清單**（不刪、不碰別人 workspace、沒共識不擋、不報個人活動量、design 資料不出核准的模型、不假裝是人、不對 design 下判斷）有沒有要加減 | | agent-operating-model.md 7.4 |
 | T38 | 10-09 | **agent 自己的版控與多實例**：core 由誰維護、一實例一帳號還是共用、升級的節奏 | 三層分離（core／實例的工作區／生產用的工具）、登記表、實例名與版號署名、沙盒當 core 的 regression、換手已寫進 operating model 第八節，並做成投影片《agent 自己的版控》；這三件要公司決定 | agent-operating-model.md 第八節、docs/slides/agent-own-version-control-and-instances.pdf |
 | T7 | 10-08 | **轉型的終點**：流程存在就好，還是要團隊真正理解並自己維護 | D2 給了初步答案（先改變 PM，由他帶動團隊），細節待討論 | decision-log.md D2 |
-| T44 | 10-09 | **啟動包的驗收**：派乾淨 context 的 subagent 扮內網的 Claude Code 只讀 starter-kit/，問它專案要做什麼、第一週做什麼、哪些先問 PM、哪裡看不懂或矛盾；照報告改 | 第一版啟動包（100 個檔）已打包；驗收進行中 | starter-kit/ |
 | T15 | 10-08 | **目錄用途與相依關係沒有文件，對 agent 設計的影響**：通用 agent 每個 workspace 都要另寫指引，那這個 agent 要不要自己建立並維護每個專案的目錄說明與相依關係（並放進版控）？ | 你在討論第二份圖形文件時提出這個問題；只寫進了文件第 8 頁（加總覽頁後的頁碼），還沒討論對 agent 本身的設計意涵 | docs/slides/team-treating-vc-as-backup.pdf 第 8 頁 |
 
 ## 等你確認的產出
@@ -55,6 +54,7 @@
 | T12 | 10-08 | 推上 GitHub 前檢查公開範圍 | 使用者說明 repo 是個人專用，不需檢查；已推上 datochuang/cicd-mentor |
 | T16 | 10-09 | 五個定錨原則等你確認 | 全部同意，改用英文專有名詞：Small batches、SSOT、Traceability、CI、Self-documenting。記為 D4 |
 | T39 | 10-09 | 《agent 自己的版控》第 3–10 頁照 D5 改、加「換手」一頁、換手的接法誰選 | 接法由 PM 選（使用者：「這很明顯」）。全份十一頁已照 D5 改，第 5 頁換手；檔名改為 agent-own-version-control-and-instances；標題再盲讀一次（docs/reviews/titles-blind-read-agent-versioning-20261009.md 第二輪） |
+| T44 | 10-09 | 啟動包的驗收 | 乾淨 context 的 subagent 扮內網 Claude Code 讀完 26 份 .md 與 15 張 PNG，回報五大項（沙盒輸入不在 .md、授權矛盾、讀序與第一步接不上、包外引用、用語打架）；全部照改：加 02-diagnosis/sixteen-problems.md、授權定版（agent 不 submit、計畫核准前只交新增檔、超預算先停再請示）、builder 唯一讀序、MVP 對到階段、D11 註記、glossary 補 workspace 三義等、模板加 config／people／decisions；投影片沙盒頁的十六種對齊頁序 |
 | T43 | 10-09 | D7 之後的投影片修改 | 做了：《把版控當備份的團隊》第 1、10、19 頁（五個框、沒講好要不要 review、五列加一句註）；《進到陌生 workspace》第 1、7 頁（第五個檢查改 review 規矩）與文件標題；《agent 自己的版控》第 3 頁；《為什麼非要 CI/CD》第 1、8、11 頁；《互動場景》六原則改五原則；README 的 alt 從各份標題重產 |
 | T8 | 10-08 | 心態頁「會被盯上嗎？」那列 | 使用者說不需要，拿掉；該頁剩三列 |
 | T9 | 10-08 | 「對的掌舵人」四個條件 | 使用者 ok；D9 之後這四條就是「誰能接 PM」的門檻 |

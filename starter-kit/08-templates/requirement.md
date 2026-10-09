@@ -20,7 +20,7 @@ owner: <這個工具上線後誰負責>
 
 ## output
 
-- exit code：0 過、1 不過、2 自己壞了。
+- exit code：0 過、1 不過、2 自己壞了（這個約定由 core 定，要改走 MR）。
 - report 格式：一行摘要＋細節檔的路徑；附 CL 號與 manifest。
 
 ## 通過的定義

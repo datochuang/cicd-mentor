@@ -1,5 +1,9 @@
 # CL 說明模板
 
+```
+schema: cl-description/1
+```
+
 agent 交的 shelved CL 一律照這個；教團隊時在對方的 CL 上示範改寫。一包一件事；混了就拆。
 
 ```
@@ -10,7 +14,7 @@ agent 交的 shelved CL 一律照這個；教團隊時在對方的 CL 上示範�
 影響誰：<下游、引用這些檔的人、要同步的東西>
 怎麼退回：<revert 的步驟，或「直接 revert 即可」>
 
-(agent-dma v0.3.2, registry r12)   ← agent 交的 CL 才有這行
+(agent-dma v0.3.2, registry r12)   ← agent 交的 CL 才有這行；r12 是登記表的版本
 ```
 
 ## 示意

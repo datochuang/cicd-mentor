@@ -15,3 +15,6 @@
 | [manifest.md](manifest.md) | 跟著結果走的清單 |
 | [handover.md](handover.md) | 換手時舊實例寫的交接 |
 | [registry.md](registry.md) | 登記表：路徑 → 實例 → PM |
+| [config.md](config.md) | 實例設定：看什麼、授權表、預算、例外清單 |
+| [people.md](people.md) | 關係人的主本：找誰、怎麼問 |
+| [decisions.md](decisions.md) | 這個 design 的方針：誰核准、哪張請示 |
