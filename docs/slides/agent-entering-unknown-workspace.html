@@ -2,7 +2,7 @@
 <html lang="zh-Hant" data-theme="light">
 <head>
 <meta charset="utf-8">
-<title>進到陌生的 workspace：人或 agent 照六個原則檢查，不過就先做 patch</title>
+<title>進到陌生的 workspace：人或 agent 照五個原則檢查，不過就先做 patch</title>
 <style>
 :root{--paper:#fff;--surface:#fff;--surface-2:#eef2f5;--ink:#17212b;--ink-2:#48596a;--ink-3:#78889a;--rule:#cfd9e1;--rule-2:#aebbc7;
 --goal:#116b64;--warn:#a0580f;--agent:#2f6f9f;--pm:#7a4f9a;
@@ -26,7 +26,7 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 </style>
 </head>
 <body>
-<section class="slide"><div class="kicker">進到陌生 workspace 的檢查　·　圖 1 ／ 9</div><h1>流程：六個檢查各驗一個原則，不過就做 patch，由專案 owner 決定收不收</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左邊是進去之前要做的事：開專用乾淨的 workspace、只 sync 不碰別人的目錄、先記基線、指令以站上 p4 help 為準。中間是六個檢查的順序：Self-documenting 看得懂嗎（圖 2）、SSOT 跑得起來嗎只有一份嗎（圖 3、4）、Traceability 連得回來源嗎（圖 5）、Continuous Integration 每次變更有機器檢查嗎（圖 6）、Code review 併入前有人看過嗎（圖 7）、Small batches 一包一件事嗎（圖 8）。右邊是每個檢查都走一遍的循環：查、判定、不過就先補一版 patch、交 owner 採用或修正、結果記進地圖。" xmlns="http://www.w3.org/2000/svg">
+<section class="slide"><div class="kicker">進到陌生 workspace 的檢查　·　圖 1 ／ 9</div><h1>流程：六個檢查對五個原則，不過就做 patch，由專案 owner 決定收不收</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左邊是進去之前要做的事：開專用乾淨的 workspace、只 sync 不碰別人的目錄、先記基線、指令以站上 p4 help 為準。中間是六個檢查的順序：Self-documenting 看得懂嗎（圖 2）、SSOT 跑得起來嗎只有一份嗎（圖 3、4）、Traceability 連得回來源嗎（圖 5）、Continuous Integration 每次變更有機器檢查嗎（圖 6）、review 規矩：目錄講好要不要 review 了嗎（圖 7）、Small batches 一包一件事嗎（圖 8）。右邊是每個檢查都走一遍的循環：查、判定、不過就先補一版 patch、交 owner 採用或修正、結果記進地圖。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
 <text class="tx-lbl" x="20.0" y="20.0" text-anchor="start" fill="var(--ink-2)">這份文件回答：人或 AI agent 進到一個沒看過的 workspace，怎麼檢查它有沒有 CI/CD；不過時自己先補什麼 ↓</text>
 <rect x="20.0" y="44.0" width="200.0" height="150.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
@@ -62,8 +62,8 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx-s" x="496.6" y="205.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">圖 6</text>
 <line x1="395.0" y1="222.0" x2="395.0" y2="226.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
 <rect x="260.0" y="228.0" width="270.0" height="38.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".08"/>
-<text class="tx" x="272.0" y="244.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">5  Code review</text>
-<text class="tx-s" x="272.0" y="259.0" text-anchor="start" fill="var(--ink-2)">併入前有人看過嗎</text>
+<text class="tx" x="272.0" y="244.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">5  Review 規矩</text>
+<text class="tx-s" x="272.0" y="259.0" text-anchor="start" fill="var(--ink-2)">目錄講好要不要 review 了嗎</text>
 <rect x="475.2" y="237.0" width="42.8" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
 <text class="tx-s" x="496.6" y="251.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">圖 7</text>
 <line x1="395.0" y1="268.0" x2="395.0" y2="272.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
@@ -91,7 +91,7 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx" x="594.0" y="275.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">結果記進地圖</text>
 <text class="tx-s" x="740.0" y="115.0" text-anchor="start" fill="var(--ink-3)">過：記錄，下一個</text>
 <line x1="20.0" y1="376.0" x2="860.0" y2="376.0" stroke="var(--rule)" stroke-width="1"/>
-<text class="tx" x="20.0" y="402.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">六個檢查各對應一個原則的檢驗；不過的時候，多數缺口靠通用常識就能先補一版。</text>
+<text class="tx" x="20.0" y="402.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">六個檢查對應五個原則的檢驗（review 規矩歸 Self-documenting）；不過的時候，多數缺口靠通用常識就能先補一版。</text>
 <text class="tx" x="20.0" y="426.0" text-anchor="start" fill="var(--ink-2)">owner 拿到的是可以直接採用的 patch，只有少數幾件事需要他回答。</text>
 </svg></div><div class="pn">1 / 9</div></section>
 <section class="slide"><div class="kicker">進到陌生 workspace 的檢查　·　圖 2 ／ 9</div><h1>Self-documenting：光看 depot 說不出每個目錄做什麼，就先補一份目錄說明</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="Self-documenting 的檢查：怎麼查（列頂層目錄與 README、找 filelist 與 run script、對照哪些檔案沒被引用、看最近的 CL）；判定（每個目錄說得出用途、誰引用誰畫得出來、怎麼跑有寫下來；不過的徵兆：rtl_old 與 rtl_new2 並存、README 過期、沒有檔案說怎麼跑）；先補：PROJECT_MAP.md 初稿標依據、從 filelist 擷取的相依圖、疑似未使用清單只標不刪；只需要問 owner：猜的那幾行對不對、疑似未使用的目錄能不能標為棄用。" xmlns="http://www.w3.org/2000/svg">
@@ -297,41 +297,41 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx" x="20.0" y="382.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">最小的 check 就是圖 3 那個 script；先讓它定時跑、結果看得到，再談每個 CL 都跑。</text>
 <text class="tx" x="20.0" y="406.0" text-anchor="start" fill="var(--ink-2)">裝觸發、配算力、通知誰，要 owner 點頭。</text>
 </svg></div><div class="pn">6 / 9</div></section>
-<section class="slide"><div class="kicker">進到陌生 workspace 的檢查　·　圖 7 ／ 9</div><h1>Code review：沒人看過就 submit，先補一條 shelve 給人看的流程</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="Code review 的檢查：怎麼查（找 reviewer 的紀錄、找兩人改同檔的 resolve 誰看過差異、interface 改了用到它的人事前知不知道）；判定（每一包併入前有第二個人看過並留下紀錄、resolve 由看懂兩邊的人做；不過的徵兆：submit 就算完成、resolve 直接 accept 整份、review 只在里程碑的會議上）；先補：review 流程提案、resolve 清單、目錄負責人表初稿；只需要問 owner：每個目錄誰負責、review 要不要擋 submit。" xmlns="http://www.w3.org/2000/svg">
+<section class="slide"><div class="kicker">進到陌生 workspace 的檢查　·　圖 7 ／ 9</div><h1>Review 規矩：目錄沒講好要不要 review，先補一份規矩初稿給 owner 定</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="review 規矩的檢查：怎麼查（每個目錄有沒有寫要不要 review、找 reviewer 的紀錄、找兩人改同檔的 resolve 誰看過差異）；判定（每個目錄講好要不要、誰看、什麼時候；說要的目錄每一包併入前有人看過並留紀錄；不過的徵兆：沒有任何目錄講過、submit 就算完成、resolve 直接 accept 整份）；先補：review 規矩初稿、最輕的流程、resolve 清單；只需要問 owner：每個目錄要不要 review 誰看、要不要擋 submit。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
-<rect x="20.0" y="14.0" width="89.3" height="24.0" rx="12" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
-<text class="tx-s" x="64.6" y="32.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">Code review</text>
-<text class="tx" x="121.3" y="31.0" text-anchor="start" fill="var(--ink-2)">檢驗：隨便挑一包併入 main 的 submit，說得出誰看過、看了什麼</text>
+<rect x="20.0" y="14.0" width="240.6" height="24.0" rx="12" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="140.3" y="32.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">Review 規矩（每個目錄講好要不要 review）</text>
+<text class="tx" x="272.6" y="31.0" text-anchor="start" fill="var(--ink-2)">檢驗：隨便挑一個目錄，說得出它要不要 review、誰看；說要的目錄，隨便挑一包說得出誰看過</text>
 <text class="tx-lbl" x="20.0" y="70.0" text-anchor="start" fill="var(--ink-2)">怎麼查</text>
-<text class="tx-s" x="20.0" y="94.0" text-anchor="start" fill="var(--ink-2)">· 找 reviewer 的紀錄：Swarm、reviewed-by</text>
-<text class="tx-s" x="20.0" y="116.0" text-anchor="start" fill="var(--ink-2)">· 找兩人改同檔的 resolve：誰看過差異</text>
-<text class="tx-s" x="20.0" y="138.0" text-anchor="start" fill="var(--ink-2)">· interface 改了，用到它的人事前知不知道</text>
+<text class="tx-s" x="20.0" y="94.0" text-anchor="start" fill="var(--ink-2)">· 目錄有沒有寫要不要 review：PROJECT_MAP</text>
+<text class="tx-s" x="20.0" y="116.0" text-anchor="start" fill="var(--ink-2)">· 找 reviewer 的紀錄：Swarm、reviewed-by</text>
+<text class="tx-s" x="20.0" y="138.0" text-anchor="start" fill="var(--ink-2)">· 找兩人改同檔的 resolve：誰看過差異</text>
 <text class="tx-lbl" x="300.0" y="70.0" text-anchor="start" fill="var(--ink-2)">判定</text>
 <text class="tx" x="300.0" y="94.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
-<text class="tx-s" x="318.0" y="94.0" text-anchor="start" fill="var(--ink-2)">每一包併入前有第二個人看過，留下紀錄</text>
+<text class="tx-s" x="318.0" y="94.0" text-anchor="start" fill="var(--ink-2)">每個目錄講好了：要／不要、誰看、什麼時候</text>
 <text class="tx" x="300.0" y="116.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
-<text class="tx-s" x="318.0" y="116.0" text-anchor="start" fill="var(--ink-2)">resolve 由看懂兩邊的人做</text>
+<text class="tx-s" x="318.0" y="116.0" text-anchor="start" fill="var(--ink-2)">說要的目錄，每一包併入前有人看過並留紀錄</text>
 <text class="tx-s" x="300.0" y="148.0" text-anchor="start" fill="var(--warn)">不過的徵兆</text>
 <text class="tx" x="300.0" y="170.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
-<text class="tx-s" x="318.0" y="170.0" text-anchor="start" fill="var(--ink-2)">submit 就算完成</text>
+<text class="tx-s" x="318.0" y="170.0" text-anchor="start" fill="var(--ink-2)">沒有任何目錄講過要不要 review</text>
 <text class="tx" x="300.0" y="192.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
-<text class="tx-s" x="318.0" y="192.0" text-anchor="start" fill="var(--ink-2)">resolve 直接 accept 整份</text>
+<text class="tx-s" x="318.0" y="192.0" text-anchor="start" fill="var(--ink-2)">submit 就算完成</text>
 <text class="tx" x="300.0" y="214.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
-<text class="tx-s" x="318.0" y="214.0" text-anchor="start" fill="var(--ink-2)">review 只在里程碑的會議上</text>
+<text class="tx-s" x="318.0" y="214.0" text-anchor="start" fill="var(--ink-2)">resolve 直接 accept 整份</text>
 <text class="tx-lbl" x="560.0" y="70.0" text-anchor="start" fill="var(--goal)">不過時，先補這些（自己做）</text>
 <rect x="560.0" y="80.0" width="300.0" height="136.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".06"/>
-<text class="tx" x="574.0" y="104.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">review 流程提案</text>
-<text class="tx-s" x="574.0" y="121.0" text-anchor="start" fill="var(--ink-2)">shelve → 指定 reviewer → 看過才 submit</text>
-<text class="tx" x="574.0" y="144.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">resolve 清單</text>
-<text class="tx-s" x="574.0" y="161.0" text-anchor="start" fill="var(--ink-2)">最近整份 accept 的 resolve，列給當事人看</text>
-<text class="tx" x="574.0" y="184.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">目錄負責人表初稿</text>
-<text class="tx-s" x="574.0" y="201.0" text-anchor="start" fill="var(--ink-2)">從 CL 歷史推誰常改哪裡，標「推測」</text>
+<text class="tx" x="574.0" y="104.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">review 規矩初稿</text>
+<text class="tx-s" x="574.0" y="121.0" text-anchor="start" fill="var(--ink-2)">每目錄：要／不要、誰看、何時；寫進 PROJECT_MAP</text>
+<text class="tx" x="574.0" y="144.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">最輕的流程</text>
+<text class="tx-s" x="574.0" y="161.0" text-anchor="start" fill="var(--ink-2)">說要的：shelve → 指定 reviewer → 看過才 submit</text>
+<text class="tx" x="574.0" y="184.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">resolve 清單</text>
+<text class="tx-s" x="574.0" y="201.0" text-anchor="start" fill="var(--ink-2)">最近整份 accept 的 resolve，列給當事人看</text>
 <text class="tx-lbl" x="560.0" y="242.0" text-anchor="start" fill="var(--warn)">只需要問 owner</text>
-<text class="tx-s" x="560.0" y="264.0" text-anchor="start" fill="var(--warn)">? 每個目錄誰負責</text>
-<text class="tx-s" x="560.0" y="284.0" text-anchor="start" fill="var(--warn)">? review 要不要擋 submit（trigger）</text>
+<text class="tx-s" x="560.0" y="264.0" text-anchor="start" fill="var(--warn)">? 每個目錄要不要 review、誰看</text>
+<text class="tx-s" x="560.0" y="284.0" text-anchor="start" fill="var(--warn)">? 要不要擋 submit（trigger）</text>
 <line x1="20.0" y1="356.0" x2="860.0" y2="356.0" stroke="var(--rule)" stroke-width="1"/>
-<text class="tx" x="20.0" y="382.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">review 是併入前唯一由人把關的點；先補一條最輕的流程：shelve 給一個人看。</text>
-<text class="tx" x="20.0" y="406.0" text-anchor="start" fill="var(--ink-2)">負責人表從歷史推得出初稿，確認要 owner。</text>
+<text class="tx" x="20.0" y="382.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">要不要 review 由各目錄自己定、可以改，但要講好、寫下來；沒講好等於沒人看。</text>
+<text class="tx" x="20.0" y="406.0" text-anchor="start" fill="var(--ink-2)">agent 交的 shelved CL 一律 owner 收了才進 depot，這條不由目錄定。</text>
 </svg></div><div class="pn">7 / 9</div></section>
 <section class="slide"><div class="kicker">進到陌生 workspace 的檢查　·　圖 8 ／ 9</div><h1>Small batches：過去的大 CL 改不了，先給 CL 說明模板和拆小 CL 的示範</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="Small batches 的檢查：怎麼查（p4 changes 看最近的 submit 幾個檔案與說明、p4 describe 看一包裡幾件事、看兩包之間隔多久）；判定（一包一件事、說明看得懂；不過的徵兆：說明是 update fix sync、一包混 RTL tb script、一包是某人一整段期間的工作）；先補：CL 說明模板、pre-submit 清單、拆包示範；只需要問 owner：團隊願不願意用模板、進行中的大包怎麼拆。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>

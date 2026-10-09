@@ -26,7 +26,7 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 </style>
 </head>
 <body>
-<section class="slide"><div class="kicker">版控只當備份的團隊　·　圖 1 ／ 19</div><h1>總覽：depot 留得住檔案、答不出哪一版跑的；十六個問題歸成六個原則</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左上 depot 留得住的四個打勾：每個檔案的最新版與歷史、誰在什麼時候改了哪個檔、舊版救得回來、label 那天的檔案清單。左下 depot 答不出的四個打叉：這份結果是哪一版跑的、乾淨的機器能不能重跑、哪一次改動弄壞的、併入前誰看過；今天都由某個人的記憶回答。右邊六個框，各一個原則與沒做到時的問題：Small batches（大包 submit、說明只寫 update）；Single Source of Truth（五個地方散落、產物進 depot、IP 解壓覆蓋、flow 每案複製一份）；Traceability（label 只有檔案、哪一版跑的要問人、兩台機器不同結果、退不回去）；Continuous Integration（壞了很久才發現、沒有 branch main 會壞、Excel 狀態表）；Self-documenting（流程只在人腦、下游沒清單、目錄沒說明）；Code review（沒有 review、resolve 整份收）。每框附圖號。" xmlns="http://www.w3.org/2000/svg">
+<section class="slide"><div class="kicker">版控只當備份的團隊　·　圖 1 ／ 19</div><h1>總覽：depot 留得住檔案、答不出哪一版跑的；十六個問題歸成五個原則</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左上 depot 留得住的四個打勾：每個檔案的最新版與歷史、誰在什麼時候改了哪個檔、舊版救得回來、label 那天的檔案清單。左下 depot 答不出的四個打叉：這份結果是哪一版跑的、乾淨的機器能不能重跑、哪一次改動弄壞的、併入前誰看過；今天都由某個人的記憶回答。右邊五個框，各一個原則與沒做到時的問題：Small batches（大包 submit、說明只寫 update、resolve 整份收）；Single Source of Truth（五個地方散落、產物進 depot、IP 解壓覆蓋、flow 每案複製一份）；Traceability（label 只有檔案、哪一版跑的要問人、兩台機器不同結果、退不回去）；Continuous Integration（壞了很久才發現、沒有 branch main 會壞、Excel 狀態表）；Self-documenting（流程只在人腦、下游沒清單、目錄沒說明、沒講好要不要 review）。右下角註：Code review 不是原則，要不要 review 由各目錄講好、寫在 PROJECT_MAP。每框附圖號。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
 <text class="tx-lbl" x="20.0" y="20.0" text-anchor="start" fill="var(--ink-2)">這份文件回答：把版控當備份的團隊每天怎麼運作、長出哪些問題、這些問題歸成哪幾個原則</text>
 <rect x="20.0" y="34.0" width="230.0" height="150.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".06"/>
@@ -58,7 +58,9 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx-s" x="342.2" y="80.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">大包 submit</text>
 <rect x="300.0" y="92.0" width="104.8" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
 <text class="tx-s" x="352.4" y="106.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">說明只寫 update</text>
-<text class="tx-s" x="300.0" y="174.0" text-anchor="start" fill="var(--ink-3)">圖 2</text>
+<rect x="300.0" y="118.0" width="101.0" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="350.5" y="132.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">resolve 整份收</text>
+<text class="tx-s" x="300.0" y="174.0" text-anchor="start" fill="var(--ink-3)">圖 2、11</text>
 <rect x="482.0" y="34.0" width="184.0" height="150.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
 <text class="tx" x="492.0" y="54.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">Single Source of Truth</text>
 <rect x="492.0" y="66.0" width="81.1" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
@@ -98,16 +100,18 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx-s" x="614.6" y="242.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">下游沒清單</text>
 <rect x="492.0" y="254.0" width="70.9" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
 <text class="tx-s" x="527.5" y="268.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">目錄沒說明</text>
-<text class="tx-s" x="492.0" y="336.0" text-anchor="start" fill="var(--ink-3)">圖 7、8</text>
-<rect x="674.0" y="196.0" width="184.0" height="150.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
-<text class="tx" x="684.0" y="216.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">Code review</text>
-<rect x="684.0" y="228.0" width="84.5" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
-<text class="tx-s" x="726.2" y="242.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">沒有 review</text>
-<rect x="684.0" y="254.0" width="101.0" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
-<text class="tx-s" x="734.5" y="268.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">resolve 整份收</text>
-<text class="tx-s" x="684.0" y="336.0" text-anchor="start" fill="var(--ink-3)">圖 10、11</text>
+<rect x="492.0" y="280.0" width="125.2" height="20.0" rx="10" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="554.6" y="294.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">沒講好要不要 review</text>
+<text class="tx-s" x="492.0" y="336.0" text-anchor="start" fill="var(--ink-3)">圖 7、8、10</text>
+<rect x="674.0" y="196.0" width="184.0" height="150.0" fill="var(--surface)" stroke="var(--ink-3)" stroke-width="1.1" stroke-dasharray="5 3"/>
+<text class="tx" x="684.0" y="216.0" text-anchor="start" fill="var(--ink-3)" style="font-weight:700">Code review 不是原則</text>
+<text class="tx-s" x="684.0" y="238.0" text-anchor="start" fill="var(--ink-3)">要不要 review 由各目錄</text>
+<text class="tx-s" x="684.0" y="255.0" text-anchor="start" fill="var(--ink-3)">自己定、可以改，但要講好、</text>
+<text class="tx-s" x="684.0" y="272.0" text-anchor="start" fill="var(--ink-3)">寫在 PROJECT_MAP；沒講好</text>
+<text class="tx-s" x="684.0" y="289.0" text-anchor="start" fill="var(--ink-3)">等於沒人看（歸 Self-</text>
+<text class="tx-s" x="684.0" y="306.0" text-anchor="start" fill="var(--ink-3)">documenting）</text>
 <line x1="20.0" y1="380.0" x2="860.0" y2="380.0" stroke="var(--rule)" stroke-width="1"/>
-<text class="tx" x="20.0" y="406.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">備份做到了：檔案留得住；「哪一版跑的、能不能重跑、誰看過」答不出。十六個問題歸成六個原則，之後的對策一一對應。</text>
+<text class="tx" x="20.0" y="406.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">備份做到了：檔案留得住；「哪一版跑的、能不能重跑、誰看過」答不出。十六個問題歸成五個原則，之後的對策一一對應。</text>
 <text class="tx" x="20.0" y="430.0" text-anchor="start" fill="var(--ink-2)">右邊每個框是一個原則，框裡是沒做到它時長出的問題，圖號是講那個問題的頁。</text>
 </svg></div><div class="pn">1 / 19</div></section>
 <section class="slide"><div class="kicker">版控只當備份的團隊　·　圖 2 ／ 19</div><h1>日常：改動在個人 workspace 累積，depot 隔很久才收到一大包</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="兩條水平的泳道。上面是個人 workspace，一整條都是密集的改動：改 RTL、跑 sim、改 testbench、改 filelist、改 script。下面是 Perforce depot，只在三個點各收到一包很大的 submit，說明分別是 update、fix、before freeze；兩包之間 depot 沒有任何變化。下方列出什麼時候才 submit：里程碑到了、有人跟你要、休假前、怕 workspace 壞掉、主管提醒；以及一包裡面有什麼：好幾個 block 的 RTL、順手改的 script、新的 testbench、一起改的 filelist。" xmlns="http://www.w3.org/2000/svg">
@@ -550,7 +554,7 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx" x="20.0" y="326.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">branch 給半成品一個可以常常 submit、又不會弄壞 main 的地方；少了它，Small batches 和 CI 都沒有地方發生。</text>
 <text class="tx" x="20.0" y="350.0" text-anchor="start" fill="var(--ink-2)">複製目錄成了 branch 的代替品，repo 因此越來越看不懂。</text>
 </svg></div><div class="pn">9 / 19</div></section>
-<section class="slide"><div class="kicker">版控只當備份的團隊　·　圖 10 ／ 19</div><h1>問題：submit 就算完成，沒有任何 CL 在進 depot 前被第二個人看過</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左邊：改、submit、完成三步，底下一個大大的 0，表示 submit 之前看過這一包的人數；review 只發生在里程碑的 design review 會議，看的是投影片與架構，看不到任何 CL。右邊危害：interface 改了用它的人整合時才知道、錯誤要等機器或下游來抓、為什麼這樣改只有作者知道、新人的寫法沒人修正。" xmlns="http://www.w3.org/2000/svg">
+<section class="slide"><div class="kicker">版控只當備份的團隊　·　圖 10 ／ 19</div><h1>問題：沒講好哪些目錄要 review，預設沒人看，改 interface 那包也一樣</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左邊：改、submit、完成三步，底下一個大大的 0，表示 submit 之前看過這一包的人數；沒有任何目錄講過要不要 review，預設就是沒人看；review 只發生在里程碑的 design review 會議，看不到任何 CL。右邊危害：interface 改了用它的人整合時才知道、錯誤要等機器或下游來抓、為什麼這樣改只有作者知道、新人的寫法沒人修正。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
 <text class="tx-lbl" x="20.0" y="24.0" text-anchor="start" fill="var(--ink-2)">今天：submit 就是完成</text>
 <rect x="20.0" y="40.0" width="100.0" height="40.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
@@ -565,9 +569,9 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx" x="90.0" y="150.0" text-anchor="start" fill="var(--ink-2)">個人在 submit 之前</text>
 <text class="tx" x="90.0" y="170.0" text-anchor="start" fill="var(--ink-2)">看過這一包</text>
 <rect x="20.0" y="200.0" width="520.0" height="96.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.3" stroke-dasharray="6 4" fill-opacity=".05"/>
-<text class="tx" x="34.0" y="224.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">review 只發生在里程碑的 design review 會議</text>
-<text class="tx-s" x="34.0" y="246.0" text-anchor="start" fill="var(--ink-2)">看的是投影片與架構，隔很久一次</text>
-<text class="tx-s" x="34.0" y="266.0" text-anchor="start" fill="var(--ink-2)">會議上看不到任何一個 CL，也沒有人逐包看改了什麼</text>
+<text class="tx" x="34.0" y="224.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">沒有任何目錄講過要不要 review；預設就是沒人看</text>
+<text class="tx-s" x="34.0" y="246.0" text-anchor="start" fill="var(--ink-2)">review 只發生在里程碑的 design review 會議，看投影片與架構</text>
+<text class="tx-s" x="34.0" y="266.0" text-anchor="start" fill="var(--ink-2)">會議上看不到任何一個 CL；連改 interface 的那一包也沒人逐包看</text>
 <text class="tx-s" x="20.0" y="322.0" text-anchor="start" fill="var(--ink-3)">示意：A 改了 bus 的 ready 行為，B 的 block 到整合才發現</text>
 <text class="tx-lbl" x="570.0" y="60.0" text-anchor="start" fill="var(--warn)">危害</text>
 <text class="tx" x="582.0" y="84.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
@@ -579,8 +583,8 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx" x="582.0" y="162.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
 <text class="tx-s" x="602.0" y="162.0" text-anchor="start" fill="var(--warn)">新人的寫法沒人修正，變成習慣</text>
 <line x1="20.0" y1="350.0" x2="860.0" y2="350.0" stroke="var(--rule)" stroke-width="1"/>
-<text class="tx" x="20.0" y="376.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">submit 等於完成，所以沒有任何一包在併入前被第二個人看過。</text>
-<text class="tx" x="20.0" y="400.0" text-anchor="start" fill="var(--ink-2)">design review 的會議看的是架構與投影片，看不到任何一個 CL。</text>
+<text class="tx" x="20.0" y="376.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">要不要 review 由各目錄自己定、可以改，但要講好、寫下來；沒講好，預設就是沒人看。</text>
+<text class="tx" x="20.0" y="400.0" text-anchor="start" fill="var(--ink-2)">連改 interface 的那一包也一樣；design review 的會議看不到任何一個 CL。</text>
 </svg></div><div class="pn">10 / 19</div></section>
 <section class="slide"><div class="kicker">版控只當備份的團隊　·　圖 11 ／ 19</div><h1>問題：兩人改同一個檔，resolve 整份收下，另一人的改動消失</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="兩人同時 checkout top.v：A 改第 10 到 20 行，B 改第 50 到 60 行。B 先 submit；A sync 後要 resolve，選了 accept yours 整份用自己的，結果 top.v 裡 B 的改動不見了，沒有錯誤訊息，submit 也成功。右邊危害：改動消失沒有訊息、要等下游壞了才發現、為了躲開改成鎖檔或各改各的複本、複本越多離只有一份真相越遠。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
@@ -922,7 +926,7 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx" x="20.0" y="348.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">備份的功能它確實做到了；右邊每一題，今天都由某個人的記憶回答。</text>
 <text class="tx" x="20.0" y="372.0" text-anchor="start" fill="var(--ink-2)">AI 的產出要跨團隊被採用，先得讓紀錄能回答右邊這些題。</text>
 </svg></div><div class="pn">18 / 19</div></section>
-<section class="slide"><div class="kicker">版控只當備份的團隊　·　圖 19 ／ 19</div><h1>收斂：前面的問題歸成 SSOT、CI 等六個原則，對策照原則一一對應</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="六列原則，各附意思、檢驗與對應的問題頁：Small batches（圖 2、6、9、11）；Single Source of Truth, SSOT（圖 3、4、7、12、13、14、15）；Traceability（圖 4、5、7、15、16、17）；Continuous Integration, CI（圖 6、9、16）；Self-documenting（圖 7、8、14）；Code review（圖 9、10、11）。" xmlns="http://www.w3.org/2000/svg">
+<section class="slide"><div class="kicker">版控只當備份的團隊　·　圖 19 ／ 19</div><h1>收斂：前面的問題歸成 SSOT、CI 等五個原則，對策照原則一一對應</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="五列原則，各附意思、檢驗與對應的問題頁：Small batches（圖 2、6、9、11）；Single Source of Truth, SSOT（圖 3、4、7、12、13、14、15）；Traceability（圖 4、5、7、15、16、17）；Continuous Integration, CI（圖 6、9、16）；Self-documenting（圖 7、8、10、14）。底下註明 Code review 不是原則，是每個目錄要講好的規矩。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
 <text class="tx-lbl" x="20.0" y="34.0" text-anchor="start" fill="var(--goal)">原則</text>
 <text class="tx-lbl" x="250.0" y="34.0" text-anchor="start" fill="var(--ink-2)">意思，以及做得到／做不到的檢驗</text>
@@ -994,30 +998,21 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <rect x="20.0" y="278.0" width="3.0" height="40.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="0"/>
 <text class="tx" x="34.0" y="294.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">Self-documenting</text>
 <text class="tx-s" x="34.0" y="313.0" text-anchor="start" fill="var(--ink-3)">自我描述</text>
-<text class="tx-s" x="250.0" y="292.0" text-anchor="start" fill="var(--ink-2)">目錄的用途、相依、怎麼跑，寫在 repo 裡</text>
-<text class="tx-s" x="250.0" y="312.0" text-anchor="start" fill="var(--ink-3)">檢驗：第一次來的人只讀 repo，就說得出每個目錄的用途與相依</text>
+<text class="tx-s" x="250.0" y="292.0" text-anchor="start" fill="var(--ink-2)">目錄的用途、相依、怎麼跑、要不要 review，寫在 repo 裡</text>
+<text class="tx-s" x="250.0" y="312.0" text-anchor="start" fill="var(--ink-3)">檢驗：第一次來的人只讀 repo，就說得出每個目錄的用途、相依、要不要 review</text>
 <rect x="640.0" y="278.0" width="42.8" height="18.0" rx="9" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
 <text class="tx-s" x="661.4" y="290.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">圖 7</text>
 <rect x="692.0" y="278.0" width="42.8" height="18.0" rx="9" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
 <text class="tx-s" x="713.4" y="290.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">圖 8</text>
 <rect x="744.0" y="278.0" width="49.1" height="18.0" rx="9" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
-<text class="tx-s" x="768.5" y="290.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">圖 14</text>
+<text class="tx-s" x="768.5" y="290.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">圖 10</text>
+<rect x="796.0" y="278.0" width="49.1" height="18.0" rx="9" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="820.5" y="290.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">圖 14</text>
 <line x1="20.0" y1="324.0" x2="860.0" y2="324.0" stroke="var(--rule)" stroke-width="1"/>
-<rect x="20.0" y="334.0" width="3.0" height="40.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="0"/>
-<text class="tx" x="34.0" y="350.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">Code review</text>
-<text class="tx-s" x="34.0" y="369.0" text-anchor="start" fill="var(--ink-3)">併入前有人看過</text>
-<text class="tx-s" x="250.0" y="348.0" text-anchor="start" fill="var(--ink-2)">每一包在併入 main 之前，有第二個人看過並留下紀錄</text>
-<text class="tx-s" x="250.0" y="368.0" text-anchor="start" fill="var(--ink-3)">檢驗：隨便挑一包併入 main 的 submit，說得出誰看過、看了什麼</text>
-<rect x="640.0" y="334.0" width="42.8" height="18.0" rx="9" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
-<text class="tx-s" x="661.4" y="346.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">圖 9</text>
-<rect x="692.0" y="334.0" width="49.1" height="18.0" rx="9" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
-<text class="tx-s" x="716.5" y="346.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">圖 10</text>
-<rect x="744.0" y="334.0" width="49.1" height="18.0" rx="9" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
-<text class="tx-s" x="768.5" y="346.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">圖 11</text>
-<line x1="20.0" y1="380.0" x2="860.0" y2="380.0" stroke="var(--rule)" stroke-width="1"/>
 <line x1="20.0" y1="394.0" x2="860.0" y2="394.0" stroke="var(--rule)" stroke-width="1"/>
-<text class="tx" x="20.0" y="420.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">六個原則都是 repo 該有的性質，各有一個做得到或做不到的檢驗。</text>
+<text class="tx" x="20.0" y="420.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">五個原則都是 repo 該有的性質，各有一個做得到或做不到的檢驗。</text>
 <text class="tx" x="20.0" y="444.0" text-anchor="start" fill="var(--ink-2)">之後談對策，每一條只回答一個問題：它讓哪一個檢驗從做不到變成做得到。</text>
+<text class="tx" x="20.0" y="468.0" text-anchor="start" fill="var(--ink-2)">Code review 不是原則：要不要 review 由各目錄自己定、可以改，但要講好、寫在 PROJECT_MAP——這歸 Self-documenting。</text>
 </svg></div><div class="pn">19 / 19</div></section>
 </body>
 </html>

@@ -6,7 +6,7 @@
 # 讀完要能：在圖裡認出自己團隊的做法，說出哪些問題是從這些做法長出來的。
 # 主旨：把版控當備份的團隊，depot 裡有檔案，但結果的來源、跑法、環境與理由都在人身上；
 #       問題在整合、交接與人員異動時浮現。
-# 脈絡：1 總覽（一張圖：depot 留得住的、答不出的；十六個問題歸成六個原則；2026-10-09 加）→ 2–4 具體怎麼運作 → 5–17 造成什麼問題（10–17 為 2026-10-09 追加）→ 18 總結 → 19 收斂成六個原則（之後對策的定錨點；第六個 Code review 待使用者確認）。
+# 脈絡：1 總覽（一張圖：depot 留得住的、答不出的；十六個問題歸成五個原則；2026-10-09 加）→ 2–4 具體怎麼運作 → 5–17 造成什麼問題（10–17 為 2026-10-09 追加）→ 18 總結 → 19 收斂成五個原則（之後對策的定錨點；Code review 不是原則，是每個目錄要講好的規矩，D7）。
 # 所有路徑、CL 號碼、label 名稱都是示意，不對應任何實際專案。
 import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
@@ -23,16 +23,15 @@ def check(s, x, y, ok, text, col=None, cls="tx"):
 
 
 
-# ── 圖 1：總覽（一張圖：depot 留得住的、答不出的；十六個問題歸成六個原則）──
+# ── 圖 1：總覽（一張圖：depot 留得住的、答不出的；十六個問題歸成五個原則）──
 # 每個問題只掛在一個最直接的原則下（圖 19 的對應是多對多，這裡為了一眼看懂只取一個）；數字是那個問題的頁。
 OVERVIEW = [
-    ("Small batches", [("大包 submit", 2), ("說明只寫 update", 2)]),
+    ("Small batches", [("大包 submit", 2), ("說明只寫 update", 2), ("resolve 整份收", 11)]),
     ("Single Source of Truth", [("五個地方散落", 3), ("產物進 depot", 12), ("IP 解壓覆蓋", 13), ("flow 每案複製一份", 14)]),
     ("Traceability", [("label 只有檔案", 4), ("哪一版跑的要問人", 5), ("兩台機器不同結果", 15), ("退不回去", 17)]),
     ("Continuous Integration", [("壞了很久才發現", 6), ("沒有 branch，main 會壞", 9), ("Excel 狀態表", 16)]),
-    ("Self-documenting", [("流程只在人腦", 7), ("下游沒清單", 7), ("目錄沒說明", 8)]),
-    ("Code review", [("沒有 review", 10), ("resolve 整份收", 11)]),
-]
+    ("Self-documenting", [("流程只在人腦", 7), ("下游沒清單", 7), ("目錄沒說明", 8), ("沒講好要不要 review", 10)]),
+]  # Code review 不是原則（D7）：要不要 review 由各目錄講好，歸 Self-documenting
 
 
 def p0():
@@ -62,14 +61,19 @@ def p0():
             pill(s, x, y, t, WARN, h=20)
             x += w_ + 6
         T(s, bx + 10, by + bh - 10, "圖 " + "、".join(str(pg) for pg in sorted({pg for _, pg in items})), fill=GRAY)
+    bx, by = 290 + 2 * 192, 34 + 162
+    rect(s, bx, by, 184, 150, col=GRAY, fill="var(--surface)", sw=1.1, dash="5 3")
+    T(s, bx + 10, by + 20, "Code review 不是原則", cls="tx", fill=GRAY, w=700)
+    for k, t in enumerate(["要不要 review 由各目錄", "自己定、可以改，但要講好、", "寫在 PROJECT_MAP；沒講好", "等於沒人看（歸 Self-", "documenting）"]):
+        T(s, bx + 10, by + 42 + 17 * k, t, fill=GRAY)
     bottom(s, 380, [
-        ("備份做到了：檔案留得住；「哪一版跑的、能不能重跑、誰看過」答不出。十六個問題歸成六個原則，之後的對策一一對應。", True),
+        ("備份做到了：檔案留得住；「哪一版跑的、能不能重跑、誰看過」答不出。十六個問題歸成五個原則，之後的對策一一對應。", True),
         ("右邊每個框是一個原則，框裡是沒做到它時長出的問題，圖號是講那個問題的頁。", False),
     ])
     aria = ("左上 depot 留得住的四個打勾：每個檔案的最新版與歷史、誰在什麼時候改了哪個檔、舊版救得回來、label 那天的檔案清單。左下 depot 答不出的四個打叉：這份結果是哪一版跑的、乾淨的機器能不能重跑、哪一次改動弄壞的、併入前誰看過；今天都由某個人的記憶回答。"
-            "右邊六個框，各一個原則與沒做到時的問題：Small batches（大包 submit、說明只寫 update）；Single Source of Truth（五個地方散落、產物進 depot、IP 解壓覆蓋、flow 每案複製一份）；"
+            "右邊五個框，各一個原則與沒做到時的問題：Small batches（大包 submit、說明只寫 update、resolve 整份收）；Single Source of Truth（五個地方散落、產物進 depot、IP 解壓覆蓋、flow 每案複製一份）；"
             "Traceability（label 只有檔案、哪一版跑的要問人、兩台機器不同結果、退不回去）；Continuous Integration（壞了很久才發現、沒有 branch main 會壞、Excel 狀態表）；"
-            "Self-documenting（流程只在人腦、下游沒清單、目錄沒說明）；Code review（沒有 review、resolve 整份收）。每框附圖號。")
+            "Self-documenting（流程只在人腦、下游沒清單、目錄沒說明、沒講好要不要 review）。右下角註：Code review 不是原則，要不要 review 由各目錄講好、寫在 PROJECT_MAP。每框附圖號。")
     return svg(s, 880, 480, aria)
 
 
@@ -491,15 +495,15 @@ def n_review():
         T(s, 90, 150, "個人在 submit 之前", cls="tx", fill=INK2)
         T(s, 90, 170, "看過這一包", cls="tx", fill=INK2)
         rect(s, 20, 200, 520, 96, col=WARN, fill=WARN, op=".05", sw=1.3, dash="6 4")
-        T(s, 34, 224, "review 只發生在里程碑的 design review 會議", cls="tx", fill=WARN, w=700)
-        T(s, 34, 246, "看的是投影片與架構，隔很久一次", fill=INK2)
-        T(s, 34, 266, "會議上看不到任何一個 CL，也沒有人逐包看改了什麼", fill=INK2)
+        T(s, 34, 224, "沒有任何目錄講過要不要 review；預設就是沒人看", cls="tx", fill=WARN, w=700)
+        T(s, 34, 246, "review 只發生在里程碑的 design review 會議，看投影片與架構", fill=INK2)
+        T(s, 34, 266, "會議上看不到任何一個 CL；連改 interface 的那一包也沒人逐包看", fill=INK2)
         T(s, 20, 322, "示意：A 改了 bus 的 ready 行為，B 的 block 到整合才發現", fill=GRAY)
     return problem_page(draw,
         ["interface 改了，用它的人整合時才知道", "錯誤要等機器或下游來抓", "為什麼這樣改，只有作者知道", "新人的寫法沒人修正，變成習慣"],
-        [("submit 等於完成，所以沒有任何一包在併入前被第二個人看過。", True),
-         ("design review 的會議看的是架構與投影片，看不到任何一個 CL。", False)],
-        "左邊：改、submit、完成三步，底下一個大大的 0，表示 submit 之前看過這一包的人數；review 只發生在里程碑的 design review 會議，看的是投影片與架構，看不到任何 CL。"
+        [("要不要 review 由各目錄自己定、可以改，但要講好、寫下來；沒講好，預設就是沒人看。", True),
+         ("連改 interface 的那一包也一樣；design review 的會議看不到任何一個 CL。", False)],
+        "左邊：改、submit、完成三步，底下一個大大的 0，表示 submit 之前看過這一包的人數；沒有任何目錄講過要不要 review，預設就是沒人看；review 只發生在里程碑的 design review 會議，看不到任何 CL。"
         "右邊危害：interface 改了用它的人整合時才知道、錯誤要等機器或下游來抓、為什麼這樣改只有作者知道、新人的寫法沒人修正。")
 
 
@@ -722,7 +726,7 @@ def p_summary():
             "下游收到的跟上一版差在哪（上游工程師）、跑的步驟與環境在哪裡（CAD 加跑的人）、這個檔案還有人在用嗎（最資深的人）、這個目錄裝什麼靠哪些東西（帶你的那個人）、main 現在能用嗎（sync 了才知道）、這一包併入前誰看過（沒有人）、晶片裡是哪一版 IP（解壓的那個人）。")
     return svg(s, 880, 480, aria)
 
-# ── 圖 18：收斂成六個原則 ─────────────────────────────────────────────
+# ── 圖 18：收斂成五個原則（Code review 不是原則，D7）─────────────────────────────────────────────
 # 原則一律用英文專有名詞（2026-10-09 使用者定），中文只是註解。
 ANCHORS = [
     ("Small batches", "小步常進", "改動小而頻繁地進到共用的地方，每一包說得出改了哪一件事",
@@ -733,10 +737,8 @@ ANCHORS = [
      "隨便拿一份結果，說得出它的版本、工具、環境與步驟", [3, 4, 6, 14, 15, 16]),
     ("Continuous Integration", "CI　變更即驗證", "改動進來的當下就被機器檢查，結果由機器寫下；共用的 main 隨時可用",
      "改壞的那一包進來時就被標出來，用不著等到整合", [5, 8, 15]),
-    ("Self-documenting", "自我描述", "目錄的用途、相依、怎麼跑，寫在 repo 裡",
-     "第一次來的人只讀 repo，就說得出每個目錄的用途與相依", [6, 7, 13]),
-    ("Code review", "併入前有人看過", "每一包在併入 main 之前，有第二個人看過並留下紀錄",
-     "隨便挑一包併入 main 的 submit，說得出誰看過、看了什麼", [8, 9, 10]),
+    ("Self-documenting", "自我描述", "目錄的用途、相依、怎麼跑、要不要 review，寫在 repo 裡",
+     "第一次來的人只讀 repo，就說得出每個目錄的用途、相依、要不要 review", [6, 7, 9, 13]),
 ]
 
 
@@ -757,16 +759,17 @@ def p_principles():
             pill(s, 640 + col_ * 52, y + 8 + 22 * row, "圖 %d" % (f + 1), WARN, h=18)
         line(s, 20, y + 54, 860, y + 54)
     bottom(s, 394, [
-        ("六個原則都是 repo 該有的性質，各有一個做得到或做不到的檢驗。", True),
+        ("五個原則都是 repo 該有的性質，各有一個做得到或做不到的檢驗。", True),
         ("之後談對策，每一條只回答一個問題：它讓哪一個檢驗從做不到變成做得到。", False),
+        ("Code review 不是原則：要不要 review 由各目錄自己定、可以改，但要講好、寫在 PROJECT_MAP——這歸 Self-documenting。", False),
     ])
-    aria = ("六列原則，各附意思、檢驗與對應的問題頁：Small batches（圖 2、6、9、11）；Single Source of Truth, SSOT（圖 3、4、7、12、13、14、15）；"
-            "Traceability（圖 4、5、7、15、16、17）；Continuous Integration, CI（圖 6、9、16）；Self-documenting（圖 7、8、14）；Code review（圖 9、10、11）。")
+    aria = ("五列原則，各附意思、檢驗與對應的問題頁：Small batches（圖 2、6、9、11）；Single Source of Truth, SSOT（圖 3、4、7、12、13、14、15）；"
+            "Traceability（圖 4、5、7、15、16、17）；Continuous Integration, CI（圖 6、9、16）；Self-documenting（圖 7、8、10、14）。底下註明 Code review 不是原則，是每個目錄要講好的規矩。")
     return svg(s, 880, 480, aria)
 
 
 PAGES = [
-    ("總覽：depot 留得住檔案、答不出哪一版跑的；十六個問題歸成六個原則", p0()),
+    ("總覽：depot 留得住檔案、答不出哪一版跑的；十六個問題歸成五個原則", p0()),
     ("日常：改動在個人 workspace 累積，depot 隔很久才收到一大包", p1()),
     ("散落：跑 regression 要的東西分在五個地方，depot 只是其中之一", p2()),
     ("交付：結果靠 email 貼路徑，label 記得檔案版本，記不得工具與環境", p3()),
@@ -775,7 +778,7 @@ PAGES = [
     ("問題：下游收到的包沒有清單；流程只在人腦裡，人走了就斷", p6()),
     ("問題：目錄用途沒寫在 depot，新人要人帶，AI agent 也要人另寫說明", p7()),
     ("問題：沒有開發 branch，半成品留在 workspace 或進 main，main 隨時會壞", p8()),
-    ("問題：submit 就算完成，沒有任何 CL 在進 depot 前被第二個人看過", n_review()),
+    ("問題：沒講好哪些目錄要 review，預設沒人看，改 interface 那包也一樣", n_review()),
     ("問題：兩人改同一個檔，resolve 整份收下，另一人的改動消失", n_conflict()),
     ("問題：netlist 等產物和來源一起進 depot，改哪一份才算數沒人說得清", n_derived()),
     ("問題：第三方 IP 解壓覆蓋，晶片裡是哪一版沒人說得出", n_ip()),
@@ -784,7 +787,7 @@ PAGES = [
     ("問題：regression 狀態靠人填 Excel，表和實際結果對不上", n_excel()),
     ("問題：想退回上次能跑的狀態，檔案回得去，環境回不去", n_rollback()),
     ("總結：備份做到了，「哪一版跑的、能不能重跑」一個都答不出", p_summary()),
-    ("收斂：前面的問題歸成 SSOT、CI 等六個原則，對策照原則一一對應", p_principles()),
+    ("收斂：前面的問題歸成 SSOT、CI 等五個原則，對策照原則一一對應", p_principles()),
 ]
 
 if __name__ == "__main__":

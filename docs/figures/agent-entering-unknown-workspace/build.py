@@ -7,7 +7,7 @@
 # 主旨：檢查有沒有 CI/CD，就是逐一驗證五個原則（D4）的檢驗；多數缺口靠通用常識就能先補一版 patch，
 #       owner 只要決定採不採用。
 # 脈絡：1 流程與前置 → 2–8 六個檢查（各對應一個原則：怎麼查／判定／先補什麼／只需要問 owner 的；SSOT 兩頁）→ 9 分工與 patch 怎麼交。
-# 2026-10-09：原則從五個變六個（加 Code review，待使用者確認），SSOT 多一頁談產物、flow、IP。
+# 2026-10-09：SSOT 多一頁談產物、flow、IP；原本的 Code review 一頁改成「review 規矩：目錄有沒有講好要不要 review」（D7：Code review 不是原則，是規矩，歸 Self-documenting）。
 # 指令（p4 changes、p4 describe、p4 triggers 等）為示意，未經實機驗證，以站上的 p4 help 為準。
 import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
@@ -25,7 +25,7 @@ def mark(s, x, y, ok, text, fill=None):
 
 # ── 圖 1：流程 ──────────────────────────────────────────────────────
 CHECKS = [("Self-documenting", "看得懂嗎", "圖 2"), ("SSOT（環境／複本）", "跑得起來嗎；只有一份嗎", "圖 3–4"), ("Traceability", "連得回來源嗎", "圖 5"),
-          ("Continuous Integration", "每次變更有機器檢查嗎", "圖 6"), ("Code review", "併入前有人看過嗎", "圖 7"), ("Small batches", "一包一件事嗎", "圖 8")]
+          ("Continuous Integration", "每次變更有機器檢查嗎", "圖 6"), ("Review 規矩", "目錄講好要不要 review 了嗎", "圖 7"), ("Small batches", "一包一件事嗎", "圖 8")]
 
 
 def p1():
@@ -66,12 +66,12 @@ def p1():
             arrow(s, 720, y + 40, 720, y + 48, col=INK2, ar="ar", sw=1.2)
     T(s, 740, 115, "過：記錄，下一個", anchor="start", fill=GRAY)
     bottom(s, 376, [
-        ("六個檢查各對應一個原則的檢驗；不過的時候，多數缺口靠通用常識就能先補一版。", True),
+        ("六個檢查對應五個原則的檢驗（review 規矩歸 Self-documenting）；不過的時候，多數缺口靠通用常識就能先補一版。", True),
         ("owner 拿到的是可以直接採用的 patch，只有少數幾件事需要他回答。", False),
     ])
     aria = ("左邊是進去之前要做的事：開專用乾淨的 workspace、只 sync 不碰別人的目錄、先記基線、指令以站上 p4 help 為準。"
             "中間是六個檢查的順序：Self-documenting 看得懂嗎（圖 2）、SSOT 跑得起來嗎只有一份嗎（圖 3、4）、Traceability 連得回來源嗎（圖 5）、"
-            "Continuous Integration 每次變更有機器檢查嗎（圖 6）、Code review 併入前有人看過嗎（圖 7）、Small batches 一包一件事嗎（圖 8）。"
+            "Continuous Integration 每次變更有機器檢查嗎（圖 6）、review 規矩：目錄講好要不要 review 了嗎（圖 7）、Small batches 一包一件事嗎（圖 8）。"
             "右邊是每個檢查都走一遍的循環：查、判定、不過就先補一版 patch、交 owner 採用或修正、結果記進地圖。")
     return svg(s, 880, 480, aria)
 
@@ -201,19 +201,19 @@ def p5():
 
 def p_review():
     return check_page(
-        "Code review", "隨便挑一包併入 main 的 submit，說得出誰看過、看了什麼",
-        ["找 reviewer 的紀錄：Swarm、reviewed-by", "找兩人改同檔的 resolve：誰看過差異", "interface 改了，用到它的人事前知不知道"],
-        ["每一包併入前有第二個人看過，留下紀錄", "resolve 由看懂兩邊的人做"],
-        ["submit 就算完成", "resolve 直接 accept 整份", "review 只在里程碑的會議上"],
-        [("review 流程提案", "shelve → 指定 reviewer → 看過才 submit"),
-         ("resolve 清單", "最近整份 accept 的 resolve，列給當事人看"),
-         ("目錄負責人表初稿", "從 CL 歷史推誰常改哪裡，標「推測」")],
-        ["每個目錄誰負責", "review 要不要擋 submit（trigger）"],
-        [("review 是併入前唯一由人把關的點；先補一條最輕的流程：shelve 給一個人看。", True),
-         ("負責人表從歷史推得出初稿，確認要 owner。", False)],
-        "Code review 的檢查：怎麼查（找 reviewer 的紀錄、找兩人改同檔的 resolve 誰看過差異、interface 改了用到它的人事前知不知道）；"
-        "判定（每一包併入前有第二個人看過並留下紀錄、resolve 由看懂兩邊的人做；不過的徵兆：submit 就算完成、resolve 直接 accept 整份、review 只在里程碑的會議上）；"
-        "先補：review 流程提案、resolve 清單、目錄負責人表初稿；只需要問 owner：每個目錄誰負責、review 要不要擋 submit。")
+        "Review 規矩（每個目錄講好要不要 review）", "隨便挑一個目錄，說得出它要不要 review、誰看；說要的目錄，隨便挑一包說得出誰看過",
+        ["目錄有沒有寫要不要 review：PROJECT_MAP", "找 reviewer 的紀錄：Swarm、reviewed-by", "找兩人改同檔的 resolve：誰看過差異"],
+        ["每個目錄講好了：要／不要、誰看、什麼時候", "說要的目錄，每一包併入前有人看過並留紀錄"],
+        ["沒有任何目錄講過要不要 review", "submit 就算完成", "resolve 直接 accept 整份"],
+        [("review 規矩初稿", "每目錄：要／不要、誰看、何時；寫進 PROJECT_MAP"),
+         ("最輕的流程", "說要的：shelve → 指定 reviewer → 看過才 submit"),
+         ("resolve 清單", "最近整份 accept 的 resolve，列給當事人看")],
+        ["每個目錄要不要 review、誰看", "要不要擋 submit（trigger）"],
+        [("要不要 review 由各目錄自己定、可以改，但要講好、寫下來；沒講好等於沒人看。", True),
+         ("agent 交的 shelved CL 一律 owner 收了才進 depot，這條不由目錄定。", False)],
+        "review 規矩的檢查：怎麼查（每個目錄有沒有寫要不要 review、找 reviewer 的紀錄、找兩人改同檔的 resolve 誰看過差異）；"
+        "判定（每個目錄講好要不要、誰看、什麼時候；說要的目錄每一包併入前有人看過並留紀錄；不過的徵兆：沒有任何目錄講過、submit 就算完成、resolve 直接 accept 整份）；"
+        "先補：review 規矩初稿、最輕的流程、resolve 清單；只需要問 owner：每個目錄要不要 review 誰看、要不要擋 submit。")
 
 
 def p6():
@@ -280,16 +280,16 @@ def p7():
 
 
 PAGES = [
-    ("流程：六個檢查各驗一個原則，不過就做 patch，由專案 owner 決定收不收", p1()),
+    ("流程：六個檢查對五個原則，不過就做 patch，由專案 owner 決定收不收", p1()),
     ("Self-documenting：光看 depot 說不出每個目錄做什麼，就先補一份目錄說明", p2()),
     ("SSOT（環境）：乾淨的 workspace 跑不起來，缺的先補成 script 進 depot", p3()),
     ("SSOT（複本）：產物、複製的 flow、解壓的 IP 各只留一份來源，其餘改成產生", p3b()),
     ("Traceability：結果說不出哪個 CL 跑的，就附一份 manifest 記來源", p4()),
     ("CI：submit 後沒有機器檢查，就先掛一個 sanity check 跟著 submit 跑", p5()),
-    ("Code review：沒人看過就 submit，先補一條 shelve 給人看的流程", p_review()),
+    ("Review 規矩：目錄沒講好要不要 review，先補一份規矩初稿給 owner 定", p_review()),
     ("Small batches：過去的大 CL 改不了，先給 CL 說明模板和拆小 CL 的示範", p6()),
     ("分工：agent 能補的直接送 patch，只有 owner 才知道的事才開口問", p7()),
 ]
 
 if __name__ == "__main__":
-    build(NAME, "進到陌生的 workspace：人或 agent 照六個原則檢查，不過就先做 patch", KICKER, PAGES)
+    build(NAME, "進到陌生的 workspace：人或 agent 照五個原則檢查，不過就先做 patch", KICKER, PAGES)

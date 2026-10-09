@@ -163,7 +163,7 @@ DOG = [("Small batches", "一個 MR 一件事；說明寫改了什麼、為什�
        ("Traceability", "訊息標版號；release note 寫行為改了什麼；核准有紀錄"),
        ("Continuous Integration", "每個 MR 跑沙盒；master 隨時可出 release"),
        ("Self-documenting", "core 的 README 讓內網的 Claude Code 讀了就能接手"),
-       ("Code review", "master 鎖住；至少一個人看過才併")]
+       ("Review 規矩（每個目錄講好）", "core 要：master 鎖住、MR 至少一人看過；工作區不用")]
 
 
 def p_why_git():
@@ -174,7 +174,7 @@ def p_why_git():
         rect(s, 20, y, 3, 44, col=CORE, fill=CORE, sw=0)
         T(s, 32, y + 18, t, cls="tx", fill=INK2, w=600)
         T(s, 32, y + 38, sub, fill=GRAY)
-    T(s, 340, 34, "六個原則（《把版控當備份的團隊》）", cls="tx-lbl", fill=GOAL)
+    T(s, 340, 34, "五個原則＋review 規矩", cls="tx-lbl", fill=GOAL)
     T(s, 540, 34, "core 的 repo 自己怎麼做到", cls="tx-lbl", fill=INK2)
     for i, (en, how) in enumerate(DOG):
         y = 46 + 40 * i
@@ -183,11 +183,11 @@ def p_why_git():
         T(s, 540, y + 25, how, fill=INK2)
         line(s, 340, y + 40, 860, y + 40)
     bottom(s, 310, [
-        ("core 放 git 是因為改版要 MR、review、tag、CI；而 core 的 repo 自己守六個原則，就是團隊第一個看得到的 CI/CD 範例。", True),
+        ("core 放 git 是因為改版要 MR、review、tag、CI；core 的 repo 自己守五個原則、講好 review 規矩，就是團隊第一個 CI/CD 範例。", True),
         ("agent 要求別人的，先在自己身上做到；團隊問「CI/CD 做起來長什麼樣」就指給他們看。", False),
     ])
     aria = ("左：為什麼 core 放 git：改版要 MR、review、tag、CI，git 平台內建；core 是軟體，和設計資料生命週期不同；目標的 depot 仍是唯一真相，core 只讀它、交 shelved CL、submit 筆記。"
-            "右：六列，Small batches 一個 MR 一件事；SSOT 規則模板 script 都在 core；Traceability 訊息標版號、release note、核准有紀錄；CI 每個 MR 跑沙盒；Self-documenting core 的 README 讓內網 Claude Code 能接手；Code review master 鎖住。")
+            "右：五個原則加 review 規矩，六列：Small batches 一個 MR 一件事；SSOT 規則模板 script 都在 core；Traceability 訊息標版號、release note、核准有紀錄；CI 每個 MR 跑沙盒；Self-documenting core 的 README 讓內網 Claude Code 能接手；review 規矩：core 要 master 鎖住、MR 有人看，工作區不用。")
     return svg(s, 880, 480, aria)
 
 

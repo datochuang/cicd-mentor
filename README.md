@@ -18,7 +18,7 @@
 
 **3. 進到一個目錄做什麼：六個檢查各驗一個原則，不過就做 patch，由 owner 決定收不收**（[進到陌生的 workspace](docs/slides/agent-entering-unknown-workspace.pdf)）
 
-![流程：六個檢查各驗一個原則，不過就做 patch，由專案 owner 決定收不收](docs/slides/img/agent-entering-unknown-workspace/p-1.png)
+![流程：六個檢查對五個原則，不過就做 patch，由專案 owner 決定收不收](docs/slides/img/agent-entering-unknown-workspace/p-1.png)
 
 **4. agent 自己怎麼活、怎麼長：實例從 agent 的 repo clone、工作區回到它；depot 只收流程在用的工具**（[agent 自己的版控與多實例](docs/slides/agent-own-version-control-and-instances.pdf)）
 
@@ -53,12 +53,12 @@
 
 ### 把版控當備份的團隊：depot 留得住檔案，答不出哪一版跑的
 
-這類團隊每天具體怎麼做事，問題從哪裡長出來，最後收斂成六個原則。十九頁。PDF：[docs/slides/team-treating-vc-as-backup.pdf](docs/slides/team-treating-vc-as-backup.pdf)
+這類團隊每天具體怎麼做事，問題從哪裡長出來，最後收斂成五個原則。十九頁。PDF：[docs/slides/team-treating-vc-as-backup.pdf](docs/slides/team-treating-vc-as-backup.pdf)
 
 <details>
 <summary>展開十九頁</summary>
 
-![總覽：depot 留得住檔案、答不出哪一版跑的；十六個問題歸成六個原則](docs/slides/img/team-treating-vc-as-backup/p-1.png)
+![總覽：depot 留得住檔案、答不出哪一版跑的；十六個問題歸成五個原則](docs/slides/img/team-treating-vc-as-backup/p-1.png)
 
 ![日常：改動在個人 workspace 累積，depot 隔很久才收到一大包](docs/slides/img/team-treating-vc-as-backup/p-2.png)
 
@@ -76,7 +76,7 @@
 
 ![問題：沒有開發 branch，半成品留在 workspace 或進 main，main 隨時會壞](docs/slides/img/team-treating-vc-as-backup/p-9.png)
 
-![問題：submit 就算完成，沒有任何 CL 在進 depot 前被第二個人看過](docs/slides/img/team-treating-vc-as-backup/p-10.png)
+![問題：沒講好哪些目錄要 review，預設沒人看，改 interface 那包也一樣](docs/slides/img/team-treating-vc-as-backup/p-10.png)
 
 ![問題：兩人改同一個檔，resolve 整份收下，另一人的改動消失](docs/slides/img/team-treating-vc-as-backup/p-11.png)
 
@@ -94,18 +94,18 @@
 
 ![總結：備份做到了，「哪一版跑的、能不能重跑」一個都答不出](docs/slides/img/team-treating-vc-as-backup/p-18.png)
 
-![收斂：前面的問題歸成 SSOT、CI 等六個原則，對策照原則一一對應](docs/slides/img/team-treating-vc-as-backup/p-19.png)
+![收斂：前面的問題歸成 SSOT、CI 等五個原則，對策照原則一一對應](docs/slides/img/team-treating-vc-as-backup/p-19.png)
 
 </details>
 
-### 進到陌生的 workspace：人或 agent 照六個原則檢查，不過就先做 patch
+### 進到陌生的 workspace：人或 agent 照五個原則檢查，不過就先做 patch
 
 人或 AI agent 進到一個沒看過的 workspace，具體怎麼檢查它有沒有 CI/CD；每個檢查點不過時自己先補什麼，只有哪些事才問 owner。九頁。PDF：[docs/slides/agent-entering-unknown-workspace.pdf](docs/slides/agent-entering-unknown-workspace.pdf)
 
 <details>
 <summary>展開九頁</summary>
 
-![流程：六個檢查各驗一個原則，不過就做 patch，由專案 owner 決定收不收](docs/slides/img/agent-entering-unknown-workspace/p-1.png)
+![流程：六個檢查對五個原則，不過就做 patch，由專案 owner 決定收不收](docs/slides/img/agent-entering-unknown-workspace/p-1.png)
 
 ![Self-documenting：光看 depot 說不出每個目錄做什麼，就先補一份目錄說明](docs/slides/img/agent-entering-unknown-workspace/p-2.png)
 
@@ -117,7 +117,7 @@
 
 ![CI：submit 後沒有機器檢查，就先掛一個 sanity check 跟著 submit 跑](docs/slides/img/agent-entering-unknown-workspace/p-6.png)
 
-![Code review：沒人看過就 submit，先補一條 shelve 給人看的流程](docs/slides/img/agent-entering-unknown-workspace/p-7.png)
+![Review 規矩：目錄沒講好要不要 review，先補一份規矩初稿給 owner 定](docs/slides/img/agent-entering-unknown-workspace/p-7.png)
 
 ![Small batches：過去的大 CL 改不了，先給 CL 說明模板和拆小 CL 的示範](docs/slides/img/agent-entering-unknown-workspace/p-8.png)
 
@@ -152,19 +152,19 @@
 
 ![結論：沒有 CI/CD，每圈、每次交接、每個方案都要等人查判，N 個 agent 等於一個](docs/slides/img/loops-and-ai-multiplier/p-10.png)
 
-![對應：三層各要的條件，對到《把版控當備份的團隊》的六個原則](docs/slides/img/loops-and-ai-multiplier/p-11.png)
+![對應：三層各要的條件，對到《把版控當備份的團隊》的五個原則](docs/slides/img/loops-and-ai-multiplier/p-11.png)
 
-![現狀的內圈：每圈靠人設環境、人跑、人看 log，轉得慢、判法還不一](docs/slides/img/loops-and-ai-multiplier/p-3.png)
+![內圈在 IC：一圈有快有慢，CI/CD 照快慢排成幾道檢查，每道機器判](docs/slides/img/loops-and-ai-multiplier/p-3.png)
 
-![外圈（outer loop）：比 N 個方案的 PPA，每個方案都要先跑完一圈內圈](docs/slides/img/loops-and-ai-multiplier/p-4.png)
+![現狀的內圈：每圈靠人設環境、人跑、人看 log，轉得慢、判法還不一](docs/slides/img/loops-and-ai-multiplier/p-4.png)
 
-![Agentic AI：N 個 agent 平行「改」很便宜，瓶頸變成誰來查、誰來判](docs/slides/img/loops-and-ai-multiplier/p-5.png)
+![中圈：改動機器查過就進 main，問題早且小；waterfall 把整合留到最後](docs/slides/img/loops-and-ai-multiplier/p-5.png)
 
-![上限：能平行幾個由 license 與算力決定；CI/CD 管的是排隊和固定環境](docs/slides/img/loops-and-ai-multiplier/p-6.png)
+![中圈的交接：交出的改動小、機器查過，下游人或 agent 不必等人解釋](docs/slides/img/loops-and-ai-multiplier/p-6.png)
 
-![結論：沒有 CI/CD，每圈要人顧，N 個方案跑不完，N 個 agent 等於一個](docs/slides/img/loops-and-ai-multiplier/p-7.png)
+![外圈（outer loop）：N 個方案比 PPA，每個先各自轉完內圈、機器判過才比](docs/slides/img/loops-and-ai-multiplier/p-7.png)
 
-![對應：迴圈要自己轉的六個條件，就是《把版控當備份的團隊》的六個原則](docs/slides/img/loops-and-ai-multiplier/p-8.png)
+![Agentic AI：agent 在三層都加速「改」，瓶頸變成誰來查、誰來判](docs/slides/img/loops-and-ai-multiplier/p-8.png)
 
 </details>
 
