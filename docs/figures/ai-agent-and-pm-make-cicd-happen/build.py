@@ -191,7 +191,7 @@ def p5():
     arrow(s, 264, 158, 314, 158, col=PM, ar="ar-p", sw=2)
     arrow(s, 616, 158, 566, 158, col=AGENT, ar="ar-a", sw=2)
     T(s, 440, 262, "對方缺的，正好是自己帶來的", anchor="middle", fill=GRAY)
-    T(s, 440, 300, "PM 指負責把團隊開發流程導入 CI/CD 的那個人，和 project 的 PM 無關", anchor="middle", fill=GRAY)
+    T(s, 440, 300, "PM 指負責導入 CI/CD 的人，和 project 的 PM 無關", anchor="middle", fill=GRAY)
     bottom(s, 368, [
         ("AI 一個人推不動組織，PM 一個人做不完；兩邊搭在一起，缺的才補齊。", True),
         ("關鍵在搭配對的掌舵人：AI 補上知識與執行力，方向仍由人決定。", False),
