@@ -33,8 +33,6 @@
 
 | # | 加入 | 項目 | 現況／下一步 | 相關 |
 |---|---|---|---|---|
-| T8 | 10-08 | 圖形文件第 3 頁的「會被盯上嗎？」 | 我根據討論加的，你沒明確提過；確認要不要保留 | docs/slides/why-cicd-needs-ai-agent-and-pm.pdf |
-| T9 | 10-08 | 圖形文件第 6 頁「對的掌舵人」四個條件 | 我歸納的，確認是否符合你心中的人選 | 同上 |
 | T10 | 10-08 | 圖形文件要不要做盲讀驗收 | 派沒看過討論的 subagent 扮成讀者只讀 PDF，回報看不懂的地方 | |
 | T17 | 10-09 | 圖形文件《第一次進 workspace：照五個原則檢查，不過就先補一版》初稿等你修正 | 九頁（10-09 晚上加了 SSOT 第二頁：產物、flow、IP；Code review 一頁；分工頁加了對應項目）。特別要看：六個檢查的順序、每頁「先補什麼」的 patch 名單、第 9 頁三類分工與「owner 採用才進 depot」這個預設 | docs/slides/agent-entering-unknown-workspace.pdf |
 | T43 | 10-09 | **D7 之後的投影片修改**（等七件決定完一次做，免得重建好幾次）：《把版控當備份的團隊》第 1 頁的 Code review 框併進 Self-documenting、第 10 頁改成「沒講好要不要 review」、第 19 頁改五列；《進到陌生 workspace》第六個檢查改成「目錄有沒有講好要不要 review，沒講就問 owner 定一個」、標題的「六個原則」改五個；《agent 自己的版控》第 3 頁的表改五列加 review 規矩；《為什麼非要 CI/CD》第 8、11 頁的「六個原則」改五個；《互動場景》裡提到的地方；README 的 alt 一起改 | 文字文件（direction、operating model、starter-kit-plan、decision-log D7）已改 | decision-log.md D7 |
@@ -57,6 +55,8 @@
 | T12 | 10-08 | 推上 GitHub 前檢查公開範圍 | 使用者說明 repo 是個人專用，不需檢查；已推上 datochuang/cicd-mentor |
 | T16 | 10-09 | 五個定錨原則等你確認 | 全部同意，改用英文專有名詞：Small batches、SSOT、Traceability、CI、Self-documenting。記為 D4 |
 | T39 | 10-09 | 《agent 自己的版控》第 3–10 頁照 D5 改、加「換手」一頁、換手的接法誰選 | 接法由 PM 選（使用者：「這很明顯」）。全份十一頁已照 D5 改，第 5 頁換手；檔名改為 agent-own-version-control-and-instances；標題再盲讀一次（docs/reviews/titles-blind-read-agent-versioning-20261009.md 第二輪） |
+| T8 | 10-08 | 心態頁「會被盯上嗎？」那列 | 使用者說不需要，拿掉；該頁剩三列 |
+| T9 | 10-08 | 「對的掌舵人」四個條件 | 使用者 ok；D9 之後這四條就是「誰能接 PM」的門檻 |
 | T22 | 10-09 | 前三份圖形文件要不要照新規則補總覽頁 | 《把版控當備份的團隊》《AI agent 與人類 PM 搭檔》各補了一張圖的總覽當第 1 頁；《進到陌生 workspace》第 1 頁本來就是流程總覽。六份的第 1 頁現在都是一頁講完主張 |
 | T13 | 10-08 | 投影片規則引用 ../google-xls | 不複製進來：內網 agent 的新 repo 不需要這個規則，啟動包也不帶產生器；本 workspace 的 CLAUDE.md 照舊引用（D10） |
 | T11 | 10-08 | 舊文字版的 claude.ai 連結 | 刪了；那個連結只剩這一列記著，連這一列一起收掉 |
