@@ -24,6 +24,9 @@
 | T30 | 10-09 | **任務的來源**：公司有沒有 ticket／任務系統可接；沒有的話模組狀態板是不是唯一登記處 | | agent-operating-model.md 任務掌控、任務的來源 |
 | T31 | 10-09 | **做法層的七條 practice 等你確認**：Test-first、Executable spec、Evidence-based delivery、Definition of Done、Flow as code、Blameless postmortem、量化 | 你問要不要加 TDD、evidence-based delivery、executable spec 讓 agent 的行為有依據；我提了七條並列了不納入的；每條有「agent 自己／推動團隊／檢驗」 | agent-operating-model.md 依據 |
 | T33 | 10-09 | **版控常規清單**：最缺、最該先教的三件是哪三件；Git 團隊要不要另一張對照表 | 我列了十一條（一包一件事、說明寫目的、改前 sync、resolve 要看、shelve 給人看、用 stream 不複製目錄、產物不進 depot、檔案進 depot 才算存在、label 附 manifest、workspace 乾淨、IP drop 走流程），建議先教前三件 | agent-operating-model.md 教育版控的常規 |
+| T34 | 10-09 | **PM 要先談好的資源與人**（帳號權限、trigger 權限、算力與 license、結果放哪、資安、HR 不考核、sponsor、試點 owner）誰去談、先談哪個 | 這些 agent 變不出來；是啟動前的 checklist | agent-operating-model.md 7.2 |
+| T35 | 10-09 | **分階段路線圖與每階段的成功定義、停損**要不要照我寫的 | 準備 → 試點 → 擴散 → 常態；試點的成功：owner 採用了 shelved CL、check 每天跑有人看、至少一個檢驗從做不到變做得到 | agent-operating-model.md 7.3 |
+| T36 | 10-09 | **紅線清單**（不刪、不碰別人 workspace、沒共識不擋、不報個人活動量、design 資料不出核准的模型、不假裝是人、不對 design 下判斷）有沒有要加減 | | agent-operating-model.md 7.4 |
 | T7 | 10-08 | **轉型的終點**：流程存在就好，還是要團隊真正理解並自己維護 | D2 給了初步答案（先改變 PM，由他帶動團隊），細節待討論 | decision-log.md D2 |
 | T15 | 10-08 | **目錄用途與相依關係沒有文件，對 agent 設計的影響**：通用 agent 每個 workspace 都要另寫指引，那這個 agent 要不要自己建立並維護每個專案的目錄說明與相依關係（並放進版控）？ | 你在討論第二份圖形文件時提出這個問題；只寫進了文件第 7 頁，還沒討論對 agent 本身的設計意涵 | docs/slides/repo-as-backup-keeps-files-not-answers.pdf 第 7 頁 |
 
