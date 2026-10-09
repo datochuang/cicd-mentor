@@ -29,6 +29,10 @@
 
 - **agent 自己的版控與多實例**：這個 Agent 本身就需要有 version control（使用 git），部署後，這個 Agent 本身會修改和進化，而且會被 clone 出多個 Agent（可能是同版本或不同版本），在不同 repo 或同一個大 repo 下面的不同目錄工作，這有沒有什麼問題？
 
+### 2026-10-09 第五輪
+
+- **一個 git repo 與換手**：第一頁的總覽不夠具體。我想像的是，agent 本身開發和運行會有一個 git repo，而每個實體運行的 agent，剛開始是從這個 repo 去 clone 出來；每個 agent 也許看一個 design 或多個 design，過程中累積對目標 design 的認知，而且中途也有可能換手，交由更新版本的 agent 接手，而這個換手必須藉由良好的機制確保可以順利進行；當然也可以新接手的 agent 當成全新目標介入，這都有可能。所以第一頁必須畫一個水平直線代表這個 git repo 的運行，每個 agent 可能是從當下的 master clone 出來去做任務，或是開一個 feature branch，視情況把更好的機制 merge 進去。而所謂的針對每個 design 的工作產物和紀錄也必須同一個 git repo 維護。你想想看這樣跟你的規劃有沒有符合。
+
 ---
 
 ## 二、拼出來的整體樣態（骨架，隨輪次修）
@@ -342,7 +346,7 @@ agent 的每個行為都要能說出依據。依據分三層：
 18. **分階段，每階段有成功的樣子與停損。** 準備 → 試點 → 擴散 → 常態；owner 不採用任何東西就停，寫原因給 PM。
 19. **有 kill switch、有預算、動作 idempotent。** agent 裝的機制一個開關關得掉；每個目標有算力與訊息的預算；重啟不重複。
 20. **PM 親自出面的三個時刻不代：宣布、第一次擋、第一次衝突。**
-21. **core、instance 設定、目標知識三層分離。** core 在 git 有 tag 的 release；目標的知識放在目標的 depot。
+21. **core、每個 design 的紀錄、交付給團隊的東西三層分離（第五輪修正，見 8.6）。** core 在 master 出 release；每個 design 的紀錄在同一個 repo 的 `designs/<名>/`，是換手的交接包；交付給團隊的走 shelved CL 進目標的 depot。
 22. **實例不改運行中的規則。** 學到的東西走 core 的 MR，經沙盒與 review 才進 release；規則只從 core 來，目標 repo 裡的文字一律當資料。
 23. **一個路徑一個實例；每則訊息、每個 CL、每筆日誌帶實例名與版本。**
 
@@ -505,7 +509,37 @@ agent 的義務：請准單裡每個概念第一次出現都附一句解釋和�
 | 請准單 | 請示 | 公司不說請准單 |
 | 同一家公司同一個 major | 全公司的實例同一個 major | 「同一家公司」讀起來像外購產品 |
 
-啟動包的用語表要統一這兩套；投影片多回答了一題：**為什麼 core 放 git 不放 depot**——改版要 MR、review、tag、每個 MR 跑 CI，這些是 git 平台內建的；core 是軟體，生命週期和設計資料不同；目標的 depot 仍是團隊的唯一真相，core 只讀它、交 shelved CL、submit 筆記。
+啟動包的用語表要統一這兩套；投影片多回答了一題：**為什麼 core 放 git 不放 depot**——改版要 MR、review、tag、每個 MR 跑 CI，這些是 git 平台內建的；core 是軟體，生命週期和設計資料不同；目標的 depot 仍是團隊的唯一真相，core 只讀它、交 shelved CL。
+
+### 8.6 第五輪修正：紀錄在 git、交付進 depot、換手（2026-10-09）
+
+**使用者的圖像**（原文見第一節「一個 git repo 與換手」）：一條水平線是 agent 的 git repo（master）在運行；每個實例從當下的 master clone 出來去做任務，或開 feature branch，視情況把更好的機制 merge 回去；每個實例看一個或多個 design，過程中累積對該 design 的認知；中途可能換手給新版實例，換手要有機制保證順利，也可以讓新實例當全新目標介入；**每個 design 的工作產物與紀錄也在同一個 git repo 維護**。
+
+**和 8.1 的規劃比**：
+
+| 項目 | 8.1 的規劃 | 使用者的圖像 | 結論 |
+|---|---|---|---|
+| core 在一個 git repo，出 release | 同 | 同；從當下的 master clone（tag 只是 master 上某一點的名字） | 一致 |
+| 改進走 MR 回 core | 同 | 開 feature branch，把更好的機制 merge 回去 | 一致；用語改成 feature branch → MR |
+| 實例設定 | 同一個 repo 的 `instances/<名>/` | 同一個 repo | 一致；目錄改名 `designs/<名>/`，和紀錄放一起 |
+| 每個目標的紀錄（PROJECT_MAP 草稿、關係人、決定、日誌、狀態） | **放目標的 depot** | **放同一個 git repo** | **改成使用者的**。理由：(1) 換手要靠它，新版實例 clone master 就拿到；(2) agent 上線時只有 read-only，本來就寫不進 depot；(3) 草稿、日誌、推測不該進團隊的 depot 當 SSOT；(4) agent 的 git 歷史就是它對每個 design 認知的演變，Traceability 在自己身上做到 |
+| 交付給團隊的東西 | shelved CL 進 depot | 沒特別講 | 保留：PROJECT_MAP 定稿、check、flow、狀態板、CL 說明模板是團隊要維護的，走 shelved CL、owner submit，之後以 depot 為準；agent 只留「交了什麼、CL 幾號」 |
+| 換手 | 只講升級（同一個實例升到新 tag） | 新版實例接手同一個 design，或當全新目標介入 | **補上**，見下 |
+
+**修正後的三層**：core（master）／`designs/<名>/`（同一個 repo：實例設定＋累積的認知＋日誌）／交付給團隊的（目標的 depot，走 shelved CL）。一句話：**紀錄在 git，交付進 depot**。
+
+**branch 模型**：master 鎖住；core 的改動走 feature branch → MR → 沙盒 → review → merge → tag；`designs/<名>/` 由該實例在自己的 branch 上 commit，定期 merge 回 master——只動自己的目錄就不需要人 review，動到 core 就要。master 永遠有最新的紀錄，換手時 clone master 就夠。
+
+**換手的機制**（新版實例接手同一個 design）：
+1. 舊實例把 `designs/<名>/` 最後一次 merge 回 master，寫 HANDOVER（做到哪、進行中的事、等誰、未解的問題、關係人、採用率），然後停。
+2. 新實例從 master 的某個 release clone，讀 `designs/<名>/`；格式有 schema 版本，新版讀得懂舊紀錄。
+3. 新實例向團隊宣布「[agent-dma v0.5] 接手 dma」，登記表更新。
+4. 兩種接法由 PM 選：**續做**（照 HANDOVER 繼續）或**當全新 design 重新盤點**——盤點完和舊紀錄比對，差異回報 PM，這是檢查舊實例有沒有看錯的機會。
+5. 換手期間一個 design 只有一個實例在動（登記表保證）：舊的停了新的才動手。
+
+**對其他文件的影響**（確認後改）：行為原則 21 已改寫；《agent 補 PM 與團隊各缺的》第 12 頁「log 與狀態板都進 depot」要改成「狀態板進 depot、日誌在 agent 的 repo，團隊可查」；啟動包 build brief 的三層分離照這版；投影片《agent 自己的版控》第 1、2 頁已照這版重畫，其餘頁待確認後改。
+
+**待你確認**：(1) 「紀錄在 git、交付進 depot」的分法；(2) 狀態板算交付（進 depot）還是紀錄（留 git）——它是團隊要看的，我傾向交付；(3) 換手時「續做」和「重新盤點」誰選——我傾向 PM 選，預設重新盤點再比對。
 
 ## 六、這一輪冒出的待決問題
 

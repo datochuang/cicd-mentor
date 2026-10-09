@@ -168,16 +168,16 @@ agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張
 
 </details>
 
-### agent 自己的版控：agent core 在 git 出 release，實例不改自己，筆記留在目標的 depot
+### agent 自己的版控：一個 git repo，master 出 release，實例從它 clone，design 的紀錄回到它
 
-agent 本身的程式與規則怎麼版控、怎麼改版、clone 成多個實例之後怎麼不互相打擾。第 1 頁一張圖講三層分開（core 在 git、實例設定另放、agent 對目標的筆記 submit 進目標的 depot）與改版的迴路（實例不改自己，改進走 core 的 MR → 沙盒 → review → release → 先升一個實例試跑）；第 2–6 頁講一份 agent 自己（放哪、為什麼 git、改版、沙盒、安全），第 7–9 頁講 clone 成多份（登記表、版號、代價），第 10 頁三件要公司定。內容來自 [agent-operating-model.md](agent-operating-model.md) 第八節。十頁。PDF：[docs/slides/agent-evolves-by-release-not-self-edit.pdf](docs/slides/agent-evolves-by-release-not-self-edit.pdf)
+agent 本身的程式與每個 design 的紀錄怎麼在一個 git repo 裡版控、實例怎麼 clone 出來、怎麼把更好的機制 merge 回去、怎麼換手。第 1 頁一張圖：一條 master 線，實例從某個 release clone 出來看一個或多個 design，紀錄累積在 `designs/<名>/` 並 merge 回 master，更好的機制走 feature branch 與 MR，舊實例停了新版實例 clone 接手；只有交付給團隊的（PROJECT_MAP 定稿、check、狀態板）才以 shelved CL 進目標的 depot。第 2–6 頁講一份 agent 自己（三層、為什麼 git、改版、沙盒、安全），第 7–9 頁講多個實例（登記表、版號、代價），第 10 頁三件要公司定。內容來自 [agent-operating-model.md](agent-operating-model.md) 第八節。十頁；第 1、2 頁已照 8.6 的修正重畫，其餘頁待確認後改。PDF：[docs/slides/agent-evolves-by-release-not-self-edit.pdf](docs/slides/agent-evolves-by-release-not-self-edit.pdf)
 
 <details>
 <summary>展開十頁</summary>
 
-![總覽：agent core 在 git 出 release，實例不改自己，筆記留在目標的 depot](docs/slides/img/agent-evolves-by-release-not-self-edit/p-1.png)
+![總覽：一個 git repo：master 出 release、實例從它 clone、design 的紀錄回到它](docs/slides/img/agent-evolves-by-release-not-self-edit/p-1.png)
 
-![三層：core、實例設定、對目標的筆記各放各的，改的人和改的頻率不同](docs/slides/img/agent-evolves-by-release-not-self-edit/p-2.png)
+![三層：core 在 master，每個 design 的紀錄在 designs/，交付給團隊的進 depot](docs/slides/img/agent-evolves-by-release-not-self-edit/p-2.png)
 
 ![為什麼 git：MR、review、tag、CI 都內建；core 自己照 CI/CD 做，就是團隊的範例](docs/slides/img/agent-evolves-by-release-not-self-edit/p-3.png)
 
