@@ -60,3 +60,15 @@
 **取代：** operating model 8.1 第一版「每個目標的知識放在目標的 depot」，以及投影片《進到陌生 workspace》《agent 補 PM 與團隊各缺的》裡「答案存成 depot 內的 PROJECT_MAP」「log 與狀態板都進 depot」的說法（待改）。
 
 **出處：** [agent-operating-model.md](agent-operating-model.md) 第一節第五至七輪原文、8.6–8.8；圖形文件《agent 自己的版控》第 1、2 頁。
+
+---
+
+## D6｜2026-10-09｜實例的版號＝core 的 release 版號再加一位小版號，每 merge 一次工作區加一
+
+**決定：** 每個實例有自己的小版號：在 core 的 release 版號後面再加一位，實例每次把工作區 `designs/<名>/` merge 回 master 就加一。例如 agent-dma v0.3.2＝跑 core v0.3、第 2 次 merge 工作區；換手後的新實例從新 release 的 .1 起算（v0.5.1）。每則訊息、CL 說明、日誌都標這個版號。
+
+**理由：** 使用者要求各實例有自己的小版號在進行。這個定義讓版號同時說出「哪一版 core」和「工作區進展到哪一次 merge」，換手與 PM 看摘要時能對上狀態；全公司仍保持同一個 major。
+
+**取代：** 無；補 D5 的版號細節。
+
+**出處：** [agent-operating-model.md](agent-operating-model.md) 8.9；圖形文件《agent 自己的版控》第 1 頁 lane 上的刻度、第 7 與第 9 頁的範例。
