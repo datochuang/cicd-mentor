@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # 《互動場景：agent 先讀懂再問再交 patch，方向由 PM 核准，採不採用團隊決定》
-# docs/slides/agent-reads-asks-patches-pm-approves.{html,pdf}
-# 執行：python3 docs/figures/agent-reads-asks-patches-pm-approves/build.py
+# docs/slides/agent-fills-what-pm-and-team-lack.{html,pdf}
+# 執行：python3 docs/figures/agent-fills-what-pm-and-team-lack/build.py
 #
 # 讀者：會和這個 agent 打交道的人：可能的 PM、PL、owner 工程師。懂 Perforce；看過或沒看過前面幾份都行。
 # 讀完要能：在每一種情況下說出誰對誰做什麼、agent 自己能做什麼、什麼要問、什麼要 PM 決定。
@@ -12,7 +12,7 @@ import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
 from slides import *
 
-NAME = "agent-reads-asks-patches-pm-approves"
+NAME = "agent-fills-what-pm-and-team-lack"
 KICKER = "agent 與 PM、團隊、repo 的互動"
 
 LANES = [("PM", PM), ("agent", AGENT), ("工程團隊", INK2), ("repo", GOAL)]
