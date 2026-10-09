@@ -136,7 +136,7 @@ def p_cover():
 PHASES = ["啟動", "盤點", "目標分析與訪談", "計畫核准", "建置", "上線分級", "監看與開工", "擴充與交棒"]
 GRID = {
     "PM": ["給範圍、帳號|與預算", "選候選目標", "看進度", "懂了才核准", "看進度", "同意擋不擋", "看一頁摘要", "定交棒條件"],
-    "agent": ["bot 上線|自我介紹", "只讀掃|一頁現況", "先讀懂|再問 owner", "附取捨|請核准", "做成|shelved CL", "附證據|提議升級", "看 CL、DM|登記開工", "提下一道|只剩監看"],
+    "agent": ["bot 上線|自我介紹", "只讀掃|一頁現況", "先讀懂|再問 owner", "附取捨|請核准", "做成|shelved CL", "附證據|提議升級", "看 CL、私訊|登記開工", "提下一道|只剩監看"],
     "工程團隊": ["知道 agent 在|看得到什麼", "", "owner 答只有|他知道的", "owner 同意|動範圍", "負責人|補強 script", "同意升級", "回一句|照流程開工", "自己維護|pipeline"],
     "repo": ["日誌、狀態板|的位置", "唯讀", "乾淨 workspace|實跑", "決定進 depot", "shelved CL|＋證據", "報告→警告→擋", "跑 check|狀態板", "check 穩定|趨勢"],
 }
@@ -160,15 +160,15 @@ def p_overview():
                 T(s, x0 + j * cw + 6, y + 22 + 16 * k, w_, fill=col if name != "工程團隊" else INK2)
     ya = y0 + 22 + rh * 4 + 10
     T(s, 20, ya + 12, "agent 的授權三級", cls="tx-lbl", fill=PM)
-    tiers = [("自主", "讀、分析、寫地圖、開 shelved CL、DM"), ("告知", "建議、第二次提醒、交 shelved CL"), ("請准", "方向、新規範、裝 trigger、擋 submit、拉 PL 群聊")]
+    tiers = [("自主", "讀、分析、寫地圖、開 shelved CL、私訊"), ("告知", "建議、第二次提醒、交 shelved CL"), ("請准", "方向、新規範、裝 trigger、擋 submit、拉 PL 群聊")]
     x = 20
     for name, desc in tiers:
         w_ = pill(s, x, ya + 20, name, PM, h=20)
         T(s, x + w_ + 6, ya + 34, desc, fill=INK2)
         x += w_ + 6 + width(desc, 10.5) + 24
     T(s, 20, ya + 62, "用語", cls="tx-lbl", fill=GRAY)
-    T(s, 60, ya + 62, "%s　PROJECT_MAP＝agent 寫在 depot 裡的目錄用途與相依說明" % "PM＝負責把團隊開發流程導入 CI/CD 的人（和 project 的 PM 無關）", fill=INK2)
-    T(s, 60, ya + 80, "狀態板＝每個模組休止／進行中哪些任務的表，也在 depot　subagent＝agent 分出去做一件事的子程式　shelved CL＝給人看、還沒 submit 的改動（git 的 PR）", fill=INK2)
+    T(s, 60, ya + 62, "PM＝負責把團隊開發流程導入 CI/CD 的人（和 project 的 PM 無關）　owner＝目標目錄或模組的負責人，決定 agent 交的 CL 收不收　CL 作者＝submit 那一包的工程師", fill=INK2)
+    T(s, 60, ya + 80, "PROJECT_MAP＝agent 寫在 depot 裡的目錄用途與相依說明　狀態板＝每個模組休止／進行中哪些任務的表　subagent＝agent 分出去做事的子程式　shelved CL＝給人看、還沒 submit 的改動", fill=INK2)
     bottom(s, ya + 96, [
         ("agent 先讀懂再問，改動做成 shelved CL；方向與影響別人的事，PM 懂了才算核准；CL 收不收是 owner 的事。", True),
         ("後面每頁一個場景，四條泳道，箭頭就是誰對誰做什麼；最後兩頁是橫跨全程的規則。", False),
@@ -178,7 +178,7 @@ def p_overview():
             "agent：bot 上線自我介紹、只讀掃一頁報告、先讀懂再問 owner、附取捨請准、做成 shelved CL、附證據提議升級、看 CL 私訊登記開工、提下一道退到看守。"
             "工程團隊：知道 agent 在、owner 答只有他知道的、owner 同意動範圍、負責人補強 script、同意升級、回一句照流程開工、自己維護 pipeline。"
             "repo：日誌與狀態板的位置、唯讀、乾淨 workspace 實跑、決定進 depot、shelved CL 加證據、報告警告擋、trigger 跑 check 與狀態板、check 穩定與趨勢。"
-            "下方是授權三級：自主、告知、請准；以及用語：PM 指負責把團隊開發流程導入 CI/CD 的人、和 project 的 PM 無關，PROJECT_MAP、狀態板、subagent、shelved CL 各一句定義。")
+            "下方是授權三級：自主、告知、請准；以及用語：PM 指負責把團隊開發流程導入 CI/CD 的人、和 project 的 PM 無關；owner 是目標目錄或模組的負責人；CL 作者是 submit 那一包的工程師；PROJECT_MAP、狀態板、subagent、shelved CL 各一句定義。")
     return svg(s, 880, 480, aria)
 
 
@@ -242,7 +242,7 @@ def p_analyze():
     acts = [("PM", x[0], W, "指定一個目標", "module 或子目錄"),
             ("agent", x[1], W, "先讀懂", "地圖、六原則檢查"),
             ("repo", x[2], W, "乾淨 workspace", "只靠 depot 編、跑 sanity"),
-            ("agent", x[3], W, "私訊 owner", "只問他才知道的"),
+            ("agent", x[3], W, "私訊目錄 owner", "只問他才知道的"),
             ("工程團隊", x[4], W, "owner 回答", "或說先擱置"),
             ("agent", x[5], W, "記進地圖", "依據標「告知」")]
     flows = [("PM", "agent", x[0] + W / 2, "指定"), ("agent", "repo", x[2] + W / 2, "實跑"), ("agent", "工程團隊", x[3] + W / 2, "問"), ("工程團隊", "agent", x[4] + W / 2, "答")]
@@ -308,12 +308,12 @@ def p_watch():
     acts = [("工程團隊", x[0], W, "submit 一個 CL", ""),
             ("repo", x[1], W, "trigger 跑 sanity", "結果附 CL 號"),
             ("agent", x[2], W, "讀 description", "幾件事？目的？"),
-            ("agent", x[3], W, "私訊一句", "看不出目的就問"),
+            ("agent", x[3], W, "私訊 CL 作者", "看不出目的就問一句"),
             ("工程團隊", x[4], W, "回一句或照改", ""),
             ("agent", x[5], W, "壞了：先問原因", "再給修法")]
     flows = [("工程團隊", "repo", x[0] + W / 2, "submit"), ("repo", "agent", x[1] + W / 2, "結果"), ("agent", "工程團隊", x[3] + W / 2, "問一句"), ("agent", "工程團隊", x[5] + W / 2, "問原因")]
     return scenario("什麼時候：第一道 check 上線之後的常態；每一筆 submit 的 CL", "授權：自主（看、私訊）", acts, flows,
-        [("監看看的是 CL 的 description、一包幾件事、check 的結果；看不出目的就 DM 一句並示範怎麼寫。", True),
+        [("監看看的是 CL 的 description、一包幾件事、check 的結果；看不出目的就私訊 CL 的作者一句並示範怎麼寫。", True),
          ("同一件事不重複念；壞了先問原因，可能是刻意的。", False)],
         "日常監看（上線後的常態）：工程師 submit 一個 CL；trigger 跑 sanity 結果附 CL 號；agent 看說明與結果，一包幾件事、看得出目的嗎；看不出目的就私訊一句並示範怎麼寫；工程師回一句或照改；壞了先問原因再給修法。",
         notes=["示意的私訊：「這包看起來是改 DMA 的 burst，對嗎？說明可以寫成：改了什麼／為什麼／怎麼驗，例如『加 burst 模式；為了 X；跑 t_dma_burst 過』。」"])
@@ -402,11 +402,11 @@ PAGES = [
     ("總表：每個階段誰做什麼、agent 的授權三級、用語定義", p_overview()),
     ("啟動：PM 給 depot 範圍與帳號，agent 以 bot 身分先只讀上線，先向團隊自我介紹", p_start()),
     ("盤點：agent 只讀掃指定的 depot 範圍，交 PM 一頁現況與幾個候選目標，PM 選", p_survey()),
-    ("目標分析：agent 讀完才 DM owner 問只有他知道的事，答案進 PROJECT_MAP", p_analyze()),
+    ("目標分析：agent 讀完才私訊目錄 owner，只問他才知道的事，答案進 PROJECT_MAP", p_analyze()),
     ("計畫核准：PM 核准方向、owner 同意範圍，缺一就不動手；PM 沒弄懂不算核准", p_approve()),
     ("建置：骨架做成 shelved CL 交 owner，缺的 check 寫需求讓人或 subagent 做", p_build()),
     ("上線分級：check 先只報告、再警告，PM 與 owner 同意才擋 submit，留 bypass", p_adopt()),
-    ("日常監看：每筆 CL agent 讀 description 與 check，看不出目的就 DM 並示範寫法", p_watch()),
+    ("日常監看：每筆 CL agent 讀 description 與 check，看不出目的就私訊作者並示範寫法", p_watch()),
     ("有人開新工作：agent 察覺就先問，確認後登記狀態板、代開 stream 與 check", p_kickoff()),
     ("擴充與交棒：一次加一道 check，團隊能自己維護後 agent 只剩監看", p_exit()),
     ("橫跨全程：log 與狀態板都進 depot，PM 看一頁摘要，每人可查關於自己的紀錄", p_transparent()),

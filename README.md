@@ -148,7 +148,7 @@ agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張
 
 ![盤點：agent 只讀掃指定的 depot 範圍，交 PM 一頁現況與幾個候選目標，PM 選](docs/slides/img/agent-reads-asks-patches-pm-approves/p-4.png)
 
-![目標分析：agent 讀完才 DM owner 問只有他知道的事，答案進 PROJECT_MAP](docs/slides/img/agent-reads-asks-patches-pm-approves/p-5.png)
+![目標分析：agent 讀完才私訊目錄 owner，只問他才知道的事，答案進 PROJECT_MAP](docs/slides/img/agent-reads-asks-patches-pm-approves/p-5.png)
 
 ![計畫核准：PM 核准方向、owner 同意範圍，缺一就不動手；PM 沒弄懂不算核准](docs/slides/img/agent-reads-asks-patches-pm-approves/p-6.png)
 
@@ -156,7 +156,7 @@ agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張
 
 ![上線分級：check 先只報告、再警告，PM 與 owner 同意才擋 submit，留 bypass](docs/slides/img/agent-reads-asks-patches-pm-approves/p-8.png)
 
-![日常監看：每筆 CL agent 讀 description 與 check，看不出目的就 DM 並示範寫法](docs/slides/img/agent-reads-asks-patches-pm-approves/p-9.png)
+![日常監看：每筆 CL agent 讀 description 與 check，看不出目的就私訊作者並示範寫法](docs/slides/img/agent-reads-asks-patches-pm-approves/p-9.png)
 
 ![有人開新工作：agent 察覺就先問，確認後登記狀態板、代開 stream 與 check](docs/slides/img/agent-reads-asks-patches-pm-approves/p-10.png)
 
