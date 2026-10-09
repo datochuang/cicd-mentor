@@ -66,6 +66,7 @@
 6. **授權分級。** 明訂哪些事 agent 可以自己做、哪些要先告知 PM、哪些只有 PM 能做。隨信任累積逐步放寬。
 7. **PM 的成長要刻意設計。** Agent 提方案時附上背後的原則；定期回顧上一階段的假設；逐步讓 PM 自己判斷，agent 退到審核角色。
 8. **先代做，累積信任與看得見的好處。** 降低工程師採用的成本，從他們真正的痛點下手，而不是先列出違反了哪些規範。
+9. **Agent 有自己的一個 git repo，實例從它生出來、工作區回到它；只有用在客戶生產環節的工具才進目標的 repo（D5）。** core 在 master 出 release；每個實例 clone 出來後建自己的工作區 `designs/<名>/`，紀錄與文件的主本都在那裡，換手時新版實例 clone 就拿到。check、flow 的修正、trigger、模板這類用在團隊生產環節的東西，以 shelved CL 交進目標的 repo，owner submit 後以那裡為準；文件（PROJECT_MAP、狀態板、報告）要不要留副本由 owner 定。像顧問：工作記錄和簡報留在顧問公司，親手做、用在客戶生產線的工具必須在客戶那裡。細節在 [agent-operating-model.md](agent-operating-model.md) 第八節。
 
 ## 問題的定錨點：六個原則（前五個 D4 已確認；第六個 Code review 待確認，見 todo T19）
 

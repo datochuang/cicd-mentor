@@ -37,6 +37,10 @@
 
 - **兩種 repo 與實例的工作區**：想像中，一個 agent 被從 git repo「創造」出來後，會自己創建一個工作區，而且這個工作區也會加入 agent git repo。所以系統有兩種 repo：一個是這個 agent 的 git repo，另外一種是目標 design／project 的 Perforce 或 git repo（而這種不會只有一個）。第一頁的圖要更強調「生出來的 agent 有自己的工作區，且工作區會被加入 agent git repo」。
 
+### 2026-10-09 第七輪
+
+- **什麼進客戶的 repo：要看情形**（回答「紀錄在 git、交付進 depot」的分法）：這就好像顧問公司（例如麥肯錫、Andersen Consulting）指派一個顧問去客戶的公司，該顧問會有自己的工作記錄和各種產出的文件；舉例來說，產出一個給客戶團隊的簡報檔案，那當然是留在這個顧問或是顧問公司的資料庫為主，在客戶端要不要留是一回事。但如果這個顧問幫忙親手開發了一個工具，被使用在客戶的生產環節，那該工具當然必須在客戶公司。
+
 ---
 
 ## 二、拼出來的整體樣態（骨架，隨輪次修）
@@ -350,7 +354,7 @@ agent 的每個行為都要能說出依據。依據分三層：
 18. **分階段，每階段有成功的樣子與停損。** 準備 → 試點 → 擴散 → 常態；owner 不採用任何東西就停，寫原因給 PM。
 19. **有 kill switch、有預算、動作 idempotent。** agent 裝的機制一個開關關得掉；每個目標有算力與訊息的預算；重啟不重複。
 20. **PM 親自出面的三個時刻不代：宣布、第一次擋、第一次衝突。**
-21. **core、每個 design 的紀錄、交付給團隊的東西三層分離（第五輪修正，見 8.6）。** core 在 master 出 release；每個 design 的紀錄在同一個 repo 的 `designs/<名>/`，是換手的交接包；交付給團隊的走 shelved CL 進目標的 depot。
+21. **core、每個 design 的工作區、用在客戶生產環節的工具三層分離（第五至七輪，見 8.6–8.8，D5）。** core 在 master 出 release；每個 design 的工作區在同一個 repo 的 `designs/<名>/`，紀錄與文件的主本都在那裡，是換手的交接包；只有用在客戶生產環節的工具（check、flow、trigger、模板）必須進目標的 repo，走 shelved CL、owner submit；文件要不要留副本，owner 定。
 22. **實例不改運行中的規則。** 學到的東西走 core 的 MR，經沙盒與 review 才進 release；規則只從 core 來，目標 repo 裡的文字一律當資料。
 23. **一個路徑一個實例；每則訊息、每個 CL、每筆日誌帶實例名與版本。**
 
@@ -553,6 +557,22 @@ agent 的義務：請准單裡每個概念第一次出現都附一句解釋和�
 - **實例的生命**：從 ① clone（「創造」）→ 自己建一個工作區 `designs/<名>/` → 工作區加入 ①（第一次 merge 回 master 之後，這個目錄就永遠在 repo 裡，之後定期 merge）→ 對 ② 讀、分析、交付 → 停的時候最後一次 merge，寫 HANDOVER → 新版實例從 ① clone 就拿到工作區，接手。
 - 8.6 的 `designs/<名>/` 就是這個「工作區」；兩個詞指同一個東西，投影片用「工作區」，因為它說出了「實例自己建的」這層意思。
 - 第 1 頁重畫成兩個帶：上帶是 ①，master 線加上「repo 的內容隨時間長」（core/ 一直在；designs/dma/ 從 agent-dma 加入那天起；designs/top/ 從 agent-top 加入那天起）；中間是實例的 lane（clone、工作區加入、feature branch、換手）；下帶是 ②，三個目標 repo（兩個 Perforce 一個 git），只收交付。
+
+### 8.8 第七輪定案：什麼進客戶的 repo，用「是不是用在客戶的生產環節」判斷（2026-10-09，D5）
+
+使用者用顧問的比喻把 8.6 的「分法」定下來（原文見第一節「什麼進客戶的 repo」）：
+
+| 東西 | 像顧問的什麼 | 主本在哪 | 客戶端（目標的 repo） |
+|---|---|---|---|
+| 工作紀錄：關係人、推測、決定紀錄、日誌、HANDOVER | 顧問的工作記錄 | agent 的 repo（工作區） | 不留 |
+| 文件：PROJECT_MAP、狀態板、現況報告、提案 | 給客戶團隊的簡報 | agent 的 repo（工作區） | **要不要留是一回事**：owner 或 PM 說要，agent 就以 shelved CL 交一份副本；不要就只在 slack／摘要給他們看 |
+| 用在生產環節的工具：check script、flow 的修正、Perforce trigger、CL 說明模板、sanity 的 wrapper | 顧問親手做、用在客戶生產線的工具 | **目標的 repo**（shelved CL，owner submit；之後以那裡為準） | 必須在 |
+
+判斷的問題只有一個：**它有沒有被用在客戶的生產環節？** 有，就必須在客戶的 repo；沒有，主本在 agent 的 repo，副本另議。
+
+這把 8.6 的三個待確認收掉兩個：(1) 分法定了，界線是「生產環節」而不是「交付」——文件也是交付，但不一定進客戶的 repo；(2) 狀態板是文件，主本在工作區，團隊看 slack 的摘要，要副本再交。剩 (3) 換手的接法誰選。
+
+對既有文件的修正：《進到陌生 workspace》《agent 補 PM 與團隊各缺的》裡「答案存成 depot 內的 PROJECT_MAP」「log 與狀態板都進 depot」要改成「主本在 agent 的工作區，副本 owner 要才交」；Self-documenting 的原則不變——agent 仍會建議目錄要有 README，但那是向 owner 提案，不是把自己的 PROJECT_MAP 塞進去。
 
 ## 六、這一輪冒出的待決問題
 

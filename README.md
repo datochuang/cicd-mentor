@@ -168,16 +168,16 @@ agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張
 
 </details>
 
-### agent 自己的版控：實例從 agent 的 git repo 生出來，工作區也回到它；目標的 repo 只收交付
+### agent 自己的版控：實例從 agent 的 git repo 生出來，工作區也回到它；目標的 repo 只收用在生產的工具
 
-系統有兩種 repo：agent 自己的一個 git repo，和目標 design 的很多個 repo（Perforce 或 git）。第 1 頁一張圖分三帶：上帶是 agent 的 git repo，內容隨時間長（core/ 一直在；每個實例的工作區 `designs/<名>/` 從加入那天起就在裡面），master 線上有 release；中間是實例的 lane——從某個 release clone 出來、建自己的工作區、工作區加入 repo 並定期 merge 回 master、更好的機制走 feature branch 與 MR、舊實例停了新版實例 clone 就拿到工作區接手；下帶是目標的 repo，agent 只讀它、只交付它要維護的（PROJECT_MAP 定稿、check、狀態板），走 shelved CL 或 MR。第 2–6 頁講一份 agent 自己（三層、為什麼 git、改版、沙盒、安全），第 7–9 頁講多個實例（登記表、版號、代價），第 10 頁三件要公司定。內容來自 [agent-operating-model.md](agent-operating-model.md) 第八節。十頁；第 1、2 頁已照 8.6、8.7 重畫，其餘頁待確認後改。PDF：[docs/slides/agent-evolves-by-release-not-self-edit.pdf](docs/slides/agent-evolves-by-release-not-self-edit.pdf)
+系統有兩種 repo：agent 自己的一個 git repo，和目標 design 的很多個 repo（Perforce 或 git）。第 1 頁一張圖分三帶：上帶是 agent 的 git repo，內容隨時間長（core/ 一直在；每個實例的工作區 `designs/<名>/` 從加入那天起就在裡面），master 線上有 release；中間是實例的 lane——從某個 release clone 出來、建自己的工作區、工作區加入 repo 並定期 merge 回 master、更好的機制走 feature branch 與 MR、舊實例停了新版實例 clone 就拿到工作區接手；下帶是目標的 repo，agent 只讀它，只有用在團隊生產環節的工具（check、flow 的修正、trigger、CL 說明模板）才以 shelved CL 或 MR 交進去，文件（PROJECT_MAP、狀態板）主本在工作區、副本 owner 要才交（D5：像顧問，工作記錄和簡報留在顧問公司，用在客戶生產線的工具必須在客戶那裡）。第 2–6 頁講一份 agent 自己（三層、為什麼 git、改版、沙盒、安全），第 7–9 頁講多個實例（登記表、版號、代價），第 10 頁三件要公司定。內容來自 [agent-operating-model.md](agent-operating-model.md) 第八節。十頁；第 1、2 頁已照 D5 重畫，其餘頁待改。PDF：[docs/slides/agent-evolves-by-release-not-self-edit.pdf](docs/slides/agent-evolves-by-release-not-self-edit.pdf)
 
 <details>
 <summary>展開十頁</summary>
 
-![總覽：實例從 agent 的 git repo 生出來，工作區也回到它；目標的 repo 只收交付](docs/slides/img/agent-evolves-by-release-not-self-edit/p-1.png)
+![總覽：實例從 agent 的 repo 生出來、工作區回到它；目標的 repo 只收生產用的工具](docs/slides/img/agent-evolves-by-release-not-self-edit/p-1.png)
 
-![三層：core 在 master，每個 design 的紀錄在 designs/，交付給團隊的進 depot](docs/slides/img/agent-evolves-by-release-not-self-edit/p-2.png)
+![三層：core 在 master，文件與紀錄在工作區，生產用的工具才進目標的 repo](docs/slides/img/agent-evolves-by-release-not-self-edit/p-2.png)
 
 ![為什麼 git：MR、review、tag、CI 都內建；core 自己照 CI/CD 做，就是團隊的範例](docs/slides/img/agent-evolves-by-release-not-self-edit/p-3.png)
 

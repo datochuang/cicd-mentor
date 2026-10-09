@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-# 《agent 自己的版控：實例從 agent 的 git repo 生出來，工作區也回到它；目標的 repo 只收交付》
+# 《agent 自己的版控：實例從 agent 的 git repo 生出來，工作區也回到它；目標的 repo 只收用在生產的工具》
 # docs/slides/agent-evolves-by-release-not-self-edit.{html,pdf}
 # 執行：python3 docs/figures/agent-evolves-by-release-not-self-edit/build.py
 #
 # 讀者：要接手製作與部署這個 agent 的人：內網的 Claude Code、負責 core 的人、PM。懂 git 與 Perforce。
-# 讀完要能：說出系統的兩種 repo 各是什麼、關係怎麼不對稱；一個實例怎麼生出來、工作區怎麼回到 agent 的 repo、怎麼換手；對目標的 repo 只做什麼。
+# 讀完要能：說出系統的兩種 repo 各是什麼、關係怎麼不對稱；一個實例怎麼生出來、工作區怎麼回到 agent 的 repo、怎麼換手；什麼東西才進目標的 repo。
 # 主旨：兩種 repo——agent 自己的一個 git repo，和目標 design 的很多個 repo（Perforce 或 git）。實例從前者 clone 出來、建自己的工作區
-#       designs/<名>/、工作區加入前者並定期 merge 回 master；更好的機制走 feature branch 與 MR；換手靠工作區；對後者只讀、只交付（shelved CL 或 MR）。
+#       designs/<名>/、工作區加入前者並定期 merge 回 master；更好的機制走 feature branch 與 MR；換手靠工作區；對後者只讀，
+#       只有用在團隊生產環節的工具（check、flow、trigger、模板）才以 shelved CL 或 MR 交進去，文件主本在工作區、副本 owner 定（D5）。
 # 用語（第 1 頁定義）：core＝master 上的程式與規則；實例＝從 agent 的 git repo clone 出來的一份 agent，看一個或多個 design；
 #       工作區＝designs/<名>/，實例建的、回到 repo 的；design＝實例負責的那個設計與它的 repo；換手＝新版實例接手同一個 design；PM＝負責把 CI/CD 導入團隊的主管。
 # 內容來源：agent-operating-model.md 第八節（8.6、8.7）。實例名、版號、路徑都是示意。
@@ -89,13 +90,13 @@ def p_overview():
     T(s, 118, 262, "讀、交 shelved CL", fill=TGT)
     T(s, 794, 280, "讀、交 shelved CL", anchor="end", fill=TGT)
     rect(s, 20, 290, 836, 70, col=TGT, fill=TGT, op=".05", sw=1.4, dash="6 4")
-    T(s, 32, 308, "② 目標 design 的 repo（不只一個；Perforce 或 git）：agent 只讀它，只交付它要維護的東西", cls="tx-lbl", fill=TGT)
+    T(s, 32, 308, "② 目標 design 的 repo（不只一個；Perforce 或 git）：agent 只讀它；只有用在他們生產環節的工具才進去", cls="tx-lbl", fill=TGT)
     for x, w, t in ((32, 300, "//depot/chipA（Perforce）：dma、top、flow"), (348, 230, "//depot/chipB（Perforce）"), (594, 250, "chipC 的 GitLab repo（git）")):
         rect(s, x, 316, w, 24, col=TGT, fill=TGT, op=".12", sw=1.4)
         T(s, x + 10, 332, t, cls="tx", fill=TGT, w=700)
-    T(s, 32, 354, "交付的：PROJECT_MAP 定稿、check、flow、狀態板、CL 說明模板；走 shelved CL（Perforce）或 MR（git），owner 收了才算", fill=INK2)
+    T(s, 32, 354, "進去的：check、flow 的修正、trigger、CL 說明模板，owner 收了才算；文件（PROJECT_MAP、狀態板）主本在工作區，副本 owner 要才交", fill=INK2)
     bottom(s, 370, [
-        ("兩種 repo：agent 的一個 git repo，和目標 design 的很多個。實例從前者生出來、建工作區、工作區回到前者；對後者只讀與交付。", True),
+        ("兩種 repo：agent 的一個 git repo，和目標 design 的很多個。實例從前者生出來、建工作區、工作區回到前者；對後者只讀，只交生產用的工具。", True),
         ("第 2–6 頁講一份 agent 自己：三層、為什麼 git、改版、沙盒、安全；第 7–9 頁講多個實例：登記表、版號、代價；第 10 頁待決。", False),
     ])
     T(s, 20, 442, "用語：core＝master 上的程式與規則　實例＝從 agent 的 git repo clone 出來的一份 agent　工作區＝designs/<名>/，實例建的、回到 repo 的", fill=GRAY)
@@ -104,15 +105,15 @@ def p_overview():
             "列下方是 master 線，有 v0.3、v0.4、v0.5 三個 release。中間兩條實例的 lane：agent-dma v0.3 從 v0.3 clone 出來看 dma，建工作區 designs/dma/（PROJECT_MAP 草稿、關係人、決定紀錄、日誌、HANDOVER），"
             "粗箭頭把工作區加入 repo；中途開 feature branch 經 MR merge 回 master；最後一次 merge 紀錄後停，換手給從 v0.5 clone 的 agent-dma v0.5，它 clone 就拿到工作區，讀它續做或當全新 design 重新盤點。"
             "agent-top v0.4 從 v0.4 clone 出來看 top 與 flow，建工作區 designs/top/ 同樣加入 repo。下帶是目標 design 的 repo，不只一個：chipA、chipB 兩個 Perforce depot 和 chipC 的 GitLab repo；"
-            "實例對它們只讀、交 shelved CL 或 MR，只交付它們要維護的：PROJECT_MAP 定稿、check、flow、狀態板、CL 說明模板，owner 收了才算。最下方用語定義 core、實例、工作區、design、換手、PM。")
+            "實例對它們只讀；只有用在他們生產環節的工具才進去：check、flow 的修正、trigger、CL 說明模板，走 shelved CL 或 MR，owner 收了才算；文件如 PROJECT_MAP、狀態板主本在工作區，副本 owner 要才交。最下方用語定義 core、實例、工作區、design、換手、PM。")
     return svg(s, 880, 480, aria)
 
 
 # ── 圖 2：三層 ──────────────────────────────────────────────────────
 LAYERS = [
     ("core（master）", CORE, "solid", ["程式、版控 adapter", "行為指導原則、提示詞", "模板、通用 check script"], "同一個 repo 的根目錄", "MR → 沙盒 → review → merge → release", "幾週一版；所有實例一致", "所有實例共用；實例不能直接改"),
-    ("designs/<名>/（實例的工作區）", INST, "dash", ["實例設定：看哪些 design、PM、預算、授權表", "累積的認知：PROJECT_MAP 草稿、關係人、決定", "日誌、狀態、待辦、HANDOVER"], "實例自己建，加入同一個 repo", "實例自己 commit，定期 merge 回 master", "每天長", "換手的交接包：clone master 就拿到"),
-    ("交付給團隊的", TGT, "solid", ["PROJECT_MAP 定稿、狀態板", "check、flow、CL 說明模板", "需求 markdown"], "目標的 depot", "shelved CL，owner submit；depot 為準", "owner 收了才算", "屬於團隊；agent 走了還在"),
+    ("designs/<名>/（實例的工作區）", INST, "dash", ["實例設定：看哪些 design、PM、預算、授權表", "文件的主本：PROJECT_MAP、狀態板、報告、提案", "紀錄：關係人、決定、日誌、HANDOVER"], "實例自己建，加入同一個 repo", "實例自己 commit，定期 merge 回 master", "每天長", "顧問自己的資料庫；換手的交接包"),
+    ("用在團隊生產環節的工具", TGT, "solid", ["check script、flow 的修正", "Perforce trigger、CL 說明模板", "文件的副本（owner 要才留）"], "目標的 repo（depot 或 git）", "shelved CL 或 MR，owner 收；以那裡為準", "owner 收了才算", "用在客戶生產線的工具必須在客戶那裡"),
 ]
 
 
@@ -125,12 +126,12 @@ def p_layers():
             T(s, x, 166 + 50 * k, lbl, cls="tx-lbl", fill=GRAY)
             T(s, x, 186 + 50 * k, val, cls="tx", fill=c)
     bottom(s, 372, [
-        ("紀錄在 git，交付進 depot：core 要所有實例一致；designs/<名>/ 是實例自己的紀錄，也是換手的交接包；交付給團隊的要進 depot 才算數。", True),
-        ("團隊的 depot 只收他們要維護的東西；agent 的草稿、推測、日誌留在自己的 repo，動自己的目錄不必人 review，動 core 才要。", False),
+        ("判斷只問一句：有沒有用在團隊的生產環節？有，就必須進目標的 repo；沒有，主本在工作區，副本 owner 要才交。", True),
+        ("像顧問：工作記錄和給客戶的簡報留在顧問公司的資料庫；親手做、用在客戶生產線的工具，當然必須在客戶那裡。", False),
     ])
     aria = ("三欄：core 在 master（程式、行為原則、提示詞、模板、check script；同一個 repo 的根目錄；MR 沙盒 review merge release；幾週一版所有實例一致；所有實例共用）；"
-            "designs 目錄（實例設定、累積的認知：PROJECT_MAP 草稿、關係人、決定、日誌、狀態、待辦、HANDOVER；同一個 repo 每個 design 一個目錄；實例自己 commit 定期 merge 回 master；每天長；換手的交接包）；"
-            "交付給團隊的（PROJECT_MAP 定稿、狀態板、check、flow、CL 說明模板、需求 markdown；目標的 depot；shelved CL owner submit 之後以 depot 為準；owner 收了才算；屬於團隊、agent 走了還在）。")
+            "designs 目錄是實例的工作區（實例設定；文件的主本：PROJECT_MAP、狀態板、報告、提案；紀錄：關係人、決定、日誌、HANDOVER；實例自己建加入同一個 repo；實例自己 commit 定期 merge 回 master；每天長；顧問自己的資料庫、換手的交接包）；"
+            "用在團隊生產環節的工具（check script、flow 的修正、Perforce trigger、CL 說明模板、文件的副本 owner 要才留；目標的 repo；shelved CL 或 MR owner 收之後以那裡為準；owner 收了才算；用在客戶生產線的工具必須在客戶那裡）。")
     return svg(s, 880, 480, aria)
 
 
@@ -378,8 +379,8 @@ def p_decisions():
 
 
 PAGES = [
-    ("總覽：實例從 agent 的 git repo 生出來，工作區也回到它；目標的 repo 只收交付", p_overview()),
-    ("三層：core 在 master，每個 design 的紀錄在 designs/，交付給團隊的進 depot", p_layers()),
+    ("總覽：實例從 agent 的 repo 生出來、工作區回到它；目標的 repo 只收生產用的工具", p_overview()),
+    ("三層：core 在 master，文件與紀錄在工作區，生產用的工具才進目標的 repo", p_layers()),
     ("為什麼 git：MR、review、tag、CI 都內建；core 自己照 CI/CD 做，就是團隊的範例", p_why_git()),
     ("改版：實例不自改，改進一律開 core 的 MR，過沙盒與 review 才出 release", p_evolve()),
     ("沙盒：埋了十六種已知問題的 depot 是 core 的 regression，三項全過才出 release", p_sandbox()),
@@ -391,4 +392,4 @@ PAGES = [
 ]
 
 if __name__ == "__main__":
-    build(NAME, "agent 自己的版控：實例從 agent 的 git repo 生出來，工作區也回到它；目標的 repo 只收交付", KICKER, PAGES)
+    build(NAME, "agent 自己的版控：實例從 agent 的 git repo 生出來，工作區也回到它；目標的 repo 只收用在生產的工具", KICKER, PAGES)
