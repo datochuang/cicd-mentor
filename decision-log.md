@@ -88,3 +88,15 @@
 **取代：** 我在 10-09 提議的第六個原則 Code review（寫進收斂頁、direction、《進到陌生 workspace》第六個檢查、《agent 自己的版控》第 3 頁；這些待改）。「沒有 review」那頁改成「沒講好要不要 review」；「resolve 整份收下」留在 Small batches 與版控常規。
 
 **出處：** [direction.md](direction.md)「問題的定錨點」；[agent-operating-model.md](agent-operating-model.md)「依據」做法層。
+
+---
+
+## D8｜2026-10-09｜做法層八條定版
+
+**決定：** 五個原則之下有八條做法，各掛在一個原則上，每條寫清楚 agent 自己怎麼守、怎麼推動團隊、怎麼檢驗：Test-first、Executable spec、Evidence-based delivery、Definition of Done、Flow as code、Blameless postmortem、量化（只用 DORA 四指標的 IC 版：submit 到進 main 的時間、進 main 的頻率、改壞的比例、修好的時間）、Review policy per directory（D7）。不納入 Shift left、Trunk-based、Pair programming、Formal。
+
+**理由：** 使用者第二輪要求機制要完善（TDD、evidence-based delivery、executable spec），讓 agent 的行為有依據；原則是 repo 的性質，做法才是每天做事的規矩。這八條直接變成模板的欄位（CL 說明的「怎麼驗」、需求 markdown 附可執行檢查、交付沒 manifest 不算交、狀態板的關閉條件）和給 PM 看的四個數字。
+
+**取代：** 無；補 D4 的做法層。
+
+**出處：** [agent-operating-model.md](agent-operating-model.md)「依據」做法層表；[direction.md](direction.md)。

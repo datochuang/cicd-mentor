@@ -8,7 +8,7 @@
 |---|---|---|
 | 為什麼要做（論述） | 齊 | 《AI agent 與人類 PM 搭檔》、《為什麼非要 CI/CD》 |
 | 現狀的症狀與代價 | 齊（16 個症狀） | 《把版控當備份的團隊》 |
-| 原則與檢驗（agent 行為的依據） | 五個原則定版（D4、D7）；做法層八條待確認 | direction.md 定錨點、operating model「依據」；T31 |
+| 原則與檢驗（agent 行為的依據） | 五個原則（D4、D7）與八條做法（D8）定版 | direction.md 定錨點、operating model「依據」 |
 | 進到一個 repo 怎麼查、怎麼補 | 齊 | 《進到陌生 workspace》 |
 | 四方在各階段的互動 | 齊 | 《agent 補 PM 與團隊各缺的》 |
 | agent 的運作樣態（使用者的描述＋補充） | 齊，但是累積體，不是乾淨版 | agent-operating-model.md |
@@ -56,7 +56,6 @@ starter-kit/
 
 ## 四、打包前要你決定的
 
-- T31（八條做法）：啟動包裡的做法表要定版（原則已由 D4、D7 定版）。
 - T25（agent 的身分）、T26（可自己 submit 的範圍、擋 submit 的條件）、T28（branch 模型）：可以留在 open-decisions，但你若已有傾向，寫成預設值會讓內網少問一輪。
 - 五份投影片的細節（T14、T17、T21、T32）：進啟動包前要不要再看一次。
 

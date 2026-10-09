@@ -2,7 +2,7 @@
 
 這份文件記錄目前有效的整體構想，會隨討論持續修改。每次改變的原因記在 [decision-log.md](decision-log.md)。
 
-最後更新：2026-10-09（D4–D7）
+最後更新：2026-10-09（D4–D8）
 
 ## 目標
 
@@ -82,9 +82,9 @@
 
 **Code review 不是原則（D7）。** 追加八個問題時我提議第六個原則 Code review；使用者定：要不要 review 由各 design／目錄自己決定，專案過程中可以改，所以它介於原則和非原則之間，定成一條規矩——**每個目錄都要講好需不需要 code review**（要／不要、誰看、什麼時候、改了留紀錄），寫在那個目錄的 PROJECT_MAP 裡。這條掛在 Self-documenting 底下（目錄的規矩寫在 repo 裡），檢驗是「隨便挑一個目錄，說得出它要不要 review；說要的目錄，隨便挑一包說得出誰看過」。「沒有 review」那頁（圖 10）因此改成「沒講好要不要 review」；「resolve 整份收下」（圖 11）留在 Small batches 與版控常規（resolve 要看兩邊）。agent 自己交的東西不在此限：shelved CL 一律 owner 收了才進 depot，core 的 MR 一律要人 review。
 
-### 做法層（提議，T31 待確認）
+### 做法層（D8 定版）
 
-五個原則是 repo 該有的性質；agent 每天做事需要的是做法。提議在原則之下加八條做法，各掛在一個原則上：Test-first（改動前先定怎麼驗）、Executable spec（目的用跑得起來的東西表達）、Evidence-based delivery（交付附證據）、Definition of Done（任務完成的五個條件）、Flow as code（script、trigger、環境進版控）、Blameless postmortem（不究責的事後檢討）、量化（DORA 四指標的 IC 版）、Review policy per directory（每個目錄講好要不要 review；D7）。完整表格在 [agent-operating-model.md](agent-operating-model.md)「依據」一節。不納入：Shift left（口號）、Trunk-based（與 Small batches 重疊）、Pair programming 等（太泛）、Formal（DV 方法而非流程）。
+五個原則是 repo 該有的性質；agent 每天做事需要的是做法。原則之下有八條做法（D8），各掛在一個原則上：Test-first（改動前先定怎麼驗）、Executable spec（目的用跑得起來的東西表達）、Evidence-based delivery（交付附證據）、Definition of Done（任務完成的五個條件）、Flow as code（script、trigger、環境進版控）、Blameless postmortem（不究責的事後檢討）、量化（DORA 四指標的 IC 版）、Review policy per directory（每個目錄講好要不要 review；D7）。完整表格在 [agent-operating-model.md](agent-operating-model.md)「依據」一節。不納入：Shift left（口號）、Trunk-based（與 Small batches 重疊）、Pair programming 等（太泛）、Formal（DV 方法而非流程）。
 
 ## 未決問題
 

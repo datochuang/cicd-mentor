@@ -22,7 +22,6 @@
 | T28 | 10-09 | **Perforce 的 branch 模型**：stream 還是傳統 branch spec；一任務一條還是一人一條 | 輔導開工要照這個模型準備 stream／workspace | agent-operating-model.md 任務掌控與開工輔導 |
 | T29 | 10-09 | **跨 workspace 的活動資訊可不可以看**（誰 open 了什麼、pending 的 CL）；怎麼告知團隊 agent 看得到 | 開工跡象的主要來源，但最容易被當成監視 | agent-operating-model.md 任務掌控與開工輔導 |
 | T30 | 10-09 | **任務的來源**：公司有沒有 ticket／任務系統可接；沒有的話模組狀態板是不是唯一登記處 | | agent-operating-model.md 任務掌控、任務的來源 |
-| T31 | 10-09 | **做法層的七條 practice 等你確認**：Test-first、Executable spec、Evidence-based delivery、Definition of Done、Flow as code、Blameless postmortem、量化 | 你問要不要加 TDD、evidence-based delivery、executable spec 讓 agent 的行為有依據；我提了七條並列了不納入的；每條有「agent 自己／推動團隊／檢驗」 | agent-operating-model.md 依據 |
 | T33 | 10-09 | **版控常規清單**：最缺、最該先教的三件是哪三件；Git 團隊要不要另一張對照表 | 我列了十一條（一包一件事、說明寫目的、改前 sync、resolve 要看、shelve 給人看、用 stream 不複製目錄、產物不進 depot、檔案進 depot 才算存在、label 附 manifest、workspace 乾淨、IP drop 走流程），建議先教前三件 | agent-operating-model.md 教育版控的常規 |
 | T34 | 10-09 | **PM 要先談好的資源與人**（帳號權限、trigger 權限、算力與 license、結果放哪、資安、HR 不考核、sponsor、試點 owner）誰去談、先談哪個 | 這些 agent 變不出來；是啟動前的 checklist | agent-operating-model.md 7.2 |
 | T35 | 10-09 | **分階段路線圖與每階段的成功定義、停損**要不要照我寫的 | 準備 → 試點 → 擴散 → 常態；試點的成功：owner 採用了 shelved CL、check 每天跑有人看、至少一個檢驗從做不到變做得到 | agent-operating-model.md 7.3 |
@@ -64,6 +63,7 @@
 | T12 | 10-08 | 推上 GitHub 前檢查公開範圍 | 使用者說明 repo 是個人專用，不需檢查；已推上 datochuang/cicd-mentor |
 | T16 | 10-09 | 五個定錨原則等你確認 | 全部同意，改用英文專有名詞：Small batches、SSOT、Traceability、CI、Self-documenting。記為 D4 |
 | T39 | 10-09 | 《agent 自己的版控》第 3–10 頁照 D5 改、加「換手」一頁、換手的接法誰選 | 接法由 PM 選（使用者：「這很明顯」）。全份十一頁已照 D5 改，第 5 頁換手；檔名改為 agent-own-version-control-and-instances；標題再盲讀一次（docs/reviews/titles-blind-read-agent-versioning-20261009.md 第二輪） |
+| T31 | 10-09 | 做法層八條等你確認 | 照提案全採用：Test-first、Executable spec、Evidence-based delivery、Definition of Done、Flow as code、Blameless postmortem、量化（DORA 四指標 IC 版）、Review policy per directory。記為 D8 |
 | T19 | 10-09 | 第六個原則 Code review | 不採用。使用者：review 非必要，由各 design 自行決定、過程中可變，定成規矩「每個目錄都要講好需不需要 code review」，掛在 Self-documenting，做法層加 Review policy per directory。記為 D7 |
 | T18 | 10-09 | CI 的意思補「結果由機器寫下；共用的 main 隨時可用」 | 使用者同意。記在 D7 |
 | T42 | 10-09 | 實例小版號的定義 | 照我的理解：core 版號後面加一位，實例每次把工作區 merge 回 master 就加一（agent-dma v0.3.2）。記為 D6 |
