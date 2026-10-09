@@ -90,28 +90,28 @@ PDF 版：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agen
 
 </details>
 
-### CI/CD 的意義：讓迴圈自己轉，AI 的倍數才成立
+### 為什麼非要 CI/CD：查和判不交給機器，N 個 agent 等於一個
 
-為什麼《把版控當備份的團隊》裡的症狀代價很大：一個行動是改、查、判的迴圈（inner loop），探索是比較 N 個候選（outer loop）；CI/CD 把查和判交給機器，迴圈才自己轉、能平行、能比較。沒有它，AI 只能加速「改」，倍數歸一。八頁，附務實的上限（license、算力、可比性）。PDF：[docs/slides/loops-need-cicd-before-ai-multiplies.pdf](docs/slides/loops-need-cicd-before-ai-multiplies.pdf)
+為什麼《把版控當備份的團隊》裡的症狀代價很大：一個改動是改、查、判的內圈（inner loop），探索是比 N 個方案的 PPA 的外圈（outer loop）；CI/CD 把查和判交給機器，迴圈才自己轉、能平行、能比較。沒有它，AI 只能加速「改」，N 個 agent 的效果等於一個。八頁，附務實的上限（license、算力、可比性）。PDF：[docs/slides/loops-need-cicd-before-ai-multiplies.pdf](docs/slides/loops-need-cicd-before-ai-multiplies.pdf)
 
 <details>
 <summary>展開八頁</summary>
 
-![迴圈：一個行動是改、查、判轉到過為止，CI/CD 把查和判交給機器](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-1.png)
+![內圈（inner loop）：一個改動是改、查、判轉到過為止，查和判交給機器](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-1.png)
 
-![半徑：IC 的一圈有快有慢，CI/CD 把它們分層排程，結果由機器判](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-2.png)
+![分層：IC 的一圈有快有慢，CI/CD 按快慢分層跑，哪一層都由機器判](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-2.png)
 
-![沒有 CI/CD 的 inner loop：每圈都要人設環境、人跑、人判，轉得慢又判不準](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-3.png)
+![現狀的內圈：每圈靠人設環境、人跑、人看 log，轉得慢、判法還不一](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-3.png)
 
-![Outer loop：真正要比的是 N 個候選的 PPA，每個候選都是一整圈 inner loop](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-4.png)
+![外圈（outer loop）：比 N 個方案的 PPA，每個方案都要先跑完一圈內圈](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-4.png)
 
-![Agentic AI：便宜的是「改」，平行 N 個 agent 之後，瓶頸移到「判」](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-5.png)
+![Agentic AI：N 個 agent 平行「改」很便宜，瓶頸變成誰來查、誰來判](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-5.png)
 
-![上限：平行的寬度由 license 與算力決定，比較要在同一環境下才算數](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-6.png)
+![上限：能平行幾個由 license 與算力決定；CI/CD 管的是排隊和固定環境](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-6.png)
 
-![連鎖：沒有 CI/CD，inner loop 要人顧，outer loop 轉不完，倍數歸一](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-7.png)
+![結論：沒有 CI/CD，每圈要人顧，N 個方案跑不完，N 個 agent 等於一個](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-7.png)
 
-![對應：六個原則各自撐住迴圈的一個條件](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-8.png)
+![對應：迴圈要自己轉的六個條件，就是《把版控當備份的團隊》的六個原則](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-8.png)
 
 </details>
 

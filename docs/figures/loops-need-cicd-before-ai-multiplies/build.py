@@ -15,7 +15,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
 from slides import *
 
 NAME = "loops-need-cicd-before-ai-multiplies"
-KICKER = "為什麼需要 CI/CD"
+KICKER = "CI/CD 的意義"
 
 
 def nbox(s, x, y, w, h, title, sub=None, col=INK2, kind="plain", sub2=None):
@@ -63,23 +63,23 @@ def loop(s, x0, y0, steps, back_label="不過", pass_label="過", w=96, h=44, ga
 def p1():
     s = []
     T(s, 20, 20, "這份文件回答：CI/CD 對這個團隊的意義是什麼；《把版控當備份的團隊》裡的症狀，代價到底多大 ↓", cls="tx-lbl", fill=INK2)
-    T(s, 20, 50, "一個行動 = 改、查、判，轉到過為止", cls="tx-lbl", fill=INK2)
-    xr = loop(s, 20, 64, [("改", "人或 agent", None), ("查", "lint、sim", GOAL), ("判", "PASS 才算過", GOAL)], w=104, gap=30)
-    nbox(s, xr, 64, 92, 44, "行動完成", "下一個行動", col=GOAL, kind="solid")
+    T(s, 20, 50, "內圈（inner loop）：一個改動（加功能、修 bug）= 改、查、判，轉到過為止", cls="tx-lbl", fill=INK2)
+    xr = loop(s, 20, 64, [("改", "人或 agent", None), ("查", "lint、sim", GOAL), ("判", "全 PASS 才過", GOAL)], w=104, gap=30)
+    nbox(s, xr, 64, 92, 44, "改動完成", "下一個改動", col=GOAL, kind="solid")
     pill(s, 20, 160, "CI/CD 做的事：查和判由機器做，每一圈一樣", GOAL)
     # 右邊：例子
     rect(s, 548, 44, 312, 150, col="var(--rule-2)", fill="var(--surface-2)", sw=1.2)
-    T(s, 560, 66, "一個行動的例子（示意）", cls="tx", fill=INK2, w=700)
-    for j, (k, v) in enumerate([("行動", "給 DMA 加 burst 模式"), ("改", "改 RTL，加一個 testcase"), ("查", "lint、compile、跑 DMA 的 sim 子集"), ("判", "全部 PASS 才過；有一個 FAIL 就回去改")]):
+    T(s, 560, 66, "一個改動的例子（示意）", cls="tx", fill=INK2, w=700)
+    for j, (k, v) in enumerate([("改動", "給 DMA 加 burst 模式"), ("改", "改 RTL，加一個 testcase"), ("查", "跑 lint、compile、DMA 的 sim 子集"), ("判", "全部 PASS 才過；有一個 FAIL 就回去改")]):
         T(s, 560, 92 + 24 * j, k, cls="tx", fill=GOAL, w=700)
         T(s, 600, 92 + 24 * j, v, fill=INK2)
     # 用語註記
     rect(s, 20, 212, 840, 64, col="var(--rule-2)", fill="var(--surface)", sw=1, dash="4 3")
     T(s, 32, 234, "用語：軟體業把 commit 前叫 inner loop（本機的改、lint、unit test），commit 後的整合與 CI/CD 叫 outer loop。", fill=GRAY)
-    T(s, 32, 254, "這份文件的 inner loop 指「一個行動的迴圈」，outer loop 指後面會講的「探索」：比較 N 個候選。", fill=GRAY)
+    T(s, 32, 254, "這份文件的內圈（inner loop）指「一個改動的迴圈」，外圈（outer loop）指第 4 頁的「探索」：比 N 個方案的 PPA。", fill=GRAY)
     bottom(s, 300, [
         ("CI/CD 把查和判交給機器：每一圈一樣的環境、一樣的標準、不用人在旁邊。", True),
-        ("人或 agent 只負責改；迴圈什麼時候轉、轉幾圈，都和人的空檔無關。", False),
+        ("人或 agent 只負責改；內圈什麼時候轉、轉幾圈，都和人的空檔無關。", False),
     ])
     aria = ("一個行動的迴圈：改（人或 agent）、查（跑 lint、compile、sim）、判（PASS 才算過），不過就繞回改，過了就行動完成。"
             "CI/CD 做的事是查和判由機器做、每一圈一樣。右邊是示意的例子：給 DMA 加 burst 模式；改 RTL 加 testcase；lint、compile、跑 DMA 的 sim 子集；全部 PASS 才過。"
@@ -120,7 +120,7 @@ def p2():
 # ── 圖 3：沒有 CI/CD 的 inner loop ───────────────────────────────────
 def p3():
     s = []
-    T(s, 20, 30, "同一個行動，沒有 CI/CD 的時候", cls="tx-lbl", fill=WARN)
+    T(s, 20, 30, "同一個改動，沒有 CI/CD 的時候：內圈長這樣", cls="tx-lbl", fill=WARN)
     steps = [("改", "人", None), ("設環境", "人：環境、license", WARN), ("跑", "人：盯著 queue", WARN), ("看 log", "人：挑幾個看", WARN), ("判", "人：「應該可以」", WARN)]
     xr = loop(s, 20, 48, steps, w=104, gap=30)
     T(s, 20, 150, "每一圈都卡在人身上；agent 改完也一樣，要等人設環境、人跑、人判。", cls="tx", fill=INK2)
@@ -152,8 +152,8 @@ CANDS = [("候選 A", "cache 32K・bus 64"), ("候選 B", "cache 64K・bus 64"),
 def p4():
     s = []
     rect(s, 20, 24, 560, 250, col=GOAL, fill=GOAL, op=".04", sw=1.4, dash="6 4")
-    T(s, 32, 46, "outer loop：探索（示意）", cls="tx", fill=GOAL, w=700)
-    T(s, 32, 64, "問題：cache 多大、bus 多寬？每個組合都要走完一整圈 inner loop，才拿得到 PPA", fill=INK2)
+    T(s, 32, 46, "外圈（outer loop）：探索（示意）", cls="tx", fill=GOAL, w=700)
+    T(s, 32, 64, "問題：cache 多大、bus 多寬？每個方案都要走完一整圈內圈，才拿得到 PPA；這裡的「比」是比 PPA 好壞", fill=INK2)
     for i, (name, cfg) in enumerate(CANDS):
         x = 32 + i * 136
         rect(s, x, 80, 124, 60, col="var(--rule-2)", fill="var(--surface-2)", sw=1.2)
@@ -185,8 +185,8 @@ def p4():
     T(s, 612, 246, "每次跑的環境一致", fill=INK2)
     T(s, 612, 266, "出處：research/loops-and-ai-multiplier.md", fill=GRAY)
     bottom(s, 300, [
-        ("要比較 N 個候選，每個候選都要走完一整圈 inner loop，拿到同一標準下的 PPA。", True),
-        ("inner loop 轉不起來，outer loop 就沒有東西可以比；買了 DSO.ai 這類工具也接不上。", False),
+        ("要比 N 個方案，每個方案都要走完一整圈內圈，拿到同一標準下的 PPA。", True),
+        ("內圈轉不起來，外圈就沒有東西可以比；買了 DSO.ai 這類工具也接不上。", False),
     ])
     aria = ("outer loop 探索的示意：cache 多大、bus 多寬，四個候選組合各走一整圈 inner loop 拿到 PPA，在同一版工具、同一環境、同一約束下比較後選一個。"
             "右邊：業界已經有機器在跑這個外圈，Synopsys 說 DSO.ai autonomously search design spaces for optimal PPA solutions；Cadence Cerebrus 自動探索 implementation flow。"
@@ -267,7 +267,7 @@ def p6():
 
 
 # ── 圖 7：沒有 CI/CD 的連鎖 ──────────────────────────────────────────
-CHAIN = [["沒有 CI/CD"], ["inner loop", "每圈要人"], ["agent", "每一步等人"], ["N 個 agent", "排成一條人龍"], ["outer loop 轉不完", "結果不可比"]]
+CHAIN = [["沒有 CI/CD"], ["內圈", "每圈要人顧"], ["agent", "每一步等人"], ["N 個 agent", "排成一條人龍"], ["外圈轉不完", "N 個方案比不了"]]
 BREAKS = [("圖 2、3", "環境散在 depot 外", "每圈要人設環境"), ("圖 14", "兩台機器結果不同", "圈與圈不可比"), ("圖 15", "狀態靠人填 Excel", "判靠人"),
           ("圖 5", "壞了很久才發現", "圈沒有閉合"), ("圖 8", "main 隨時會壞", "agent sync 到壞的")]
 
@@ -286,7 +286,7 @@ def p7():
             arrow(s, x + 139, 54, x + 147, 54, col=WARN, ar="ar-w", sw=1.4)
     rect(s, 770, 30, 90, 48, col=WARN, fill=WARN, op=".16", sw=1.8)
     s.append('<text x="815" y="66" text-anchor="middle" style="font-family:var(--sans);font-size:26px;font-weight:700;fill:%s">×1</text>' % WARN)
-    T(s, 815, 94, "AI 的倍數", anchor="middle", fill=WARN)
+    T(s, 815, 94, "N 個 agent 的效果", anchor="middle", fill=WARN)
     # 長條示意
     T(s, 20, 120, "同樣 N 個 agent、同樣的 license，一段時間內轉完的圈數（長條是示意）", cls="tx-lbl", fill=INK2)
     T(s, 20, 150, "有 CI/CD", cls="tx", fill=GOAL, w=700)
@@ -303,7 +303,7 @@ def p7():
         w_ = pill(s, x, y, fig, WARN, h=20)
         T(s, x + w_ + 8, y + 14, sym + " → " + brk, fill=INK2)
     bottom(s, 330, [
-        ("沒有 CI/CD，先是 inner loop 轉不動，outer loop 自然沒得轉；AI 加速的只有「改」，倍數變回一。", True),
+        ("沒有 CI/CD，先是內圈轉不動，外圈自然沒得轉；AI 加速的只有「改」，N 個 agent 的效果等於一個。", True),
         ("《把版控當備份的團隊》裡的每個症狀，都在這條鏈上打斷一環。", False),
     ])
     aria = ("連鎖：沒有 CI/CD、inner loop 每圈要人、agent 每一步等人、N 個 agent 排成一條人龍、outer loop 轉不完結果不可比，AI 的倍數變成 ×1。"
@@ -314,7 +314,7 @@ def p7():
 
 # ── 圖 8：六個原則各撐住迴圈的哪個條件 ───────────────────────────────
 MAP = [("Small batches", "一圈一件事", "判出來的差異才歸得到某個改動"),
-       ("Single Source of Truth", "每圈的條件一樣；agent 進得去就能跑", "少了：兩圈不可比，agent 要人設環境"),
+       ("Single Source of Truth", "每圈條件一樣，agent 進得去就能跑", "少了：兩圈不可比，agent 要人設環境"),
        ("Traceability", "每個結果連得回候選與環境", "少了：比較表是假的"),
        ("Continuous Integration", "查和判由機器做", "少了：每圈要人"),
        ("Self-documenting", "agent 不用人帶就看得懂", "少了：每個 workspace 要人寫說明"),
@@ -323,19 +323,19 @@ MAP = [("Small batches", "一圈一件事", "判出來的差異才歸得到某�
 
 def p8():
     s = []
-    T(s, 20, 34, "原則", cls="tx-lbl", fill=GOAL)
-    T(s, 250, 34, "撐住迴圈的哪個條件", cls="tx-lbl", fill=INK2)
-    T(s, 580, 34, "少了會怎樣", cls="tx-lbl", fill=WARN)
+    T(s, 20, 34, "迴圈要自己轉的條件", cls="tx-lbl", fill=INK2)
+    T(s, 350, 34, "撐住它的原則（出自《把版控當備份的團隊》）", cls="tx-lbl", fill=GOAL)
+    T(s, 620, 34, "少了會怎樣", cls="tx-lbl", fill=WARN)
     for i, (en, cond, miss) in enumerate(MAP):
         y = 46 + 44 * i
         rect(s, 20, y + 6, 3, 30, col=GOAL, fill=GOAL, sw=0)
-        T(s, 34, y + 26, en, cls="tx", fill=GOAL, w=700)
-        T(s, 250, y + 26, cond, cls="tx", fill=INK2)
-        T(s, 580, y + 26, miss, fill=WARN)
+        T(s, 34, y + 26, cond, cls="tx", fill=INK2)
+        T(s, 350, y + 26, en, cls="tx", fill=GOAL, w=700)
+        T(s, 620, y + 26, miss, fill=WARN)
         line(s, 20, y + 42, 860, y + 42)
     bottom(s, 330, [
-        ("六個原則的用處只有一件事：讓迴圈自己轉、能平行、能比較。", True),
-        ("這就是 CI/CD 對這個團隊的意義，也是 AI 的倍數成立的前提。", False),
+        ("這六個條件就是前面七頁講的事；撐住它們的六個原則，另一份文件已經收斂出來。", True),
+        ("這就是 CI/CD 對這個團隊的意義，也是 N 個 agent 要有 N 倍效果的前提。", False),
     ])
     aria = ("六列：Small batches 撐住一圈一件事；Single Source of Truth 撐住每圈條件一樣與 agent 進得去就能跑；Traceability 撐住結果連得回候選與環境；"
             "Continuous Integration 撐住查和判由機器做；Self-documenting 撐住 agent 不用人帶；Code review 撐住人判放在併入前一次做完。各附少了會怎樣。")
@@ -343,15 +343,15 @@ def p8():
 
 
 PAGES = [
-    ("迴圈：一個行動是改、查、判轉到過為止，CI/CD 把查和判交給機器", p1()),
-    ("半徑：IC 的一圈有快有慢，CI/CD 把它們分層排程，結果由機器判", p2()),
-    ("沒有 CI/CD 的 inner loop：每圈都要人設環境、人跑、人判，轉得慢又判不準", p3()),
-    ("Outer loop：真正要比的是 N 個候選的 PPA，每個候選都是一整圈 inner loop", p4()),
-    ("Agentic AI：便宜的是「改」，平行 N 個 agent 之後，瓶頸移到「判」", p5()),
-    ("上限：平行的寬度由 license 與算力決定，比較要在同一環境下才算數", p6()),
-    ("連鎖：沒有 CI/CD，inner loop 要人顧，outer loop 轉不完，倍數歸一", p7()),
-    ("對應：六個原則各自撐住迴圈的一個條件", p8()),
+    ("內圈（inner loop）：一個改動是改、查、判轉到過為止，查和判交給機器", p1()),
+    ("分層：IC 的一圈有快有慢，CI/CD 按快慢分層跑，哪一層都由機器判", p2()),
+    ("現狀的內圈：每圈靠人設環境、人跑、人看 log，轉得慢、判法還不一", p3()),
+    ("外圈（outer loop）：比 N 個方案的 PPA，每個方案都要先跑完一圈內圈", p4()),
+    ("Agentic AI：N 個 agent 平行「改」很便宜，瓶頸變成誰來查、誰來判", p5()),
+    ("上限：能平行幾個由 license 與算力決定；CI/CD 管的是排隊和固定環境", p6()),
+    ("結論：沒有 CI/CD，每圈要人顧，N 個方案跑不完，N 個 agent 等於一個", p7()),
+    ("對應：迴圈要自己轉的六個條件，就是《把版控當備份的團隊》的六個原則", p8()),
 ]
 
 if __name__ == "__main__":
-    build(NAME, "CI/CD 的意義：讓迴圈自己轉，AI 的倍數才成立", KICKER, PAGES)
+    build(NAME, "為什麼非要 CI/CD：查和判不交給機器，N 個 agent 等於一個", KICKER, PAGES)
