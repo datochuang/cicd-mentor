@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# 《第一次進 workspace：照五個原則檢查，不過就先補一版》：docs/slides/check-then-patch-before-asking-owner.{html,pdf}
-# 執行：python3 docs/figures/check-then-patch-before-asking-owner/build.py
+# 《第一次進 workspace：照五個原則檢查，不過就先補一版》：docs/slides/agent-entering-unknown-workspace.{html,pdf}
+# 執行：python3 docs/figures/agent-entering-unknown-workspace/build.py
 #
 # 讀者：第一次進到一個沒看過的 workspace 的人或 AI agent。懂 Perforce 基本操作、會寫 script，不認識這個專案。
 # 讀完要能：照順序把 workspace 檢查一遍；每個檢查點知道怎麼判定、不過時自己先補什麼、哪些才需要問 owner。
@@ -13,7 +13,7 @@ import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
 from slides import *
 
-NAME = "check-then-patch-before-asking-owner"
+NAME = "agent-entering-unknown-workspace"
 KICKER = "進到陌生 workspace 的檢查"
 
 

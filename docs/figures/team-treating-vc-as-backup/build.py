@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# 《把版控當備份的團隊：depot 留住檔案，留不住答案》：docs/slides/repo-as-backup-keeps-files-not-answers.{html,pdf}
-# 執行：python3 docs/figures/repo-as-backup-keeps-files-not-answers/build.py
+# 《把版控當備份的團隊：depot 留住檔案，留不住答案》：docs/slides/team-treating-vc-as-backup.{html,pdf}
+# 執行：python3 docs/figures/team-treating-vc-as-backup/build.py
 #
 # 讀者：公司內部的主管與工程師。每天用 Perforce，熟悉自己團隊的做法，沒有把這些做法和後面的問題連起來看過。
 # 讀完要能：在圖裡認出自己團隊的做法，說出哪些問題是從這些做法長出來的。
@@ -12,7 +12,7 @@ import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
 from slides import *
 
-NAME = "repo-as-backup-keeps-files-not-answers"
+NAME = "team-treating-vc-as-backup"
 KICKER = "版控只當備份的團隊"
 
 

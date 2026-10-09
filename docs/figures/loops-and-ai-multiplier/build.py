@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# 《CI/CD 的意義：讓迴圈自己轉，AI 的倍數才成立》：docs/slides/loops-need-cicd-before-ai-multiplies.{html,pdf}
-# 執行：python3 docs/figures/loops-need-cicd-before-ai-multiplies/build.py
+# 《CI/CD 的意義：讓迴圈自己轉，AI 的倍數才成立》：docs/slides/loops-and-ai-multiplier.{html,pdf}
+# 執行：python3 docs/figures/loops-and-ai-multiplier/build.py
 #
 # 讀者：公司內部的主管與工程師。大致認同「迭代式開發＋CI/CD」的方向，但懷疑它是否非做不可；熟 IC 設計流程，不熟軟體業的用語。
 # 讀完要能：用一句話說出為什麼《把版控當備份的團隊》裡的症狀代價很大：它們打斷的是 AI 本來能放大的那個迴圈。
@@ -15,7 +15,7 @@ import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
 from slides import *
 
-NAME = "loops-need-cicd-before-ai-multiplies"
+NAME = "loops-and-ai-multiplier"
 KICKER = "CI/CD 的意義"
 
 

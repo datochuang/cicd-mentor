@@ -41,9 +41,9 @@ starter-kit/
   README.md                 這包是什麼、讀的順序、第一週做什麼
   CLAUDE.md                 給內網 Claude Code：先是專案的目的與框架，再是工作規則（紅線、先問 PM 的事、交付形式、不深入什麼）
   glossary.md
-  01-why/                   ai-agent-and-pm-make-cicd-happen.pdf、loops-need-cicd-before-ai-multiplies.pdf
-  02-diagnosis/             repo-as-backup-keeps-files-not-answers.pdf
-  03-procedures/            check-then-patch-before-asking-owner.pdf、agent-fills-what-pm-and-team-lack.pdf
+  01-why/                   why-cicd-needs-ai-agent-and-pm.pdf、loops-and-ai-multiplier.pdf
+  02-diagnosis/             team-treating-vc-as-backup.pdf
+  03-procedures/            agent-entering-unknown-workspace.pdf、agent-pm-team-repo-interactions.pdf
   04-principles.md          五原則＋八做法＋檢驗（含每個目錄講好要不要 review）
   05-behavior-guidelines.md agent 行為指導原則（乾淨版）
   06-pm-handbook.md

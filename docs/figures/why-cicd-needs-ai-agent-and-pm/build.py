@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# 《AI agent 與 PM 一起把 CI/CD 做成》：docs/slides/ai-agent-and-pm-make-cicd-happen.{html,pdf}
-# 執行：python3 docs/figures/ai-agent-and-pm-make-cicd-happen/build.py
+# 《AI agent 與 PM 一起把 CI/CD 做成》：docs/slides/why-cicd-needs-ai-agent-and-pm.{html,pdf}
+# 執行：python3 docs/figures/why-cicd-needs-ai-agent-and-pm/build.py
 #
 # 讀者：公司內部的主管與決策者（sponsor 候選、部門主管、可能的 PM）。懂 IC 設計流程與 Perforce 基本用法，
 #       大致認同「迭代式開發＋CI/CD」的方向，但懷疑是否非做不可、懷疑做得到；沒參與過這個專案的討論。
@@ -12,7 +12,7 @@ import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
 from slides import *
 
-NAME = "ai-agent-and-pm-make-cicd-happen"
+NAME = "why-cicd-needs-ai-agent-and-pm"
 KICKER = "CI/CD Mentor Agent"
 
 
