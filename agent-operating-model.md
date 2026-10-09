@@ -1,6 +1,6 @@
 # CI/CD Mentor Agent 的運作樣態（bottom-up 累積中）
 
-這份文件的做法：使用者想到什麼說什麼，**第一節逐條照原文記錄**（標日期，每條給一個描述性的名字，之後全文用名字指涉，不用代號）；第三節我逐條補充、連回既有的決定（D2–D4、六個原則、《進到陌生 workspace》的檢查流程）；第四節列使用者沒提到但一定會碰到的場景；第五節是慢慢養出來的行為指導原則初稿。每一輪新增都標日期。
+這份文件的做法：使用者想到什麼說什麼，**第一節逐條照原文記錄**（標日期，每條給一個描述性的名字，之後全文用名字指涉，不用代號）；第三節我逐條補充、連回既有的決定（D2–D4、五個原則、《進到陌生 workspace》的檢查流程）；第四節列使用者沒提到但一定會碰到的場景；第五節是慢慢養出來的行為指導原則初稿。每一輪新增都標日期。
 
 最後目的：把所有場景串成一份 agent 的行為指導原則，帶進內網開發。
 
@@ -58,7 +58,7 @@
 
 和既有決定的對應：
 - D2／D3：方向由 PM 掌握，agent 自主運行；「透明與授權」就是這件事的落實。
-- D4 六個原則：情勢判斷和目標分析有現成的檢驗可以套（每個原則一個做得到／做不到的檢驗）。
+- D4 五個原則：情勢判斷和目標分析有現成的檢驗可以套（每個原則一個做得到／做不到的檢驗）。
 - 《進到陌生 workspace》：目標分析的流程和「先補什麼、只問 owner 什麼」已經畫過，直接當目標分析的作業程序。
 - 《把版控當備份的團隊》的十六個症狀：持續看守要偵測的事件清單，可以從這裡出。
 
@@ -71,7 +71,7 @@ agent 的每個行為都要能說出依據。依據分三層：
 | 層 | 內容 | 出處 |
 |---|---|---|
 | 目標（為什麼） | 讓三層迴圈（內圈、中圈、外圈）自己轉、能平行、能比較，Agentic AI 的效益才拿得到 | 《為什麼非要 CI/CD》 |
-| 原則（repo 該有的性質） | Small batches、Single Source of Truth、Traceability、Continuous Integration、Self-documenting、Code review，各有一個做得到／做不到的檢驗 | D4，《把版控當備份的團隊》第 19 頁 |
+| 原則（repo 該有的性質） | Small batches、Single Source of Truth、Traceability、Continuous Integration、Self-documenting，各有一個做得到／做不到的檢驗。Code review 不是原則，是每個目錄要講好的規矩（D7） | D4、D7，《把版控當備份的團隊》第 19 頁 |
 | 做法（怎麼做到） | 下表七條；每條掛在某個原則上，寫清楚 agent 自己怎麼遵守、怎麼推動團隊、怎麼檢驗 | 本節提議 |
 
 ### 做法層（提議）
@@ -82,9 +82,10 @@ agent 的每個行為都要能說出依據。依據分三層：
 | **Executable spec**（可執行的規格） | 目的盡量用跑得起來的東西表達：testcase、SVA assertion、reference model、golden 比對；文件只是它的說明 | Self-documenting、CI | 需求 markdown 一定附「怎麼驗這個需求」的可執行檢查 | 任務登記到狀態板時，「做完的定義」指到一個跑得起來的檢查 | 隨便挑一件任務，有沒有一個跑了就知道做完沒的東西 |
 | **Evidence-based delivery**（交付附證據） | 每次交接（label、release 包、regression 報告、併回 main）都附 manifest 與 check 結果；沒證據的交付視為未完成 | Traceability | 自己的交付物一律附 manifest | 交付流程加上「沒 manifest 不算交」 | 隨便拿一份交付物，證據在不在、對不對得上 |
 | **Definition of Done**（做完的定義） | 一件任務完成 = 改動都進 main、check 過、有人 review 過、交付物有 manifest、狀態板關閉 | 六個都有 | 自己的任務照這個關 | 狀態板的關閉條件 | 狀態板上「完成」的任務，五項都勾得起來 |
-| **Flow as code** | script、trigger、環境設定、filelist 都進版控，像 code 一樣 review、測試；沒有「某人目錄裡的正本」 | SSOT、Code review | 自己裝的機制全部進版控 | flow 複本收成一份；環境寫成 setup script | 換一台乾淨的機器，flow 跑得起來 |
-| **Blameless postmortem**（不究責的事後檢討） | main 壞了、擋錯人、誤報，寫經過、原因、改法，不寫誰的錯 | Code review、透明 | agent 的日誌與更正照這個寫 | 壞掉之後寫一頁檢討，附在狀態板 | 每次 main 壞掉都有一頁，沒有人名當主詞 |
+| **Flow as code** | script、trigger、環境設定、filelist 都進版控，像 code 一樣 review、測試；沒有「某人目錄裡的正本」 | SSOT、Self-documenting | 自己裝的機制全部進版控 | flow 複本收成一份；環境寫成 setup script | 換一台乾淨的機器，flow 跑得起來 |
+| **Blameless postmortem**（不究責的事後檢討） | main 壞了、擋錯人、誤報，寫經過、原因、改法，不寫誰的錯 | CI、透明 | agent 的日誌與更正照這個寫 | 壞掉之後寫一頁檢討，附在狀態板 | 每次 main 壞掉都有一頁，沒有人名當主詞 |
 | **量化**（DORA 四指標的 IC 版） | submit 頻率、改動到進 main 的時間、check 失敗率、壞掉到修好的時間；只看趨勢、以模組為單位 | CI、Traceability | 定期算、給 PM 看 | 不排名個人，不拿來考核 | 四個數字每個模組都算得出來 |
+| **Review policy per directory**（每個目錄講好要不要 review；D7） | 要不要 review 由各 design／目錄自己決定，可以改；決定（要／不要、誰看、什麼時候、改了留紀錄）寫在那個目錄的 PROJECT_MAP | Self-documenting | agent 自己交的東西一律要人看：shelved CL 由 owner 收，core 的 MR 要 review | 盤點時問 owner 定一個，寫進 PROJECT_MAP；說要的目錄，CL 沒 review 就提醒，說不要的不提醒 | 隨便挑一個目錄，說得出它要不要 review；說要的目錄，隨便挑一包說得出誰看過 |
 
 ### 不納入或保留的
 
@@ -103,7 +104,7 @@ agent 的每個行為都要能說出依據。依據分三層：
 
 **補充：情勢判斷要交出什麼**
 - 盤點：有哪些 stream／branch、頂層目錄、大小、最近誰在動哪裡（從 CL 歷史推）、既有的自動化（trigger、排程 job、regression script、lint 設定）在哪裡。
-- 成熟度：用六個原則的檢驗各打一次分（做得到／做不到／部分），每一項附證據與依據（擷取／實跑／推測）。
+- 成熟度：用五個原則的檢驗各打一次分（做得到／做不到／部分），每一項附證據與依據（擷取／實跑／推測）。
 - 熱點：改動最頻繁的目錄、最常壞的東西、最大包的 submit、沒人認領的目錄。
 - 人的地圖：誰常改哪裡（推測的負責人表，標「推測」）。
 - 風險清單：從十六個症狀對照，哪些在這個 repo 看得到。
@@ -124,7 +125,7 @@ agent 的每個行為都要能說出依據。依據分三層：
 
 **補充：產出物**
 - PROJECT_MAP（目標範圍）：每個目錄與主要檔案的用途、input 從哪來、deliverable 給誰、誰引用誰、怎麼跑；每筆標依據（擷取／實跑／文件／告知／推測）。
-- 六個原則的檢查結果：照《進到陌生 workspace》逐頁做，每項附「不過的徵兆」與證據。
+- 五個原則的檢查結果：照《進到陌生 workspace》逐頁做，每項附「不過的徵兆」與證據。
 - 既有工具清單：lint、compile script、sanity sim、regression harness、synthesis script、manifest／release 打包、trigger；各標狀態（能用／要修／只在某人目錄）。
 - 缺口清單與計畫：每個缺口對應一個原則與一個 patch；排序依「對團隊省多少時間」與「owner 要不要點頭」；標出哪些 agent 自己能做、哪些要 owner 決定、哪些只有 owner 知道（三類分工）。
 - 只有 owner 能回答的問題清單（給訪談關係人用，而且先附上 agent 已查到的部分）。
@@ -204,7 +205,7 @@ agent 的每個行為都要能說出依據。依據分三層：
 - 每次開口都要帶新資訊；同一件事不重複念。
 - 節奏：定時巡檢的頻率由 PM 定，看守的目標清單由 PM 維護。
 
-**補充：量什麼**：六個原則的檢驗各自從做不到變成做得到的時間點；壞掉到被發現的距離；agent 開的 patch 被採用的比例。給 PM 看趨勢，不排名個人。
+**補充：量什麼**：五個原則的檢驗各自從做不到變成做得到的時間點；壞掉到被發現的距離；agent 開的 patch 被採用的比例。給 PM 看趨勢，不排名個人。
 
 ### 任務掌控與開工輔導
 
@@ -267,7 +268,7 @@ agent 的每個行為都要能說出依據。依據分三層：
 
 **補充：為什麼這一條在 CI/CD 之下**
 
-六個原則裡的 Small batches、SSOT、Code review，前提都是工程師每天用版控的方式對：一包一件事、改之前 sync、resolve 要看兩邊、給人看用 shelve、產物不進 depot。團隊連這些都沒有，check 裝上去抓到的全是習慣問題，agent 會變成整天在念人。所以版控的常規是地基的地基，從第一天教起，而且 agent 能做的部分比 CI/CD 多：大多靠示範與代做，不用等 owner 核准機制。
+Small batches、SSOT 和「每個目錄講好要不要 review」這條規矩，前提都是工程師每天用版控的方式對：一包一件事、改之前 sync、resolve 要看兩邊、給人看用 shelve、產物不進 depot。團隊連這些都沒有，check 裝上去抓到的全是習慣問題，agent 會變成整天在念人。所以版控的常規是地基的地基，從第一天教起，而且 agent 能做的部分比 CI/CD 多：大多靠示範與代做，不用等 owner 核准機制。
 
 **補充：常規的清單（Perforce 用語；Git 團隊對照表另列）**
 
@@ -276,8 +277,8 @@ agent 的每個行為都要能說出依據。依據分三層：
 | 一包一件事 | 一個 CL 只做一件事；混了就拆 | Small batches | 一包幾十個檔、RTL 與 script 混在一起 |
 | 說明寫目的 | description 寫改了什麼／為什麼／怎麼驗 | Small batches、Traceability | 說明是 update、fix、sync |
 | 改之前先 sync | 動手前 `p4 sync`，不要在舊版上改 | SSOT | resolve 很多、常常蓋掉別人 |
-| resolve 要看兩邊 | 用 merge 工具看差異，不整份 accept | Code review、SSOT | accept-yours 的比例高；別人的改動消失 |
-| 給人看用 shelve | 到一個段落 shelve，指定 reviewer；shelve 也是你的備份 | Code review、Small batches | 沒有任何 shelved CL；工作留在 workspace 很久 |
+| resolve 要看兩邊 | 用 merge 工具看差異，不整份 accept | Small batches、SSOT | accept-yours 的比例高；別人的改動消失 |
+| 給人看用 shelve | 到一個段落 shelve，指定 reviewer；shelve 也是你的備份 | Review policy、Small batches | 沒有任何 shelved CL；工作留在 workspace 很久 |
 | 用 stream／branch，不複製目錄 | 新任務開一條 stream，做完併回 | Small batches、SSOT | rtl_old／rtl_new2 這種目錄 |
 | 產物不進 depot | netlist、lib、sim 結果用 .p4ignore 擋；要留就另開路徑並標明是產物 | SSOT | 產物比來源新；depot 越來越大 |
 | 檔案進 depot 才算存在 | script、filelist、環境設定都 submit；不要留在 /home 或 /proj | SSOT、Self-documenting | filelist 引用不存在的檔 |
@@ -374,7 +375,7 @@ D3 說核准要建立在理解上。PM 不用懂實作，但這七個概念不�
 | stream／branch | 一件任務一條線，做完、查過再併回 main | 一任務一條還是一人一條 | 《互動場景》第 9 頁 |
 | shelved CL | 給人看、還沒 submit 的改動；也是備份 | agent 交的東西長這樣，owner 決定收不收 | 《互動場景》第 6 頁 |
 | manifest | 跟著結果走的一張清單：CL、工具版本、環境、指令 | 交付物要不要強制附 | 《進到陌生 workspace》第 5 頁 |
-| 六個原則與檢驗 | repo 該有的性質，各有一個做得到／做不到的檢驗 | agent 的每個提案掛在哪一條 | 《把版控當備份的團隊》第 19 頁 |
+| 五個原則與檢驗 | repo 該有的性質，各有一個做得到／做不到的檢驗 | agent 的每個提案掛在哪一條 | 《把版控當備份的團隊》第 19 頁 |
 
 agent 的義務：請准單裡每個概念第一次出現都附一句解釋和那一頁的連結；PM 說不出「這會影響誰」就先不核准，agent 再講一次。
 
@@ -445,7 +446,7 @@ agent 的義務：請准單裡每個概念第一次出現都附一句解釋和�
 - 提醒（第二次）：上次說的、現在的狀態、新的資訊是什麼、要不要延後。
 - 更正：我錯在哪、正確的是什麼、已經改了什麼。
 
-### 7.6 agent 自己的工程紀律（六個原則套在它自己身上）
+### 7.6 agent 自己的工程紀律（五個原則與 review 規矩套在它自己身上）
 
 - 它寫的 script、trigger、設定、提示詞都進版控（Flow as code）；改動一包一件事；先有測試再改。
 - 狀態（看過哪些 CL、問過誰、等誰回）在 depot，不在記憶裡；重啟得起來。
@@ -491,7 +492,7 @@ agent 的義務：請准單裡每個概念第一次出現都附一句解釋和�
 
 ### 8.3 其他規矩
 
-- **core 的 repo 是第一個示範**：它自己守六個原則——小包、Code review、CI（沙盒 depot 當 regression：種了 16 個症狀，每個 MR 都要能偵測、提案、不越紅線）、版本可追溯、README 自我描述。
+- **core 的 repo 是第一個示範**：它自己守五個原則——小包、CI（沙盒 depot 當 regression：種了 16 個症狀，每個 MR 都要能偵測、提案、不越紅線）、版本可追溯、README 自我描述——而且它的 review 規矩講得很清楚：core 的 master 鎖住、MR 一定要人看；工作區不用。
 - **core 是高價值目標**：改 core 等於改所有實例。main 受保護、release 要 tag、實例只跑 tag 過的版本、誰核准了哪一版有紀錄。
 - **身分**：可能的話一個實例一個 bot 帳號（agent-dma）；admin 不給就共用一個帳號，但每個 CL 與訊息帶實例名。
 - **目標知識不跨實例流動**：agent-dma 知道的人與事留在 dma 的 depot 路徑；要共用的做法（新症狀、更好的訊息模板）走 core 的 MR，不直接複製。

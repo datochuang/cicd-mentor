@@ -72,3 +72,19 @@
 **取代：** 無；補 D5 的版號細節。
 
 **出處：** [agent-operating-model.md](agent-operating-model.md) 8.9；圖形文件《agent 自己的版控》第 1 頁 lane 上的刻度、第 7 與第 9 頁的範例。
+
+---
+
+## D7｜2026-10-09｜原則維持五個；Code review 不是原則，是每個目錄要講好的規矩；CI 定義補兩句
+
+**決定：**
+1. 原則維持 D4 的五個：Small batches、SSOT、Traceability、CI、Self-documenting。
+2. CI 的意思定版為「改動進來的當下就被機器檢查，結果由機器寫下；共用的 main 隨時可用」。
+3. Code review 不是原則。要不要 review 由各 design／目錄自己決定，專案過程中可以改。定成一條規矩：**每個目錄都要講好需不需要 code review**——要／不要、誰看、什麼時候（進 main 前、里程碑前）、改了留紀錄——寫在那個目錄的 PROJECT_MAP 裡。掛在 Self-documenting 底下；檢驗是「隨便挑一個目錄，說得出它要不要 review；說要的目錄，隨便挑一包說得出誰看過」。做法層加一條 Review policy per directory（T31 一併確認）。
+4. agent 自己交的東西不在此限：shelved CL 一律 owner 收了才進 depot；core 的 MR 一律要人 review。
+
+**理由：** 使用者：「code review 是非必要，由各個 design 自行決定，且專案過程當中可以變更……介於原則和非原則之間，或許要定義成『每個目錄都要講好需不需要 code review』。」原則是 repo 該有的性質，不能由目錄各自選；review 可以各自選，所以它不是原則，但「有沒有講好」是 Self-documenting 的事。
+
+**取代：** 我在 10-09 提議的第六個原則 Code review（寫進收斂頁、direction、《進到陌生 workspace》第六個檢查、《agent 自己的版控》第 3 頁；這些待改）。「沒有 review」那頁改成「沒講好要不要 review」；「resolve 整份收下」留在 Small batches 與版控常規。
+
+**出處：** [direction.md](direction.md)「問題的定錨點」；[agent-operating-model.md](agent-operating-model.md)「依據」做法層。

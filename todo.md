@@ -42,12 +42,11 @@
 | T10 | 10-08 | 圖形文件要不要做盲讀驗收 | 派沒看過討論的 subagent 扮成讀者只讀 PDF，回報看不懂的地方 | |
 | T11 | 10-08 | 舊文字版說明文件的 Artifact 連結要不要刪 | 檔案已移到 docs/archive/；連結 https://claude.ai/artifact/GqNg8P9QN569RFvVhb1Yme 仍在 | |
 | T17 | 10-09 | 圖形文件《第一次進 workspace：照五個原則檢查，不過就先補一版》初稿等你修正 | 九頁（10-09 晚上加了 SSOT 第二頁：產物、flow、IP；Code review 一頁；分工頁加了對應項目）。特別要看：六個檢查的順序、每頁「先補什麼」的 patch 名單、第 9 頁三類分工與「owner 採用才進 depot」這個預設 | docs/slides/check-then-patch-before-asking-owner.pdf |
-| T19 | 10-09 | **第六個原則 Code review**（併入前有人看過並留紀錄）等你確認 | 追加的「沒有 review」「resolve 整份收下」兩頁掛不進原來五個：CI 是機器把關，review 是人把關，對策不同。已寫進圖形文件收斂頁、direction.md、檢查文件第 7 頁；不採用的話這三處要改 | direction.md 定錨點 |
+| T43 | 10-09 | **D7 之後的投影片修改**（等七件決定完一次做，免得重建好幾次）：《把版控當備份的團隊》第 1 頁的 Code review 框併進 Self-documenting、第 10 頁改成「沒講好要不要 review」、第 19 頁改五列；《進到陌生 workspace》第六個檢查改成「目錄有沒有講好要不要 review，沒講就問 owner 定一個」、標題的「六個原則」改五個；《agent 自己的版控》第 3 頁的表改五列加 review 規矩；《為什麼非要 CI/CD》第 8、11 頁的「六個原則」改五個；《互動場景》裡提到的地方；README 的 alt 一起改 | 文字文件（direction、operating model、starter-kit-plan、decision-log D7）已改 | decision-log.md D7 |
 | T20 | 10-09 | **《把版控當備份的團隊》p4–p16 冒號前全是「問題」**，審稿說 13 頁下來那格沒有資訊，建議改放原則名或分組詞 | 我沒動，因為這會改變「主題：結論」裡主題詞的用法。我的建議：改成「問題（Traceability）：…」這種形式，讀者翻到收斂頁前就看過六個詞；你決定 | docs/reviews/titles-blind-read-20261009.md |
 | T21 | 10-09 | 圖形文件《為什麼非要 CI/CD：查和判不交給機器，N 個 agent 等於一個》初稿等你修正 | 十一頁。2026-10-09 深夜依你「順序不通順」重排：脊椎是三層套疊的迴圈。1 總覽（三種效益站在 CI/CD 地基上，地基現在是空的；一頁看完整個主張）→ 2–4 內圈（定義、在 IC 排成幾道檢查、現狀）→ 5–6 中圈（迭代進 main、交接）→ 7 外圈 → 8–9 AI（三層都加速改、瓶頸在判；上限）→ 10 結論 → 11 對應。特別要看：第 1 頁那張三層的表對不對、第 6 頁 agent 接得了／接不了的那段、第 7 頁 DSO.ai 的引用與「前提是推論」、第 9 頁三個上限 | docs/slides/loops-need-cicd-before-ai-multiplies.pdf；research/loops-and-ai-multiplier.md |
 | T22 | 10-09 | **前三份圖形文件要不要照新規則補一頁總結** | 「第 1 頁一頁講完主張」的規則是做第四份時才定的；前三份（agent 與 PM、把版控當備份、進到陌生 workspace）的第 1 頁仍是鋪陳式開頭 | CLAUDE.md 圖形化文件的規則 |
 | T32 | 10-09 | 圖形文件《互動場景》初稿等你修正 | 十二頁，泳道圖；每頁的「什麼時候」「授權」和示意的訊息例句都是我寫的 | docs/slides/agent-fills-what-pm-and-team-lack.pdf |
-| T18 | 10-09 | **CI 原則的意思補了「共用的 main 隨時可用」「結果由機器寫下」**（D4 微調） | 加「沒有 branch」那頁時，它的危害要掛到 CI 上，原本的定義只講「改動進來時被檢查」，沒講檢查的目的是讓 main 隨時可用。請確認這個補法，不然就要考慮第六個原則 | direction.md 定錨點 |
 | T14 | 10-08 | 圖形文件《把版控當備份的團隊》初稿等你修正 | 十八頁全部是我創作的（10-09 晚上追加圖 9–16：沒有 review、resolve 整份收下、產物進 depot、IP 解壓覆蓋、flow 複製、兩台機器結果不同、Excel 狀態表、退不回去）。情境與細節都要你對照實際狀況修正 | docs/slides/repo-as-backup-keeps-files-not-answers.pdf |
 
 ## 其他
@@ -65,5 +64,7 @@
 | T12 | 10-08 | 推上 GitHub 前檢查公開範圍 | 使用者說明 repo 是個人專用，不需檢查；已推上 datochuang/cicd-mentor |
 | T16 | 10-09 | 五個定錨原則等你確認 | 全部同意，改用英文專有名詞：Small batches、SSOT、Traceability、CI、Self-documenting。記為 D4 |
 | T39 | 10-09 | 《agent 自己的版控》第 3–10 頁照 D5 改、加「換手」一頁、換手的接法誰選 | 接法由 PM 選（使用者：「這很明顯」）。全份十一頁已照 D5 改，第 5 頁換手；檔名改為 agent-own-version-control-and-instances；標題再盲讀一次（docs/reviews/titles-blind-read-agent-versioning-20261009.md 第二輪） |
+| T19 | 10-09 | 第六個原則 Code review | 不採用。使用者：review 非必要，由各 design 自行決定、過程中可變，定成規矩「每個目錄都要講好需不需要 code review」，掛在 Self-documenting，做法層加 Review policy per directory。記為 D7 |
+| T18 | 10-09 | CI 的意思補「結果由機器寫下；共用的 main 隨時可用」 | 使用者同意。記在 D7 |
 | T42 | 10-09 | 實例小版號的定義 | 照我的理解：core 版號後面加一位，實例每次把工作區 merge 回 master 就加一（agent-dma v0.3.2）。記為 D6 |
 | T40 | 10-09 | D5 影響的舊投影片要改 | 照我的判斷做了：《agent 補 PM 與團隊各缺的》第 2 頁用語、第 3 頁啟動（目標的 repo 只被讀，紀錄在 agent 的 repo）、第 6 頁（決定記在 agent 的 repo）、第 12 頁（log 與狀態板在 agent 的 repo、團隊可讀，副本進 depot 由 owner 定）；《進到陌生 workspace》講的是 setup script、manifest 這類生產用的東西進 depot，符合 D5，不用改 |
