@@ -27,6 +27,7 @@
 | T36 | 10-09 | **紅線清單**（不刪、不碰別人 workspace、沒共識不擋、不報個人活動量、design 資料不出核准的模型、不假裝是人、不對 design 下判斷）有沒有要加減 | | agent-operating-model.md 7.4 |
 | T38 | 10-09 | **agent 自己的版控與多實例**：core 由誰維護、一實例一帳號還是共用、升級的節奏 | 三層分離（core／實例的工作區／生產用的工具）、登記表、實例名與版號署名、沙盒當 core 的 regression、換手已寫進 operating model 第八節，並做成投影片《agent 自己的版控》；這三件要公司決定 | agent-operating-model.md 第八節、docs/slides/agent-own-version-control-and-instances.pdf |
 | T7 | 10-08 | **轉型的終點**：流程存在就好，還是要團隊真正理解並自己維護 | D2 給了初步答案（先改變 PM，由他帶動團隊），細節待討論 | decision-log.md D2 |
+| T45 | 10-09 | **D12 的連帶**：五份投影片（總覽與原則頁加 CD、第七個檢查、互動場景加交付頁、中圈交接點名 CD、core 的 release pipeline）、啟動包同步（04、05、07、glossary、十六種問題、模板加 release 包、CLAUDE.md、06 概念表、10 的 D12）、再盲讀一次 | 文字文件（direction、operating model、decision-log）已改 | decision-log.md D12 |
 | T15 | 10-08 | **目錄用途與相依關係沒有文件，對 agent 設計的影響**：通用 agent 每個 workspace 都要另寫指引，那這個 agent 要不要自己建立並維護每個專案的目錄說明與相依關係（並放進版控）？ | 你在討論第二份圖形文件時提出這個問題；只寫進了文件第 8 頁（加總覽頁後的頁碼），還沒討論對 agent 本身的設計意涵 | docs/slides/team-treating-vc-as-backup.pdf 第 8 頁 |
 
 ## 等你確認的產出
@@ -38,7 +39,7 @@
 | T20 | 10-09 | **《把版控當備份的團隊》p4–p16 冒號前全是「問題」**，審稿說 13 頁下來那格沒有資訊，建議改放原則名或分組詞 | 我沒動，因為這會改變「主題：結論」裡主題詞的用法。我的建議：改成「問題（Traceability）：…」這種形式，讀者翻到收斂頁前就看過六個詞；你決定 | docs/reviews/titles-blind-read-20261009.md |
 | T21 | 10-09 | 圖形文件《為什麼非要 CI/CD：查和判不交給機器，N 個 agent 等於一個》初稿等你修正 | 十一頁。2026-10-09 深夜依你「順序不通順」重排：脊椎是三層套疊的迴圈。1 總覽（三種效益站在 CI/CD 地基上，地基現在是空的；一頁看完整個主張）→ 2–4 內圈（定義、在 IC 排成幾道檢查、現狀）→ 5–6 中圈（迭代進 main、交接）→ 7 外圈 → 8–9 AI（三層都加速改、瓶頸在判；上限）→ 10 結論 → 11 對應。特別要看：第 1 頁那張三層的表對不對、第 6 頁 agent 接得了／接不了的那段、第 7 頁 DSO.ai 的引用與「前提是推論」、第 9 頁三個上限 | docs/slides/loops-and-ai-multiplier.pdf；research/loops-and-ai-multiplier.md |
 | T32 | 10-09 | 圖形文件《互動場景》初稿等你修正 | 十二頁，泳道圖；每頁的「什麼時候」「授權」和示意的訊息例句都是我寫的 | docs/slides/agent-pm-team-repo-interactions.pdf |
-| T14 | 10-08 | 圖形文件《把版控當備份的團隊》初稿等你修正 | 十八頁全部是我創作的（10-09 晚上追加圖 9–16：沒有 review、resolve 整份收下、產物進 depot、IP 解壓覆蓋、flow 複製、兩台機器結果不同、Excel 狀態表、退不回去）。情境與細節都要你對照實際狀況修正 | docs/slides/team-treating-vc-as-backup.pdf |
+| T14 | 10-08 | 圖形文件《把版控當備份的團隊》初稿等你修正（審閱中；D12 加 CD 後原則頁會變，先做完 D12 再繼續） | 十八頁全部是我創作的（10-09 晚上追加圖 9–16：沒有 review、resolve 整份收下、產物進 depot、IP 解壓覆蓋、flow 複製、兩台機器結果不同、Excel 狀態表、退不回去）。情境與細節都要你對照實際狀況修正 | docs/slides/team-treating-vc-as-backup.pdf |
 
 ## 其他
 

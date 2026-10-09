@@ -4,7 +4,7 @@
 
 這個 repo 只討論與規劃，不在這裡做 agent：最終產出是啟動包，帶進公司內網、在全新的 repo 與 session 裡才開始製作與部署（D10）。
 
-最後更新：2026-10-09（D4–D8）
+最後更新：2026-10-09（D4–D12）
 
 ## 目標
 
@@ -72,7 +72,7 @@
 8. **先代做，累積信任與看得見的好處。** 降低工程師採用的成本，從他們真正的痛點下手，而不是先列出違反了哪些規範。
 9. **Agent 有自己的一個 git repo，實例從它生出來、工作區回到它；只有用在客戶生產環節的工具才進目標的 repo（D5）。** core 在 master 出 release；每個實例 clone 出來後建自己的工作區 `designs/<名>/`，紀錄與文件的主本都在那裡，換手時新版實例 clone 就拿到。check、flow 的修正、trigger、模板這類用在團隊生產環節的東西，以 shelved CL 交進目標的 repo，owner submit 後以那裡為準；文件（PROJECT_MAP、狀態板、報告）要不要留副本由 owner 定。像顧問：工作記錄和簡報留在顧問公司，親手做、用在客戶生產線的工具必須在客戶那裡。實例的版號是 core 的 release 版號再加一位小版號，每 merge 一次工作區加一（agent-dma v0.3.2；D6）。細節在 [agent-operating-model.md](agent-operating-model.md) 第八節。
 
-## 問題的定錨點：五個原則（D4；D7 定 Code review 不是原則，是每個目錄要講好的規矩）
+## 問題的定錨點：六個原則（D4、D12；D7 定 Code review 不是原則，是每個目錄要講好的規矩）
 
 把版控當備份的團隊有一長串具體問題（見圖形文件《把版控當備份的團隊》圖 2–17；2026-10-09 加了總覽頁，頁碼全部加一）。為了之後談對策時不必逐一對應，把它們收斂成幾個 repo 該有的性質。原則一律用英文專有名詞，中文只是註解。每個原則附一個做得到／做不到的檢驗；**之後每一條對策只回答一個問題：它讓哪一個檢驗從做不到變成做得到。**
 
@@ -83,12 +83,15 @@
 | **Traceability**（可追溯） | 每個結果與交付物都連得回產生它的版本、工具、環境與步驟 | 隨便拿一份結果，說得出它的版本、工具、環境與步驟 | 圖 4、5、7、15、16、17 |
 | **Continuous Integration (CI)**（變更即驗證） | 改動進來的當下就被機器檢查，結果由機器寫下；共用的 main 隨時可用（D7 確認這個補法） | 改壞的那一包進來時就被標出來，用不著等到整合 | 圖 6、9、16 |
 | **Self-documenting**（自我描述） | 目錄的用途、相依、怎麼跑、**要不要 review**，寫在 repo 裡 | 第一次來的人只讀 repo，就說得出每個目錄的用途、相依、要不要 review | 圖 7、8、10、14 |
+| **Continuous Delivery (CD)**（持續交付） | 每個通過 check 的改動，機器自動產出下游能直接拿的交付物：打包、附 manifest、打 label（known-good）、放到固定位置、通知下游；下游（top 整合、DV、PD）從那裡拿，不等人；release 包按一下就出。IC 沒有「部署到 production」，對應的是「交到下一棒，而且下一棒拿了就能跑」 | 任何時候不用問人，就拿得到最新一份附 manifest 的交付包，下游拿了就能跑 | 圖 4、7、17 |
+
+**CD 是第六個原則（D12）。** 使用者指出整份論述 CI 有帶到，CD 幾乎只有兩個字母；CD 不像 code review 是各目錄可選的，它就是中圈的「接棒」本身，所以獨立一條。重點在 agent 要主動：預設 owner 根本沒有「交付物」的概念和意識，agent 要主動詢問、調查、輔助 owner 定義出具體的交付物，再把出包做成 script。
 
 **Code review 不是原則（D7）。** 追加八個問題時我提議第六個原則 Code review；使用者定：要不要 review 由各 design／目錄自己決定，專案過程中可以改，所以它介於原則和非原則之間，定成一條規矩——**每個目錄都要講好需不需要 code review**（要／不要、誰看、什麼時候、改了留紀錄），寫在那個目錄的 PROJECT_MAP 裡。這條掛在 Self-documenting 底下（目錄的規矩寫在 repo 裡），檢驗是「隨便挑一個目錄，說得出它要不要 review；說要的目錄，隨便挑一包說得出誰看過」。「沒有 review」那頁（圖 10）因此改成「沒講好要不要 review」；「resolve 整份收下」（圖 11）留在 Small batches 與版控常規（resolve 要看兩邊）。agent 自己交的東西不在此限：shelved CL 一律 owner 收了才進 depot，core 的 MR 一律要人 review。
 
 ### 做法層（D8 定版）
 
-五個原則是 repo 該有的性質；agent 每天做事需要的是做法。原則之下有八條做法（D8），各掛在一個原則上：Test-first（改動前先定怎麼驗）、Executable spec（目的用跑得起來的東西表達）、Evidence-based delivery（交付附證據）、Definition of Done（任務完成的五個條件）、Flow as code（script、trigger、環境進版控）、Blameless postmortem（不究責的事後檢討）、量化（DORA 四指標的 IC 版）、Review policy per directory（每個目錄講好要不要 review；D7）。完整表格在 [agent-operating-model.md](agent-operating-model.md)「依據」一節。不納入：Shift left（口號）、Trunk-based（與 Small batches 重疊）、Pair programming 等（太泛）、Formal（DV 方法而非流程）。
+六個原則是 repo 該有的性質；agent 每天做事需要的是做法。原則之下有九條做法（D8、D12），各掛在一個原則上：Test-first（改動前先定怎麼驗）、Executable spec（目的用跑得起來的東西表達）、Evidence-based delivery（交付附證據）、Definition of Done（任務完成的五個條件）、Flow as code（script、trigger、環境進版控）、Blameless postmortem（不究責的事後檢討）、量化（DORA 四指標的 IC 版）、Review policy per directory（每個目錄講好要不要 review；D7）、Release pipeline（交付流水線：打包、manifest、label、取用處、通知全是 script，main 過 check 就跑；agent 主動幫 owner 定義交付物；D12）。完整表格在 [agent-operating-model.md](agent-operating-model.md)「依據」一節。不納入：Shift left（口號）、Trunk-based（與 Small batches 重疊）、Pair programming 等（太泛）、Formal（DV 方法而非流程）。
 
 ## 未決問題
 

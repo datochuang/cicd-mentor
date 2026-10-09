@@ -129,3 +129,19 @@
 **取代：** 無；把原本只寫在 CLAUDE.md「產出」一節的意思，提到每份重要文件的開頭。
 
 **出處：** README.md 開頭；CLAUDE.md「產出」。
+
+---
+
+## D12｜2026-10-09｜Continuous Delivery 是第六個原則；做法加 Release pipeline；agent 主動幫 owner 定義交付物
+
+**決定：**
+1. 原則變六個：加 **Continuous Delivery (CD)**——每個通過 check 的改動，機器自動產出下游能直接拿的交付物（打包、附 manifest、打 label、放到固定位置、通知下游），下游不等人；release 包按一下就出。檢驗：任何時候不用問人，就拿得到最新一份附 manifest 的交付包，下游拿了就能跑。症狀第 4、7、17 頁掛過來。IC 沒有部署到 production，對應的是「交到下一棒，而且下一棒拿了就能跑」。
+2. 做法加第九條 **Release pipeline**：打包、manifest、label、取用處、通知全是 script，main 過 check 就跑；agent 自己的 release 先這樣出。
+3. **agent 要主動**：預設 owner 根本沒有「交付物」的概念和意識，agent 主動詢問、調查（CL 歷史、label、下游引用）、輔助 owner 定義出具體的交付物，草稿給 owner 確認，再把出包做成 script。
+4. 場景補齊：《互動場景》加「交付」一頁；《進到陌生 workspace》加第七個檢查；《為什麼非要 CI/CD》中圈交接那頁點名 CD；《把版控當備份的團隊》總覽與原則頁加 CD；operating model 建置機制加「交付」一層。
+
+**理由：** 使用者：「CI 是有帶到…但我們對於 CD 的著墨好像很少？幾乎就只是文件中有 CD 這兩個字母而已，各種流程和場景的推演都沒有？」CD 不像 code review 是各目錄可選的，它就是中圈的接棒本身，值得獨立一條讀者才看得到。
+
+**取代：** D4／D7 的「五個原則」改成六個；其餘不變。
+
+**出處：** [agent-operating-model.md](agent-operating-model.md) 第一節第八輪、「交付（CD）」一節、做法表；[direction.md](direction.md) 定錨點。
