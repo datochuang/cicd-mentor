@@ -26,7 +26,7 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 </style>
 </head>
 <body>
-<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 1 ／ 8</div><h1>內圈（inner loop）：一個改動是改、查、判轉到過為止，查和判交給機器</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="一個行動的迴圈：改（人或 agent）、查（跑 lint、compile、sim）、判（PASS 才算過），不過就繞回改，過了就行動完成。CI/CD 做的事是查和判由機器做、每一圈一樣。右邊是示意的例子：給 DMA 加 burst 模式；改 RTL 加 testcase；lint、compile、跑 DMA 的 sim 子集；全部 PASS 才過。下方註明軟體業的 inner/outer loop 以 commit 為界，這份文件的 inner loop 指一個行動的迴圈、outer loop 指探索。" xmlns="http://www.w3.org/2000/svg">
+<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 1 ／ 10</div><h1>內圈（inner loop）：一個改動是改、查、判轉到過為止，查和判交給機器</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="一個行動的迴圈：改（人或 agent）、查（跑 lint、compile、sim）、判（PASS 才算過），不過就繞回改，過了就行動完成。CI/CD 做的事是查和判由機器做、每一圈一樣。右邊是示意的例子：給 DMA 加 burst 模式；改 RTL 加 testcase；lint、compile、跑 DMA 的 sim 子集；全部 PASS 才過。下方註明軟體業的 inner/outer loop 以 commit 為界，這份文件的 inner loop 指一個行動的迴圈、outer loop 指探索。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
 <text class="tx-lbl" x="20.0" y="20.0" text-anchor="start" fill="var(--ink-2)">這份文件回答：CI/CD 對這個團隊的意義是什麼；《把版控當備份的團隊》裡的症狀，代價到底多大 ↓</text>
 <text class="tx-lbl" x="20.0" y="50.0" text-anchor="start" fill="var(--ink-2)">內圈（inner loop）：一個改動（加功能、修 bug）= 改、查、判，轉到過為止</text>
@@ -62,12 +62,12 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx-s" x="600.0" y="164.0" text-anchor="start" fill="var(--ink-2)">全部 PASS 才過；有一個 FAIL 就回去改</text>
 <rect x="20.0" y="212.0" width="840.0" height="64.0" fill="var(--surface)" stroke="var(--rule-2)" stroke-width="1" stroke-dasharray="4 3"/>
 <text class="tx-s" x="32.0" y="234.0" text-anchor="start" fill="var(--ink-3)">用語：軟體業把 commit 前叫 inner loop（本機的改、lint、unit test），commit 後的整合與 CI/CD 叫 outer loop。</text>
-<text class="tx-s" x="32.0" y="254.0" text-anchor="start" fill="var(--ink-3)">這份文件的內圈（inner loop）指「一個改動的迴圈」，外圈（outer loop）指第 4 頁的「探索」：比 N 個方案的 PPA。</text>
+<text class="tx-s" x="32.0" y="254.0" text-anchor="start" fill="var(--ink-3)">這份文件的內圈（inner loop）指「一個改動的迴圈」，外圈（outer loop）指第 6 頁的「探索」：比 N 個方案的 PPA。</text>
 <line x1="20.0" y1="300.0" x2="860.0" y2="300.0" stroke="var(--rule)" stroke-width="1"/>
 <text class="tx" x="20.0" y="326.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">CI/CD 把查和判交給機器：每一圈一樣的環境、一樣的標準、不用人在旁邊。</text>
 <text class="tx" x="20.0" y="350.0" text-anchor="start" fill="var(--ink-2)">人或 agent 只負責改；內圈什麼時候轉、轉幾圈，都和人的空檔無關。</text>
-</svg></div><div class="pn">1 / 8</div></section>
-<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 2 ／ 8</div><h1>分層：IC 的一圈有快有慢，CI/CD 按快慢分層跑，哪一層都由機器判</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="四層迴圈，長條示意一圈的長短：lint 與 compile 快，每次改完就跑；sanity sim 子集中等，每包 submit 都跑；完整 regression 慢，每晚跑一次；synthesis 與 STA 很慢，每個里程碑或候選各跑一次，跑完自動抓 PPA。哪一層都由機器判。" xmlns="http://www.w3.org/2000/svg">
+</svg></div><div class="pn">1 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 2 ／ 10</div><h1>分層：IC 的一圈有快有慢，CI/CD 按快慢分層跑，哪一層都由機器判</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="四層迴圈，長條示意一圈的長短：lint 與 compile 快，每次改完就跑；sanity sim 子集中等，每包 submit 都跑；完整 regression 慢，每晚跑一次；synthesis 與 STA 很慢，每個里程碑或候選各跑一次，跑完自動抓 PPA。哪一層都由機器判。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
 <text class="tx-lbl" x="20.0" y="30.0" text-anchor="start" fill="var(--ink-2)">一圈要多久</text>
 <text class="tx-s" x="200.0" y="30.0" text-anchor="start" fill="var(--ink-3)">長條是示意，不代表任何實際時間</text>
@@ -96,8 +96,8 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <line x1="20.0" y1="330.0" x2="860.0" y2="330.0" stroke="var(--rule)" stroke-width="1"/>
 <text class="tx" x="20.0" y="356.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">CI/CD 不會讓 sim 或 synthesis 變快；它做的是讓每一層不用人顧、結果能信，慢的那幾層在背景轉。</text>
 <text class="tx" x="20.0" y="380.0" text-anchor="start" fill="var(--ink-2)">agent 能自己轉的是快的那幾層；慢的那幾層由它排進去、等結果。</text>
-</svg></div><div class="pn">2 / 8</div></section>
-<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 3 ／ 8</div><h1>現狀的內圈：每圈靠人設環境、人跑、人看 log，轉得慢、判法還不一</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="沒有 CI/CD 時同一個行動的迴圈：改、設環境（人）、跑（人盯著 queue）、看 log（人挑幾個看）、判（人說應該可以），不過就繞回去。每一圈的代價：時間等於那個人的空檔；兩圈環境不保證一樣（圖 14）；判的標準每個人不同（圖 15）；結果對不回哪一圈改的（圖 4）。agent 的處境：改得很快然後停下來等人，平行幾個也排同一條人龍。" xmlns="http://www.w3.org/2000/svg">
+</svg></div><div class="pn">2 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 3 ／ 10</div><h1>現狀的內圈：每圈靠人設環境、人跑、人看 log，轉得慢、判法還不一</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="沒有 CI/CD 時同一個行動的迴圈：改、設環境（人）、跑（人盯著 queue）、看 log（人挑幾個看）、判（人說應該可以），不過就繞回去。每一圈的代價：時間等於那個人的空檔；兩圈環境不保證一樣（圖 14）；判的標準每個人不同（圖 15）；結果對不回哪一圈改的（圖 4）。agent 的處境：改得很快然後停下來等人，平行幾個也排同一條人龍。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
 <text class="tx-lbl" x="20.0" y="30.0" text-anchor="start" fill="var(--warn)">同一個改動，沒有 CI/CD 的時候：內圈長這樣</text>
 <rect x="20.0" y="48.0" width="104.0" height="44.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
@@ -149,8 +149,105 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <line x1="20.0" y1="346.0" x2="860.0" y2="346.0" stroke="var(--rule)" stroke-width="1"/>
 <text class="tx" x="20.0" y="372.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">沒有 CI/CD，一圈裡四個步驟靠人：設環境、跑、看、判；迴圈轉多快由人的空檔決定。</text>
 <text class="tx" x="20.0" y="396.0" text-anchor="start" fill="var(--ink-2)">兩圈之間環境和標準不一樣，連「這一圈比上一圈好」都說不準。</text>
-</svg></div><div class="pn">3 / 8</div></section>
-<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 4 ／ 8</div><h1>外圈（outer loop）：比 N 個方案的 PPA，每個方案都要先跑完一圈內圈</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="outer loop 探索的示意：cache 多大、bus 多寬，四個候選組合各走一整圈 inner loop 拿到 PPA，在同一版工具、同一環境、同一約束下比較後選一個。右邊：業界已經有機器在跑這個外圈，Synopsys 說 DSO.ai autonomously search design spaces for optimal PPA solutions；Cadence Cerebrus 自動探索 implementation flow。前提是推論：flow 能被機器帶參數呼叫、PPA 能被機器讀回來、每次跑的環境一致。" xmlns="http://www.w3.org/2000/svg">
+</svg></div><div class="pn">3 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 4 ／ 10</div><h1>迭代：每一包走完內圈就併入，問題早、小、看得見；waterfall 留到最後一次爆</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="上半是 waterfall 的時間軸：spec、RTL 全部寫完、DV 才開始、大整合、synthesis 與 PD；問題到 DV 和大整合才浮現，能交付的狀態只在最後。下半是迭代：十個改查判併的小包依序併入，紅點標出早期就被看見的小問題；能交付的狀態每一包併入後都有。時間上：問題早發現改的代價小、沒有最後的大整合、下游用不著等全部做完。風險上：未知早曝光、隨時有 known-good 可退回、進度用通過的檢查量。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="30.0" text-anchor="start" fill="var(--warn)">waterfall：每個階段做完才交下去，整合與驗證留到最後</text>
+<rect x="20.0" y="42.0" width="90.0" height="32.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx-s" x="65.0" y="62.0" text-anchor="middle" fill="var(--ink-2)">spec</text>
+<rect x="116.0" y="42.0" width="170.0" height="32.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx-s" x="201.0" y="62.0" text-anchor="middle" fill="var(--ink-2)">RTL 全部寫完</text>
+<rect x="292.0" y="42.0" width="150.0" height="32.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.3" fill-opacity=".10"/>
+<text class="tx-s" x="367.0" y="62.0" text-anchor="middle" fill="var(--warn)">DV 才開始</text>
+<rect x="448.0" y="42.0" width="110.0" height="32.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.3" fill-opacity=".10"/>
+<text class="tx-s" x="503.0" y="62.0" text-anchor="middle" fill="var(--warn)">大整合</text>
+<rect x="564.0" y="42.0" width="130.0" height="32.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx-s" x="629.0" y="62.0" text-anchor="middle" fill="var(--ink-2)">synthesis、PD</text>
+<text class="tx-s" x="20.0" y="96.0" text-anchor="start" fill="var(--warn)">問題到 DV 和大整合才浮現：interface 對不上、timing 差很多；越晚改越貴（業界叫 shift left：test early and test often）</text>
+<text class="tx-s" x="20.0" y="114.0" text-anchor="start" fill="var(--ink-3)">能交付的狀態：只在最後才有一個；進度 = 文件寫完的比例</text>
+<text class="tx-lbl" x="20.0" y="150.0" text-anchor="start" fill="var(--goal)">迭代：每一包走完內圈就併入；每一包都查過，隨時有能交付的狀態</text>
+<rect x="20.0" y="162.0" width="58.0" height="32.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.2" fill-opacity=".10"/>
+<text class="tx-s" x="49.0" y="182.0" text-anchor="middle" fill="var(--goal)">改查判併</text>
+<rect x="86.0" y="162.0" width="58.0" height="32.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.2" fill-opacity=".10"/>
+<text class="tx-s" x="115.0" y="182.0" text-anchor="middle" fill="var(--goal)">改查判併</text>
+<circle cx="138" cy="160" r="4" fill="var(--warn)"/>
+<rect x="152.0" y="162.0" width="58.0" height="32.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.2" fill-opacity=".10"/>
+<text class="tx-s" x="181.0" y="182.0" text-anchor="middle" fill="var(--goal)">改查判併</text>
+<rect x="218.0" y="162.0" width="58.0" height="32.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.2" fill-opacity=".10"/>
+<text class="tx-s" x="247.0" y="182.0" text-anchor="middle" fill="var(--goal)">改查判併</text>
+<rect x="284.0" y="162.0" width="58.0" height="32.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.2" fill-opacity=".10"/>
+<text class="tx-s" x="313.0" y="182.0" text-anchor="middle" fill="var(--goal)">改查判併</text>
+<circle cx="336" cy="160" r="4" fill="var(--warn)"/>
+<rect x="350.0" y="162.0" width="58.0" height="32.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.2" fill-opacity=".10"/>
+<text class="tx-s" x="379.0" y="182.0" text-anchor="middle" fill="var(--goal)">改查判併</text>
+<rect x="416.0" y="162.0" width="58.0" height="32.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.2" fill-opacity=".10"/>
+<text class="tx-s" x="445.0" y="182.0" text-anchor="middle" fill="var(--goal)">改查判併</text>
+<rect x="482.0" y="162.0" width="58.0" height="32.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.2" fill-opacity=".10"/>
+<text class="tx-s" x="511.0" y="182.0" text-anchor="middle" fill="var(--goal)">改查判併</text>
+<circle cx="534" cy="160" r="4" fill="var(--warn)"/>
+<rect x="548.0" y="162.0" width="58.0" height="32.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.2" fill-opacity=".10"/>
+<text class="tx-s" x="577.0" y="182.0" text-anchor="middle" fill="var(--goal)">改查判併</text>
+<rect x="614.0" y="162.0" width="58.0" height="32.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.2" fill-opacity=".10"/>
+<text class="tx-s" x="643.0" y="182.0" text-anchor="middle" fill="var(--goal)">改查判併</text>
+<text class="tx-s" x="20.0" y="216.0" text-anchor="start" fill="var(--ink-2)">問題小、早、就在那一包裡（紅點）；DV 與 synthesis 的檢查分層跟著每一包跑（第 2 頁）</text>
+<text class="tx-s" x="20.0" y="234.0" text-anchor="start" fill="var(--ink-3)">能交付的狀態：每一包併入後都有一個；進度 = 通過檢查的功能數</text>
+<text class="tx-lbl" x="20.0" y="270.0" text-anchor="start" fill="var(--goal)">時間上</text>
+<text class="tx-lbl" x="440.0" y="270.0" text-anchor="start" fill="var(--goal)">風險上</text>
+<text class="tx-s" x="32.0" y="294.0" text-anchor="start" fill="var(--ink-2)">· 問題早發現，改的代價小</text>
+<text class="tx-s" x="32.0" y="314.0" text-anchor="start" fill="var(--ink-2)">· 沒有最後的大整合，時程的變異小</text>
+<text class="tx-s" x="32.0" y="334.0" text-anchor="start" fill="var(--ink-2)">· 下游用不著等全部做完才開始（下一頁）</text>
+<text class="tx-s" x="452.0" y="294.0" text-anchor="start" fill="var(--ink-2)">· 未知早曝光，留到最後的少</text>
+<text class="tx-s" x="452.0" y="314.0" text-anchor="start" fill="var(--ink-2)">· 隨時有 known-good 可退回（《把版控當備份的團隊》圖 16）</text>
+<text class="tx-s" x="452.0" y="334.0" text-anchor="start" fill="var(--ink-2)">· 進度用通過的檢查量，用不著靠文件</text>
+<line x1="20.0" y1="362.0" x2="860.0" y2="362.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="388.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">迭代把整合和驗證攤到每一包，問題在小的時候就被看見；waterfall 把它們留到最後，一次爆。</text>
+<text class="tx" x="20.0" y="412.0" text-anchor="start" fill="var(--ink-2)">tape-out 本身還是一次性的；迭代的是它之前的每一步。</text>
+</svg></div><div class="pn">4 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 5 ／ 10</div><h1>接棒：迭代的每一棒小而查過，下一棒不用等；棒子才交得給 agent</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左邊 waterfall 的棒子：上一棒做完全部才交，交的是 spec 文件加 tarball 加人的記憶，下一棒要等全部做完、等人解釋、等環境；agent 接不了。右邊迭代加 CI/CD 的棒子：上一棒每一包併入就交，交的是版控裡查過、跑得起來的狀態，附 manifest 與 check，下一棒馬上開跑；人或 agent 都接得了，晚上 agent 接棒跑 regression、修 lint，早上人接回來。下方：agent 接得了的那一段是打包、跑 check、修 lint、讓測試過、附 manifest，以及人不在時讓內圈繼續轉；還是人的那一段是設計對不對、取捨怎麼選、下一棒要做什麼。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="24.0" text-anchor="start" fill="var(--ink-2)">一棒交給下一棒：架構 → RTL → DV → PD；或同一件工作，白天的人交給晚上的 agent</text>
+<rect x="20.0" y="40.0" width="400.0" height="150.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".05"/>
+<text class="tx" x="32.0" y="62.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">waterfall 的棒子</text>
+<rect x="32.0" y="74.0" width="110.0" height="44.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="44.0" y="95.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">上一棒</text>
+<text class="tx-s" x="44.0" y="113.0" text-anchor="start" fill="var(--ink-2)">做完全部才交</text>
+<line x1="146.0" y1="96.0" x2="176.0" y2="96.0" stroke="var(--warn)" stroke-width="1.4" marker-end="url(#ar-w)"/>
+<rect x="180.0" y="74.0" width="140.0" height="44.0" fill="var(--surface)" stroke="var(--warn)" stroke-width="1.2"/>
+<text class="tx" x="192.0" y="92.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">spec 文件</text>
+<text class="tx-s" x="192.0" y="110.0" text-anchor="start" fill="var(--ink-2)">＋tarball＋人的記憶</text>
+<line x1="324.0" y1="96.0" x2="344.0" y2="96.0" stroke="var(--warn)" stroke-width="1.4" marker-end="url(#ar-w)"/>
+<rect x="348.0" y="74.0" width="64.0" height="44.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="360.0" y="95.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">下一棒</text>
+<text class="tx-s" x="360.0" y="113.0" text-anchor="start" fill="var(--ink-2)">等</text>
+<text class="tx-s" x="32.0" y="142.0" text-anchor="start" fill="var(--warn)">✗ 等全部做完、等人解釋、等環境</text>
+<text class="tx-s" x="32.0" y="162.0" text-anchor="start" fill="var(--warn)">✗ agent 接不了：讀得懂檔案，接不到環境、判不了對不對</text>
+<rect x="440.0" y="40.0" width="420.0" height="150.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".05"/>
+<text class="tx" x="452.0" y="62.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">迭代＋CI/CD 的棒子</text>
+<rect x="452.0" y="74.0" width="100.0" height="44.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.6" fill-opacity=".10"/>
+<text class="tx" x="464.0" y="95.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">上一棒</text>
+<text class="tx-s" x="464.0" y="113.0" text-anchor="start" fill="var(--ink-2)">每一包併入就交</text>
+<line x1="556.0" y1="96.0" x2="586.0" y2="96.0" stroke="var(--goal)" stroke-width="1.4" marker-end="url(#ar-g)"/>
+<rect x="590.0" y="74.0" width="160.0" height="44.0" fill="var(--surface)" stroke="var(--goal)" stroke-width="1.2"/>
+<text class="tx" x="602.0" y="92.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">查過、跑得起來的狀態</text>
+<text class="tx-s" x="602.0" y="110.0" text-anchor="start" fill="var(--ink-2)">版控裡，附 manifest</text>
+<line x1="754.0" y1="96.0" x2="766.0" y2="96.0" stroke="var(--goal)" stroke-width="1.4" marker-end="url(#ar-g)"/>
+<rect x="770.0" y="74.0" width="84.0" height="44.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.6" fill-opacity=".10"/>
+<text class="tx" x="782.0" y="95.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">下一棒</text>
+<text class="tx-s" x="782.0" y="113.0" text-anchor="start" fill="var(--ink-2)">馬上開跑</text>
+<text class="tx-s" x="452.0" y="142.0" text-anchor="start" fill="var(--goal)">✓ 人或 agent 都接得了：sync、跑 check、看結果</text>
+<text class="tx-s" x="452.0" y="162.0" text-anchor="start" fill="var(--goal)">✓ 晚上 agent 接棒：跑 regression、修 lint、讓測試過；早上人接回來</text>
+<text class="tx-lbl" x="20.0" y="220.0" text-anchor="start" fill="var(--agent)">agent 接得了的那一段（務實）</text>
+<text class="tx-s" x="32.0" y="244.0" text-anchor="start" fill="var(--ink-2)">· 打包、跑 check、修 lint、讓測試過、附 manifest</text>
+<text class="tx-s" x="32.0" y="264.0" text-anchor="start" fill="var(--ink-2)">· 人不在的時候讓內圈繼續轉</text>
+<text class="tx-lbl" x="440.0" y="220.0" text-anchor="start" fill="var(--pm)">還是人的那一段</text>
+<text class="tx-s" x="452.0" y="244.0" text-anchor="start" fill="var(--ink-2)">· 設計對不對、取捨怎麼選（Code review）</text>
+<text class="tx-s" x="452.0" y="264.0" text-anchor="start" fill="var(--ink-2)">· 下一棒要做什麼</text>
+<text class="tx-s" x="20.0" y="300.0" text-anchor="start" fill="var(--ink-3)">跨團隊交 spec 文件時，waterfall 是唯一能協調的方式；交出去的東西換成跑得起來的，迭代才過得了交界。</text>
+<line x1="20.0" y1="320.0" x2="860.0" y2="320.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="346.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">迭代的每一棒小而查過，下一棒不用等；棒子交得給人，也交得給 agent。</text>
+<text class="tx" x="20.0" y="370.0" text-anchor="start" fill="var(--ink-2)">棒子是文件加記憶，agent 接不了；棒子是版控裡跑得起來的狀態，agent 才接得了。</text>
+</svg></div><div class="pn">5 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 6 ／ 10</div><h1>外圈（outer loop）：比 N 個方案的 PPA，每個方案都要先跑完一圈內圈</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="outer loop 探索的示意：cache 多大、bus 多寬，四個候選組合各走一整圈 inner loop 拿到 PPA，在同一版工具、同一環境、同一約束下比較後選一個。右邊：業界已經有機器在跑這個外圈，Synopsys 說 DSO.ai autonomously search design spaces for optimal PPA solutions；Cadence Cerebrus 自動探索 implementation flow。前提是推論：flow 能被機器帶參數呼叫、PPA 能被機器讀回來、每次跑的環境一致。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
 <rect x="20.0" y="24.0" width="560.0" height="250.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".04"/>
 <text class="tx" x="32.0" y="46.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">外圈（outer loop）：探索（示意）</text>
@@ -208,8 +305,8 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <line x1="20.0" y1="300.0" x2="860.0" y2="300.0" stroke="var(--rule)" stroke-width="1"/>
 <text class="tx" x="20.0" y="326.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">要比 N 個方案，每個方案都要走完一整圈內圈，拿到同一標準下的 PPA。</text>
 <text class="tx" x="20.0" y="350.0" text-anchor="start" fill="var(--ink-2)">內圈轉不起來，外圈就沒有東西可以比；買了 DSO.ai 這類工具也接不上。</text>
-</svg></div><div class="pn">4 / 8</div></section>
-<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 5 ／ 8</div><h1>Agentic AI：N 個 agent 平行「改」很便宜，瓶頸變成誰來查、誰來判</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="四個 agent 平行做改，每一個都要被判。左邊判由人做：四條箭頭匯到一個人看 log，吞吐量等於一個人看 log 的速度。右邊判由機器做（CI）：四個機器判平行，人只在併入前看一次（Code review），吞吐量等於 license 與算力的寬度。下方引用 Superset 部落格：every agent needs a human to review its code, it&#x27;s the humans that don&#x27;t scale；另一位實作者：產生與驗證可以平行，語意上的接受要串行。" xmlns="http://www.w3.org/2000/svg">
+</svg></div><div class="pn">6 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 7 ／ 10</div><h1>Agentic AI：N 個 agent 平行「改」很便宜，瓶頸變成誰來查、誰來判</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="四個 agent 平行做改，每一個都要被判。左邊判由人做：四條箭頭匯到一個人看 log，吞吐量等於一個人看 log 的速度。右邊判由機器做（CI）：四個機器判平行，人只在併入前看一次（Code review），吞吐量等於 license 與算力的寬度。下方引用 Superset 部落格：every agent needs a human to review its code, it&#x27;s the humans that don&#x27;t scale；另一位實作者：產生與驗證可以平行，語意上的接受要串行。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
 <text class="tx-lbl" x="20.0" y="30.0" text-anchor="start" fill="var(--agent)">N 個 agent 平行做「改」：產生候選、改 RTL、寫 testbench</text>
 <rect x="20.0" y="40.0" width="88.0" height="36.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
@@ -259,8 +356,8 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <line x1="20.0" y1="356.0" x2="860.0" y2="356.0" stroke="var(--rule)" stroke-width="1"/>
 <text class="tx" x="20.0" y="382.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">agent 讓「改」變得很便宜，平行灑 N 個之後，瓶頸整個移到「判」。</text>
 <text class="tx" x="20.0" y="406.0" text-anchor="start" fill="var(--ink-2)">判由人做，N 個 agent 排成一條人龍；判由機器做，人只在併入前看一次。</text>
-</svg></div><div class="pn">5 / 8</div></section>
-<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 6 ／ 8</div><h1>上限：能平行幾個由 license 與算力決定；CI/CD 管的是排隊和固定環境</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="三個務實的上限：平行的寬度由 license 與算力決定；一圈的底線是 heavy flow 仍然慢，AI 省的是等人的時間；比較的前提是同一版工具、環境、約束，少一樣就分不出候選的差還是環境的差。中間一句：AI 的加成等於不用人顧的圈數乘以可信的比較。CI/CD 直接解的是比較的前提。" xmlns="http://www.w3.org/2000/svg">
+</svg></div><div class="pn">7 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 8 ／ 10</div><h1>上限：能平行幾個由 license 與算力決定；CI/CD 管的是排隊和固定環境</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="三個務實的上限：平行的寬度由 license 與算力決定；一圈的底線是 heavy flow 仍然慢，AI 省的是等人的時間；比較的前提是同一版工具、環境、約束，少一樣就分不出候選的差還是環境的差。中間一句：AI 的加成等於不用人顧的圈數乘以可信的比較。CI/CD 直接解的是比較的前提。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
 <rect x="20.0" y="30.0" width="272.0" height="150.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
 <text class="tx" x="34.0" y="54.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">平行的寬度</text>
@@ -287,30 +384,34 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <line x1="20.0" y1="330.0" x2="860.0" y2="330.0" stroke="var(--rule)" stroke-width="1"/>
 <text class="tx" x="20.0" y="356.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">平行有上限，一圈有底線，比較有前提；三個都是工程問題，講清楚效益才算得出來。</text>
 <text class="tx" x="20.0" y="380.0" text-anchor="start" fill="var(--ink-2)">CI/CD 解的是比較的前提，也讓前兩個能被排程。</text>
-</svg></div><div class="pn">6 / 8</div></section>
-<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 7 ／ 8</div><h1>結論：沒有 CI/CD，每圈要人顧，N 個方案跑不完，N 個 agent 等於一個</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="連鎖：沒有 CI/CD、inner loop 每圈要人、agent 每一步等人、N 個 agent 排成一條人龍、outer loop 轉不完結果不可比，AI 的倍數變成 ×1。長條示意：同樣 N 個 agent 與 license，有 CI/CD 一段時間內轉完的圈數多而且可比；沒有 CI/CD 等於一個人的速度而且不可比。症狀各打斷哪一環：環境散在 depot 外（圖 2、3）讓每圈要人設環境；兩台機器結果不同（圖 14）讓圈與圈不可比；狀態靠人填 Excel（圖 15）讓判靠人；壞了很久才發現（圖 5）讓圈沒有閉合；main 隨時會壞（圖 8）讓 agent sync 到壞的。" xmlns="http://www.w3.org/2000/svg">
+</svg></div><div class="pn">8 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 9 ／ 10</div><h1>結論：沒有 CI/CD，每圈要人顧、棒接不過去、方案跑不完，agent 再多也等於一個</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="連鎖：沒有 CI/CD、內圈每圈要人顧、棒交不出去下一棒等人、agent 每一步等人、N 個 agent 排成一條人龍、外圈轉不完方案比不了，N 個 agent 的效果變成 ×1。長條示意：同樣 N 個 agent 與 license，有 CI/CD 一段時間內轉完的圈數多而且可比；沒有 CI/CD 等於一個人的速度而且不可比。症狀各打斷哪一環：環境散在 depot 外（圖 2、3）讓每圈要人設環境；兩台機器結果不同（圖 14）讓圈與圈不可比；狀態靠人填 Excel（圖 15）讓判靠人；壞了很久才發現（圖 5）讓圈沒有閉合；main 隨時會壞（圖 8）讓 agent sync 到壞的。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
-<rect x="20.0" y="30.0" width="136.0" height="48.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.3" fill-opacity=".06"/>
-<text class="tx" x="88.0" y="59.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">沒有 CI/CD</text>
-<line x1="159.0" y1="54.0" x2="167.0" y2="54.0" stroke="var(--warn)" stroke-width="1.4" marker-end="url(#ar-w)"/>
-<rect x="170.0" y="30.0" width="136.0" height="48.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.3" fill-opacity=".06"/>
-<text class="tx" x="238.0" y="51.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">內圈</text>
-<text class="tx-s" x="238.0" y="69.0" text-anchor="middle" fill="var(--warn)">每圈要人顧</text>
-<line x1="309.0" y1="54.0" x2="317.0" y2="54.0" stroke="var(--warn)" stroke-width="1.4" marker-end="url(#ar-w)"/>
-<rect x="320.0" y="30.0" width="136.0" height="48.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.3" fill-opacity=".06"/>
-<text class="tx" x="388.0" y="51.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">agent</text>
-<text class="tx-s" x="388.0" y="69.0" text-anchor="middle" fill="var(--warn)">每一步等人</text>
-<line x1="459.0" y1="54.0" x2="467.0" y2="54.0" stroke="var(--warn)" stroke-width="1.4" marker-end="url(#ar-w)"/>
-<rect x="470.0" y="30.0" width="136.0" height="48.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.3" fill-opacity=".06"/>
-<text class="tx" x="538.0" y="51.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">N 個 agent</text>
-<text class="tx-s" x="538.0" y="69.0" text-anchor="middle" fill="var(--warn)">排成一條人龍</text>
-<line x1="609.0" y1="54.0" x2="617.0" y2="54.0" stroke="var(--warn)" stroke-width="1.4" marker-end="url(#ar-w)"/>
-<rect x="620.0" y="30.0" width="136.0" height="48.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.3" fill-opacity=".06"/>
-<text class="tx" x="688.0" y="51.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">外圈轉不完</text>
-<text class="tx-s" x="688.0" y="69.0" text-anchor="middle" fill="var(--warn)">N 個方案比不了</text>
+<rect x="20.0" y="30.0" width="110.0" height="48.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.3" fill-opacity=".06"/>
+<text class="tx" x="75.0" y="59.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">沒有 CI/CD</text>
+<line x1="133.0" y1="54.0" x2="140.0" y2="54.0" stroke="var(--warn)" stroke-width="1.4" marker-end="url(#ar-w)"/>
+<rect x="142.0" y="30.0" width="110.0" height="48.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.3" fill-opacity=".06"/>
+<text class="tx" x="197.0" y="51.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">內圈</text>
+<text class="tx-s" x="197.0" y="69.0" text-anchor="middle" fill="var(--warn)">每圈要人顧</text>
+<line x1="255.0" y1="54.0" x2="262.0" y2="54.0" stroke="var(--warn)" stroke-width="1.4" marker-end="url(#ar-w)"/>
+<rect x="264.0" y="30.0" width="110.0" height="48.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.3" fill-opacity=".06"/>
+<text class="tx" x="319.0" y="51.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">棒交不出去</text>
+<text class="tx-s" x="319.0" y="69.0" text-anchor="middle" fill="var(--warn)">下一棒等人</text>
+<line x1="377.0" y1="54.0" x2="384.0" y2="54.0" stroke="var(--warn)" stroke-width="1.4" marker-end="url(#ar-w)"/>
+<rect x="386.0" y="30.0" width="110.0" height="48.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.3" fill-opacity=".06"/>
+<text class="tx" x="441.0" y="51.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">agent</text>
+<text class="tx-s" x="441.0" y="69.0" text-anchor="middle" fill="var(--warn)">每一步等人</text>
+<line x1="499.0" y1="54.0" x2="506.0" y2="54.0" stroke="var(--warn)" stroke-width="1.4" marker-end="url(#ar-w)"/>
+<rect x="508.0" y="30.0" width="110.0" height="48.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.3" fill-opacity=".06"/>
+<text class="tx" x="563.0" y="51.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">N 個 agent</text>
+<text class="tx-s" x="563.0" y="69.0" text-anchor="middle" fill="var(--warn)">排成一條人龍</text>
+<line x1="621.0" y1="54.0" x2="628.0" y2="54.0" stroke="var(--warn)" stroke-width="1.4" marker-end="url(#ar-w)"/>
+<rect x="630.0" y="30.0" width="110.0" height="48.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.3" fill-opacity=".06"/>
+<text class="tx" x="685.0" y="51.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">外圈轉不完</text>
+<text class="tx-s" x="685.0" y="69.0" text-anchor="middle" fill="var(--warn)">方案比不了</text>
 <rect x="770.0" y="30.0" width="90.0" height="48.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.8" fill-opacity=".16"/>
 <text x="815" y="66" text-anchor="middle" style="font-family:var(--sans);font-size:26px;font-weight:700;fill:var(--warn)">×1</text>
-<text class="tx-s" x="815.0" y="94.0" text-anchor="middle" fill="var(--warn)">N 個 agent 的效果</text>
+<text class="tx-s" x="860.0" y="94.0" text-anchor="end" fill="var(--warn)">N 個 agent 的效果</text>
 <text class="tx-lbl" x="20.0" y="120.0" text-anchor="start" fill="var(--ink-2)">同樣 N 個 agent、同樣的 license，一段時間內轉完的圈數（長條是示意）</text>
 <text class="tx" x="20.0" y="150.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">有 CI/CD</text>
 <rect x="120.0" y="134.0" width="620.0" height="24.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".18"/>
@@ -335,10 +436,10 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx-s" x="325.4" y="290.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">圖 8</text>
 <text class="tx-s" x="354.8" y="290.0" text-anchor="start" fill="var(--ink-2)">main 隨時會壞 → agent sync 到壞的</text>
 <line x1="20.0" y1="330.0" x2="860.0" y2="330.0" stroke="var(--rule)" stroke-width="1"/>
-<text class="tx" x="20.0" y="356.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">沒有 CI/CD，先是內圈轉不動，外圈自然沒得轉；AI 加速的只有「改」，N 個 agent 的效果等於一個。</text>
+<text class="tx" x="20.0" y="356.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">沒有 CI/CD，內圈轉不動、棒交不出去，外圈自然沒得轉；AI 加速的只有「改」，N 個 agent 的效果等於一個。</text>
 <text class="tx" x="20.0" y="380.0" text-anchor="start" fill="var(--ink-2)">《把版控當備份的團隊》裡的每個症狀，都在這條鏈上打斷一環。</text>
-</svg></div><div class="pn">7 / 8</div></section>
-<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 8 ／ 8</div><h1>對應：迴圈要自己轉的六個條件，就是《把版控當備份的團隊》的六個原則</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="六列：Small batches 撐住一圈一件事；Single Source of Truth 撐住每圈條件一樣與 agent 進得去就能跑；Traceability 撐住結果連得回候選與環境；Continuous Integration 撐住查和判由機器做；Self-documenting 撐住 agent 不用人帶；Code review 撐住人判放在併入前一次做完。各附少了會怎樣。" xmlns="http://www.w3.org/2000/svg">
+</svg></div><div class="pn">9 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的意義　·　圖 10 ／ 10</div><h1>對應：迴圈要自己轉的六個條件，就是《把版控當備份的團隊》的六個原則</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="六列：Small batches 撐住一圈一件事；Single Source of Truth 撐住每圈條件一樣與 agent 進得去就能跑；Traceability 撐住結果連得回候選與環境；Continuous Integration 撐住查和判由機器做；Self-documenting 撐住 agent 不用人帶；Code review 撐住人判放在併入前一次做完。各附少了會怎樣。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
 <text class="tx-lbl" x="20.0" y="34.0" text-anchor="start" fill="var(--ink-2)">迴圈要自己轉的條件</text>
 <text class="tx-lbl" x="350.0" y="34.0" text-anchor="start" fill="var(--goal)">撐住它的原則（出自《把版控當備份的團隊》）</text>
@@ -376,6 +477,6 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <line x1="20.0" y1="330.0" x2="860.0" y2="330.0" stroke="var(--rule)" stroke-width="1"/>
 <text class="tx" x="20.0" y="356.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">這六個條件就是前面七頁講的事；撐住它們的六個原則，另一份文件已經收斂出來。</text>
 <text class="tx" x="20.0" y="380.0" text-anchor="start" fill="var(--ink-2)">這就是 CI/CD 對這個團隊的意義，也是 N 個 agent 要有 N 倍效果的前提。</text>
-</svg></div><div class="pn">8 / 8</div></section>
+</svg></div><div class="pn">10 / 10</div></section>
 </body>
 </html>

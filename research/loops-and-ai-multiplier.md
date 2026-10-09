@@ -27,6 +27,15 @@
 - 比較要在同一版工具、同一環境、同一約束下才算數；少一樣，PPA 的差異就分不出是候選的差還是環境的差。
 - 因此 AI 的加成寫成「不用人顧的圈數 × 可信的比較」，而非「sim 變快」。
 
+## 迭代相對 waterfall：時間與風險（2026-10-09 補）
+
+- 業界把「驗證越早做越好」叫 shift left，Siemens、Synopsys 的部落格都在講：test early and test often，越晚抓到的問題改起來越貴（Siemens 引了「up to 100x」這類數字，未獨立驗證，文件裡不用數字）。Synopsys 的「shift left with sanity testing」講的就是每次改完跑 sanity，和本專案的分層一致。
+- 硬體的 waterfall 有結構性原因：零件、光罩、tape-out 都是一次性、長 lead time 的大事，所以 build 要提早排定、改的機會少（Instrumental 的文章）。這也是為什麼文件要明講「tape-out 還是一次性的，迭代的是它之前的每一步」。
+- Tampere 大學 Rautakoura 的研究：waterfall 仍主導硬體開發，但可以用「可預測的排程」「以 interface 為中心的實作」等原則引入敏捷，做到一年一顆 SoC 的節奏（三顆 SoC 的經驗）。
+- UC Berkeley 的 agile 硬體方法：用可製造的小型原型快速迭代，五年十一次 tape-out。
+- 本專案先前的觀察（`../google-xls/docs/slides/handoff-decides-iteration`）：跨組織交出去的是 spec 文件時，waterfall 是唯一可行的協調方式；交出去的東西換成跑得起來、判得了的，迭代才能過交界。這直接連到「接棒」那一頁：棒子是文件加記憶，agent 接不了；棒子是版控裡跑得起來的狀態，人或 agent 都接得了。
+- 文件裡對 agent 接棒的範圍刻意保守：接得了的是打包、跑 check、修 lint、讓測試過、附 manifest，以及人不在時讓內圈繼續轉；設計對不對、取捨怎麼選、下一棒做什麼，還是人。
+
 ## 來源
 
 - [Microsoft Learn: Understand the inner loop](https://learn.microsoft.com/en-us/training/modules/implement-tools-track-usage-flow/2-understand-inner-loop)
