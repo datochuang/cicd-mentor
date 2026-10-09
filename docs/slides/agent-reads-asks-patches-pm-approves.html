@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+<meta charset="utf-8">
+<title>互動場景：agent 先讀懂再問再交 patch，方向由 PM 核准，採不採用團隊決定</title>
+<style>
+:root{--paper:#fff;--surface:#fff;--surface-2:#eef2f5;--ink:#17212b;--ink-2:#48596a;--ink-3:#78889a;--rule:#cfd9e1;--rule-2:#aebbc7;
+--goal:#116b64;--warn:#a0580f;--agent:#2f6f9f;--pm:#7a4f9a;
+--mono:"SF Mono",Menlo,Consolas,"PingFang TC","Noto Sans TC","Microsoft JhengHei",monospace;
+--sans:"Helvetica Neue",Arial,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif}
+html,body{margin:0;padding:0;background:#fff;color:var(--ink);font-family:var(--sans)}
+body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@page{size:A4 landscape;margin:0}
+.slide{width:297mm;height:210mm;box-sizing:border-box;padding:11mm 14mm 9mm;display:flex;flex-direction:column;break-after:page;page-break-after:always;overflow:hidden;position:relative}
+.slide:last-child{break-after:auto;page-break-after:auto}
+@media screen{body{background:#e6ebef}.slide{background:#fff;margin:8mm auto;box-shadow:0 1px 4px rgba(0,0,0,.12)}}
+.kicker{font-family:var(--mono);font-size:9.5pt;letter-spacing:.06em;color:var(--ink-3);margin:0 0 2mm}
+.slide h1{font-family:var(--sans);font-size:20pt;font-weight:600;margin:0 0 5mm;line-height:1.25}
+.fig{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{display:block;color:var(--ink)}
+.pn{position:absolute;right:14mm;bottom:6mm;font-family:var(--mono);font-size:8.5pt;color:var(--ink-3)}
+.tx{font-family:var(--mono);font-size:12px;fill:currentColor}
+.tx-s{font-family:var(--mono);font-size:10.5px;fill:var(--ink-3)}
+.tx-b{font-family:var(--sans);font-size:15px;font-weight:700;fill:currentColor}
+.tx-lbl{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.06em;fill:var(--ink-3)}
+</style>
+</head>
+<body>
+<section class="slide"><div class="kicker">agent 與 PM、團隊、repo 的互動　·　圖 1 ／ 12</div><h1>總覽：PM 定方向，agent 讀懂、問、交 patch、看守，團隊決定採不採用</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="角色乘階段的表。階段：啟動、情勢判斷、目標分析與訪談、計畫請准、建置、採用、看守與開工、加強與退場。PM：給範圍帳號預算、選切入目標、看進度、懂了才核准、看進度、同意擋不擋、看一頁摘要、定退場條件。agent：bot 上線自我介紹、只讀掃一頁報告、先讀懂再問 owner、附取捨請准、做成 shelved CL、附證據提議升級、看 CL 私訊登記開工、提下一道退到看守。工程團隊：知道 agent 在、owner 答只有他知道的、owner 同意動範圍、負責人補強 script、同意升級、回一句照流程開工、自己維護 pipeline。repo：日誌與狀態板的位置、唯讀、乾淨 workspace 實跑、決定進 depot、shelved CL 加證據、報告警告擋、trigger 跑 check 與狀態板、check 穩定與趨勢。下方是授權三級：自主、告知、請准。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="20.0" text-anchor="start" fill="var(--ink-2)">這份文件回答：agent 和 PM、工程團隊、repo 在每個階段各做什麼；agent 自己能做什麼、什麼要問、什麼要 PM 決定 ↓</text>
+<text class="tx-s" x="157.0" y="50.0" text-anchor="middle" fill="var(--ink-3)">啟動</text>
+<line x1="110.0" y1="58.0" x2="110.0" y2="298.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx-s" x="251.0" y="50.0" text-anchor="middle" fill="var(--ink-3)">情勢判斷</text>
+<line x1="204.0" y1="58.0" x2="204.0" y2="298.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx-s" x="345.0" y="50.0" text-anchor="middle" fill="var(--ink-3)">目標分析與訪談</text>
+<line x1="298.0" y1="58.0" x2="298.0" y2="298.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx-s" x="439.0" y="50.0" text-anchor="middle" fill="var(--ink-3)">計畫請准</text>
+<line x1="392.0" y1="58.0" x2="392.0" y2="298.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx-s" x="533.0" y="50.0" text-anchor="middle" fill="var(--ink-3)">建置</text>
+<line x1="486.0" y1="58.0" x2="486.0" y2="298.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx-s" x="627.0" y="50.0" text-anchor="middle" fill="var(--ink-3)">採用</text>
+<line x1="580.0" y1="58.0" x2="580.0" y2="298.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx-s" x="721.0" y="50.0" text-anchor="middle" fill="var(--ink-3)">看守與開工</text>
+<line x1="674.0" y1="58.0" x2="674.0" y2="298.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx-s" x="815.0" y="50.0" text-anchor="middle" fill="var(--ink-3)">加強與退場</text>
+<line x1="768.0" y1="58.0" x2="768.0" y2="298.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="58.0" width="840.0" height="60.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="92.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">PM</text>
+<text class="tx-s" x="116.0" y="82.0" text-anchor="start" fill="var(--pm)">給範圍、帳號</text>
+<text class="tx-s" x="116.0" y="98.0" text-anchor="start" fill="var(--pm)">與預算</text>
+<text class="tx-s" x="210.0" y="82.0" text-anchor="start" fill="var(--pm)">選切入目標</text>
+<text class="tx-s" x="304.0" y="82.0" text-anchor="start" fill="var(--pm)">看進度</text>
+<text class="tx-s" x="398.0" y="82.0" text-anchor="start" fill="var(--pm)">懂了才核准</text>
+<text class="tx-s" x="492.0" y="82.0" text-anchor="start" fill="var(--pm)">看進度</text>
+<text class="tx-s" x="586.0" y="82.0" text-anchor="start" fill="var(--pm)">同意擋不擋</text>
+<text class="tx-s" x="680.0" y="82.0" text-anchor="start" fill="var(--pm)">看一頁摘要</text>
+<text class="tx-s" x="774.0" y="82.0" text-anchor="start" fill="var(--pm)">定退場條件</text>
+<rect x="20.0" y="118.0" width="840.0" height="60.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="152.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">agent</text>
+<text class="tx-s" x="116.0" y="142.0" text-anchor="start" fill="var(--agent)">bot 上線</text>
+<text class="tx-s" x="116.0" y="158.0" text-anchor="start" fill="var(--agent)">自我介紹</text>
+<text class="tx-s" x="210.0" y="142.0" text-anchor="start" fill="var(--agent)">只讀掃</text>
+<text class="tx-s" x="210.0" y="158.0" text-anchor="start" fill="var(--agent)">一頁報告</text>
+<text class="tx-s" x="304.0" y="142.0" text-anchor="start" fill="var(--agent)">先讀懂</text>
+<text class="tx-s" x="304.0" y="158.0" text-anchor="start" fill="var(--agent)">再問 owner</text>
+<text class="tx-s" x="398.0" y="142.0" text-anchor="start" fill="var(--agent)">附取捨</text>
+<text class="tx-s" x="398.0" y="158.0" text-anchor="start" fill="var(--agent)">請准</text>
+<text class="tx-s" x="492.0" y="142.0" text-anchor="start" fill="var(--agent)">做成</text>
+<text class="tx-s" x="492.0" y="158.0" text-anchor="start" fill="var(--agent)">shelved CL</text>
+<text class="tx-s" x="586.0" y="142.0" text-anchor="start" fill="var(--agent)">附證據</text>
+<text class="tx-s" x="586.0" y="158.0" text-anchor="start" fill="var(--agent)">提議升級</text>
+<text class="tx-s" x="680.0" y="142.0" text-anchor="start" fill="var(--agent)">看 CL、私訊</text>
+<text class="tx-s" x="680.0" y="158.0" text-anchor="start" fill="var(--agent)">登記開工</text>
+<text class="tx-s" x="774.0" y="142.0" text-anchor="start" fill="var(--agent)">提下一道</text>
+<text class="tx-s" x="774.0" y="158.0" text-anchor="start" fill="var(--agent)">退到看守</text>
+<rect x="20.0" y="178.0" width="840.0" height="60.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="212.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">工程團隊</text>
+<text class="tx-s" x="116.0" y="202.0" text-anchor="start" fill="var(--ink-2)">知道 agent 在</text>
+<text class="tx-s" x="116.0" y="218.0" text-anchor="start" fill="var(--ink-2)">看得到什麼</text>
+<text class="tx-s" x="304.0" y="202.0" text-anchor="start" fill="var(--ink-2)">owner 答只有</text>
+<text class="tx-s" x="304.0" y="218.0" text-anchor="start" fill="var(--ink-2)">他知道的</text>
+<text class="tx-s" x="398.0" y="202.0" text-anchor="start" fill="var(--ink-2)">owner 同意</text>
+<text class="tx-s" x="398.0" y="218.0" text-anchor="start" fill="var(--ink-2)">動範圍</text>
+<text class="tx-s" x="492.0" y="202.0" text-anchor="start" fill="var(--ink-2)">負責人</text>
+<text class="tx-s" x="492.0" y="218.0" text-anchor="start" fill="var(--ink-2)">補強 script</text>
+<text class="tx-s" x="586.0" y="202.0" text-anchor="start" fill="var(--ink-2)">同意升級</text>
+<text class="tx-s" x="680.0" y="202.0" text-anchor="start" fill="var(--ink-2)">回一句</text>
+<text class="tx-s" x="680.0" y="218.0" text-anchor="start" fill="var(--ink-2)">照流程開工</text>
+<text class="tx-s" x="774.0" y="202.0" text-anchor="start" fill="var(--ink-2)">自己維護</text>
+<text class="tx-s" x="774.0" y="218.0" text-anchor="start" fill="var(--ink-2)">pipeline</text>
+<rect x="20.0" y="238.0" width="840.0" height="60.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="272.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">repo</text>
+<text class="tx-s" x="116.0" y="262.0" text-anchor="start" fill="var(--goal)">日誌、狀態板</text>
+<text class="tx-s" x="116.0" y="278.0" text-anchor="start" fill="var(--goal)">的位置</text>
+<text class="tx-s" x="210.0" y="262.0" text-anchor="start" fill="var(--goal)">唯讀</text>
+<text class="tx-s" x="304.0" y="262.0" text-anchor="start" fill="var(--goal)">乾淨 workspace</text>
+<text class="tx-s" x="304.0" y="278.0" text-anchor="start" fill="var(--goal)">實跑</text>
+<text class="tx-s" x="398.0" y="262.0" text-anchor="start" fill="var(--goal)">決定進 depot</text>
+<text class="tx-s" x="492.0" y="262.0" text-anchor="start" fill="var(--goal)">shelved CL</text>
+<text class="tx-s" x="492.0" y="278.0" text-anchor="start" fill="var(--goal)">＋證據</text>
+<text class="tx-s" x="586.0" y="262.0" text-anchor="start" fill="var(--goal)">報告→警告→擋</text>
+<text class="tx-s" x="680.0" y="262.0" text-anchor="start" fill="var(--goal)">跑 check</text>
+<text class="tx-s" x="680.0" y="278.0" text-anchor="start" fill="var(--goal)">狀態板</text>
+<text class="tx-s" x="774.0" y="262.0" text-anchor="start" fill="var(--goal)">check 穩定</text>
+<text class="tx-s" x="774.0" y="278.0" text-anchor="start" fill="var(--goal)">趨勢</text>
+<text class="tx-lbl" x="20.0" y="326.0" text-anchor="start" fill="var(--pm)">agent 的授權三級</text>
+<rect x="20.0" y="334.0" width="40.4" height="20.0" rx="10" fill="var(--pm)" stroke="var(--pm)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="40.2" y="348.0" text-anchor="middle" fill="var(--pm)" style="font-weight:700">自主</text>
+<text class="tx-s" x="66.4" y="348.0" text-anchor="start" fill="var(--ink-2)">讀、分析、寫地圖、開 shelved CL、私訊</text>
+<rect x="292.1" y="334.0" width="40.4" height="20.0" rx="10" fill="var(--pm)" stroke="var(--pm)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="312.3" y="348.0" text-anchor="middle" fill="var(--pm)" style="font-weight:700">告知</text>
+<text class="tx-s" x="338.4" y="348.0" text-anchor="start" fill="var(--ink-2)">建議、第二次提醒、交 patch</text>
+<rect x="502.1" y="334.0" width="40.4" height="20.0" rx="10" fill="var(--pm)" stroke="var(--pm)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="522.3" y="348.0" text-anchor="middle" fill="var(--pm)" style="font-weight:700">請准</text>
+<text class="tx-s" x="548.5" y="348.0" text-anchor="start" fill="var(--ink-2)">方向、新規範、裝 trigger、擋 submit、拉 PL 群聊</text>
+<line x1="20.0" y1="376.0" x2="860.0" y2="376.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="402.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">agent 先讀懂再問再交 patch；方向與影響別人的事，PM 懂了才算核准；採不採用是 owner 的事。</text>
+<text class="tx" x="20.0" y="426.0" text-anchor="start" fill="var(--ink-2)">後面每頁一個場景，四條泳道，箭頭就是誰對誰做什麼。</text>
+</svg></div><div class="pn">1 / 12</div></section>
+<section class="slide"><div class="kicker">agent 與 PM、團隊、repo 的互動　·　圖 2 ／ 12</div><h1>啟動：PM 給範圍與帳號，agent 以 bot 身分只讀上線，先向團隊自我介紹</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="啟動：PM 指定範圍與帳號；agent 以 bot 帳號只讀上線，私訊 PL 與 owner 自我介紹；工程團隊知道 agent 在、看得到什麼；repo 裡建好日誌與狀態板的位置。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="22.0" text-anchor="start" fill="var(--ink-2)">什麼時候：PM 決定開始的第一天</text>
+<rect x="770.2" y="6.0" width="89.8" height="22.0" rx="11" fill="var(--pm)" stroke="var(--pm)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="815.1" y="22.0" text-anchor="middle" fill="var(--pm)" style="font-weight:700">授權：PM 請准</text>
+<rect x="20.0" y="36.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="72.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">PM</text>
+<rect x="20.0" y="106.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="142.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">agent</text>
+<rect x="20.0" y="176.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="212.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">工程團隊</text>
+<rect x="20.0" y="246.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="282.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">repo</text>
+<rect x="104.0" y="44.0" width="140.0" height="46.0" fill="var(--pm)" stroke="var(--pm)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="112.0" y="62.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">指定範圍與帳號</text>
+<text class="tx-s" x="112.0" y="80.0" text-anchor="start" fill="var(--ink-2)">哪個 repo、能看哪些目錄、預算</text>
+<rect x="256.0" y="114.0" width="140.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="264.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">以 bot 帳號上線</text>
+<text class="tx-s" x="264.0" y="150.0" text-anchor="start" fill="var(--ink-2)">只讀；專用乾淨 workspace</text>
+<rect x="408.0" y="114.0" width="140.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="416.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">自我介紹</text>
+<text class="tx-s" x="416.0" y="150.0" text-anchor="start" fill="var(--ink-2)">私訊 PL 與 owner</text>
+<rect x="560.0" y="184.0" width="140.0" height="46.0" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="568.0" y="202.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">知道 agent 在</text>
+<text class="tx-s" x="568.0" y="220.0" text-anchor="start" fill="var(--ink-2)">它看得到什麼、紀錄放哪</text>
+<rect x="712.0" y="254.0" width="140.0" height="46.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="720.0" y="272.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">日誌與狀態板的位置</text>
+<text class="tx-s" x="720.0" y="290.0" text-anchor="start" fill="var(--ink-2)">進 depot，所有人看得到</text>
+<line x1="174.0" y1="92.0" x2="174.0" y2="111.0" stroke="var(--pm)" stroke-width="1.5" marker-end="url(#ar-p)"/>
+<text class="tx-s" x="180.0" y="106.0" text-anchor="start" fill="var(--ink-3)">給範圍</text>
+<line x1="478.0" y1="162.0" x2="478.0" y2="181.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="484.0" y="176.0" text-anchor="start" fill="var(--ink-3)">「我是 agent，向 PM 報告」</text>
+<line x1="782.0" y1="162.0" x2="782.0" y2="251.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="788.0" y="176.0" text-anchor="start" fill="var(--ink-3)">建目錄</text>
+<text class="tx-s" x="20.0" y="330.0" text-anchor="start" fill="var(--ink-3)">示意的自我介紹：「我是 CI/CD mentor agent，向 PM 某某報告。我會看 //depot/chipA/dma 的 CL 與 check 結果，</text>
+<text class="tx-s" x="20.0" y="348.0" text-anchor="start" fill="var(--ink-3)">紀錄在 //depot/chipA/agent-log。有問題直接私訊我。」</text>
+<line x1="20.0" y1="388.0" x2="860.0" y2="388.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="414.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">agent 用自己的 bot 帳號、只讀權限上線；第一件事是向團隊說自己是誰、向誰報告、會看什麼、紀錄放哪。</text>
+<text class="tx" x="20.0" y="438.0" text-anchor="start" fill="var(--ink-2)">能看哪些目錄、花多少算力，PM 在這一步就定；agent 不自己擴。</text>
+</svg></div><div class="pn">2 / 12</div></section>
+<section class="slide"><div class="kicker">agent 與 PM、團隊、repo 的互動　·　圖 3 ／ 12</div><h1>情勢判斷：agent 只讀掃整個 depot，交 PM 一頁情勢和幾個切入目標，PM 選</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="情勢判斷：PM 指定整個 repo 附預算；agent 只讀掃描 depot 的結構、歷史、既有自動化；交一頁情勢報告（六原則打分、熱點、風險）並建議一到三個切入目標；PM 選目標。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="22.0" text-anchor="start" fill="var(--ink-2)">什麼時候：PM 要整體情勢，還沒決定從哪裡開始</text>
+<rect x="748.3" y="6.0" width="111.7" height="22.0" rx="11" fill="var(--pm)" stroke="var(--pm)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="804.2" y="22.0" text-anchor="middle" fill="var(--pm)" style="font-weight:700">授權：自主（只讀）</text>
+<rect x="20.0" y="36.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="72.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">PM</text>
+<rect x="20.0" y="106.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="142.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">agent</text>
+<rect x="20.0" y="176.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="212.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">工程團隊</text>
+<rect x="20.0" y="246.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="282.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">repo</text>
+<rect x="104.0" y="44.0" width="118.0" height="46.0" fill="var(--pm)" stroke="var(--pm)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="112.0" y="62.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">指定整個 repo</text>
+<text class="tx-s" x="112.0" y="80.0" text-anchor="start" fill="var(--ink-2)">附預算</text>
+<rect x="231.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="239.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">只讀掃描</text>
+<text class="tx-s" x="239.0" y="150.0" text-anchor="start" fill="var(--ink-2)">結構、歷史、既有自動化</text>
+<rect x="358.0" y="254.0" width="118.0" height="46.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="366.0" y="272.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">depot（唯讀）</text>
+<text class="tx-s" x="366.0" y="290.0" text-anchor="start" fill="var(--ink-2)">stream、CL 歷史、trigger</text>
+<rect x="485.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="493.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">一頁情勢報告</text>
+<text class="tx-s" x="493.0" y="150.0" text-anchor="start" fill="var(--ink-2)">六原則打分、熱點、風險</text>
+<rect x="612.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="620.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">建議切入目標</text>
+<text class="tx-s" x="620.0" y="150.0" text-anchor="start" fill="var(--ink-2)">一到三個，附理由</text>
+<rect x="739.0" y="44.0" width="118.0" height="46.0" fill="var(--pm)" stroke="var(--pm)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="747.0" y="62.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">選目標</text>
+<text class="tx-s" x="747.0" y="80.0" text-anchor="start" fill="var(--ink-2)">痛點、owner 願意</text>
+<line x1="163.0" y1="92.0" x2="163.0" y2="111.0" stroke="var(--pm)" stroke-width="1.5" marker-end="url(#ar-p)"/>
+<text class="tx-s" x="169.0" y="106.0" text-anchor="start" fill="var(--ink-3)">指定</text>
+<line x1="417.0" y1="162.0" x2="417.0" y2="251.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="423.0" y="176.0" text-anchor="start" fill="var(--ink-3)">不逐檔讀</text>
+<line x1="671.0" y1="112.0" x2="671.0" y2="93.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="677.0" y="104.0" text-anchor="start" fill="var(--ink-3)">報告</text>
+<text class="tx-s" x="20.0" y="330.0" text-anchor="start" fill="var(--ink-3)">報告裡每個判斷都附依據：擷取（從檔案或歷史讀到）、實跑（在乾淨 workspace 跑過）、推測。</text>
+<line x1="20.0" y1="370.0" x2="860.0" y2="370.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="396.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">情勢判斷只讀、有預算、看不完就寫清楚看了什麼沒看什麼；交出去的是一頁報告和幾個切入目標，選哪個是 PM 的事。</text>
+<text class="tx" x="20.0" y="420.0" text-anchor="start" fill="var(--ink-2)">推測的東西（負責人、目的）一律標「推測」，等目標分析時再問本人。</text>
+</svg></div><div class="pn">3 / 12</div></section>
+<section class="slide"><div class="kicker">agent 與 PM、團隊、repo 的互動　·　圖 4 ／ 12</div><h1>目標分析：agent 先讀懂再問 owner，只問他才知道的，答案進 PROJECT_MAP</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="目標分析與訪談：PM 指定一個 module 或子目錄；agent 先讀懂，寫 PROJECT_MAP 初稿、做六原則檢查，在乾淨 workspace 實跑；再私訊 owner 只問他才知道的事並附已查到的；owner 回答或說先擱置；回答記進 PROJECT_MAP 標告知。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="22.0" text-anchor="start" fill="var(--ink-2)">什麼時候：PM 指定了一個目標，agent 第一次進去</text>
+<rect x="738.1" y="6.0" width="121.9" height="22.0" rx="11" fill="var(--pm)" stroke="var(--pm)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="799.1" y="22.0" text-anchor="middle" fill="var(--pm)" style="font-weight:700">授權：自主（讀、問）</text>
+<rect x="20.0" y="36.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="72.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">PM</text>
+<rect x="20.0" y="106.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="142.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">agent</text>
+<rect x="20.0" y="176.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="212.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">工程團隊</text>
+<rect x="20.0" y="246.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="282.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">repo</text>
+<rect x="104.0" y="44.0" width="118.0" height="46.0" fill="var(--pm)" stroke="var(--pm)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="112.0" y="62.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">指定一個目標</text>
+<text class="tx-s" x="112.0" y="80.0" text-anchor="start" fill="var(--ink-2)">module 或子目錄</text>
+<rect x="231.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="239.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">先讀懂</text>
+<text class="tx-s" x="239.0" y="150.0" text-anchor="start" fill="var(--ink-2)">地圖、六原則檢查</text>
+<rect x="358.0" y="254.0" width="118.0" height="46.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="366.0" y="272.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">乾淨 workspace</text>
+<text class="tx-s" x="366.0" y="290.0" text-anchor="start" fill="var(--ink-2)">只靠 depot 編、跑 sanity</text>
+<rect x="485.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="493.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">私訊 owner</text>
+<text class="tx-s" x="493.0" y="150.0" text-anchor="start" fill="var(--ink-2)">只問他才知道的</text>
+<rect x="612.0" y="184.0" width="118.0" height="46.0" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="620.0" y="202.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">owner 回答</text>
+<text class="tx-s" x="620.0" y="220.0" text-anchor="start" fill="var(--ink-2)">或說先擱置</text>
+<rect x="739.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="747.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">記進地圖</text>
+<text class="tx-s" x="747.0" y="150.0" text-anchor="start" fill="var(--ink-2)">依據標「告知」</text>
+<line x1="163.0" y1="92.0" x2="163.0" y2="111.0" stroke="var(--pm)" stroke-width="1.5" marker-end="url(#ar-p)"/>
+<text class="tx-s" x="169.0" y="106.0" text-anchor="start" fill="var(--ink-3)">指定</text>
+<line x1="417.0" y1="162.0" x2="417.0" y2="251.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="423.0" y="176.0" text-anchor="start" fill="var(--ink-3)">實跑</text>
+<line x1="544.0" y1="162.0" x2="544.0" y2="181.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="550.0" y="176.0" text-anchor="start" fill="var(--ink-3)">問</text>
+<line x1="671.0" y1="182.0" x2="671.0" y2="163.0" stroke="var(--ink-2)" stroke-width="1.5" marker-end="url(#ar)"/>
+<text class="tx-s" x="677.0" y="174.0" text-anchor="start" fill="var(--ink-3)">答</text>
+<text class="tx-s" x="20.0" y="330.0" text-anchor="start" fill="var(--ink-3)">示意的私訊：「這個目錄是 DMA 的 RTL，由 tb/dma 驗，交給 top 整合，對嗎？top.f 引用的 dma_ctrl.v 我找不到，在你那裡嗎？」</text>
+<text class="tx-s" x="20.0" y="348.0" text-anchor="start" fill="var(--ink-3)">只有 owner 知道的事：缺的檔在誰那裡、猜的用途對不對、交付物給誰、進行中的大包怎麼拆、flow 的正本誰維護。</text>
+<line x1="20.0" y1="388.0" x2="860.0" y2="388.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="414.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">問之前先查，問的時候附證據；只問只有 owner 知道的事，一次一批。</text>
+<text class="tx" x="20.0" y="438.0" text-anchor="start" fill="var(--ink-2)">owner 說先擱置，agent 聽理由、談折衷、記下什麼時候回來問。</text>
+</svg></div><div class="pn">4 / 12</div></section>
+<section class="slide"><div class="kicker">agent 與 PM、團隊、repo 的互動　·　圖 5 ／ 12</div><h1>計畫請准：agent 附取捨與替代方案，PM 懂了才算核准，owner 同意才動他的範圍</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="計畫請准：agent 列出缺口與 patch 計畫，每個缺口掛一個原則；向 PM 請准方向與優先順序，附原則、取捨、替代方案、影響誰；PM 理解後核准；agent 再請 owner 同意動他的範圍；決定記進 depot。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="22.0" text-anchor="start" fill="var(--ink-2)">什麼時候：目標分析完成，要開始動之前</text>
+<rect x="689.2" y="6.0" width="170.8" height="22.0" rx="11" fill="var(--pm)" stroke="var(--pm)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="774.6" y="22.0" text-anchor="middle" fill="var(--pm)" style="font-weight:700">授權：PM 請准 ＋ owner 同意</text>
+<rect x="20.0" y="36.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="72.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">PM</text>
+<rect x="20.0" y="106.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="142.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">agent</text>
+<rect x="20.0" y="176.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="212.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">工程團隊</text>
+<rect x="20.0" y="246.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="282.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">repo</text>
+<rect x="104.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="112.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">缺口與計畫</text>
+<text class="tx-s" x="112.0" y="150.0" text-anchor="start" fill="var(--ink-2)">每個缺口掛一個原則</text>
+<rect x="231.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="239.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">請准方向與順序</text>
+<text class="tx-s" x="239.0" y="150.0" text-anchor="start" fill="var(--ink-2)">原則、取捨、替代</text>
+<rect x="358.0" y="44.0" width="118.0" height="46.0" fill="var(--pm)" stroke="var(--pm)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="366.0" y="62.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">理解後核准</text>
+<text class="tx-s" x="366.0" y="80.0" text-anchor="start" fill="var(--ink-2)">說得出影響誰</text>
+<rect x="485.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="493.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">請 owner 同意</text>
+<text class="tx-s" x="493.0" y="150.0" text-anchor="start" fill="var(--ink-2)">做什麼、怎麼退</text>
+<rect x="612.0" y="184.0" width="118.0" height="46.0" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="620.0" y="202.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">owner 同意</text>
+<text class="tx-s" x="620.0" y="220.0" text-anchor="start" fill="var(--ink-2)">或改範圍</text>
+<rect x="739.0" y="254.0" width="118.0" height="46.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="747.0" y="272.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">決定進 depot</text>
+<text class="tx-s" x="747.0" y="290.0" text-anchor="start" fill="var(--ink-2)">決定紀錄、地圖</text>
+<line x1="290.0" y1="112.0" x2="290.0" y2="93.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="296.0" y="104.0" text-anchor="start" fill="var(--ink-3)">請准</text>
+<line x1="417.0" y1="92.0" x2="417.0" y2="111.0" stroke="var(--pm)" stroke-width="1.5" marker-end="url(#ar-p)"/>
+<text class="tx-s" x="423.0" y="106.0" text-anchor="start" fill="var(--ink-3)">核准</text>
+<line x1="544.0" y1="162.0" x2="544.0" y2="181.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="550.0" y="176.0" text-anchor="start" fill="var(--ink-3)">請同意</text>
+<line x1="671.0" y1="232.0" x2="671.0" y2="251.0" stroke="var(--ink-2)" stroke-width="1.5" marker-end="url(#ar)"/>
+<text class="tx-s" x="20.0" y="330.0" text-anchor="start" fill="var(--ink-3)">計畫裡每條 patch 標三類之一：agent 自己能補、補了要 owner 決定、只有 owner 知道。</text>
+<line x1="20.0" y1="370.0" x2="860.0" y2="370.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="396.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">方向、優先順序、對團隊的新要求是方針層：PM 懂了才算核准，owner 同意才動他的範圍。</text>
+<text class="tx" x="20.0" y="420.0" text-anchor="start" fill="var(--ink-2)">請准要分批、附取捨；PM 不懂就問，蓋章不算核准。</text>
+</svg></div><div class="pn">5 / 12</div></section>
+<section class="slide"><div class="kicker">agent 與 PM、團隊、repo 的互動　·　圖 6 ／ 12</div><h1>建置：patch 做成 shelved CL 交 owner，缺的 check 寫需求讓人或 subagent 做</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="建置：agent 把機制拆成觸發與流程、檢查工具、結果可見三層；既有 script 找負責人談補強；沒有的寫需求 markdown，由 subagent 或人實作測試部署；交付是 shelved CL 加測試證據；owner 採用等於 submit，不採用回一句為什麼。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="22.0" text-anchor="start" fill="var(--ink-2)">什麼時候：計畫核准後，補某個缺口</text>
+<rect x="681.5" y="6.0" width="178.6" height="22.0" rx="11" fill="var(--pm)" stroke="var(--pm)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="770.7" y="22.0" text-anchor="middle" fill="var(--pm)" style="font-weight:700">授權：自主做；裝 trigger 請准</text>
+<rect x="20.0" y="36.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="72.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">PM</text>
+<rect x="20.0" y="106.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="142.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">agent</text>
+<rect x="20.0" y="176.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="212.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">工程團隊</text>
+<rect x="20.0" y="246.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="282.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">repo</text>
+<rect x="104.0" y="114.0" width="140.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="112.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">拆成三層</text>
+<text class="tx-s" x="112.0" y="150.0" text-anchor="start" fill="var(--ink-2)">觸發／檢查工具／結果可見</text>
+<rect x="256.0" y="184.0" width="140.0" height="46.0" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="264.0" y="202.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">script 負責人</text>
+<text class="tx-s" x="264.0" y="220.0" text-anchor="start" fill="var(--ink-2)">談怎麼補強、怎麼接</text>
+<rect x="408.0" y="114.0" width="140.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="416.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">沒有的：需求 markdown</text>
+<text class="tx-s" x="416.0" y="150.0" text-anchor="start" fill="var(--ink-2)">給 subagent 或人實作</text>
+<rect x="560.0" y="254.0" width="140.0" height="46.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="568.0" y="272.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">shelved CL＋證據</text>
+<text class="tx-s" x="568.0" y="290.0" text-anchor="start" fill="var(--ink-2)">agent 的 workspace 跑過</text>
+<rect x="712.0" y="184.0" width="140.0" height="46.0" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="720.0" y="202.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">owner 採用＝submit</text>
+<text class="tx-s" x="720.0" y="220.0" text-anchor="start" fill="var(--ink-2)">不採用回一句</text>
+<line x1="326.0" y1="162.0" x2="326.0" y2="181.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="332.0" y="176.0" text-anchor="start" fill="var(--ink-3)">談</text>
+<line x1="630.0" y1="162.0" x2="630.0" y2="251.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="636.0" y="176.0" text-anchor="start" fill="var(--ink-3)">交</text>
+<line x1="782.0" y1="252.0" x2="782.0" y2="233.0" stroke="var(--goal)" stroke-width="1.5" marker-end="url(#ar-g)"/>
+<text class="tx-s" x="788.0" y="244.0" text-anchor="start" fill="var(--ink-3)">採用</text>
+<text class="tx-s" x="20.0" y="330.0" text-anchor="start" fill="var(--ink-3)">需求 markdown 的最低內容：目的、input、output、通過的定義、時間與資源預算、在哪裡跑、owner、怎麼測它自己。</text>
+<line x1="20.0" y1="370.0" x2="860.0" y2="370.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="396.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">機制分三層：觸發與流程、檢查工具、結果可見；既有的找負責人補強，沒有的用需求 markdown 讓 subagent 或人做。</text>
+<text class="tx" x="20.0" y="420.0" text-anchor="start" fill="var(--ink-2)">不論誰做，交付都是 shelved CL 加測試證據；owner submit 才進 depot。</text>
+</svg></div><div class="pn">6 / 12</div></section>
+<section class="slide"><div class="kicker">agent 與 PM、團隊、repo 的互動　·　圖 7 ／ 12</div><h1>採用：check 先只報告，穩了才警告，PM 與 owner 都同意才擋 submit，留 bypass</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="採用階梯：check 先只報告；團隊用一段時間看穩不穩；agent 附誤報率與抓到什麼提議升級；升到警告，submit 時提示不擋；PM 與 owner 都同意才擋 submit，而且留 bypass、有負責人。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="22.0" text-anchor="start" fill="var(--ink-2)">什麼時候：一道 check 裝好之後</text>
+<rect x="668.8" y="6.0" width="191.2" height="22.0" rx="11" fill="var(--pm)" stroke="var(--pm)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="764.4" y="22.0" text-anchor="middle" fill="var(--pm)" style="font-weight:700">授權：升到擋要 PM 與 owner 請准</text>
+<rect x="20.0" y="36.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="72.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">PM</text>
+<rect x="20.0" y="106.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="142.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">agent</text>
+<rect x="20.0" y="176.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="212.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">工程團隊</text>
+<rect x="20.0" y="246.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="282.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">repo</text>
+<rect x="104.0" y="254.0" width="118.0" height="46.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="112.0" y="272.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">check 只報告</text>
+<text class="tx-s" x="112.0" y="290.0" text-anchor="start" fill="var(--ink-2)">結果看得到，不擋</text>
+<rect x="231.0" y="184.0" width="118.0" height="46.0" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="239.0" y="202.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">用一段時間</text>
+<text class="tx-s" x="239.0" y="220.0" text-anchor="start" fill="var(--ink-2)">穩不穩、誤報多不多</text>
+<rect x="358.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="366.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">附證據提議升級</text>
+<text class="tx-s" x="366.0" y="150.0" text-anchor="start" fill="var(--ink-2)">誤報率、抓到什麼</text>
+<rect x="485.0" y="254.0" width="118.0" height="46.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="493.0" y="272.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">警告</text>
+<text class="tx-s" x="493.0" y="290.0" text-anchor="start" fill="var(--ink-2)">submit 時提示，不擋</text>
+<rect x="612.0" y="44.0" width="118.0" height="46.0" fill="var(--pm)" stroke="var(--pm)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="620.0" y="62.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">PM、owner 都同意</text>
+<text class="tx-s" x="620.0" y="80.0" text-anchor="start" fill="var(--ink-2)">才擋；留 bypass</text>
+<rect x="739.0" y="254.0" width="118.0" height="46.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="747.0" y="272.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">擋 submit</text>
+<text class="tx-s" x="747.0" y="290.0" text-anchor="start" fill="var(--ink-2)">留 bypass</text>
+<line x1="290.0" y1="252.0" x2="290.0" y2="233.0" stroke="var(--goal)" stroke-width="1.5" marker-end="url(#ar-g)"/>
+<line x1="417.0" y1="112.0" x2="417.0" y2="93.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="423.0" y="104.0" text-anchor="start" fill="var(--ink-3)">提議</text>
+<line x1="544.0" y1="162.0" x2="544.0" y2="251.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="550.0" y="176.0" text-anchor="start" fill="var(--ink-3)">升級</text>
+<line x1="798.0" y1="92.0" x2="798.0" y2="251.0" stroke="var(--pm)" stroke-width="1.5" marker-end="url(#ar-p)"/>
+<text class="tx-s" x="804.0" y="106.0" text-anchor="start" fill="var(--ink-3)">同意擋</text>
+<line x1="20.0" y1="352.0" x2="860.0" y2="352.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="378.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">採用是階梯：只報告 → 警告 → 擋；每升一級都要證據，擋要 PM 與 owner 都同意。</text>
+<text class="tx" x="20.0" y="402.0" text-anchor="start" fill="var(--ink-2)">沒有共識就停在警告；誤報多就退一級。</text>
+</svg></div><div class="pn">7 / 12</div></section>
+<section class="slide"><div class="kicker">agent 與 PM、團隊、repo 的互動　·　圖 8 ／ 12</div><h1>日常看守：CL 進來 agent 看說明和 check，看不出目的就私訊一句並示範怎麼寫</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="日常看守：工程師 submit 一個 CL；trigger 跑 sanity 結果附 CL 號；agent 看說明與結果，一包幾件事、看得出目的嗎；看不出目的就私訊一句並示範怎麼寫；工程師回一句或照改；壞了先問原因再給修法。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="22.0" text-anchor="start" fill="var(--ink-2)">什麼時候：每一個 CL 進到看守中的目標</text>
+<rect x="728.0" y="6.0" width="132.0" height="22.0" rx="11" fill="var(--pm)" stroke="var(--pm)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="794.0" y="22.0" text-anchor="middle" fill="var(--pm)" style="font-weight:700">授權：自主（看、私訊）</text>
+<rect x="20.0" y="36.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="72.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">PM</text>
+<rect x="20.0" y="106.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="142.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">agent</text>
+<rect x="20.0" y="176.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="212.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">工程團隊</text>
+<rect x="20.0" y="246.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="282.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">repo</text>
+<rect x="104.0" y="184.0" width="118.0" height="46.0" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="112.0" y="202.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">submit 一個 CL</text>
+<rect x="231.0" y="254.0" width="118.0" height="46.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="239.0" y="272.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">trigger 跑 sanity</text>
+<text class="tx-s" x="239.0" y="290.0" text-anchor="start" fill="var(--ink-2)">結果附 CL 號</text>
+<rect x="358.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="366.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">看說明與結果</text>
+<text class="tx-s" x="366.0" y="150.0" text-anchor="start" fill="var(--ink-2)">幾件事？目的？</text>
+<rect x="485.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="493.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">私訊一句</text>
+<text class="tx-s" x="493.0" y="150.0" text-anchor="start" fill="var(--ink-2)">看不出目的就問</text>
+<rect x="612.0" y="184.0" width="118.0" height="46.0" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="620.0" y="202.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">回一句或照改</text>
+<rect x="739.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="747.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">壞了：先問原因</text>
+<text class="tx-s" x="747.0" y="150.0" text-anchor="start" fill="var(--ink-2)">再給修法</text>
+<line x1="163.0" y1="232.0" x2="163.0" y2="251.0" stroke="var(--ink-2)" stroke-width="1.5" marker-end="url(#ar)"/>
+<text class="tx-s" x="169.0" y="246.0" text-anchor="start" fill="var(--ink-3)">submit</text>
+<line x1="290.0" y1="252.0" x2="290.0" y2="163.0" stroke="var(--goal)" stroke-width="1.5" marker-end="url(#ar-g)"/>
+<text class="tx-s" x="296.0" y="244.0" text-anchor="start" fill="var(--ink-3)">結果</text>
+<line x1="544.0" y1="162.0" x2="544.0" y2="181.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="550.0" y="176.0" text-anchor="start" fill="var(--ink-3)">問一句</text>
+<line x1="798.0" y1="162.0" x2="798.0" y2="181.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="804.0" y="176.0" text-anchor="start" fill="var(--ink-3)">問原因</text>
+<text class="tx-s" x="20.0" y="330.0" text-anchor="start" fill="var(--ink-3)">示意的私訊：「這包看起來是改 DMA 的 burst，對嗎？說明可以寫成：改了什麼／為什麼／怎麼驗，例如『加 burst 模式；為了 X；跑 t_dma_burst 過』。」</text>
+<line x1="20.0" y1="370.0" x2="860.0" y2="370.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="396.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">看守看的是 CL 的說明、一包幾件事、check 的結果；看不出目的就私訊一句並示範怎麼寫。</text>
+<text class="tx" x="20.0" y="420.0" text-anchor="start" fill="var(--ink-2)">同一件事不重複念；壞了先問原因，可能是刻意的。</text>
+</svg></div><div class="pn">8 / 12</div></section>
+<section class="slide"><div class="kicker">agent 與 PM、團隊、repo 的互動　·　圖 9 ／ 12</div><h1>開工輔導：看到跡象先問，說是就登記狀態板，把 stream 與 check 準備好給他</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="開工輔導：repo 裡出現跡象，某人 open 多個檔沒 submit；agent 私訊問是不是在做某件事並附線索；工程師說是；agent 登記到狀態板，目的、範圍、做完的定義；在 repo 準備好 stream、workspace、check 交到他手上；工程師小包 submit、shelve 給人看、check 過了併回 main。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="22.0" text-anchor="start" fill="var(--ink-2)">什麼時候：看到有人好像開了一件新工作</text>
+<rect x="646.5" y="6.0" width="213.5" height="22.0" rx="11" fill="var(--pm)" stroke="var(--pm)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="753.2" y="22.0" text-anchor="middle" fill="var(--pm)" style="font-weight:700">授權：自主（問、準備）；登記要本人同意</text>
+<rect x="20.0" y="36.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="72.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">PM</text>
+<rect x="20.0" y="106.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="142.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">agent</text>
+<rect x="20.0" y="176.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="212.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">工程團隊</text>
+<rect x="20.0" y="246.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="282.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">repo</text>
+<rect x="104.0" y="254.0" width="118.0" height="46.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="112.0" y="272.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">跡象</text>
+<text class="tx-s" x="112.0" y="290.0" text-anchor="start" fill="var(--ink-2)">open 多檔沒 submit</text>
+<rect x="231.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="239.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">私訊：在做 X 嗎？</text>
+<text class="tx-s" x="239.0" y="150.0" text-anchor="start" fill="var(--ink-2)">附線索</text>
+<rect x="358.0" y="184.0" width="118.0" height="46.0" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="366.0" y="202.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">是，要做 DMA burst</text>
+<rect x="485.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="493.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">登記狀態板</text>
+<text class="tx-s" x="493.0" y="150.0" text-anchor="start" fill="var(--ink-2)">目的、範圍、做完的定義</text>
+<rect x="612.0" y="254.0" width="118.0" height="46.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="620.0" y="272.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">stream、check</text>
+<text class="tx-s" x="620.0" y="290.0" text-anchor="start" fill="var(--ink-2)">workspace 也備好</text>
+<rect x="739.0" y="184.0" width="118.0" height="46.0" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="747.0" y="202.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">小包、併回</text>
+<text class="tx-s" x="747.0" y="220.0" text-anchor="start" fill="var(--ink-2)">shelve 給人看再併</text>
+<line x1="163.0" y1="252.0" x2="163.0" y2="163.0" stroke="var(--goal)" stroke-width="1.5" marker-end="url(#ar-g)"/>
+<text class="tx-s" x="169.0" y="244.0" text-anchor="start" fill="var(--ink-3)">看到</text>
+<line x1="290.0" y1="162.0" x2="290.0" y2="181.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="296.0" y="176.0" text-anchor="start" fill="var(--ink-3)">問</text>
+<line x1="417.0" y1="182.0" x2="417.0" y2="163.0" stroke="var(--ink-2)" stroke-width="1.5" marker-end="url(#ar)"/>
+<text class="tx-s" x="423.0" y="174.0" text-anchor="start" fill="var(--ink-3)">答</text>
+<line x1="671.0" y1="162.0" x2="671.0" y2="251.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="677.0" y="176.0" text-anchor="start" fill="var(--ink-3)">準備</text>
+<line x1="798.0" y1="252.0" x2="798.0" y2="233.0" stroke="var(--goal)" stroke-width="1.5" marker-end="url(#ar-g)"/>
+<text class="tx-s" x="804.0" y="244.0" text-anchor="start" fill="var(--ink-3)">用</text>
+<text class="tx-s" x="20.0" y="330.0" text-anchor="start" fill="var(--ink-3)">狀態板上每件任務：做什麼（一句）、誰、動哪些目錄、預計交什麼、在哪條 stream、到哪一步；看的是任務，不是人。</text>
+<line x1="20.0" y1="370.0" x2="860.0" y2="370.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="396.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">看到跡象先問，說是才登記；登記時把做完的定義指到一個跑得起來的檢查。</text>
+<text class="tx" x="20.0" y="420.0" text-anchor="start" fill="var(--ink-2)">用 Perforce 的詞輔導：stream、workspace、shelve、copy up；東西準備好交到他手上，一步不用查手冊。</text>
+</svg></div><div class="pn">9 / 12</div></section>
+<section class="slide"><div class="kicker">agent 與 PM、團隊、repo 的互動　·　圖 10 ／ 12</div><h1>透明：日誌與狀態板都在 depot，PM 看一頁摘要，工程師看得到關於自己的紀錄</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="透明：agent 每個動作、訊息、判斷寫日誌，和狀態板、PROJECT_MAP 一起放在 depot；定期給 PM 一頁摘要，PM 要細節就讀日誌；工程師看得到關於自己的紀錄；報告以模組為單位，不排名、不用於考核。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="22.0" text-anchor="start" fill="var(--ink-2)">什麼時候：一直都在</text>
+<rect x="789.1" y="6.0" width="70.9" height="22.0" rx="11" fill="var(--pm)" stroke="var(--pm)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="824.5" y="22.0" text-anchor="middle" fill="var(--pm)" style="font-weight:700">授權：自主</text>
+<rect x="20.0" y="36.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="72.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">PM</text>
+<rect x="20.0" y="106.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="142.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">agent</text>
+<rect x="20.0" y="176.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="212.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">工程團隊</text>
+<rect x="20.0" y="246.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="282.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">repo</text>
+<rect x="104.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="112.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">每個動作寫日誌</text>
+<text class="tx-s" x="112.0" y="150.0" text-anchor="start" fill="var(--ink-2)">訊息、判斷、不確定的</text>
+<rect x="231.0" y="254.0" width="118.0" height="46.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="239.0" y="272.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">日誌、狀態板、地圖</text>
+<text class="tx-s" x="239.0" y="290.0" text-anchor="start" fill="var(--ink-2)">都在 depot</text>
+<rect x="358.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="366.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">定期一頁摘要</text>
+<text class="tx-s" x="366.0" y="150.0" text-anchor="start" fill="var(--ink-2)">做了什麼、發現什麼、等誰</text>
+<rect x="485.0" y="44.0" width="118.0" height="46.0" fill="var(--pm)" stroke="var(--pm)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="493.0" y="62.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">看摘要</text>
+<text class="tx-s" x="493.0" y="80.0" text-anchor="start" fill="var(--ink-2)">要細節就讀日誌</text>
+<rect x="612.0" y="184.0" width="118.0" height="46.0" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="620.0" y="202.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">看得到關於自己的紀錄</text>
+<text class="tx-s" x="620.0" y="220.0" text-anchor="start" fill="var(--ink-2)">狀態板記任務不記人</text>
+<rect x="739.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="747.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">報告以模組為單位</text>
+<text class="tx-s" x="747.0" y="150.0" text-anchor="start" fill="var(--ink-2)">不排名、不用於考核</text>
+<line x1="163.0" y1="162.0" x2="163.0" y2="251.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="169.0" y="176.0" text-anchor="start" fill="var(--ink-3)">寫</text>
+<line x1="417.0" y1="112.0" x2="417.0" y2="93.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="423.0" y="104.0" text-anchor="start" fill="var(--ink-3)">摘要</text>
+<line x1="671.0" y1="252.0" x2="671.0" y2="233.0" stroke="var(--goal)" stroke-width="1.5" marker-end="url(#ar-g)"/>
+<text class="tx-s" x="677.0" y="244.0" text-anchor="start" fill="var(--ink-3)">可讀</text>
+<line x1="20.0" y1="352.0" x2="860.0" y2="352.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="378.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">agent 的日誌與狀態板放在 depot，PM 和工程師都讀得到；PM 平時看一頁摘要。</text>
+<text class="tx" x="20.0" y="402.0" text-anchor="start" fill="var(--ink-2)">關於某人的紀錄那個人看得到；報告以模組和流程為單位，不排名個人。</text>
+</svg></div><div class="pn">10 / 12</div></section>
+<section class="slide"><div class="kicker">agent 與 PM、團隊、repo 的互動　·　圖 11 ／ 12</div><h1>擱置與誤報：工程師說先擱置就談折衷記回訪，拒絕交 PM 決定，agent 錯了當眾更正</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="三欄。擱置：工程師說這週趕 tape-out 先不動，agent 說好 tape-out 後再問並標在地圖上，repo 記回訪時點。拒絕：工程師說不認同這個 check，agent 不裁決、整理證據與選項，PM 決定。誤報：agent 錯怪了一包 CL，在同一群人面前更正，repo 裡留一頁不究責的檢討。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="22.0" text-anchor="start" fill="var(--ink-2)">什麼時候：對方不想動、不同意，或 agent 錯了</text>
+<rect x="678.5" y="6.0" width="181.5" height="22.0" rx="11" fill="var(--pm)" stroke="var(--pm)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="769.3" y="22.0" text-anchor="middle" fill="var(--pm)" style="font-weight:700">授權：擱置可自己答應；拒絕交 PM</text>
+<rect x="20.0" y="40.0" width="272.0" height="250.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.3" stroke-dasharray="6 4" fill-opacity=".04"/>
+<text class="tx" x="34.0" y="62.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">擱置</text>
+<rect x="34.0" y="78.0" width="60.7" height="20.0" rx="10" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="64.4" y="92.0" text-anchor="middle" fill="var(--ink-2)" style="font-weight:700">工程團隊</text>
+<text class="tx-s" x="34.0" y="118.0" text-anchor="start" fill="var(--ink-2)">「這週趕 tape-out，先不動」</text>
+<line x1="60.0" y1="126.0" x2="60.0" y2="140.0" stroke="var(--ink-2)" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="34.0" y="144.0" width="51.5" height="20.0" rx="10" fill="var(--agent)" stroke="var(--agent)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="59.8" y="158.0" text-anchor="middle" fill="var(--agent)" style="font-weight:700">agent</text>
+<text class="tx-s" x="34.0" y="184.0" text-anchor="start" fill="var(--ink-2)">好，tape-out 後再問；先標在地圖上</text>
+<line x1="60.0" y1="192.0" x2="60.0" y2="206.0" stroke="var(--agent)" stroke-width="1.2" marker-end="url(#ar-a)"/>
+<rect x="34.0" y="210.0" width="45.2" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="56.6" y="224.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">repo</text>
+<text class="tx-s" x="34.0" y="250.0" text-anchor="start" fill="var(--ink-2)">記回訪的時點</text>
+<rect x="304.0" y="40.0" width="272.0" height="250.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.3" stroke-dasharray="6 4" fill-opacity=".04"/>
+<text class="tx" x="318.0" y="62.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">拒絕</text>
+<rect x="318.0" y="78.0" width="60.7" height="20.0" rx="10" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="348.4" y="92.0" text-anchor="middle" fill="var(--ink-2)" style="font-weight:700">工程團隊</text>
+<text class="tx-s" x="318.0" y="118.0" text-anchor="start" fill="var(--ink-2)">「我不認同這個 check」</text>
+<line x1="344.0" y1="126.0" x2="344.0" y2="140.0" stroke="var(--ink-2)" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="318.0" y="144.0" width="51.5" height="20.0" rx="10" fill="var(--agent)" stroke="var(--agent)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="343.8" y="158.0" text-anchor="middle" fill="var(--agent)" style="font-weight:700">agent</text>
+<text class="tx-s" x="318.0" y="184.0" text-anchor="start" fill="var(--ink-2)">不裁決；整理證據與選項</text>
+<line x1="344.0" y1="192.0" x2="344.0" y2="206.0" stroke="var(--agent)" stroke-width="1.2" marker-end="url(#ar-a)"/>
+<rect x="318.0" y="210.0" width="32.6" height="20.0" rx="10" fill="var(--pm)" stroke="var(--pm)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="334.3" y="224.0" text-anchor="middle" fill="var(--pm)" style="font-weight:700">PM</text>
+<text class="tx-s" x="318.0" y="250.0" text-anchor="start" fill="var(--ink-2)">決定</text>
+<rect x="588.0" y="40.0" width="272.0" height="250.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.3" stroke-dasharray="6 4" fill-opacity=".04"/>
+<text class="tx" x="602.0" y="62.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">誤報</text>
+<rect x="602.0" y="78.0" width="51.5" height="20.0" rx="10" fill="var(--agent)" stroke="var(--agent)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="627.8" y="92.0" text-anchor="middle" fill="var(--agent)" style="font-weight:700">agent</text>
+<text class="tx-s" x="602.0" y="118.0" text-anchor="start" fill="var(--ink-2)">錯怪了一包 CL</text>
+<line x1="628.0" y1="126.0" x2="628.0" y2="140.0" stroke="var(--agent)" stroke-width="1.2" marker-end="url(#ar-a)"/>
+<rect x="602.0" y="144.0" width="60.7" height="20.0" rx="10" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="632.4" y="158.0" text-anchor="middle" fill="var(--ink-2)" style="font-weight:700">工程團隊</text>
+<text class="tx-s" x="602.0" y="184.0" text-anchor="start" fill="var(--ink-2)">同一群人面前更正</text>
+<line x1="628.0" y1="192.0" x2="628.0" y2="206.0" stroke="var(--ink-2)" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="602.0" y="210.0" width="45.2" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="624.6" y="224.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">repo</text>
+<text class="tx-s" x="602.0" y="250.0" text-anchor="start" fill="var(--ink-2)">一頁不究責的檢討</text>
+<text class="tx-s" x="20.0" y="312.0" text-anchor="start" fill="var(--ink-3)">擱置：嚴重度低、有期限的 agent 自己答應；嚴重度高、沒期限、一再延後的交 PM，而且對當事人透明。</text>
+<line x1="20.0" y1="332.0" x2="860.0" y2="332.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="358.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">擱置可以談：聽理由、談折衷、記回訪；拒絕交 PM 決定，agent 不裁決。</text>
+<text class="tx" x="20.0" y="382.0" text-anchor="start" fill="var(--ink-2)">agent 錯了當眾更正，寫一頁不究責的檢討。</text>
+</svg></div><div class="pn">11 / 12</div></section>
+<section class="slide"><div class="kicker">agent 與 PM、團隊、repo 的互動　·　圖 12 ／ 12</div><h1>加強與退場：一道 check 穩了才提下一道，團隊自己維護 pipeline 後 agent 退到看守</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="加強與退場：某道 check 穩定通過一段時間；agent 附證據提議下一道；團隊同意或先不要；agent 量六原則檢驗與四個指標的趨勢給 PM；團隊自己維護 pipeline 之後，agent 退到看守與維運。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="22.0" text-anchor="start" fill="var(--ink-2)">什麼時候：機制跑穩之後</text>
+<rect x="682.4" y="6.0" width="177.6" height="22.0" rx="11" fill="var(--pm)" stroke="var(--pm)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="771.2" y="22.0" text-anchor="middle" fill="var(--pm)" style="font-weight:700">授權：加一道告知；退場 PM 決定</text>
+<rect x="20.0" y="36.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="72.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">PM</text>
+<rect x="20.0" y="106.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="142.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">agent</text>
+<rect x="20.0" y="176.0" width="840.0" height="62.0" fill="var(--surface)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="212.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">工程團隊</text>
+<rect x="20.0" y="246.0" width="840.0" height="62.0" fill="var(--surface-2)" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="32.0" y="282.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">repo</text>
+<rect x="104.0" y="254.0" width="118.0" height="46.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="112.0" y="272.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">某道 check 穩定通過</text>
+<text class="tx-s" x="112.0" y="290.0" text-anchor="start" fill="var(--ink-2)">一段時間</text>
+<rect x="231.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="239.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">提議下一道</text>
+<text class="tx-s" x="239.0" y="150.0" text-anchor="start" fill="var(--ink-2)">附證據：為什麼現在加得起</text>
+<rect x="358.0" y="184.0" width="118.0" height="46.0" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="366.0" y="202.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">同意，或先不要</text>
+<rect x="485.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="493.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">量趨勢</text>
+<text class="tx-s" x="493.0" y="150.0" text-anchor="start" fill="var(--ink-2)">六原則檢驗、四個指標</text>
+<rect x="612.0" y="184.0" width="118.0" height="46.0" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="620.0" y="202.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">自己維護 pipeline</text>
+<text class="tx-s" x="620.0" y="220.0" text-anchor="start" fill="var(--ink-2)">做完的定義成了習慣</text>
+<rect x="739.0" y="114.0" width="118.0" height="46.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="747.0" y="132.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">退到看守與維運</text>
+<text class="tx-s" x="747.0" y="150.0" text-anchor="start" fill="var(--ink-2)">交回條件達成</text>
+<line x1="163.0" y1="252.0" x2="163.0" y2="163.0" stroke="var(--goal)" stroke-width="1.5" marker-end="url(#ar-g)"/>
+<line x1="290.0" y1="162.0" x2="290.0" y2="181.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="296.0" y="176.0" text-anchor="start" fill="var(--ink-3)">提議</text>
+<line x1="544.0" y1="112.0" x2="544.0" y2="93.0" stroke="var(--agent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+<text class="tx-s" x="550.0" y="104.0" text-anchor="start" fill="var(--ink-3)">趨勢</text>
+<line x1="671.0" y1="182.0" x2="671.0" y2="163.0" stroke="var(--ink-2)" stroke-width="1.5" marker-end="url(#ar)"/>
+<text class="tx-s" x="677.0" y="174.0" text-anchor="start" fill="var(--ink-3)">交回</text>
+<text class="tx-s" x="20.0" y="330.0" text-anchor="start" fill="var(--ink-3)">四個指標的 IC 版：submit 頻率、改動到進 main 的時間、check 失敗率、壞掉到修好的時間；以模組為單位。</text>
+<line x1="20.0" y1="370.0" x2="860.0" y2="370.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="396.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">一次只加一道，穩定了才加；量的是模組的趨勢，不是個人。</text>
+<text class="tx" x="20.0" y="420.0" text-anchor="start" fill="var(--ink-2)">團隊自己維護 pipeline 之後，agent 退到看守；這是退場的條件。</text>
+</svg></div><div class="pn">12 / 12</div></section>
+</body>
+</html>
