@@ -64,54 +64,83 @@ def loop(s, x0, y0, steps, back_label="不過", pass_label="過", w=96, h=44, ga
     return xl + 36
 
 
-# ── 圖 1：總覽，三層迴圈套在一起（2026-10-09 重排後加）────────────────
-OVERVIEW_ROWS = [("內圈", ["查和判由機器做", "每圈一樣的環境"], ["每圈等人跑、等人判"]),
-                 ("中圈", ["每個改動進 main 前都查過", "交出去的東西可查"], ["問題留到大整合才出", "交接靠文件和記憶"]),
-                 ("外圈", ["每個方案同環境跑", "PPA 由機器讀回來"], ["方案比不了"])]
+# ── 圖 1：總覽——效益站在地基上，地基現在是空的（2026-10-09 第三版）────
+PILLARS = [
+    ("內圈自己轉", "一個改動：agent 改，機器查、判，不眠不休",
+     ["時間：每圈不等人，晚上也在轉", "風險：每個改動都查過才進 main"],
+     ["查判靠人", "每圈等人；agent 再多也等於一個"]),
+    ("外圈平行跑", "N 個 agent 同時試 N 個方案，PPA 機器讀回",
+     ["時間：N 個方案一起跑，license 排得滿", "風險：同環境比，選錯方案的機會小"],
+     ["環境各不同", "PPA 比不了；N 次都要人跑"]),
+    ("上下游接棒", "交出去的是查過、跑得起來的狀態，agent 接得了",
+     ["時間：下游不必等人解釋，馬上開跑", "風險：問題早、小，用不著大整合"],
+     ["交接靠文件加記憶", "下游等人；agent 接不了"]),
+]
 
 
 def p_overview():
     s = []
-    T(s, 20, 20, "這份文件回答：CI/CD 對這個團隊的意義是什麼；《把版控當備份的團隊》裡的症狀，代價到底多大 ↓", cls="tx-lbl", fill=INK2)
-    rect(s, 20, 40, 400, 290, col=GOAL, fill=GOAL, op=".04", sw=1.4, dash="6 4")
-    T(s, 32, 62, "外圈：N 個方案各跑一整圈，比 PPA", cls="tx", fill=GOAL, w=700)
-    T(s, 32, 80, "第 7 頁", fill=GRAY)
-    rect(s, 50, 92, 340, 212, col="var(--rule-2)", fill="var(--surface)", sw=1.2)
-    T(s, 62, 114, "中圈（迭代）：許多改動依序進 main，main 隨時可交付", cls="tx", fill=INK2, w=700)
-    T(s, 62, 132, "交接給下游也在這一層　第 5–6 頁", fill=GRAY)
-    rect(s, 80, 146, 280, 134, col=GOAL, fill=GOAL, op=".10", sw=1.6)
-    T(s, 92, 168, "內圈：一個改動", cls="tx", fill=GOAL, w=700)
-    for i, t in enumerate(["改", "查", "判"]):
-        x = 92 + i * 90
-        c = GOAL if i else INK2
-        rect(s, x, 184, 70, 32, col=c, fill="var(--surface)", sw=1.2)
-        T(s, x + 35, 205, t, cls="tx", anchor="middle", fill=c, w=700)
-        if i < 2:
-            arrow(s, x + 73, 200, x + 87, 200, col=INK2, ar="ar", sw=1.2)
-    path(s, "M307,218 L307,236 L127,236 L127,220", col=WARN, ar="ar-w", sw=1.2)
-    T(s, 217, 252, "不過就繞回去；過了就進 main", anchor="middle", fill=INK2)
-    T(s, 92, 272, "第 2–4 頁", fill=GRAY)
-    T(s, 450, 60, "每一層", cls="tx-lbl", fill=INK2)
-    T(s, 540, 60, "CI/CD 做的事", cls="tx-lbl", fill=GOAL)
-    T(s, 720, 60, "沒有的時候", cls="tx-lbl", fill=WARN)
-    y = 84
-    for name, does, without in OVERVIEW_ROWS:
-        T(s, 450, y + 16, name, cls="tx", fill=INK2, w=700)
-        for k, d in enumerate(does):
-            T(s, 540, y + 16 + 18 * k, d, fill=GOAL)
-        for k, w_ in enumerate(without):
-            T(s, 720, y + 16 + 18 * k, w_, fill=WARN)
-        line(s, 450, y + 46, 860, y + 46)
-        y += 56
-    T(s, 450, y + 20, "AI 加速的只有「改」，三層都一樣；查和判仍要機器做（第 8 頁）", cls="tx", fill=AGENT, w=600)
-    bottom(s, 352, [
-        ("三層做的是同一件事：改交給人或 agent，查和判交給機器；少了機器的查和判，哪一層都轉不起來。", True),
-        ("後面照三層的順序各講一到三頁，再講 AI 為什麼三層都要、上限在哪，最後收成結論。", False),
+    T(s, 20, 20, "Agentic AI 帶來的三種效益（對開發時間與風險）", cls="tx-lbl", fill=AGENT)
+    T(s, 860, 20, "後面十頁是這一頁的展開", cls="tx-lbl", anchor="end", fill=GRAY)
+    for i, (name, how, gains, _) in enumerate(PILLARS):
+        x = 20 + i * 290
+        rect(s, x, 32, 260, 150, col=AGENT, fill=AGENT, op=".08", sw=1.6)
+        T(s, x + 14, 56, name, cls="tx", fill=AGENT, w=700)
+        T(s, x + 14, 76, how, fill=INK2)
+        # 小圖：三種迴圈的形狀
+        y0 = 92
+        if i == 0:
+            for k, t in enumerate(["改", "查", "判"]):
+                bx = x + 14 + k * 62
+                c = AGENT if k == 0 else GOAL
+                rect(s, bx, y0, 44, 22, col=c, fill="var(--surface)", sw=1.1)
+                T(s, bx + 22, y0 + 15, t, anchor="middle", fill=c)
+                if k < 2:
+                    arrow(s, bx + 46, y0 + 11, bx + 60, y0 + 11, col=INK2, ar="ar", sw=1)
+            path(s, "M%d,%d L%d,%d L%d,%d L%d,%d" % (x + 160, y0 + 23, x + 160, y0 + 32, x + 36, y0 + 32, x + 36, y0 + 24), col=WARN, ar="ar-w", sw=1)
+            T(s, x + 212, y0 + 15, "不停地轉", fill=GRAY)
+        elif i == 1:
+            for k in range(3):
+                bx = x + 14 + k * 70
+                rect(s, bx, y0, 60, 22, col=GOAL, fill="var(--surface)", sw=1.1)
+                T(s, bx + 30, y0 + 15, "方案 %s" % "ABC"[k], anchor="middle", fill=GOAL)
+                arrow(s, bx + 30, y0 + 24, bx + 30, y0 + 32, col=GOAL, ar="ar-g", sw=1)
+            line(s, x + 44, y0 + 33, x + 184, y0 + 33, col=GOAL, sw=1)
+            T(s, x + 192, y0 + 37, "比 PPA", fill=GRAY)
+        else:
+            rect(s, x + 14, y0, 60, 22, col=INK2, fill="var(--surface)", sw=1.1)
+            T(s, x + 44, y0 + 15, "上游", anchor="middle", fill=INK2)
+            arrow(s, x + 78, y0 + 11, x + 104, y0 + 11, col=GOAL, ar="ar-g", sw=1.2)
+            rect(s, x + 108, y0, 76, 22, col=GOAL, fill="var(--surface)", sw=1.1)
+            T(s, x + 146, y0 + 15, "查過的狀態", anchor="middle", fill=GOAL)
+            arrow(s, x + 188, y0 + 11, x + 214, y0 + 11, col=GOAL, ar="ar-g", sw=1.2)
+            rect(s, x + 218, y0, 40, 22, col=AGENT, fill="var(--surface)", sw=1.1)
+            T(s, x + 238, y0 + 15, "下游", anchor="middle", fill=AGENT)
+        for k, g in enumerate(gains):
+            T(s, x + 14, 146 + 18 * k, g, fill=GOAL if k == 0 else INK2)
+        # 柱子站在地基上
+        for px in (x + 60, x + 200):
+            s.append('<path d="M%d,184 L%d,196 L%d,196 Z" fill="%s"/>' % (px, px - 7, px + 7, GOAL))
+    # 地基
+    rect(s, 20, 198, 840, 62, col=GOAL, fill=GOAL, op=".14", sw=2)
+    T(s, 34, 222, "地基：CI/CD，查和判交給機器", cls="tx", fill=GOAL, w=700)
+    T(s, 34, 246, "每圈環境一樣（SSOT）・結果由機器寫下、連得回來源（Traceability）・進 main 前機器查過、人看過（CI、Code review）・main 隨時可用", fill=INK2)
+    # 現狀：空的地基
+    rect(s, 20, 276, 840, 86, col=WARN, fill=WARN, op=".05", sw=1.6, dash="8 5")
+    T(s, 34, 298, "現狀：這塊地基是空的。查判靠人、環境靠記憶、main 隨時會壞；上面三種效益各變成——", cls="tx", fill=WARN, w=700)
+    for i, (_, _, _, lose) in enumerate(PILLARS):
+        x = 20 + i * 290
+        check(s, x + 14, 326, False, lose[0], cls="tx")
+        T(s, x + 34, 346, lose[1], fill=WARN)
+    pill(s, 860 - 12, 300, "N 個 agent ＝ ×1", WARN, anchor="end")
+    bottom(s, 380, [
+        ("AI 加速的只有「改」；查和判沒有機器做，三種效益一個都拿不到，N 個 agent 等於一個。", True),
+        ("把這塊地基補起來，是拿到 Agentic AI 效益的前提；它和買哪一家的 AI 無關。", False),
     ])
-    aria = ("左邊三層套疊：最外是外圈，N 個方案各跑一整圈比 PPA；中間是中圈（迭代），許多改動依序進 main，main 隨時可交付，交接給下游也在這一層；"
-            "最裡面是內圈，一個改動的改、查、判，不過就繞回去，過了就進 main。右邊一張表：每一層 CI/CD 做的事與沒有的時候——"
-            "內圈：查和判由機器做、每圈一樣的環境，沒有時每圈等人跑等人判；中圈：每個改動進 main 前都查過、交出去的東西可查，沒有時問題留到大整合才出、交接靠文件和記憶；"
-            "外圈：每個方案同環境跑、PPA 由機器讀回來，沒有時方案比不了。AI 加速的只有改，三層都一樣。")
+    aria = ("三根柱子是 Agentic AI 的三種效益：內圈自己轉（時間：每圈不等人；風險：每個改動都查過才進 main）、"
+            "外圈平行跑（時間：N 個方案一起跑；風險：同環境比選錯機會小）、上下游接棒（時間：下游不必等人解釋；風險：問題早小用不著大整合）。"
+            "三根柱子站在一塊地基上：CI/CD，查和判交給機器，含 SSOT、Traceability、CI、Code review。"
+            "地基下方一塊虛線的空框是現狀：查判靠人、環境靠記憶、main 隨時會壞，三種效益各變成每圈等人、PPA 比不了、下游等人，N 個 agent 等於一個。")
     return svg(s, 880, 480, aria)
 
 
@@ -492,7 +521,7 @@ def p8():
 
 
 PAGES = [
-    ("總覽：三層迴圈，CI/CD 在每一層做同一件事：查和判交給機器", p_overview()),
+    ("總覽：AI 的三種效益站在同一塊地基 CI/CD 上，而這塊地基現在是空的", p_overview()),
     ("內圈（inner loop）：一個改動是改、查、判轉到過為止，查和判交給機器", p1()),
     ("內圈在 IC：一圈有快有慢，CI/CD 照快慢排成幾道檢查，每道機器判", p2()),
     ("現狀的內圈：每圈靠人設環境、人跑、人看 log，轉得慢、判法還不一", p3()),

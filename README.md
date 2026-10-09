@@ -92,12 +92,12 @@ PDF 版：[docs/slides/ai-agent-and-pm-make-cicd-happen.pdf](docs/slides/ai-agen
 
 ### 為什麼非要 CI/CD：查和判不交給機器，N 個 agent 等於一個
 
-為什麼《把版控當備份的團隊》裡的症狀代價很大。脊椎是三層套在一起的迴圈：一個改動的內圈（inner loop）、一個專案的中圈（迭代與交接）、N 個方案比 PPA 的外圈（outer loop）；CI/CD 在每一層做同一件事（查和判交給機器），AI 在每一層加速的也只有「改」。沒有 CI/CD，每圈、每次交接、每個方案都要等人查判，N 個 agent 等於一個。十一頁，附務實的上限（license、算力、可比性）。PDF：[docs/slides/loops-need-cicd-before-ai-multiplies.pdf](docs/slides/loops-need-cicd-before-ai-multiplies.pdf)
+為什麼《把版控當備份的團隊》裡的症狀代價很大。第 1 頁一張圖：Agentic AI 的三種效益（內圈自己轉、外圈平行跑、上下游接棒）站在 CI/CD 這塊地基上，而這塊地基現在是空的。之後的脊椎是三層套在一起的迴圈：一個改動的內圈（inner loop）、一個專案的中圈（迭代與交接）、N 個方案比 PPA 的外圈（outer loop）；CI/CD 在每一層做同一件事（查和判交給機器），AI 在每一層加速的也只有「改」。沒有 CI/CD，每圈、每次交接、每個方案都要等人查判，N 個 agent 等於一個。十一頁，附務實的上限（license、算力、可比性）。PDF：[docs/slides/loops-need-cicd-before-ai-multiplies.pdf](docs/slides/loops-need-cicd-before-ai-multiplies.pdf)
 
 <details>
 <summary>展開十一頁</summary>
 
-![總覽：三層迴圈，CI/CD 在每一層做同一件事：查和判交給機器](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-1.png)
+![總覽：AI 的三種效益站在同一塊地基 CI/CD 上，而這塊地基現在是空的](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-1.png)
 
 ![內圈（inner loop）：一個改動是改、查、判轉到過為止，查和判交給機器](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-2.png)
 
