@@ -179,11 +179,12 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 <text class="tx-s" x="553.8" y="318.0" text-anchor="middle" fill="var(--pm)" style="font-weight:700">請准</text>
 <text class="tx-s" x="580.0" y="318.0" text-anchor="start" fill="var(--ink-2)">方向、新規範、裝 trigger、擋 submit、拉 PL 群聊</text>
 <text class="tx-lbl" x="20.0" y="346.0" text-anchor="start" fill="var(--ink-3)">用語</text>
-<text class="tx-s" x="60.0" y="346.0" text-anchor="start" fill="var(--ink-2)">PM＝負責把團隊開發流程導入 CI/CD 的人（和 project 的 PM 無關）　owner＝目標目錄或模組的負責人，決定 agent 交的 CL 收不收　CL 作者＝submit 那一包的工程師</text>
-<text class="tx-s" x="60.0" y="364.0" text-anchor="start" fill="var(--ink-2)">PROJECT_MAP＝agent 寫在 depot 裡的目錄用途與相依說明　狀態板＝每個模組休止／進行中哪些任務的表　subagent＝agent 分出去做事的子程式　shelved CL＝給人看、還沒 submit 的改動</text>
-<line x1="20.0" y1="380.0" x2="860.0" y2="380.0" stroke="var(--rule)" stroke-width="1"/>
-<text class="tx" x="20.0" y="406.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">agent 先讀懂再問，改動做成 shelved CL；方向與影響別人的事，PM 懂了才算核准；CL 收不收是 owner 的事。</text>
-<text class="tx" x="20.0" y="430.0" text-anchor="start" fill="var(--ink-2)">後面每頁一個場景，四條泳道，箭頭就是誰對誰做什麼；最後兩頁是橫跨全程的規則。</text>
+<text class="tx-s" x="140.0" y="346.0" text-anchor="start" fill="var(--ink-2)">PM＝負責把團隊開發流程導入 CI/CD 的人（和 project 的 PM 無關）　owner＝目標目錄或模組的負責人，決定 agent 交的 CL 收不收</text>
+<text class="tx-s" x="140.0" y="364.0" text-anchor="start" fill="var(--ink-2)">CL 作者＝submit 那一包的工程師　PROJECT_MAP＝agent 寫在 depot 裡的目錄用途與相依說明　狀態板＝每個模組休止／進行中哪些任務的表</text>
+<text class="tx-s" x="140.0" y="382.0" text-anchor="start" fill="var(--ink-2)">subagent＝agent 分出去做事的子程式　shelved CL＝給人看、還沒 submit 的改動（git 的 PR）</text>
+<line x1="20.0" y1="398.0" x2="860.0" y2="398.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="424.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">agent 先讀懂再問，改動做成 shelved CL；方向與影響別人的事，PM 懂了才算核准；CL 收不收是 owner 的事。</text>
+<text class="tx" x="20.0" y="448.0" text-anchor="start" fill="var(--ink-2)">後面每頁一個場景，四條泳道，箭頭就是誰對誰做什麼；最後兩頁是橫跨全程的規則。</text>
 </svg></div><div class="pn">2 / 13</div></section>
 <section class="slide"><div class="kicker">agent 與 PM、團隊、repo 的互動　·　圖 3 ／ 13</div><h1>啟動：PM 給 depot 範圍與帳號，agent 以 bot 身分先只讀上線，先向團隊自我介紹</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="啟動：PM 指定範圍與帳號；agent 以 bot 帳號先只讀上線，之後按需要分階段加權限，私訊 PL 與 owner 自我介紹；工程團隊知道 agent 在、看得到什麼；repo 裡建好日誌與狀態板的位置。" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>

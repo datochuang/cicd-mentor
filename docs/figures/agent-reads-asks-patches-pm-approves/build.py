@@ -167,9 +167,10 @@ def p_overview():
         T(s, x + w_ + 6, ya + 34, desc, fill=INK2)
         x += w_ + 6 + width(desc, 10.5) + 24
     T(s, 20, ya + 62, "用語", cls="tx-lbl", fill=GRAY)
-    T(s, 60, ya + 62, "PM＝負責把團隊開發流程導入 CI/CD 的人（和 project 的 PM 無關）　owner＝目標目錄或模組的負責人，決定 agent 交的 CL 收不收　CL 作者＝submit 那一包的工程師", fill=INK2)
-    T(s, 60, ya + 80, "PROJECT_MAP＝agent 寫在 depot 裡的目錄用途與相依說明　狀態板＝每個模組休止／進行中哪些任務的表　subagent＝agent 分出去做事的子程式　shelved CL＝給人看、還沒 submit 的改動", fill=INK2)
-    bottom(s, ya + 96, [
+    T(s, 140, ya + 62, "PM＝負責把團隊開發流程導入 CI/CD 的人（和 project 的 PM 無關）　owner＝目標目錄或模組的負責人，決定 agent 交的 CL 收不收", fill=INK2)
+    T(s, 140, ya + 80, "CL 作者＝submit 那一包的工程師　PROJECT_MAP＝agent 寫在 depot 裡的目錄用途與相依說明　狀態板＝每個模組休止／進行中哪些任務的表", fill=INK2)
+    T(s, 140, ya + 98, "subagent＝agent 分出去做事的子程式　shelved CL＝給人看、還沒 submit 的改動（git 的 PR）", fill=INK2)
+    bottom(s, ya + 114, [
         ("agent 先讀懂再問，改動做成 shelved CL；方向與影響別人的事，PM 懂了才算核准；CL 收不收是 owner 的事。", True),
         ("後面每頁一個場景，四條泳道，箭頭就是誰對誰做什麼；最後兩頁是橫跨全程的規則。", False),
     ])
