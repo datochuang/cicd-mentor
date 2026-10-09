@@ -11,7 +11,7 @@
 #       → 7 第三層外圈 → 8–9 AI（三層都加速「改」、瓶頸在判；務實的上限）→ 10 結論（鏈照三層排）→ 11 六個條件對應六個原則。
 # 2026-10-09 使用者說順序不通順，重排成這條脊椎：先給三層的地圖，再一層一層講，AI 放在三層之後。
 # 括號裡的「圖 N」指《把版控當備份的團隊》的頁碼；長條與次數都是示意。
-import pathlib, sys
+import math, pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
 from slides import *
 
@@ -141,6 +141,89 @@ def p_overview():
             "外圈平行跑（時間：N 個方案一起跑；風險：同環境比選錯機會小）、上下游接棒（時間：下游不必等人解釋；風險：問題早小用不著大整合）。"
             "三根柱子站在一塊地基上：CI/CD，查和判交給機器，含 SSOT、Traceability、CI、Code review。"
             "地基下方一塊虛線的空框是現狀：查判靠人、環境靠記憶、main 隨時會壞，三種效益各變成每圈等人、PPA 比不了、下游等人，N 個 agent 等於一個。")
+    return svg(s, 880, 480, aria)
+
+
+# ── 圖 1 的圖版：兩棟一樣的房子，差別只在地基（2026-10-09，與字版二擇一）──
+def icon_loop(s, cx, cy, r, col):
+    a1, a2 = math.radians(-60), math.radians(230)
+    x1, y1 = cx + r * math.cos(a1), cy + r * math.sin(a1)
+    x2, y2 = cx + r * math.cos(a2), cy + r * math.sin(a2)
+    s.append('<path d="M%.1f,%.1f A%d,%d 0 1 1 %.1f,%.1f" fill="none" stroke="%s" stroke-width="2.2" marker-end="url(#%s)"/>' % (x1, y1, r, r, x2, y2, col, "ar-g" if col == GOAL else "ar-w"))
+
+
+def icon_fan(s, cx, cy, col):
+    for dy in (-14, 0, 14):
+        s.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="2" marker-end="url(#%s)"/>' % (cx - 26, cy + dy, cx + 12, cy, col, "ar-g" if col == GOAL else "ar-w"))
+    s.append('<rect x="%.1f" y="%.1f" width="22" height="22" transform="rotate(45 %.1f %.1f)" fill="var(--surface)" stroke="%s" stroke-width="1.6"/>' % (cx + 14, cy - 11, cx + 25, cy, col))
+
+
+def icon_handoff(s, cx, cy, col):
+    rect(s, cx - 34, cy - 10, 22, 20, col=col, fill="var(--surface)", sw=1.6)
+    s.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="2" marker-end="url(#%s)"/>' % (cx - 9, cy, cx + 9, cy, col, "ar-g" if col == GOAL else "ar-w"))
+    rect(s, cx + 12, cy - 10, 22, 20, col=col, fill="var(--surface)", sw=1.6)
+
+
+def house(s, x0, good):
+    col = GOAL if good else WARN
+    # 屋頂：效益
+    s.append('<path d="M%d,96 L%d,40 L%d,96 Z" fill="%s" fill-opacity="%s" stroke="%s" stroke-width="1.6"%s/>' % (
+        x0, x0 + 200, x0 + 400, col, ".12" if good else ".05", col, "" if good else ' stroke-dasharray="7 4"'))
+    T(s, x0 + 200, 66, "Agentic AI 的效益", cls="tx", anchor="middle", fill=col, w=700)
+    T(s, x0 + 200, 86, "開發時間 ↓　風險 ↓" if good else "開發時間 —　風險 —", cls="tx", anchor="middle", fill=INK2 if good else WARN)
+    # 三根柱子
+    names = [("內圈", "自己轉"), ("外圈", "平行跑"), ("上下游", "接棒")]
+    gains = [("每圈不等人", "都查過才進"), ("N 個一起跑", "同環境可比"), ("下游不用等", "免大整合")]
+    loses = [("每圈等人", "agent 等人"), ("方案比不了", "N 次人跑"), ("下游等人", "靠文件記憶")]
+    for i in range(3):
+        px = x0 + 30 + i * 125
+        cx = px + 60
+        tr = "" if good else ' transform="rotate(%d %d 262)"' % ((-3, 2, -2)[i], cx)
+        s.append('<g%s>' % tr)
+        if good:
+            rect(s, px, 104, 120, 150, col=GOAL, fill=GOAL, op=".10", sw=1.6)
+        else:
+            rect(s, px, 104, 120, 150, col=WARN, fill=WARN, op=".04", sw=1.4, dash="6 4")
+        (icon_loop, icon_fan, icon_handoff)[i](s, cx, 140, *((18, col) if i == 0 else (col,)))
+        T(s, cx, 178, names[i][0], cls="tx", anchor="middle", fill=col, w=700)
+        T(s, cx, 196, names[i][1], cls="tx", anchor="middle", fill=col, w=700)
+        a, b = gains[i] if good else loses[i]
+        T(s, cx, 222, ("" if good else "✗ ") + a, anchor="middle", fill=INK2 if good else WARN)
+        T(s, cx, 240, ("" if good else "✗ ") + b, anchor="middle", fill=INK2 if good else WARN)
+        s.append('</g>')
+    # 地基
+    if good:
+        rect(s, x0, 260, 400, 64, col=GOAL, fill=GOAL, op=".18", sw=2)
+        T(s, x0 + 14, 284, "地基：CI/CD，查和判交給機器", cls="tx", fill=GOAL, w=700)
+        x = x0 + 14
+        for t in ["SSOT", "Traceability", "CI", "Code review"]:
+            x += pill(s, x, 296, t, GOAL, h=18) + 6
+    else:
+        rect(s, x0, 260, 400, 64, col=WARN, fill="var(--surface)", sw=1.6, dash="8 5")
+        T(s, x0 + 200, 284, "地基是空的", cls="tx", anchor="middle", fill=WARN, w=700)
+        T(s, x0 + 200, 306, "查判靠人・環境靠記憶・main 隨時會壞", anchor="middle", fill=WARN)
+    line(s, x0 - 10, 326, x0 + 410, 326, col="var(--rule-2)", sw=2)
+    # 倍數
+    s.append('<text x="%d" y="%d" text-anchor="middle" style="font-family:var(--sans);font-size:30px;font-weight:700;fill:%s">%s</text>' % (x0 + 200, 352, col, "×N" if good else "×1"))
+    T(s, x0 + 200, 368, "N 個 agent 的效果", anchor="middle", fill=GRAY)
+
+
+def p_overview_graphic():
+    s = []
+    T(s, 20, 20, "現狀", cls="tx-lbl", fill=WARN)
+    T(s, 460, 20, "補上地基之後", cls="tx-lbl", fill=GOAL)
+    house(s, 20, False)
+    house(s, 460, True)
+    arrow(s, 426, 292, 454, 292, col=GOAL, ar="ar-g", sw=2.2)
+    T(s, 440, 282, "補", anchor="middle", fill=GOAL)
+    bottom(s, 384, [
+        ("AI 加速的只有「改」；查和判交給機器，三種效益才站得起來。", True),
+        ("現狀少的是地基；補地基和買哪一家的 AI 無關。", False),
+    ])
+    aria = ("兩棟一樣的房子。左邊現狀：屋頂的效益拿不到（開發時間與風險都沒改善），三根柱子內圈自己轉、外圈平行跑、上下游接棒都是虛線、歪的，"
+            "各標每圈等人、方案比不了、下游等人；地基是空的，查判靠人、環境靠記憶、main 隨時會壞；N 個 agent 的效果 ×1。"
+            "右邊補上地基之後：屋頂開發時間降、風險降；三根柱子實心站直，各標每圈不等人且都查過才進、N 個一起跑且同環境可比、下游不用等且免大整合；"
+            "地基是 CI/CD，查和判交給機器，含 SSOT、Traceability、CI、Code review；N 個 agent 的效果 ×N。")
     return svg(s, 880, 480, aria)
 
 
@@ -536,3 +619,8 @@ PAGES = [
 
 if __name__ == "__main__":
     build(NAME, "為什麼非要 CI/CD：查和判不交給機器，N 個 agent 等於一個", KICKER, PAGES)
+    # 總覽兩版的比較（暫時；使用者決定留哪一版後移除）
+    build("loops-overview-compare", "總覽兩版比較", "總覽兩版", [
+        ("圖版：AI 的三種效益站在 CI/CD 地基上；現狀地基是空的，N 個 agent ＝ 1", p_overview_graphic()),
+        ("字版：AI 的三種效益站在同一塊地基 CI/CD 上，而這塊地基現在是空的", p_overview()),
+    ])
