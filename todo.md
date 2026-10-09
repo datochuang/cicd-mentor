@@ -40,7 +40,6 @@
 | T43 | 10-09 | **D7 之後的投影片修改**（等七件決定完一次做，免得重建好幾次）：《把版控當備份的團隊》第 1 頁的 Code review 框併進 Self-documenting、第 10 頁改成「沒講好要不要 review」、第 19 頁改五列；《進到陌生 workspace》第六個檢查改成「目錄有沒有講好要不要 review，沒講就問 owner 定一個」、標題的「六個原則」改五個；《agent 自己的版控》第 3 頁的表改五列加 review 規矩；《為什麼非要 CI/CD》第 8、11 頁的「六個原則」改五個；《互動場景》裡提到的地方；README 的 alt 一起改 | 文字文件（direction、operating model、starter-kit-plan、decision-log D7）已改 | decision-log.md D7 |
 | T20 | 10-09 | **《把版控當備份的團隊》p4–p16 冒號前全是「問題」**，審稿說 13 頁下來那格沒有資訊，建議改放原則名或分組詞 | 我沒動，因為這會改變「主題：結論」裡主題詞的用法。我的建議：改成「問題（Traceability）：…」這種形式，讀者翻到收斂頁前就看過六個詞；你決定 | docs/reviews/titles-blind-read-20261009.md |
 | T21 | 10-09 | 圖形文件《為什麼非要 CI/CD：查和判不交給機器，N 個 agent 等於一個》初稿等你修正 | 十一頁。2026-10-09 深夜依你「順序不通順」重排：脊椎是三層套疊的迴圈。1 總覽（三種效益站在 CI/CD 地基上，地基現在是空的；一頁看完整個主張）→ 2–4 內圈（定義、在 IC 排成幾道檢查、現狀）→ 5–6 中圈（迭代進 main、交接）→ 7 外圈 → 8–9 AI（三層都加速改、瓶頸在判；上限）→ 10 結論 → 11 對應。特別要看：第 1 頁那張三層的表對不對、第 6 頁 agent 接得了／接不了的那段、第 7 頁 DSO.ai 的引用與「前提是推論」、第 9 頁三個上限 | docs/slides/loops-and-ai-multiplier.pdf；research/loops-and-ai-multiplier.md |
-| T22 | 10-09 | **前三份圖形文件要不要照新規則補一頁總結** | 「第 1 頁一頁講完主張」的規則是做第四份時才定的；前三份（agent 與 PM、把版控當備份、進到陌生 workspace）的第 1 頁仍是鋪陳式開頭 | CLAUDE.md 圖形化文件的規則 |
 | T32 | 10-09 | 圖形文件《互動場景》初稿等你修正 | 十二頁，泳道圖；每頁的「什麼時候」「授權」和示意的訊息例句都是我寫的 | docs/slides/agent-pm-team-repo-interactions.pdf |
 | T14 | 10-08 | 圖形文件《把版控當備份的團隊》初稿等你修正 | 十八頁全部是我創作的（10-09 晚上追加圖 9–16：沒有 review、resolve 整份收下、產物進 depot、IP 解壓覆蓋、flow 複製、兩台機器結果不同、Excel 狀態表、退不回去）。情境與細節都要你對照實際狀況修正 | docs/slides/team-treating-vc-as-backup.pdf |
 
@@ -58,6 +57,7 @@
 | T12 | 10-08 | 推上 GitHub 前檢查公開範圍 | 使用者說明 repo 是個人專用，不需檢查；已推上 datochuang/cicd-mentor |
 | T16 | 10-09 | 五個定錨原則等你確認 | 全部同意，改用英文專有名詞：Small batches、SSOT、Traceability、CI、Self-documenting。記為 D4 |
 | T39 | 10-09 | 《agent 自己的版控》第 3–10 頁照 D5 改、加「換手」一頁、換手的接法誰選 | 接法由 PM 選（使用者：「這很明顯」）。全份十一頁已照 D5 改，第 5 頁換手；檔名改為 agent-own-version-control-and-instances；標題再盲讀一次（docs/reviews/titles-blind-read-agent-versioning-20261009.md 第二輪） |
+| T22 | 10-09 | 前三份圖形文件要不要照新規則補總覽頁 | 《把版控當備份的團隊》《AI agent 與人類 PM 搭檔》各補了一張圖的總覽當第 1 頁；《進到陌生 workspace》第 1 頁本來就是流程總覽。六份的第 1 頁現在都是一頁講完主張 |
 | T13 | 10-08 | 投影片規則引用 ../google-xls | 不複製進來：內網 agent 的新 repo 不需要這個規則，啟動包也不帶產生器；本 workspace 的 CLAUDE.md 照舊引用（D10） |
 | T11 | 10-08 | 舊文字版的 claude.ai 連結 | 刪了；那個連結只剩這一列記著，連這一列一起收掉 |
 | T41 | 10-09 | 前五份投影片的檔名照新規則改 | 改了：why-cicd-needs-ai-agent-and-pm、team-treating-vc-as-backup、agent-entering-unknown-workspace、loops-and-ai-multiplier、agent-pm-team-repo-interactions；圖目錄、README、todo、starter-kit-plan 同步，reviews 與 decision-log 保留舊名當歷史 |

@@ -30,22 +30,24 @@
 
 ### AI agent 與人類 PM 搭檔：AI 出 CI/CD 知識與動手能力，人類 PM 定方向與優先序
 
-為什麼要做、為什麼做不起來、誰來做：方向（AI 要跨部門發揮效益，前提是先有迭代式開發與 CI/CD）→ 背景（CI/CD 假設的小步 submit、自動驗證等習慣，IC 團隊多半沒有）→ 心態（認同，卻懷疑非做不可、也懷疑做得到）→ 推動者（想推的主管知道目標，說不出第一步）→ 搭配（AI 出知識與動手能力，PM 定方向與優先序）→ 協作（agent 自己觀察、提案、執行、回報，方向由 PM 弄懂後核准）。六頁。PDF：[docs/slides/why-cicd-needs-ai-agent-and-pm.pdf](docs/slides/why-cicd-needs-ai-agent-and-pm.pdf)
+為什麼要做、為什麼做不起來、誰來做：總覽 → 方向（AI 要跨部門發揮效益，前提是先有迭代式開發與 CI/CD）→ 背景（CI/CD 假設的小步 submit、自動驗證等習慣，IC 團隊多半沒有）→ 心態（認同，卻懷疑非做不可、也懷疑做得到）→ 推動者（想推的主管知道目標，說不出第一步）→ 搭配（AI 出知識與動手能力，PM 定方向與優先序）→ 協作（agent 自己觀察、提案、執行、回報，方向由 PM 弄懂後核准）。七頁（第 1 頁是一張圖的總覽）。PDF：[docs/slides/why-cicd-needs-ai-agent-and-pm.pdf](docs/slides/why-cicd-needs-ai-agent-and-pm.pdf)
 
 <details>
-<summary>展開六頁</summary>
+<summary>展開七頁</summary>
 
-![方向：AI 要跨部門發揮效益，前提是先有迭代式開發與 CI/CD](docs/slides/img/why-cicd-needs-ai-agent-and-pm/p-1.png)
+![總覽：方向大家認同，卡在習慣、心態、推動者；AI agent 出知識與手，PM 定方向](docs/slides/img/why-cicd-needs-ai-agent-and-pm/p-1.png)
 
-![背景：CI/CD 假設的小步 submit、自動驗證等習慣，IC 團隊多半沒有](docs/slides/img/why-cicd-needs-ai-agent-and-pm/p-2.png)
+![方向：AI 要跨部門發揮效益，前提是先有迭代式開發與 CI/CD](docs/slides/img/why-cicd-needs-ai-agent-and-pm/p-2.png)
 
-![心態：工程師認同 CI/CD，卻懷疑非做不可、也懷疑做得到](docs/slides/img/why-cicd-needs-ai-agent-and-pm/p-3.png)
+![背景：CI/CD 假設的小步 submit、自動驗證等習慣，IC 團隊多半沒有](docs/slides/img/why-cicd-needs-ai-agent-and-pm/p-3.png)
 
-![推動者：想推 CI/CD 的主管知道目標，說不出第一步要改哪個流程](docs/slides/img/why-cicd-needs-ai-agent-and-pm/p-4.png)
+![心態：工程師認同 CI/CD，卻懷疑非做不可、也懷疑做得到](docs/slides/img/why-cicd-needs-ai-agent-and-pm/p-4.png)
 
-![搭配：AI 出 CI/CD 知識與動手能力，人類 PM 定方向與優先序](docs/slides/img/why-cicd-needs-ai-agent-and-pm/p-5.png)
+![推動者：想推 CI/CD 的主管知道目標，說不出第一步要改哪個流程](docs/slides/img/why-cicd-needs-ai-agent-and-pm/p-5.png)
 
-![協作：agent 自己觀察、提案、執行、回報，方向由 PM 弄懂後核准](docs/slides/img/why-cicd-needs-ai-agent-and-pm/p-6.png)
+![搭配：AI 出 CI/CD 知識與動手能力，人類 PM 定方向與優先序](docs/slides/img/why-cicd-needs-ai-agent-and-pm/p-6.png)
+
+![協作：agent 自己觀察、提案、執行、回報，方向由 PM 弄懂後核准](docs/slides/img/why-cicd-needs-ai-agent-and-pm/p-7.png)
 
 </details>
 

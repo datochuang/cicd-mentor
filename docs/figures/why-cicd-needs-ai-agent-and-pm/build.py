@@ -7,7 +7,7 @@
 # 讀完要能：說出這件事為什麼一直做不起來，以及 AI agent 與人類 PM 搭配後怎麼把它做成；判斷要不要支持或擔任 PM。
 # 主旨：方向大家認同，卡在工程師不熟軟體業界的做法、心態遲疑、推動者不知道怎麼開始；
 #       AI 有完整的 CI/CD 知識與技能，和對的掌舵人搭配，就能自主地與人類 PM 一起把事情做成。
-# 脈絡（2026-10-08 使用者定）：1 簡單帶出必要性 → 2–4 實踐的困難 → 5–6 AI 與 PM 搭配。
+# 脈絡（2026-10-08 使用者定）：1 總覽（一張圖講完主張；2026-10-09 加）→ 2 簡單帶出必要性 → 3–5 實踐的困難 → 6–7 AI 與 PM 搭配。
 import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
 from slides import *
@@ -16,7 +16,72 @@ NAME = "why-cicd-needs-ai-agent-and-pm"
 KICKER = "CI/CD Mentor Agent"
 
 
-# ── 圖 1：方向 ──────────────────────────────────────────────────────
+
+# ── 圖 1：總覽（一張圖：方向大家認同；卡在習慣、心態、推動者；AI agent 與 PM 搭配，agent 轉循環）──
+def p0():
+    s = []
+    T(s, 20, 20, "這份文件回答：方向大家認同，為什麼一直做不起來；AI agent 怎麼和人類 PM 一起把它做成", cls="tx-lbl", fill=INK2)
+    # 左：方向
+    T(s, 20, 42, "方向：大家認同", cls="tx-lbl", fill=GOAL)
+    for i, (t, sub, gap) in enumerate([("公司競爭力", "更快、更可靠地交出晶片", False), ("AI 效益跨出組織疆界", "AI 的產出跨團隊被信任、被採用", False),
+                                       ("迭代式開發", "tape-out 前小步改、頻繁整合", False), ("CI/CD", "每個變更自動驗證、結果查得到版本", True)]):
+        y = 52 + i * 50
+        if gap:
+            rect(s, 20, y, 250, 44, col=WARN, fill=WARN, op=".06", sw=1.6, dash="6 4")
+            T(s, 32, y + 18, t + "　目前缺這一層", cls="tx", fill=WARN, w=700)
+        else:
+            rect(s, 20, y, 250, 44, col="var(--rule-2)", fill="var(--surface-2)", sw=1.2)
+            T(s, 32, y + 18, t, cls="tx", fill=INK2, w=700)
+        T(s, 32, y + 35, sub, fill=GRAY)
+    T(s, 20, 266, "下層撐住上層；底層沒有，上面都站不住", fill=GRAY)
+    arrow(s, 274, 150, 306, 150, col=WARN, ar="ar-w", sw=1.8)
+    # 中：做不起來的三個原因
+    T(s, 310, 42, "為什麼做不起來", cls="tx-lbl", fill=WARN)
+    for i, (t, l1, l2) in enumerate([("團隊的習慣", "小步 submit、自動驗證、環境用 script 重建", "這些 CI/CD 假設的習慣，IC 團隊多半沒有"),
+                                     ("工程師的心態", "認同，但懷疑非做不可、懷疑做得到", "tape-out 的壓力永遠排第一"),
+                                     ("推動的主管", "知道目標與團隊的痛點，說不出第一步", "改哪個流程、pipeline 放哪、怎麼談")]):
+        y = 52 + i * 72
+        rect(s, 310, y, 260, 64, col=WARN, fill=WARN, op=".05", sw=1.4, dash="6 4")
+        T(s, 322, y + 18, t, cls="tx", fill=WARN, w=700)
+        T(s, 322, y + 36, l1, fill=INK2)
+        T(s, 322, y + 52, l2, fill=INK2)
+    arrow(s, 574, 150, 606, 150, col=GOAL, ar="ar-g", sw=1.8)
+    # 右：搭配
+    T(s, 610, 42, "怎麼做成：搭配", cls="tx-lbl", fill=GOAL)
+    rect(s, 610, 52, 250, 98, col=PM, fill=PM, op=".08", sw=1.6)
+    T(s, 622, 72, "人類 PM：掌舵", cls="tx", fill=PM, w=700)
+    for k, t in enumerate(["方向與優先序、成功的定義", "組織的權威、最後的判斷"]):
+        T(s, 622, 92 + 17 * k, "+ " + t, fill=INK2)
+    T(s, 622, 140, "缺：做法、時間、人手", fill=WARN)
+    rect(s, 610, 160, 250, 98, col=AGENT, fill=AGENT, op=".08", sw=1.6)
+    T(s, 622, 180, "AI agent：執行", cls="tx", fill=AGENT, w=700)
+    for k, t in enumerate(["CI/CD 知識、Perforce 與 scripting", "不停地觀察與動手、和每位工程師溝通"]):
+        T(s, 622, 200 + 17 * k, "+ " + t, fill=INK2)
+    T(s, 622, 248, "缺：組織權威、方向判斷", fill=WARN)
+    T(s, 735, 272, "對方缺的，正好是自己帶來的", anchor="middle", fill=GRAY)
+    # 下：agent 轉的循環
+    T(s, 20, 296, "agent 不眠不休地轉這個循環；方向上的決定，PM 弄懂了才核准", cls="tx-lbl", fill=AGENT)
+    x = 20
+    xs_ = []
+    for t, col in [("1 觀察 repo 與團隊", AGENT), ("2 提案，附原則與取捨", AGENT), ("3 PM 理解後核准", PM), ("4 執行，與工程師溝通", AGENT), ("5 回報，附證據", AGENT)]:
+        w_ = pill(s, x, 306, t, col, h=22)
+        xs_.append(x + w_ / 2)
+        if t[0] != "5":
+            arrow(s, x + w_ + 4, 317, x + w_ + 18, 317, col=INK2, ar="ar", sw=1.3)
+        x += w_ + 22
+    path(s, "M%d,330 L%d,342 L%d,342 L%d,331" % (xs_[-1], xs_[-1], xs_[0], xs_[0]), col=AGENT, ar="ar-a", sw=1.2, dash="4 3")
+    bottom(s, 356, [
+        ("方向大家認同；做不起來卡的是習慣、心態、推動者三件，不是意願。AI agent 出知識與動手，人類 PM 定方向，搭在一起才做得成。", True),
+        ("PM＝負責把 CI/CD 導入團隊的人，不是 project 的 PM。後面六頁逐一展開。", False),
+    ])
+    aria = ("左欄方向，大家認同：公司競爭力、AI 效益跨出組織疆界、迭代式開發、CI/CD 四層疊起來，CI/CD 那層標目前缺這一層，底層沒有上面站不住。"
+            "中欄為什麼做不起來，三個虛線框：團隊的習慣（小步 submit、自動驗證、環境用 script 重建，IC 團隊多半沒有）；工程師的心態（認同但懷疑非做不可、懷疑做得到，tape-out 壓力排第一）；推動的主管（知道目標說不出第一步）。"
+            "右欄怎麼做成：人類 PM 掌舵（方向與優先序、成功的定義、組織的權威、最後的判斷；缺做法、時間、人手），AI agent 執行（CI/CD 知識、Perforce 與 scripting、不停地觀察與動手、和每位工程師溝通；缺組織權威、方向判斷），對方缺的正好是自己帶來的。"
+            "下方五個膠囊的循環：觀察、提案、PM 理解後核准、執行、回報，再回到觀察；agent 不眠不休地轉，方向上的決定 PM 弄懂了才核准。")
+    return svg(s, 880, 480, aria)
+
+
+# ── 圖 2：方向 ──────────────────────────────────────────────────────
 LAYERS = [
     ("公司競爭力", "更快、更可靠地交出晶片", "plain"),
     ("AI 效益跨出組織疆界", "AI 的產出跨團隊被信任、被採用", "plain"),
@@ -27,7 +92,6 @@ LAYERS = [
 
 def p1():
     s = []
-    T(s, 20, 20, "這份文件回答：方向大家認同，為什麼一直做不起來；AI agent 怎麼和人類 PM 一起把它做成 ↓", cls="tx-lbl", fill=INK2)
     cx, h, gap, y0 = 430, 56, 14, 48
     for i, (name, sub, kind) in enumerate(LAYERS):
         w = 340 + 100 * i
@@ -251,6 +315,7 @@ def p6():
 
 
 PAGES = [
+    ("總覽：方向大家認同，卡在習慣、心態、推動者；AI agent 出知識與手，PM 定方向", p0()),
     ("方向：AI 要跨部門發揮效益，前提是先有迭代式開發與 CI/CD", p1()),
     ("背景：CI/CD 假設的小步 submit、自動驗證等習慣，IC 團隊多半沒有", p2()),
     ("心態：工程師認同 CI/CD，卻懷疑非做不可、也懷疑做得到", p3()),
