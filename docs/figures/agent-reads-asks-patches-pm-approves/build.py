@@ -62,7 +62,77 @@ def scene(s, when, auth):
     pill(s, 860, 6, auth, PM, h=22, anchor="end")
 
 
-# ── 圖 1：總覽，角色 × 階段 ──────────────────────────────────────────
+# ── 圖 1：總覽——三方各缺什麼，agent 補什麼 ───────────────────────────
+def card(s, x, y, w, h, title, col, has, lacks=None, kind="solid"):
+    if kind == "solid":
+        rect(s, x, y, w, h, col=col, fill=col, op=".10", sw=1.8)
+    else:
+        rect(s, x, y, w, h, col=col, fill=col, op=".05", sw=1.4, dash="6 4")
+    T(s, x + 12, y + 22, title, cls="tx", fill=col, w=700)
+    T(s, x + 12, y + 42, has, fill=INK2)
+    if lacks:
+        T(s, x + 12, y + 60, lacks, fill=WARN, cls="tx")
+
+
+def p_cover():
+    s = []
+    # PM
+    card(s, 300, 28, 280, 72, "PM：負責導入 CI/CD 的人", PM, "有：決心、方向、組織的權威", "缺：經驗、實作的技能")
+    # agent
+    rect(s, 300, 196, 280, 92, col=AGENT, fill=AGENT, op=".10", sw=1.8)
+    T(s, 312, 218, "agent", cls="tx", fill=AGENT, w=700)
+    T(s, 312, 238, "有：CI/CD 經驗、Perforce 與 scripting 技能", fill=INK2)
+    T(s, 312, 258, "不眠不休；把 PM 缺的經驗、團隊缺的方法補上", cls="tx", fill=AGENT, w=700)
+    T(s, 312, 278, "方向仍由 PM 決定；CL 收不收仍由 owner 決定", fill=GRAY)
+    # team
+    card(s, 670, 196, 190, 92, "工程團隊", INK2, "有：design 的本事", "缺：不堅決、不知怎麼做")
+    # repo
+    card(s, 20, 196, 190, 92, "repo（depot）", GOAL, "今天：只當備份用", "目標：CI/CD 的地基", kind="dash")
+    # PM <-> agent
+    arrow(s, 380, 104, 380, 192, col=PM, ar="ar-p", sw=1.8)
+    T(s, 372, 150, "定方向、核准（懂了才算）", anchor="end", fill=PM)
+    arrow(s, 460, 192, 460, 104, col=AGENT, ar="ar-a", sw=1.8)
+    T(s, 468, 142, "請准單附原則與取捨", fill=AGENT)
+    T(s, 468, 158, "一頁摘要；教到 PM 懂", fill=AGENT)
+    # agent <-> team
+    arrow(s, 584, 222, 666, 222, col=AGENT, ar="ar-a", sw=1.8)
+    T(s, 625, 212, "問、示範、代做", anchor="middle", fill=AGENT)
+    arrow(s, 666, 262, 584, 262, col=INK2, ar="ar", sw=1.6)
+    T(s, 625, 280, "回答、採用", anchor="middle", fill=INK2)
+    # agent <-> repo
+    arrow(s, 296, 222, 214, 222, col=AGENT, ar="ar-a", sw=1.8)
+    T(s, 255, 212, "讀懂、裝 check", anchor="middle", fill=AGENT)
+    arrow(s, 214, 262, 296, 262, col=GOAL, ar="ar-g", sw=1.6)
+    T(s, 255, 280, "CL、結果、狀態板", anchor="middle", fill=GOAL)
+    # team -> repo（底下繞）
+    path(s, "M765,292 L765,308 L115,308 L115,294", col=INK2, ar="ar", sw=1.3, dash="4 3")
+    T(s, 440, 304, "工程師 submit、shelve，照 agent 準備好的流程做", anchor="middle", fill=GRAY)
+    # PM <-> team（親自出面）
+    path(s, "M584,56 L765,56 L765,192", col=PM, ar="ar-p", sw=1.3, dash="5 3")
+    T(s, 757, 128, "親自出面：宣布、第一次擋、衝突", anchor="end", fill=PM)
+    # 時間軸
+    phases = [("啟動", "PM 給範圍與帳號", "agent 自我介紹"), ("盤點", "agent 只讀掃", "PM 選目標"), ("試點", "agent 交 shelved CL", "owner 採用"),
+              ("擴散", "check 升級", "陪人開工"), ("常態", "團隊自己維護", "agent 只剩監看")]
+    for i, (name, l1, l2) in enumerate(phases):
+        x = 20 + i * 168
+        pill(s, x, 330, name, GOAL, h=20)
+        T(s, x, 364, l1, fill=INK2)
+        T(s, x, 380, l2, fill=INK2)
+        if i < 4:
+            arrow(s, x + 150, 340, x + 164, 340, col=GRAY, ar="ar-gray", sw=1)
+    bottom(s, 398, [
+        ("PM 有決心沒經驗，團隊不堅決也不知道怎麼做；agent 補的正是這兩個缺：給 PM 可核准的提案與經驗，給團隊方法與陪做。", True),
+        ("後面每頁一個場景；下一頁是每個階段誰做什麼的總表、授權三級、用語。", False),
+    ])
+    aria = ("四張卡：上方 PM，負責導入 CI/CD 的人，有決心、方向、組織的權威，缺經驗與實作技能；中間 agent，有 CI/CD 經驗、Perforce 與 scripting 技能、不眠不休，把 PM 缺的經驗、團隊缺的方法補上；"
+            "右邊工程團隊，有 design 的本事，缺不堅決、不知怎麼做；左邊 repo，今天只當備份用，目標變成 CI/CD 的地基。"
+            "箭頭：PM 對 agent 定方向與核准，agent 對 PM 請准單與一頁摘要並教到懂；agent 對團隊問、示範、代做，團隊回答、採用；"
+            "agent 對 repo 讀懂、裝 check，repo 回 CL、結果、狀態板；工程師 submit 與 shelve 照 agent 準備好的流程；PM 親自出面的三件事是宣布、第一次擋、衝突。"
+            "下方時間軸：啟動、盤點、試點、擴散、常態各兩句主要互動。")
+    return svg(s, 880, 480, aria)
+
+
+# ── 圖 2：總表，角色 × 階段 ──────────────────────────────────────────
 PHASES = ["啟動", "盤點", "目標分析與訪談", "計畫核准", "建置", "上線分級", "監看與開工", "擴充與交棒"]
 GRID = {
     "PM": ["給範圍、帳號|與預算", "選候選目標", "看進度", "懂了才核准", "看進度", "同意擋不擋", "看一頁摘要", "定交棒條件"],
@@ -74,7 +144,7 @@ GRID = {
 
 def p_overview():
     s = []
-    T(s, 20, 20, "這份文件回答：agent 和 PM、工程團隊、repo 在每個階段各做什麼；agent 自己能做什麼、什麼要問、什麼要 PM 決定 ↓", cls="tx-lbl", fill=INK2)
+    T(s, 20, 20, "每個階段誰做什麼（上一頁的展開）；agent 自己能做什麼、什麼要問、什麼要 PM 決定 ↓", cls="tx-lbl", fill=INK2)
     cw, x0, y0, rh = 94, 110, 36, 54
     for j, ph in enumerate(PHASES):
         T(s, x0 + j * cw + cw / 2, y0 + 14, ph, anchor="middle", fill=GRAY)
@@ -328,7 +398,8 @@ def p_exit():
 
 
 PAGES = [
-    ("總覽：PM 定方向，agent 讀懂、問、交 shelved CL、監看，CL 收不收 owner 決定", p_overview()),
+    ("總覽：PM 有決心沒經驗，團隊不堅決也不知怎麼做；agent 補這兩個缺", p_cover()),
+    ("總表：每個階段誰做什麼、agent 的授權三級、用語定義", p_overview()),
     ("啟動：PM 給 depot 範圍與帳號，agent 以 bot 身分先只讀上線，先向團隊自我介紹", p_start()),
     ("盤點：agent 只讀掃指定的 depot 範圍，交 PM 一頁現況與幾個候選目標，PM 選", p_survey()),
     ("目標分析：agent 讀完才 DM owner 問只有他知道的事，答案進 PROJECT_MAP", p_analyze()),
