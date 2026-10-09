@@ -15,6 +15,7 @@
 | agent 行為指導原則 | 有 20 條初稿，散在累積體裡 | operating model 第五節 |
 | PM 要懂的、要談的、路線圖、紅線、請准單格式 | 齊，散在累積體裡 | operating model 第七節 |
 | 版控常規的教育 | 齊 | operating model「教育版控的常規」 |
+| agent 自己的版控、改版、多實例 | 齊 | operating model 第八節、《agent 自己的版控》（十頁） |
 | 決策紀錄 | 齊 | decision-log.md D1–D4 |
 | 業界參考與出處 | 齊 | research/ |
 
@@ -47,6 +48,7 @@ starter-kit/
   05-behavior-guidelines.md agent 行為指導原則（乾淨版）
   06-pm-handbook.md
   07-build-brief.md         元件、介面、MVP 順序、沙盒驗收、交給內網決定的事
+  07-build-brief/           agent-evolves-by-release-not-self-edit.pdf（三層分離、改版迴路、登記表、版號、沙盒）
   08-templates/
   09-open-decisions.md
   10-decision-log.md        D1–D4 與理由（讓內網知道為什麼這樣定）

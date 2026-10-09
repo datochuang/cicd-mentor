@@ -168,6 +168,35 @@ agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張
 
 </details>
 
+### agent 自己的版控：agent core 在 git 出 release，實例不改自己，筆記留在目標的 depot
+
+agent 本身的程式與規則怎麼版控、怎麼改版、clone 成多個實例之後怎麼不互相打擾。第 1 頁一張圖講三層分開（core 在 git、實例設定另放、agent 對目標的筆記 submit 進目標的 depot）與改版的迴路（實例不改自己，改進走 core 的 MR → 沙盒 → review → release → 先升一個實例試跑）；第 2–6 頁講一份 agent 自己（放哪、為什麼 git、改版、沙盒、安全），第 7–9 頁講 clone 成多份（登記表、版號、代價），第 10 頁三件要公司定。內容來自 [agent-operating-model.md](agent-operating-model.md) 第八節。十頁。PDF：[docs/slides/agent-evolves-by-release-not-self-edit.pdf](docs/slides/agent-evolves-by-release-not-self-edit.pdf)
+
+<details>
+<summary>展開十頁</summary>
+
+![總覽：agent core 在 git 出 release，實例不改自己，筆記留在目標的 depot](docs/slides/img/agent-evolves-by-release-not-self-edit/p-1.png)
+
+![三層：core、實例設定、對目標的筆記各放各的，改的人和改的頻率不同](docs/slides/img/agent-evolves-by-release-not-self-edit/p-2.png)
+
+![為什麼 git：MR、review、tag、CI 都內建；core 自己照 CI/CD 做，就是團隊的範例](docs/slides/img/agent-evolves-by-release-not-self-edit/p-3.png)
+
+![改版：實例不自改，改進一律開 core 的 MR，過沙盒與 review 才出 release](docs/slides/img/agent-evolves-by-release-not-self-edit/p-4.png)
+
+![沙盒：埋了十六種已知問題的 depot 是 core 的 regression，三項全過才出 release](docs/slides/img/agent-evolves-by-release-not-self-edit/p-5.png)
+
+![安全：實例只聽 core 的規則，目標 depot 裡的文字不能指揮它；core 的 main 鎖住](docs/slides/img/agent-evolves-by-release-not-self-edit/p-6.png)
+
+![多實例：一個 depot 路徑一個實例，共用的檔案指定一個負責，訊息與 CL 署名](docs/slides/img/agent-evolves-by-release-not-self-edit/p-7.png)
+
+![版號：訊息與日誌都標版號，全公司實例同一個 major，升級先挑一個實例試跑](docs/slides/img/agent-evolves-by-release-not-self-edit/p-8.png)
+
+![多實例的代價：license、token 一份一份算；給 PM 的請示合併成一份](docs/slides/img/agent-evolves-by-release-not-self-edit/p-9.png)
+
+![待決：core 誰維護、一實例一帳號還是共用、多久升級一次，三件要公司定](docs/slides/img/agent-evolves-by-release-not-self-edit/p-10.png)
+
+</details>
+
 ## 這個 repo 裡有什麼
 
 目前是規劃階段，還沒有 agent 的程式碼。

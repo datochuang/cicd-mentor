@@ -491,6 +491,22 @@ agent 的義務：請准單裡每個概念第一次出現都附一句解釋和�
 - build brief 要寫三層分離、登記表、版本標記、沙盒當 core 的 CI。
 - open decisions 多三條：core 由誰維護（PM？CAD？內網的 Claude Code？）、一實例一帳號還是共用、升級節奏。
 
+### 8.5 圖形版與用語
+
+本節的圖形版是 `docs/slides/agent-evolves-by-release-not-self-edit.pdf`（十頁，第 1 頁總覽）。盲讀審稿（`docs/reviews/titles-blind-read-agent-versioning-20261009.md`）指出 core、實例、目標都和 IC 用語撞名，所以投影片第 1 頁定義了用語，並把本節幾個詞換成更直述的：
+
+| 本節的詞 | 投影片用的詞 | 為什麼 |
+|---|---|---|
+| 目標的知識 | 筆記（agent 對目標學到的：PROJECT_MAP、狀態板、日誌） | 「知識」分不清是 agent 學到的還是專案的 know-how |
+| 進化 | 改版 | 進化太文藝；走 MR 的是新的偵測規則、更好的訊息模板、提示詞的修正 |
+| 沙盒當 core 的 CI | 沙盒是 core 的 regression | IC 讀者對 regression 更直覺 |
+| 紅線 | 不可做的事 | 標題裡「紅線」盲讀猜不到 |
+| 共用物 | 共用的檔案（flow、IP、top 的 filelist） | 太抽象 |
+| 請准單 | 請示 | 公司不說請准單 |
+| 同一家公司同一個 major | 全公司的實例同一個 major | 「同一家公司」讀起來像外購產品 |
+
+啟動包的用語表要統一這兩套；投影片多回答了一題：**為什麼 core 放 git 不放 depot**——改版要 MR、review、tag、每個 MR 跑 CI，這些是 git 平台內建的；core 是軟體，生命週期和設計資料不同；目標的 depot 仍是團隊的唯一真相，core 只讀它、交 shelved CL、submit 筆記。
+
 ## 六、這一輪冒出的待決問題
 
 - 情勢判斷的報告形式與預算。
