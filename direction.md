@@ -80,6 +80,10 @@
 
 2026-10-09 追加八個問題（圖 9–16）後，「沒有 review」與「resolve 整份收下」掛不進原來的五個原則：CI 是機器把關，review 是人把關，對策的性質不同（shelve 給人看、指定 reviewer、擋不擋 submit），所以提議第六個原則。
 
+### 做法層（提議，T31 待確認）
+
+六個原則是 repo 該有的性質；agent 每天做事需要的是做法。提議在原則之下加七條做法，各掛在一個原則上：Test-first（改動前先定怎麼驗）、Executable spec（目的用跑得起來的東西表達）、Evidence-based delivery（交付附證據）、Definition of Done（任務完成的五個條件）、Flow as code（script、trigger、環境進版控）、Blameless postmortem（不究責的事後檢討）、量化（DORA 四指標的 IC 版）。完整表格在 [agent-operating-model.md](agent-operating-model.md)「依據」一節。不納入：Shift left（口號）、Trunk-based（與 Small batches 重疊）、Pair programming 等（太泛）、Formal（DV 方法而非流程）。
+
 ## 未決問題
 
 集中記在 [todo.md](todo.md)。

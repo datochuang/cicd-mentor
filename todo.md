@@ -14,14 +14,15 @@
 | T4 | 10-08 | **試點團隊與範圍**怎麼選 | 建議挑自願的團隊、一個專案、一兩種高價值檢查；未討論 | research/industry-practices-and-risks.md |
 | T5 | 10-08 | **資安與 IP**：design 資料能否交給 LLM、用哪種模型與部署方式；agent 在版控上用誰的身分、有哪些權限 | 未討論，可能最早卡關 | research/industry-practices-and-risks.md |
 | T6 | 10-08 | **成功指標**怎麼定 | 圖形文件只有方向示意，具體指標與門檻未定 | |
-| T23 | 10-09 | **情勢判斷（U1）的報告形式與預算** | PM 想看一頁還是一份；時間與算力的預算誰給 | agent-operating-model.md U1 |
-| T24 | 10-09 | **目標分析的計畫要誰同意**：只 PM 核准，還是 owner 也要同意才動他的範圍 | 我的建議：兩個都要 | agent-operating-model.md U2 |
-| T25 | 10-09 | **agent 在 slack／mail 與 Perforce 上的身分**：bot 帳號代表 PM，還是用 PM 或工程師的名義 | 我強烈建議 bot 帳號＋「代表 PM」；和 T5 綁在一起 | agent-operating-model.md U3、S1 |
-| T26 | 10-09 | **agent 什麼情況可以自己 submit；擋 submit 的條件** | 是 T2 授權表的核心；初稿：只動自己的 script 目錄可自己 submit；擋 submit 要 PM 與 owner 同意、有 bypass | agent-operating-model.md U4、U5 |
-| T27 | 10-09 | **退場的條件**：某個目標什麼時候算交回團隊 | 未討論 | agent-operating-model.md S4 |
-| T28 | 10-09 | **Perforce 的 branch 模型**：stream 還是傳統 branch spec；一任務一條還是一人一條 | U7 輔導開工要照這個模型準備 stream／workspace | agent-operating-model.md U7 |
-| T29 | 10-09 | **跨 workspace 的活動資訊可不可以看**（誰 open 了什麼、pending 的 CL）；怎麼告知團隊 agent 看得到 | 開工跡象的主要來源，但最容易被當成監視 | agent-operating-model.md U7 |
-| T30 | 10-09 | **任務的來源**：公司有沒有 ticket／任務系統可接；沒有的話模組狀態板是不是唯一登記處 | | agent-operating-model.md U7、S15 |
+| T23 | 10-09 | **情勢判斷（U1）的報告形式與預算** | PM 想看一頁還是一份；時間與算力的預算誰給 | agent-operating-model.md 情勢判斷 |
+| T24 | 10-09 | **目標分析的計畫要誰同意**：只 PM 核准，還是 owner 也要同意才動他的範圍 | 我的建議：兩個都要 | agent-operating-model.md 目標分析 |
+| T25 | 10-09 | **agent 在 slack／mail 與 Perforce 上的身分**：bot 帳號代表 PM，還是用 PM 或工程師的名義 | 我強烈建議 bot 帳號＋「代表 PM」；和 T5 綁在一起 | agent-operating-model.md 訪談關係人、啟動與身分 |
+| T26 | 10-09 | **agent 什麼情況可以自己 submit；擋 submit 的條件** | 是 T2 授權表的核心；初稿：只動自己的 script 目錄可自己 submit；擋 submit 要 PM 與 owner 同意、有 bypass | agent-operating-model.md 建置機制、透明與授權 |
+| T27 | 10-09 | **退場的條件**：某個目標什麼時候算交回團隊 | 未討論 | agent-operating-model.md 退場 |
+| T28 | 10-09 | **Perforce 的 branch 模型**：stream 還是傳統 branch spec；一任務一條還是一人一條 | 輔導開工要照這個模型準備 stream／workspace | agent-operating-model.md 任務掌控與開工輔導 |
+| T29 | 10-09 | **跨 workspace 的活動資訊可不可以看**（誰 open 了什麼、pending 的 CL）；怎麼告知團隊 agent 看得到 | 開工跡象的主要來源，但最容易被當成監視 | agent-operating-model.md 任務掌控與開工輔導 |
+| T30 | 10-09 | **任務的來源**：公司有沒有 ticket／任務系統可接；沒有的話模組狀態板是不是唯一登記處 | | agent-operating-model.md 任務掌控、任務的來源 |
+| T31 | 10-09 | **做法層的七條 practice 等你確認**：Test-first、Executable spec、Evidence-based delivery、Definition of Done、Flow as code、Blameless postmortem、量化 | 你問要不要加 TDD、evidence-based delivery、executable spec 讓 agent 的行為有依據；我提了七條並列了不納入的；每條有「agent 自己／推動團隊／檢驗」 | agent-operating-model.md 依據 |
 | T7 | 10-08 | **轉型的終點**：流程存在就好，還是要團隊真正理解並自己維護 | D2 給了初步答案（先改變 PM，由他帶動團隊），細節待討論 | decision-log.md D2 |
 | T15 | 10-08 | **目錄用途與相依關係沒有文件，對 agent 設計的影響**：通用 agent 每個 workspace 都要另寫指引，那這個 agent 要不要自己建立並維護每個專案的目錄說明與相依關係（並放進版控）？ | 你在討論第二份圖形文件時提出這個問題；只寫進了文件第 7 頁，還沒討論對 agent 本身的設計意涵 | docs/slides/repo-as-backup-keeps-files-not-answers.pdf 第 7 頁 |
 
