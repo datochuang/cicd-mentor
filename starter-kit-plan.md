@@ -1,0 +1,63 @@
+# 啟動包（starter kit）的盤點與規劃
+
+2026-10-09。目的：這個 workspace 的最終產出是一個**啟動包**，帶進公司內網後，由內網的 Claude Code 接手把 CI/CD mentor agent 做出來並部署。啟動包不深入技術細節；它要讓內網的 Claude Code 和 PM 知道「為什麼、要做成什麼樣、行為的規矩、先做哪一步、哪些事要人決定」。
+
+## 一、盤點：哪些面向已經有了
+
+| 面向 | 現況 | 落在哪 |
+|---|---|---|
+| 為什麼要做（論述） | 齊 | 《AI agent 與人類 PM 搭檔》、《為什麼非要 CI/CD》 |
+| 現狀的症狀與代價 | 齊（16 個症狀） | 《把版控當備份的團隊》 |
+| 原則與檢驗（agent 行為的依據） | 齊，待確認第六原則與做法層 | direction.md 定錨點、operating model「依據」；T19、T31 |
+| 進到一個 repo 怎麼查、怎麼補 | 齊 | 《進到陌生 workspace》 |
+| 四方在各階段的互動 | 齊 | 《agent 補 PM 與團隊各缺的》 |
+| agent 的運作樣態（使用者的描述＋補充） | 齊，但是累積體，不是乾淨版 | agent-operating-model.md |
+| agent 行為指導原則 | 有 20 條初稿，散在累積體裡 | operating model 第五節 |
+| PM 要懂的、要談的、路線圖、紅線、請准單格式 | 齊，散在累積體裡 | operating model 第七節 |
+| 版控常規的教育 | 齊 | operating model「教育版控的常規」 |
+| 決策紀錄 | 齊 | decision-log.md D1–D4 |
+| 業界參考與出處 | 齊 | research/ |
+
+## 二、啟動包還缺的（包裝層）
+
+| 缺的東西 | 為什麼需要 | 做法 |
+|---|---|---|
+| **入口與讀的順序** | 內網 Claude Code 與 PM 打開第一個檔要知道這是什麼、先讀什麼、第一週做什麼 | `README.md` |
+| **給內網 Claude Code 的工作規則** | 它接手時要有自己的 CLAUDE.md：紅線、什麼先問 PM、交付的形式（shelved CL＋證據）、不深入哪些事 | `CLAUDE.md`（啟動包版，和本 workspace 的不同） |
+| **乾淨版的行為指導原則** | 現在 20 條散在累積體裡，還夾著「待你確認」；啟動包要一份獨立、可直接遵守的 | `behavior-guidelines.md`：從 operating model 收斂，每條指回依據 |
+| **建置說明（build brief）** | 內網 Claude Code 要知道做成什麼：元件（版控 adapter、監看與排程、分析、溝通、patch 產生、check 執行、狀態與日誌、請准流程）、介面格式、MVP 的順序、驗收方式；技術選型留給它 | `build-brief.md`，點到為止；明列「交給內網決定」的事 |
+| **沙盒驗收** | agent 自己也要 test-first：先建一個種了 16 個症狀的沙盒 depot，agent 能偵測、提案、而且不越紅線，才上真實 repo | 寫進 build brief 的第一步 |
+| **模板** | PROJECT_MAP、狀態板、CL 說明、需求 markdown、請准單、日誌、五種訊息——現在只有文字描述 | `templates/` 各一個骨架檔 |
+| **PM 手冊** | PM 的功課、要談的資源與人、路線圖與停損、親自出面的三件事、怎麼讀請准單 | `pm-handbook.md`，從第七節抽出 |
+| **公司要先決定的事** | todo.md 混著本 workspace 的內部事項；啟動包要一份乾淨的決定清單（身分、權限、資安、branch 模型、ticket 系統、試點、擋 submit 的條件…） | `open-decisions.md`，從 T1–T36 抽出屬於公司的 |
+| **用語表** | PM、owner、CL 作者、PROJECT_MAP、狀態板、shelved CL、check、sanity、manifest、known-good、內圈／中圈／外圈、六原則 | `glossary.md` |
+| **獨立性檢查** | 啟動包不能依賴 `../google-xls` 或 claude.ai 連結；投影片只帶 PDF 與 PNG，產生器可選 | 打包時掃 `../`、`claude.ai` |
+
+## 三、啟動包的目錄（提議）
+
+```
+starter-kit/
+  README.md                 這包是什麼、讀的順序、第一週做什麼
+  CLAUDE.md                 給內網 Claude Code：紅線、先問 PM 的事、交付形式、不深入什麼
+  glossary.md
+  01-why/                   ai-agent-and-pm-make-cicd-happen.pdf、loops-need-cicd-before-ai-multiplies.pdf
+  02-diagnosis/             repo-as-backup-keeps-files-not-answers.pdf
+  03-procedures/            check-then-patch-before-asking-owner.pdf、agent-fills-what-pm-and-team-lack.pdf
+  04-principles.md          六原則＋七做法＋檢驗
+  05-behavior-guidelines.md agent 行為指導原則（乾淨版）
+  06-pm-handbook.md
+  07-build-brief.md         元件、介面、MVP 順序、沙盒驗收、交給內網決定的事
+  08-templates/
+  09-open-decisions.md
+  10-decision-log.md        D1–D4 與理由（讓內網知道為什麼這樣定）
+```
+
+## 四、打包前要你決定的
+
+- T19（第六原則 Code review）、T31（七條做法）：啟動包裡的原則表要定版。
+- T25（agent 的身分）、T26（可自己 submit 的範圍、擋 submit 的條件）、T28（branch 模型）：可以留在 open-decisions，但你若已有傾向，寫成預設值會讓內網少問一輪。
+- 五份投影片的細節（T14、T17、T21、T32）：進啟動包前要不要再看一次。
+
+## 五、不做的
+
+- 不在這裡寫程式、不選模型與部署方式、不設計 Perforce trigger 的程式碼：這些是內網 Claude Code 的事，build brief 只列要回答的問題。
