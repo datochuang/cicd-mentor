@@ -240,6 +240,7 @@ agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張
 
 | 位置 | 內容 |
 |---|---|
+| [starter-kit/](starter-kit/) | **最終產出：啟動包**。帶進內網全新 repo 的那一包：README、CLAUDE.md、用語表、原則、行為指導原則、PM 手冊、build brief、模板、open decisions、決定紀錄、投影片 PDF 與 PNG、研究附錄 |
 | [direction.md](direction.md) | 目前有效的整體構想、設計要點、未決問題 |
 | [decision-log.md](decision-log.md) | 每個決定的日期、理由、取代了什麼 |
 | [research/](research/) | 業界實踐與類比分析等參考資料，附來源 |
