@@ -25,7 +25,6 @@
 | T34 | 10-09 | **PM 要先談好的資源與人**（帳號權限、trigger 權限、算力與 license、結果放哪、資安、HR 不考核、sponsor、試點 owner）誰去談、先談哪個 | 這些 agent 變不出來；是啟動前的 checklist | agent-operating-model.md 7.2 |
 | T35 | 10-09 | **分階段路線圖與每階段的成功定義、停損**要不要照我寫的 | 準備 → 試點 → 擴散 → 常態；試點的成功：owner 採用了 shelved CL、check 每天跑有人看、至少一個檢驗從做不到變做得到 | agent-operating-model.md 7.3 |
 | T36 | 10-09 | **紅線清單**（不刪、不碰別人 workspace、沒共識不擋、不報個人活動量、design 資料不出核准的模型、不假裝是人、不對 design 下判斷）有沒有要加減 | | agent-operating-model.md 7.4 |
-| T37 | 10-09 | **啟動包的目錄與缺件**（README、啟動包版 CLAUDE.md、乾淨版行為指導原則、build brief、沙盒驗收、模板、PM 手冊、open decisions、用語表、獨立性檢查）要不要照 starter-kit-plan.md 做 | 內容面大致齊了，缺的是包裝層；做之前要先定 T19、T31 | starter-kit-plan.md |
 | T38 | 10-09 | **agent 自己的版控與多實例**：core 由誰維護、一實例一帳號還是共用、升級的節奏 | 三層分離（core／實例的工作區／生產用的工具）、登記表、實例名與版號署名、沙盒當 core 的 regression、換手已寫進 operating model 第八節，並做成投影片《agent 自己的版控》；這三件要公司決定 | agent-operating-model.md 第八節、docs/slides/agent-own-version-control-and-instances.pdf |
 | T41 | 10-09 | **前五份投影片的檔名要不要照新規則改**（檔名講問題不講答案）：ai-agent-and-pm-make-cicd-happen、repo-as-backup-keeps-files-not-answers、check-then-patch-before-asking-owner、loops-need-cicd-before-ai-multiplies、agent-fills-what-pm-and-team-lack | 你只點名了《agent 自己的版控》那份，已改成 agent-own-version-control-and-instances；其餘五份沿用舊名，改的話 README、reviews、圖目錄一起動 | CLAUDE.md 圖形化文件的規則 |
 | T7 | 10-08 | **轉型的終點**：流程存在就好，還是要團隊真正理解並自己維護 | D2 給了初步答案（先改變 PM，由他帶動團隊），細節待討論 | decision-log.md D2 |
@@ -62,6 +61,7 @@
 | T12 | 10-08 | 推上 GitHub 前檢查公開範圍 | 使用者說明 repo 是個人專用，不需檢查；已推上 datochuang/cicd-mentor |
 | T16 | 10-09 | 五個定錨原則等你確認 | 全部同意，改用英文專有名詞：Small batches、SSOT、Traceability、CI、Self-documenting。記為 D4 |
 | T39 | 10-09 | 《agent 自己的版控》第 3–10 頁照 D5 改、加「換手」一頁、換手的接法誰選 | 接法由 PM 選（使用者：「這很明顯」）。全份十一頁已照 D5 改，第 5 頁換手；檔名改為 agent-own-version-control-and-instances；標題再盲讀一次（docs/reviews/titles-blind-read-agent-versioning-20261009.md 第二輪） |
+| T37 | 10-09 | 啟動包的目錄與缺件 | 照 starter-kit-plan.md 做；產生器不帶；research/ 帶、當附錄（11-research/）；啟動包版 CLAUDE.md 先講專案的目的與框架，再講工作規則 |
 | T1 | 10-08 | PM 是誰 | 選 C：使用者起頭、之後交棒；任何人都可能是 PM，也可以多位 PM 各推一部分。記為 D9（一個 design 一位 PM、sponsor 裁決、交接包從工作區產生、手冊寫給角色） |
 | T31 | 10-09 | 做法層八條等你確認 | 照提案全採用：Test-first、Executable spec、Evidence-based delivery、Definition of Done、Flow as code、Blameless postmortem、量化（DORA 四指標 IC 版）、Review policy per directory。記為 D8 |
 | T19 | 10-09 | 第六個原則 Code review | 不採用。使用者：review 非必要，由各 design 自行決定、過程中可變，定成規矩「每個目錄都要講好需不需要 code review」，掛在 Self-documenting，做法層加 Review policy per directory。記為 D7 |
