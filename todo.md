@@ -36,7 +36,6 @@
 | T8 | 10-08 | 圖形文件第 3 頁的「會被盯上嗎？」 | 我根據討論加的，你沒明確提過；確認要不要保留 | docs/slides/why-cicd-needs-ai-agent-and-pm.pdf |
 | T9 | 10-08 | 圖形文件第 6 頁「對的掌舵人」四個條件 | 我歸納的，確認是否符合你心中的人選 | 同上 |
 | T10 | 10-08 | 圖形文件要不要做盲讀驗收 | 派沒看過討論的 subagent 扮成讀者只讀 PDF，回報看不懂的地方 | |
-| T11 | 10-08 | 舊文字版說明文件的 Artifact 連結要不要刪 | 檔案已移到 docs/archive/；連結 https://claude.ai/artifact/GqNg8P9QN569RFvVhb1Yme 仍在 | |
 | T17 | 10-09 | 圖形文件《第一次進 workspace：照五個原則檢查，不過就先補一版》初稿等你修正 | 九頁（10-09 晚上加了 SSOT 第二頁：產物、flow、IP；Code review 一頁；分工頁加了對應項目）。特別要看：六個檢查的順序、每頁「先補什麼」的 patch 名單、第 9 頁三類分工與「owner 採用才進 depot」這個預設 | docs/slides/agent-entering-unknown-workspace.pdf |
 | T43 | 10-09 | **D7 之後的投影片修改**（等七件決定完一次做，免得重建好幾次）：《把版控當備份的團隊》第 1 頁的 Code review 框併進 Self-documenting、第 10 頁改成「沒講好要不要 review」、第 19 頁改五列；《進到陌生 workspace》第六個檢查改成「目錄有沒有講好要不要 review，沒講就問 owner 定一個」、標題的「六個原則」改五個；《agent 自己的版控》第 3 頁的表改五列加 review 規矩；《為什麼非要 CI/CD》第 8、11 頁的「六個原則」改五個；《互動場景》裡提到的地方；README 的 alt 一起改 | 文字文件（direction、operating model、starter-kit-plan、decision-log D7）已改 | decision-log.md D7 |
 | T20 | 10-09 | **《把版控當備份的團隊》p4–p16 冒號前全是「問題」**，審稿說 13 頁下來那格沒有資訊，建議改放原則名或分組詞 | 我沒動，因為這會改變「主題：結論」裡主題詞的用法。我的建議：改成「問題（Traceability）：…」這種形式，讀者翻到收斂頁前就看過六個詞；你決定 | docs/reviews/titles-blind-read-20261009.md |
@@ -49,7 +48,6 @@
 
 | # | 加入 | 項目 | 現況／下一步 | 相關 |
 |---|---|---|---|---|
-| T13 | 10-08 | `../google-xls` 的投影片規則要不要複製進本 repo | CLAUDE.md 引用了外部路徑，別人 clone 後找不到 | CLAUDE.md |
 
 ---
 
@@ -60,6 +58,8 @@
 | T12 | 10-08 | 推上 GitHub 前檢查公開範圍 | 使用者說明 repo 是個人專用，不需檢查；已推上 datochuang/cicd-mentor |
 | T16 | 10-09 | 五個定錨原則等你確認 | 全部同意，改用英文專有名詞：Small batches、SSOT、Traceability、CI、Self-documenting。記為 D4 |
 | T39 | 10-09 | 《agent 自己的版控》第 3–10 頁照 D5 改、加「換手」一頁、換手的接法誰選 | 接法由 PM 選（使用者：「這很明顯」）。全份十一頁已照 D5 改，第 5 頁換手；檔名改為 agent-own-version-control-and-instances；標題再盲讀一次（docs/reviews/titles-blind-read-agent-versioning-20261009.md 第二輪） |
+| T13 | 10-08 | 投影片規則引用 ../google-xls | 不複製進來：內網 agent 的新 repo 不需要這個規則，啟動包也不帶產生器；本 workspace 的 CLAUDE.md 照舊引用（D10） |
+| T11 | 10-08 | 舊文字版的 claude.ai 連結 | 刪了；那個連結只剩這一列記著，連這一列一起收掉 |
 | T41 | 10-09 | 前五份投影片的檔名照新規則改 | 改了：why-cicd-needs-ai-agent-and-pm、team-treating-vc-as-backup、agent-entering-unknown-workspace、loops-and-ai-multiplier、agent-pm-team-repo-interactions；圖目錄、README、todo、starter-kit-plan 同步，reviews 與 decision-log 保留舊名當歷史 |
 | T37 | 10-09 | 啟動包的目錄與缺件 | 照 starter-kit-plan.md 做；產生器不帶；research/ 帶、當附錄（11-research/）；啟動包版 CLAUDE.md 先講專案的目的與框架，再講工作規則 |
 | T1 | 10-08 | PM 是誰 | 選 C：使用者起頭、之後交棒；任何人都可能是 PM，也可以多位 PM 各推一部分。記為 D9（一個 design 一位 PM、sponsor 裁決、交接包從工作區產生、手冊寫給角色） |

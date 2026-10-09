@@ -2,6 +2,8 @@
 
 在 IC 設計團隊導入迭代式開發與 CI/CD 的 AI agent 構想。Agent 自主運行，方向由一位人類 PM 掌握（PM 指負責把團隊開發流程導入 CI/CD 的人，和 project 的 PM 無關）：PM 決定要去哪裡，agent 補上 CI/CD 的知識與執行力，兩邊一起把事情做成。
 
+> **這個 repo 是規劃用的，不是 agent 的 repo。** 這裡只討論與規劃，不在這裡做 agent，之後也不會有 agent 的程式碼。最終產出是一個**啟動包（starter kit）**：帶進公司內網，在一個全新的 repo 與 session 裡，由內網的 Claude Code 和 PM 接手，才開始製作與部署。這裡的文件都是為了那一步。
+
 ## 四張圖看完整個構想
 
 每張是一份圖形文件的總覽頁；標題後面的連結是那份的全文。
@@ -232,7 +234,7 @@ agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張
 
 ## 這個 repo 裡有什麼
 
-目前是規劃階段，還沒有 agent 的程式碼。
+這裡不會有 agent 的程式碼；agent 在內網全新的 repo 裡做，這裡只產出啟動包（規劃見 [starter-kit-plan.md](starter-kit-plan.md)）。
 
 | 位置 | 內容 |
 |---|---|

@@ -12,6 +12,8 @@
 
 這個專案目前用來讓我與你（Claude Code）討論整體規劃，並推演可能的部署與實作方式。最終目標是產出一份完整的計劃文件，讓我帶到公司的工程內網繼續開發這個 agent。
 
+**這個 repo 不是 agent 的 repo，不在這裡做 agent。** 這裡只討論與規劃；最終產出是一個啟動包（starter kit，規劃見 `starter-kit-plan.md`），帶進公司內網後，在一個**全新的 repo 與 session** 裡由內網的 Claude Code 和 PM 接手製作與部署。所以：不在這裡寫 agent 的程式碼、不在這裡選模型或部署方式；每份重要文件（README、direction、operating model、starter-kit-plan）開頭都要讓第一次看的人知道這一點。
+
 # 目前方向
 
 上面「背景」描述的是最初的構想，已經修正：**agent 自主運行，但方向由一位人類 PM 決定**（PM 指負責將團隊開發流程導入 CI/CD 的人，和 project 的 PM 無關）。Agent 不眠不休地主動發現問題、構思方案、與工程師溝通、產出技術成果；它形成的決定和方針要主動向 PM 匯報，確認 PM 真的理解之後由 PM approve。Agent 同時幫 PM 成長，並提供團隊的 holistic view。細節以 [direction.md](direction.md) 為準。

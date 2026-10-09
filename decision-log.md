@@ -117,3 +117,15 @@
 **取代：** 無；補 D2、D3 裡「一位人類 PM」的說法：仍是一個 design 一位，但不是全公司一位、不是固定一人。
 
 **出處：** [direction.md](direction.md)「PM（人）」；[agent-operating-model.md](agent-operating-model.md) 7.8。
+
+---
+
+## D10｜2026-10-09｜這個 repo 只規劃不製作：啟動包帶進內網、在全新的 repo 與 session 裡才開始做
+
+**決定：** 這個 repo（datochuang/cicd-mentor）是規劃用的 workspace，不是 agent 的 repo，不在這裡做 agent，之後也不會有 agent 的程式碼。最終產出是啟動包；帶進公司內網後，在一個全新的 repo 與 session 裡由內網的 Claude Code 和 PM 接手製作與部署。README、CLAUDE.md、direction、operating model、starter-kit-plan 的開頭都寫明這一點。啟動包不帶投影片產生器；內網的 agent repo 也不需要本 workspace 的投影片規則（T13）。
+
+**理由：** 使用者：別人不容易判斷這個 repo 雖然在討論新 agent 的做法，但不是真的要在這裡做。寫明了，讀者才不會在這裡找程式碼、也不會把這裡當成 agent 的 core。
+
+**取代：** 無；把原本只寫在 CLAUDE.md「產出」一節的意思，提到每份重要文件的開頭。
+
+**出處：** README.md 開頭；CLAUDE.md「產出」。
