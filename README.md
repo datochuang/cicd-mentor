@@ -98,7 +98,7 @@
 
 </details>
 
-### 進到陌生的 workspace：人或 agent 照五個原則檢查，不過就先做 patch
+### 進到陌生的 workspace：人或 agent 照六個原則檢查，不過就先做 patch
 
 人或 AI agent 進到一個沒看過的 workspace，具體怎麼檢查它有沒有 CI/CD；每個檢查點不過時自己先補什麼，只有哪些事才問 owner。十頁（第 7 頁是 CD：幫 owner 定出交付物）。PDF：[docs/slides/agent-entering-unknown-workspace.pdf](docs/slides/agent-entering-unknown-workspace.pdf)
 
