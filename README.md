@@ -2,35 +2,31 @@
 
 在 IC 設計團隊導入迭代式開發與 CI/CD 的 AI agent 構想。Agent 自主運行，方向由一位人類 PM 掌握（PM 指負責把團隊開發流程導入 CI/CD 的人，和 project 的 PM 無關）：PM 決定要去哪裡，agent 補上 CI/CD 的知識與執行力，兩邊一起把事情做成。
 
-## 六張圖看完整個構想
+## 五張圖看完整個構想
 
-每張都是一份圖形文件的總覽頁；標題後面的連結是那份的全文。
+每張是一份圖形文件裡講結論的那一頁；標題後面的連結是那份的全文。
 
 **1. 地基：AI 的三種效益站在同一塊地基 CI/CD 上，而這塊地基現在是空的**（[為什麼非要 CI/CD](docs/slides/loops-need-cicd-before-ai-multiplies.pdf)）
 
 ![總覽：AI 的三種效益站在同一塊地基 CI/CD 上，而這塊地基現在是空的](docs/slides/img/loops-need-cicd-before-ai-multiplies/p-1.png)
 
-**2. 現狀：depot 留得住檔案、答不出哪一版跑的；十六個問題歸成六個原則**（[把版控當備份的團隊](docs/slides/repo-as-backup-keeps-files-not-answers.pdf)）
-
-![總覽：depot 留得住檔案、答不出哪一版跑的；十六個問題歸成六個原則](docs/slides/img/repo-as-backup-keeps-files-not-answers/p-1.png)
-
-**3. 誰來做：AI 出 CI/CD 知識與動手能力，人類 PM 定方向與優先序**（[AI agent 與人類 PM 搭檔](docs/slides/ai-agent-and-pm-make-cicd-happen.pdf)）
+**2. 誰來做：AI 出 CI/CD 知識與動手能力，人類 PM 定方向與優先序**（[AI agent 與人類 PM 搭檔](docs/slides/ai-agent-and-pm-make-cicd-happen.pdf)）
 
 ![搭配：AI 出 CI/CD 知識與動手能力，人類 PM 定方向與優先序](docs/slides/img/ai-agent-and-pm-make-cicd-happen/p-5.png)
 
-**4. 怎麼一起做：PM 有決心沒經驗，團隊不堅決也不知怎麼做；agent 補這兩個缺**（[互動場景](docs/slides/agent-fills-what-pm-and-team-lack.pdf)）
+**3. 怎麼一起做：PM 有決心沒經驗，團隊不堅決也不知怎麼做；agent 補這兩個缺**（[互動場景](docs/slides/agent-fills-what-pm-and-team-lack.pdf)）
 
 ![總覽：PM 有決心沒經驗，團隊不堅決也不知怎麼做；agent 補這兩個缺](docs/slides/img/agent-fills-what-pm-and-team-lack/p-1.png)
 
-**5. 進到一個目錄做什麼：六個檢查各驗一個原則，不過就做 patch，由 owner 決定收不收**（[進到陌生的 workspace](docs/slides/check-then-patch-before-asking-owner.pdf)）
+**4. 進到一個目錄做什麼：六個檢查各驗一個原則，不過就做 patch，由 owner 決定收不收**（[進到陌生的 workspace](docs/slides/check-then-patch-before-asking-owner.pdf)）
 
 ![流程：六個檢查各驗一個原則，不過就做 patch，由專案 owner 決定收不收](docs/slides/img/check-then-patch-before-asking-owner/p-1.png)
 
-**6. agent 自己怎麼活、怎麼長：實例從 agent 的 repo clone、工作區回到它；depot 只收流程在用的工具**（[agent 自己的版控與多實例](docs/slides/agent-own-version-control-and-instances.pdf)）
+**5. agent 自己怎麼活、怎麼長：實例從 agent 的 repo clone、工作區回到它；depot 只收流程在用的工具**（[agent 自己的版控與多實例](docs/slides/agent-own-version-control-and-instances.pdf)）
 
 ![總覽：實例從 agent 的 repo clone、工作區回到它；depot 只收流程在用的工具](docs/slides/img/agent-own-version-control-and-instances/p-1.png)
 
-串起來一句話：AI 的效益要靠 CI/CD 這塊地基；我們的地基是空的；有共識但沒人有經驗，所以 agent 出知識與手、PM 定方向；四方這樣互動；agent 進到任一目錄就做這三步；而 agent 本身這樣版控、clone、換手。
+串起來一句話：AI 的效益要靠 CI/CD 這塊地基，而地基現在是空的；有共識但沒人有經驗，所以 agent 出知識與手、PM 定方向；四方這樣互動；agent 進到任一目錄就做這三步；而 agent 本身這樣版控、clone、換手。現狀的細節（版控只當備份會長出哪些問題）在下面《把版控當備份的團隊》。
 
 ## 六份圖形文件（逐頁）
 
