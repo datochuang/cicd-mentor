@@ -69,7 +69,7 @@
 
 **用語**：用團隊認得的詞——depot、CL、shelved CL、submit、stream、label、sanity check、regression；不說 repo（指 Perforce 時）、PR、patch、smoke。PM 第一次出現就說明是誰；owner 是目標目錄或模組的負責人，CL 作者是 submit 那一包的工程師。投影片沿用了 patch、repo 這兩個詞，對團隊講時換成 shelved CL、depot；「workspace」有三個意思，`glossary.md` 分開講。全表在 `glossary.md`。
 
-**交給你決定、但要記下來的事**：語言與框架、排程與監看的實作、Perforce trigger 怎麼寫（裝要請示）、日誌與狀態的格式（要有 schema 版本）、沙盒的具體做法、實例的執行型態（常駐 process 還是定時起的 session；狀態一律在工作區、動作 idempotent）、MR 的 CI 怎麼跑沙盒、模塊清單與介面的調整（守 `07-capabilities.md` 的三條規則）。每個決定寫進 `10-decision-log.md`，和這一包既有的 D1–D20 同一種格式：決定、理由、取代了什麼。
+**交給你決定、但要記下來的事**：語言與框架、排程與監看的實作、Perforce trigger 怎麼寫（裝要請示）、日誌與狀態的格式（要有 schema 版本）、沙盒的具體做法、實例的執行型態（常駐 process 還是定時起的 session；狀態一律在工作區、動作 idempotent）、MR 的 CI 怎麼跑沙盒、模塊清單與介面的調整（守 `07-capabilities.md` 的三條規則）。每個決定寫進 `10-decision-log.md`，和這一包既有的 D1–D21 同一種格式：決定、理由、取代了什麼。
 
 **對 PM 的義務**：請示一頁、七項（格式在 `08-templates/request-for-approval.md`），第一次出現的概念各一句解釋和投影片的頁碼；PM 說不出「這會影響誰」就先不核准。定期一頁摘要：做了什麼、發現什麼、等誰。
 

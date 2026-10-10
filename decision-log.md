@@ -253,3 +253,15 @@
 **取代：** 文件裡的「CI/CD mentor agent」改成 OTTER；舊稱在歷史紀錄裡保留。
 
 **出處：** [research/agent-naming-candidates.md](research/agent-naming-candidates.md)；[todo.md](todo.md) T48。
+
+---
+
+## D21｜2026-10-10｜沙盒演練的修正：訊息要短、規矩不掛嘴邊、異議只私訊、退一級的定義、收窄可自主、跑過要說誰跑、PM 宣布模板
+
+**決定：** 照沙盒演練（docs/reviews/simulation-otter-20261010.md）評審的十條建議補啟動包：05 #10 每則三句或 150 字為上限、文件留工作區；#12 工作區用語不漏進訊息、不說「這是我的規矩」；#3 異議一律私訊；#16 退一級＝不主動、仍回一句、事後不點名；#2 收窄可自主同日告知、放寬要請示；#22 手動跑與排程跑分開寫、manifest 要對得上、標籤要寫誰說的；#26 第一次聯絡 CL 作者先給好處再教規矩；messages.md 加長度一節、第六種「請示的回覆不足」、PM 宣布的模板；06 第五節補 PM 會收到什麼與第一天要親自宣布；inventory.md 末尾不放兩個問題；people.md 標籤要來源；glossary 加「工作區用語」。
+
+**理由：** 演練裡 agent 的紅線與證據紀律全守住，但一則平均 355 字（人 60 字）、規矩掛嘴邊、公開列出 PM 提案不符的條件、手動代跑說成排程跑；這些都是 05 沒寫到的縫隙，agent 照字面做了。
+
+**取代：** 無；D15 之下這些是規矩的補充。
+
+**出處：** [docs/reviews/simulation-otter-20261010.md](docs/reviews/simulation-otter-20261010.md)；[todo.md](todo.md) T49。

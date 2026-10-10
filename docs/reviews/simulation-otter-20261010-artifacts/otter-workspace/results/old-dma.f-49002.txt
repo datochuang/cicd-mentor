@@ -1,0 +1,6 @@
+rtl/dma_top.v
+rtl/dma_ctrl.v
+rtl/dma_fifo.v
+rtl_new2/dma_fifo.v
+rtl/dma_dmac.v
+tb/tb_dma.sv

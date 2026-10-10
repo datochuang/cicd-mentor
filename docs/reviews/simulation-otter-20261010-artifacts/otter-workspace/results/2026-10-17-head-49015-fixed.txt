@@ -1,0 +1,14 @@
+== 1. filelist dma.f（相對於 /private/tmp/claude-501/-Users-sherrachen-claude-workspace-cicd-mentor/3e862b82-cca2-4329-bd21-2a87ec473bf4/scratchpad/otter-sim/depot/chipA/dma）
+  OK       rtl/dma_top.v
+  OK       rtl/dma_ctrl.v
+  OK       rtl/dma_fifo.v
+  OK       tb/tb_dma.sv
+== 2. 同一個 module 名出現在兩個檔
+  無
+== 3. scripts/ 裡 setup.* 以外的檔有沒有 depot 以外的路徑或環境相依（只列，不算 FAIL）
+  EXTERNAL run_sim.csh: /proj/chipA/common/lib/sim_lib.sv
+== 4. rtl/ 裡存在但 filelist 沒引用的檔（只列，不算 FAIL）
+  UNREF    rtl/dma_arb.v
+  UNREF    rtl/dma_top_netlist.v
+== 結果：PASS；外部相依 1 處；未引用 2 檔
+manifest: otter-workspace/results/2026-10-17-head-49015-fixed.manifest.txt

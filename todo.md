@@ -26,6 +26,7 @@
 | T35 | 10-09 | **分階段路線圖與每階段的成功定義、停損**要不要照我寫的 | 準備 → 試點 → 擴散 → 常態；試點的成功：owner 採用了 shelved CL、check 每天跑有人看、至少一個檢驗從做不到變做得到 | agent-operating-model.md 7.3 |
 | T36 | 10-09 | **紅線清單**（不刪、不碰別人 workspace、沒共識不擋、不報個人活動量、design 資料不出核准的模型、不假裝是人、不對 design 下判斷）有沒有要加減 | | agent-operating-model.md 7.4 |
 | T38 | 10-09 | **agent 自己的版控與多實例**：core 由誰維護、一實例一帳號還是共用、升級的節奏 | 三層分離（core／實例的工作區／生產用的工具）、登記表、實例名與版號署名、沙盒當 core 的 regression、換手已寫進 operating model 第八節，並做成投影片《agent 自己的版控》；這三件要公司決定 | agent-operating-model.md 第八節、docs/slides/agent-own-version-control-and-instances.pdf |
+| T49 | 10-10 | **沙盒演練第二輪要不要做、測什麼** | 第一輪（docs/reviews/simulation-otter-20261010.md）只測到第一週、人太合作。第二輪建議：owner 不收 shelved CL、PM 已讀不回兩回合、兩個 owner 對共用檔意見不同、agent 中途重啟不重複問、超預算、第二次提醒與延後；或改用更難搞的人物設定 | docs/reviews/simulation-otter-20261010.md |
 
 ## 等你確認的產出
 

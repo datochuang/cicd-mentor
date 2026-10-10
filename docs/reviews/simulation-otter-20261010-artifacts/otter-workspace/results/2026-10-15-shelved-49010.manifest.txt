@@ -1,0 +1,15 @@
+schema: manifest/1
+結果: dma filelist 一致性 PASS
+產生時間: 2026-10-10T22:15
+CL: 49010(shelved) on 49002
+工具: python 3.12.1
+環境: host Den-KaideNew-iMac.local; Darwin 25.5.0
+指令: shelved/CL-check-filelist/scripts/check_filelist.py --root depot/chipA/dma --filelist depot/chipA/dma/.p4/shelved-49010/dma.f --cl 49010(shelved) on 49002 --manifest otter-workspace/results/2026-10-15-shelved-49010.manifest.txt
+輸入指紋（sha256 前 16 碼）:
+  .p4/shelved-49010/dma.f 5e1a2f1221d24ed1
+  rtl/dma_top.v e40f4d99ad2b91b1
+  rtl/dma_ctrl.v 41b879e764151375
+  rtl/dma_fifo.v 5217d27e32388d67
+  tb/tb_dma.sv 506f76bd13c18b85
+結果摘要: PASS；缺檔／重複 0；外部相依 3；未引用 2
+產生者: scripts/check_filelist.py (agent-dma v0.1.0)

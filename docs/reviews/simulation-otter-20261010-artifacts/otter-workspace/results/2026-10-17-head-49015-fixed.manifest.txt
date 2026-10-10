@@ -1,0 +1,15 @@
+schema: manifest/1
+結果: dma filelist 一致性 PASS
+產生時間: 2026-10-10T22:30
+CL: 49015
+工具: python 3.12.1
+環境: host Den-KaideNew-iMac.local; Darwin 25.5.0
+指令: /private/tmp/claude-501/-Users-sherrachen-claude-workspace-cicd-mentor/3e862b82-cca2-4329-bd21-2a87ec473bf4/scratchpad/otter-sim/shelved/CL-check-filelist-fix/scripts/check_filelist.py --root /private/tmp/claude-501/-Users-sherrachen-claude-workspace-cicd-mentor/3e862b82-cca2-4329-bd21-2a87ec473bf4/scratchpad/otter-sim/depot/chipA/dma --cl 49015 --manifest otter-workspace/results/2026-10-17-head-49015-fixed.manifest.txt
+輸入指紋（sha256 前 16 碼）:
+  dma.f 5e1a2f1221d24ed1
+  rtl/dma_top.v e40f4d99ad2b91b1
+  rtl/dma_ctrl.v 41b879e764151375
+  rtl/dma_fifo.v 5217d27e32388d67
+  tb/tb_dma.sv 506f76bd13c18b85
+結果摘要: PASS；缺檔／重複 0；外部相依 1；未引用 2
+產生者: scripts/check_filelist.py (agent-dma v0.1.0)

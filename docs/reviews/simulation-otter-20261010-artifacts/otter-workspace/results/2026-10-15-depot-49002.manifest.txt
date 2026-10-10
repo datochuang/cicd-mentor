@@ -1,0 +1,18 @@
+schema: manifest/1
+結果: dma filelist 一致性 FAIL
+產生時間: 2026-10-10T22:15
+CL: 49002
+工具: python 3.12.1
+環境: host Den-KaideNew-iMac.local; Darwin 25.5.0
+指令: shelved/CL-check-filelist/scripts/check_filelist.py --root depot/chipA/dma --cl 49002 --manifest otter-workspace/results/2026-10-15-depot-49002.manifest.txt
+輸入指紋（sha256 前 16 碼）:
+  dma.f 90975cf40f39b775
+  rtl/dma_top.v e40f4d99ad2b91b1
+  rtl/dma_ctrl.v 41b879e764151375
+  rtl/dma_fifo.v 5217d27e32388d67
+  rtl_new2/dma_fifo.v 729c04d84435c0a8
+  tb/tb_dma.sv 506f76bd13c18b85
+結果摘要: FAIL；缺檔／重複 2；外部相依 3；未引用 2
+  - filelist 引用的檔不存在：rtl/dma_dmac.v
+  - module dma_fifo 重複：rtl/dma_fifo.v, rtl_new2/dma_fifo.v
+產生者: scripts/check_filelist.py (agent-dma v0.1.0)
