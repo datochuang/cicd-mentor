@@ -66,31 +66,31 @@
 
 ![交付：結果靠 email 貼路徑，label 記得檔案版本，記不得工具與環境](docs/slides/img/team-treating-vc-as-backup/p-4.png)
 
-![問題：「這份結果是哪一版跑的」要問好幾個人，答案仍是大概](docs/slides/img/team-treating-vc-as-backup/p-5.png)
+![Traceability：「這份結果是哪一版跑的」要問好幾個人，答案仍是大概](docs/slides/img/team-treating-vc-as-backup/p-5.png)
 
-![問題：壞掉被發現時，離改壞它的那次 submit 已經很遠](docs/slides/img/team-treating-vc-as-backup/p-6.png)
+![CI：壞掉被發現時，離改壞它的那次 submit 已經很遠](docs/slides/img/team-treating-vc-as-backup/p-6.png)
 
-![問題：下游收到的包沒有清單；流程只在人腦裡，人走了就斷](docs/slides/img/team-treating-vc-as-backup/p-7.png)
+![Self-documenting：下游收到的包沒有清單；流程只在人腦裡，人走了就斷](docs/slides/img/team-treating-vc-as-backup/p-7.png)
 
-![問題：目錄用途沒寫在 depot，新人要人帶，AI agent 也要人另寫說明](docs/slides/img/team-treating-vc-as-backup/p-8.png)
+![Self-documenting：目錄用途沒寫在 depot，新人靠人帶，AI agent 也要另寫說明](docs/slides/img/team-treating-vc-as-backup/p-8.png)
 
-![問題：沒有開發 branch，半成品留在 workspace 或進 main，main 隨時會壞](docs/slides/img/team-treating-vc-as-backup/p-9.png)
+![CI：沒有開發 branch，半成品留在 workspace 或進 main，main 隨時會壞](docs/slides/img/team-treating-vc-as-backup/p-9.png)
 
-![問題：沒講好哪些目錄要 review，預設沒人看，改 interface 那包也一樣](docs/slides/img/team-treating-vc-as-backup/p-10.png)
+![Self-documenting：沒講好哪些目錄要 review，預設沒人看，改 interface 也一樣](docs/slides/img/team-treating-vc-as-backup/p-10.png)
 
-![問題：兩人改同一個檔，resolve 整份收下，另一人的改動消失](docs/slides/img/team-treating-vc-as-backup/p-11.png)
+![Small batches：兩人改同一個檔，resolve 整份收下，另一人的改動消失](docs/slides/img/team-treating-vc-as-backup/p-11.png)
 
-![問題：netlist 等產物和來源一起進 depot，改哪一份才算數沒人說得清](docs/slides/img/team-treating-vc-as-backup/p-12.png)
+![SSOT：netlist 等產物和來源一起進 depot，改哪一份才算數沒人說得清](docs/slides/img/team-treating-vc-as-backup/p-12.png)
 
-![問題：第三方 IP 解壓覆蓋，晶片裡是哪一版沒人說得出](docs/slides/img/team-treating-vc-as-backup/p-13.png)
+![SSOT：第三方 IP 解壓覆蓋，晶片裡是哪一版沒人說得出](docs/slides/img/team-treating-vc-as-backup/p-13.png)
 
-![問題：flow script 每個專案複製一份改，修好的 bug 傳不出去](docs/slides/img/team-treating-vc-as-backup/p-14.png)
+![SSOT：flow script 每個專案複製一份改，修好的 bug 傳不出去](docs/slides/img/team-treating-vc-as-backup/p-14.png)
 
-![問題：同一份 RTL 兩台機器跑出不同結果，分不出哪個才對](docs/slides/img/team-treating-vc-as-backup/p-15.png)
+![SSOT：同一份 RTL 兩台機器跑出不同結果，分不出哪個才對](docs/slides/img/team-treating-vc-as-backup/p-15.png)
 
-![問題：regression 狀態靠人填 Excel，表和實際結果對不上](docs/slides/img/team-treating-vc-as-backup/p-16.png)
+![CI：regression 狀態靠人填 Excel，表和實際結果對不上](docs/slides/img/team-treating-vc-as-backup/p-16.png)
 
-![問題：想退回上次能跑的狀態，檔案回得去，環境回不去](docs/slides/img/team-treating-vc-as-backup/p-17.png)
+![Traceability：想退回上次能跑的狀態，檔案回得去，環境回不去](docs/slides/img/team-treating-vc-as-backup/p-17.png)
 
 ![總結：備份做到了，「哪一版跑的、能不能重跑」一個都答不出](docs/slides/img/team-treating-vc-as-backup/p-18.png)
 

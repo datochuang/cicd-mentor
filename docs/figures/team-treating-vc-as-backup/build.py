@@ -8,6 +8,7 @@
 #       問題在整合、交接與人員異動時浮現。
 # 脈絡：1 總覽（一張圖：depot 留得住的、答不出的；十六個問題歸成六個原則；2026-10-09 加）→ 2–4 具體怎麼運作 → 5–17 造成什麼問題（10–17 為 2026-10-09 追加）→ 18 總結 → 19 收斂成六個原則（之後對策的定錨點；Code review 不是原則，是每個目錄要講好的規矩，D7）。
 # 所有路徑、CL 號碼、label 名稱都是示意，不對應任何實際專案。
+# 2026-10-10（T20）：第 5–17 頁冒號前的「問題」改成主要掛的原則名（和《進到陌生的 workspace》同一種標籤），讀者在收斂頁之前就看過六個詞。
 import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
 from slides import *
@@ -771,19 +772,19 @@ PAGES = [
     ("日常：改動在個人 workspace 累積，depot 隔很久才收到一大包", p1()),
     ("散落：跑 regression 要的東西分在五個地方，depot 只是其中之一", p2()),
     ("交付：結果靠 email 貼路徑，label 記得檔案版本，記不得工具與環境", p3()),
-    ("問題：「這份結果是哪一版跑的」要問好幾個人，答案仍是大概", p4()),
-    ("問題：壞掉被發現時，離改壞它的那次 submit 已經很遠", p5()),
-    ("問題：下游收到的包沒有清單；流程只在人腦裡，人走了就斷", p6()),
-    ("問題：目錄用途沒寫在 depot，新人要人帶，AI agent 也要人另寫說明", p7()),
-    ("問題：沒有開發 branch，半成品留在 workspace 或進 main，main 隨時會壞", p8()),
-    ("問題：沒講好哪些目錄要 review，預設沒人看，改 interface 那包也一樣", n_review()),
-    ("問題：兩人改同一個檔，resolve 整份收下，另一人的改動消失", n_conflict()),
-    ("問題：netlist 等產物和來源一起進 depot，改哪一份才算數沒人說得清", n_derived()),
-    ("問題：第三方 IP 解壓覆蓋，晶片裡是哪一版沒人說得出", n_ip()),
-    ("問題：flow script 每個專案複製一份改，修好的 bug 傳不出去", n_flow()),
-    ("問題：同一份 RTL 兩台機器跑出不同結果，分不出哪個才對", n_env()),
-    ("問題：regression 狀態靠人填 Excel，表和實際結果對不上", n_excel()),
-    ("問題：想退回上次能跑的狀態，檔案回得去，環境回不去", n_rollback()),
+    ("Traceability：「這份結果是哪一版跑的」要問好幾個人，答案仍是大概", p4()),
+    ("CI：壞掉被發現時，離改壞它的那次 submit 已經很遠", p5()),
+    ("Self-documenting：下游收到的包沒有清單；流程只在人腦裡，人走了就斷", p6()),
+    ("Self-documenting：目錄用途沒寫在 depot，新人靠人帶，AI agent 也要另寫說明", p7()),
+    ("CI：沒有開發 branch，半成品留在 workspace 或進 main，main 隨時會壞", p8()),
+    ("Self-documenting：沒講好哪些目錄要 review，預設沒人看，改 interface 也一樣", n_review()),
+    ("Small batches：兩人改同一個檔，resolve 整份收下，另一人的改動消失", n_conflict()),
+    ("SSOT：netlist 等產物和來源一起進 depot，改哪一份才算數沒人說得清", n_derived()),
+    ("SSOT：第三方 IP 解壓覆蓋，晶片裡是哪一版沒人說得出", n_ip()),
+    ("SSOT：flow script 每個專案複製一份改，修好的 bug 傳不出去", n_flow()),
+    ("SSOT：同一份 RTL 兩台機器跑出不同結果，分不出哪個才對", n_env()),
+    ("CI：regression 狀態靠人填 Excel，表和實際結果對不上", n_excel()),
+    ("Traceability：想退回上次能跑的狀態，檔案回得去，環境回不去", n_rollback()),
     ("總結：備份做到了，「哪一版跑的、能不能重跑」一個都答不出", p_summary()),
     ("收斂：前面的問題歸成 SSOT、CI、CD 等六個原則，對策照原則一一對應", p_principles()),
 ]
