@@ -3,6 +3,7 @@
 ```
 schema: instance-config/1
 實例: agent-dma
+別名: Eric            ← PM 挑定；slack 顯示名稱「Eric（AI agent）」、handle eric-agent
 core: v0.3            ← clone 自哪個 release；小版號由 merge 次數算
 PM: 某某
 sponsor: 某某

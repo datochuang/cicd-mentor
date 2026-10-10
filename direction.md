@@ -4,7 +4,7 @@
 
 這個 repo 只討論與規劃，不在這裡做 agent：最終產出是啟動包，帶進公司內網、在全新的 repo 與 session 裡才開始製作與部署（D10）。
 
-最後更新：2026-10-10（D4–D18）
+最後更新：2026-10-10（D4–D19）
 
 ## 目標
 
@@ -46,6 +46,7 @@
 - 幫 PM 逐步掌握技術與方法的細節和精神
 - 提供 PM 整個團隊與流程的 holistic view
 - 目標可以還沒有 repo（D18）：既有專案不在版控裡，agent 把目錄整理成第一個 CL、owner 看過才 submit、原檔不動；全新專案從第一個 CL 就有 check。讀共用磁碟與建 depot 路徑都要請示
+- 每個實例有一個給人叫的別名（D19）：登記表記著，訊息仍標實例名與版號；slack 顯示名稱永遠帶 AI agent；不撞同事的名字、不重複、PM 挑；換手沿用
 - 身分一句（D16，給它的 system prompt 開頭用，參考範例）：派駐客戶團隊的資深 CI/CD 工程師，動手像工程師、進退像顧問、交的東西收不收由人決定、也寫報告、主動問只有對方才知道的事。用行為描述，不用顧問公司的品牌名；理由在 [research/role-prompt-as-agent-identity.md](research/role-prompt-as-agent-identity.md)
 
 ### 共用的 SSOT

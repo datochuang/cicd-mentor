@@ -229,3 +229,15 @@
 **取代：** 無；補《互動場景》一頁（第 5 頁，之後頁碼各加一）。
 
 **出處：** [agent-operating-model.md](agent-operating-model.md) 第一節第十二輪、第十一節；docs/slides/agent-pm-team-repo-interactions.pdf 第 5 頁。
+
+---
+
+## D19｜2026-10-10｜每個實例有一個給人叫的別名（Eric），登記表記著；顯示名稱永遠帶 AI agent，不撞人、不重複，換手沿用
+
+**決定：** 實例生成（clone）時取一個別名方便與人互動，例如「hi，我是 Eric，負責幫 FFT 這個 design 導入 CI/CD 的 AI agent，向 PM 某某報告」。四條規矩：(1) 別名只是別名，登記表多一欄，訊息、日誌、CL 說明仍標實例名與版號；(2) slack 顯示名稱「Eric（AI agent）」、handle 帶 agent、機器人頭像，不假裝是人的紅線不變；(3) agent 提兩三個、和員工名錄比對不撞同事的名字、全公司實例不重名、PM 在啟動的請示單上挑定；(4) 換手預設沿用別名、換版號，PM 可改。
+
+**理由：** 使用者：「每個 agent 被生成時，應該自己取個名字，方便跟人類互動……你覺得可行嗎」→「好的」。團隊叫 Eric 比叫 agent-fft v0.3.2 自然；多實例時名字比路徑好分辨。風險是被當成真人，所以顯示名稱永遠帶 AI agent、不用同事的名字。
+
+**取代：** 無；補 D6（實例名與版號）一層別名。
+
+**出處：** [agent-operating-model.md](agent-operating-model.md) 第一節第十三輪、第十二節。

@@ -22,6 +22,7 @@
 | **agent** | 這個 CI/CD mentor agent：自主運行，方針由 PM 核准 |
 | **core** | agent 的程式、行為指導原則、提示詞、模板、通用 check script；在 agent 自己的 git repo 的 master 上，出 release（tag）。實例不能直接改它，改進走 MR |
 | **實例** | 從 agent 的 repo clone 出來、跑著的一份 agent（agent-dma、agent-top）；看一個或多個 design。不是 RTL 的 instance |
+| **別名** | 實例給人叫的名字（Eric），登記表記著；訊息與日誌仍標實例名與版號；slack 顯示名稱「Eric（AI agent）」；agent 提、不撞同事的名字、不重複、PM 挑；換手沿用（D19） |
 | **工作區** | `designs/<名>/`：實例自己建、加入同一個 repo 的目錄，放實例設定、文件的主本（PROJECT_MAP、狀態板、報告）、紀錄（關係人、決定、日誌、HANDOVER）。不是 p4 的 workspace |
 | **workspace（三個意思）** | p4 的 client workspace（工程師的工作目錄；「不碰別人的 workspace」指這個）；agent 的工作區 `designs/<名>/`；投影片《進到陌生的 workspace》標題裡的 workspace＝目標 depot 的一個目錄。寫東西時：p4 的叫 workspace，agent 的叫工作區，目標的叫目錄或 depot 路徑 |
 | **登記表** | repo 裡的 registry：哪個 depot 路徑歸哪個實例、向哪位 PM 報告；一個路徑一個實例；共用的檔案指定一個實例管。改走 MR（新實例接手那筆由 PM 核准）；每次 merge 版本 r 加一（r12） |
