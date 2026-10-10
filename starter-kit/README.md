@@ -30,7 +30,7 @@
 
 串起來一句話：AI 的效益要靠 CI/CD 這塊地基，而地基現在是空的；PM 有決心沒經驗、團隊不堅決也不知怎麼做，agent 補這兩個缺，四方這樣互動；agent 進到任一目錄就做這三步；而 agent 本身這樣版控、clone、換手。為什麼要這樣搭檔，在 [AI agent 與人類 PM 搭檔](01-why/why-cicd-needs-ai-agent-and-pm.pdf)；現狀的細節（版控只當備份會長出哪些問題）在 [把版控當備份的團隊](02-diagnosis/team-treating-vc-as-backup.pdf)。
 
-## 六份投影片的名字
+## 七份投影片的名字
 
 投影片的檔名講它回答什麼問題；頁眉（kicker）和標題是另一套說法；10、11 裡偶爾用舊名或標題稱呼它們，對照如下。
 
@@ -42,6 +42,7 @@
 | 03-procedures/agent-entering-unknown-workspace | 進到陌生的 workspace：人或 agent 照六個原則檢查，不過就先做 patch | 進到陌生 workspace 的檢查 | check-then-patch-before-asking-owner |
 | 03-procedures/agent-pm-team-repo-interactions | 互動場景：agent 補 PM 與團隊各缺的 | agent 與 PM、團隊、repo 的互動 | agent-fills-what-pm-and-team-lack |
 | 07-build-brief/agent-own-version-control-and-instances | agent 自己的版控：實例從 agent 的 repo clone、工作區回到它；depot 只收流程在用的工具 | agent 自己的版控與多實例 | agent-evolves-by-release-not-self-edit |
+| 07-build-brief/agent-capability-modules | agent 的基本模塊：拆成十七個各有規格的模塊，公司專屬的只有三樣 | agent 的基本模塊 | — |
 
 ## 這包裡有什麼，照什麼順序讀
 
@@ -55,10 +56,10 @@
 | 6 | [03-procedures/](03-procedures/) | Claude Code、PM | agent 進到一個目錄做什麼；四方在每個階段的互動 |
 | 7 | [05-behavior-guidelines.md](05-behavior-guidelines.md) | Claude Code（這是 agent 的規矩） | 可以直接照著做的行為指導原則，每條指回依據 |
 | 8 | [06-pm-handbook.md](06-pm-handbook.md) | PM | PM 的功課、要談的資源與人、路線圖與停損、怎麼讀請示、交棒 |
-| 9 | [07-build-brief.md](07-build-brief.md)、[07-build-brief/](07-build-brief/) | Claude Code | 做成什麼：元件、介面、兩種 repo 與三層、實例與換手、沙盒驗收、MVP 的順序 |
+| 9 | [07-build-brief.md](07-build-brief.md)、[07-capabilities.md](07-capabilities.md)、[07-build-brief/](07-build-brief/) | Claude Code | 做成什麼：元件、介面、兩種 repo 與三層、實例與換手、沙盒驗收、MVP 的順序；能力拆成哪些模塊——要模組化、分層、怎麼切是規則，十七個模塊與介面是建議 |
 | 10 | [08-templates/](08-templates/) | Claude Code | PROJECT_MAP、狀態板、CL 說明、需求、請示、日誌、訊息的骨架 |
 | 11 | [09-open-decisions.md](09-open-decisions.md) | PM、sponsor、CAD | 公司要先決定的事，附預設值 |
-| 12 | [10-decision-log.md](10-decision-log.md) | 想知道為什麼這樣定的人 | D1–D10 與理由 |
+| 12 | [10-decision-log.md](10-decision-log.md) | 想知道為什麼這樣定的人 | D1–D13 與理由 |
 | 13 | [11-research/](11-research/) | 附錄 | 業界實踐與風險、顧問類比、迴圈與 AI 倍數，附來源 |
 
 ## 第一週做什麼
@@ -76,4 +77,5 @@
 
 - 這包進了 agent 的 repo 之後，就是 core 的文件層：改它走 MR，和程式一樣。
 - 決定了什麼，記進 [10-decision-log.md](10-decision-log.md)（只增不改）；[09-open-decisions.md](09-open-decisions.md) 的項目定了就移到 10。
+- 模塊的清單與介面（[07-capabilities.md](07-capabilities.md)）可以改、該改就改，改了記進 10；要模組化、要分層、怎麼切的規則不能改（D13）。
 - 這包裡所有連結都在包內。文字裡提到的「規劃 repo」「operating model」「T 編號」是這包討論出來時的歷史脈絡，不需要也拿不到；對應關係在 [10-decision-log.md](10-decision-log.md) 的 D11。

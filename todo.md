@@ -39,6 +39,7 @@
 | T21 | 10-09 | 圖形文件《為什麼非要 CI/CD：查和判不交給機器，N 個 agent 等於一個》初稿等你修正 | 十一頁。2026-10-09 深夜依你「順序不通順」重排：脊椎是三層套疊的迴圈。1 總覽（三種效益站在 CI/CD 地基上，地基現在是空的；一頁看完整個主張）→ 2–4 內圈（定義、在 IC 排成幾道檢查、現狀）→ 5–6 中圈（迭代進 main、交接）→ 7 外圈 → 8–9 AI（三層都加速改、瓶頸在判；上限）→ 10 結論 → 11 對應。特別要看：第 1 頁那張三層的表對不對、第 6 頁 agent 接得了／接不了的那段、第 7 頁 DSO.ai 的引用與「前提是推論」、第 9 頁三個上限 | docs/slides/loops-and-ai-multiplier.pdf；research/loops-and-ai-multiplier.md |
 | T32 | 10-09 | 圖形文件《互動場景》初稿等你修正 | 十二頁，泳道圖；每頁的「什麼時候」「授權」和示意的訊息例句都是我寫的 | docs/slides/agent-pm-team-repo-interactions.pdf |
 | T14 | 10-08 | 圖形文件《把版控當備份的團隊》初稿等你修正（審閱中；D12 加 CD 後原則頁會變，先做完 D12 再繼續） | 十八頁全部是我創作的（10-09 晚上追加圖 9–16：沒有 review、resolve 整份收下、產物進 depot、IP 解壓覆蓋、flow 複製、兩台機器結果不同、Excel 狀態表、退不回去）。情境與細節都要你對照實際狀況修正 | docs/slides/team-treating-vc-as-backup.pdf |
+| T47 | 10-10 | 圖形文件《agent 的基本模塊》初稿等你修正 | 八頁。十七個模塊的名字、分組（看判做說守）、規格句、進出、沙盒怎麼驗、第 8 頁階段對模塊的表都是我提的；D13 定它們是建議、邊做邊調。特別要看：第 1 頁「沒拆會怎樣」四條、第 3 頁「乾淨環境重現」是不是你舉的例子的意思、第 7 頁「公司專屬的三樣」夠不夠 | docs/slides/agent-capability-modules.pdf；docs/reviews/titles-blind-read-capability-modules-20261010.md |
 
 ## 其他
 
@@ -51,6 +52,7 @@
 
 | # | 結束 | 議題 | 結果 |
 |---|---|---|---|
+| T46 | 10-10 | agent 的能力拆成可復用的基本模塊 | 使用者提出，先做投影片《agent 的基本模塊》（八頁，標題盲讀一輪：契約→規格、綁定→公司專屬的三樣、三態→三種結果），再 merge 回文件。使用者定：要模組化、要分層、怎麼切是規則，哪些模塊、介面長怎樣是建議、邊做邊調。記為 D13；operating model 第一節第九輪與第九節、行為原則 #25、direction 設計要點 10、README、啟動包 07-capabilities.md 與連帶 |
 | T12 | 10-08 | 推上 GitHub 前檢查公開範圍 | 使用者說明 repo 是個人專用，不需檢查；已推上 datochuang/cicd-mentor |
 | T16 | 10-09 | 五個定錨原則等你確認 | 全部同意，改用英文專有名詞：Small batches、SSOT、Traceability、CI、Self-documenting。記為 D4 |
 | T39 | 10-09 | 《agent 自己的版控》第 3–10 頁照 D5 改、加「換手」一頁、換手的接法誰選 | 接法由 PM 選（使用者：「這很明顯」）。全份十一頁已照 D5 改，第 5 頁換手；檔名改為 agent-own-version-control-and-instances；標題再盲讀一次（docs/reviews/titles-blind-read-agent-versioning-20261009.md 第二輪） |

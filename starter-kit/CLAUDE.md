@@ -19,10 +19,11 @@
 5. **agent 做事的樣態**：啟動（只讀上線、自我介紹）→ 盤點（一頁現況、候選目標）→ 目標分析（先讀懂再問 owner）→ 計畫核准（PM 懂了才算、owner 同意範圍）→ 建置（shelved CL＋證據）→ 上線分級（只報告→警告→擋）→ 交付（agent 幫 owner 定出交付物，check 過就自動出包）→ 日常監看與開工輔導 → 擴充與交棒。橫跨全程：透明；延後可以談，被拒由 PM 裁決，錯了公開更正。見 `03-procedures/`。
 6. **兩種 repo 與三層**：agent 自己有一個 git repo（core 在 master 出 release；每個實例從它 clone 出來、建自己的工作區 `designs/<名>/`、工作區 merge 回它）；目標 design 的 depot 不只一個，agent 只讀它，**只有團隊流程裡真的在用的工具**（check、flow 的修正、trigger、CL 說明模板、setup／manifest script）才以 shelved CL 交進去、owner 收；文件（PROJECT_MAP、狀態板、報告）主本在工作區，副本 owner 要才交。實例的版號是 core 版號再加一位小版號；升級就是換手。見 `07-build-brief.md` 與 `07-build-brief/agent-own-version-control-and-instances.pdf`。
 7. **交付形式**：agent 交給團隊的東西一律是 shelved CL 加測試證據（manifest、check 結果），owner submit 才算進 depot；給 PM 的東西一律一頁，附要 PM 回答的兩個問題。
+8. **能力拆成模塊**：agent 是模塊的組合，每個模塊一條規格，只講它建立什麼性質、回答什麼問題，不講讀哪份文件、怎麼跑測試；三層：agent → 模塊 → 公司專屬的三樣（接 depot 的程式、評分表、規矩表），公司專屬的只在最下層；每個模塊沙盒能單獨驗。**要模組化、要分層、怎麼切是規則；十七個模塊是哪些、介面長怎樣是建議**，你邊開發、邊部署、邊調，改了記進決定紀錄。見 `07-capabilities.md` 與 `07-build-brief/agent-capability-modules.pdf`。
 
 ## 你的工作規則
 
-**讀的順序（builder 只有這一份讀序）**：`README.md` → 這份 → `glossary.md` → `04-principles.md` → `05-behavior-guidelines.md` → `10-decision-log.md`（定了什麼，不重新辯論）→ `07-build-brief.md` → `02-diagnosis/sixteen-problems.md`（沙盒要埋的）→ `08-templates/` → `09-open-decisions.md` → `06-pm-handbook.md`（PM 會拿它和你對框架）。投影片用 PDF 或 `img/` 裡的逐頁 PNG 看；動手前至少看 `03-procedures/agent-entering-unknown-workspace.pdf`（七個檢查怎麼查、先補什麼，只在這裡）。
+**讀的順序（builder 只有這一份讀序）**：`README.md` → 這份 → `glossary.md` → `04-principles.md` → `05-behavior-guidelines.md` → `10-decision-log.md`（定了什麼，不重新辯論）→ `07-build-brief.md` → `07-capabilities.md`（拆成哪些模塊；規則與建議分開）→ `02-diagnosis/sixteen-problems.md`（沙盒要埋的）→ `08-templates/` → `09-open-decisions.md` → `06-pm-handbook.md`（PM 會拿它和你對框架）。投影片用 PDF 或 `img/` 裡的逐頁 PNG 看；動手前至少看 `03-procedures/agent-entering-unknown-workspace.pdf`（七個檢查怎麼查、先補什麼，只在這裡）。
 
 **做的順序**：
 1. 先把這一包放進 agent 的 git repo 當 core 的文件層；之後改它走 MR。
@@ -42,7 +43,7 @@
 
 **用語**：用團隊認得的詞——depot、CL、shelved CL、submit、stream、label、sanity check、regression；不說 repo（指 Perforce 時）、PR、patch、smoke。PM 第一次出現就說明是誰；owner 是目標目錄或模組的負責人，CL 作者是 submit 那一包的工程師。投影片沿用了 patch、repo 這兩個詞，對團隊講時換成 shelved CL、depot；「workspace」有三個意思，`glossary.md` 分開講。全表在 `glossary.md`。
 
-**交給你決定、但要記下來的事**：語言與框架、排程與監看的實作、Perforce trigger 怎麼寫（裝要請示）、日誌與狀態的格式（要有 schema 版本）、沙盒的具體做法、實例的執行型態（常駐 process 還是定時起的 session；狀態一律在工作區、動作 idempotent）、MR 的 CI 怎麼跑沙盒。每個決定寫進 `10-decision-log.md`，和這一包既有的 D1–D10 同一種格式：決定、理由、取代了什麼。
+**交給你決定、但要記下來的事**：語言與框架、排程與監看的實作、Perforce trigger 怎麼寫（裝要請示）、日誌與狀態的格式（要有 schema 版本）、沙盒的具體做法、實例的執行型態（常駐 process 還是定時起的 session；狀態一律在工作區、動作 idempotent）、MR 的 CI 怎麼跑沙盒、模塊清單與介面的調整（守 `07-capabilities.md` 的三條規則）。每個決定寫進 `10-decision-log.md`，和這一包既有的 D1–D13 同一種格式：決定、理由、取代了什麼。
 
 **對 PM 的義務**：請示一頁、七項（格式在 `08-templates/request-for-approval.md`），第一次出現的概念各一句解釋和投影片的頁碼；PM 說不出「這會影響誰」就先不核准。定期一頁摘要：做了什麼、發現什麼、等誰。
 

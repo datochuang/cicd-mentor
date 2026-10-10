@@ -16,6 +16,7 @@
 | PM 要懂的、要談的、路線圖、紅線、請准單格式 | 齊，散在累積體裡 | operating model 第七節 |
 | 版控常規的教育 | 齊 | operating model「教育版控的常規」 |
 | agent 自己的版控、改版、多實例 | 齊 | operating model 第八節、《agent 自己的版控》（十頁） |
+| agent 的能力拆成基本模塊：規則（模組化、分層、切法）與建議（十七個模塊、介面）分開 | 齊（D13；清單與介面由內網邊做邊調） | operating model 第九節、《agent 的基本模塊》（八頁）、啟動包 07-capabilities.md |
 | 決策紀錄 | 齊 | decision-log.md D1–D4 |
 | 業界參考與出處 | 齊 | research/ |
 
@@ -48,10 +49,11 @@ starter-kit/
   05-behavior-guidelines.md agent 行為指導原則（乾淨版）
   06-pm-handbook.md
   07-build-brief.md         元件、介面、MVP 順序、沙盒驗收、交給內網決定的事
-  07-build-brief/           agent-own-version-control-and-instances.pdf（兩種 repo、三層、改版、換手、沙盒、登記表、版號）
+  07-capabilities.md        能力拆成哪些模塊：規則（模組化、分層、切法）不能破；十七個模塊、介面、core 目錄是建議（D13）
+  07-build-brief/           agent-own-version-control-and-instances.pdf（兩種 repo、三層、改版、換手、沙盒、登記表、版號）、agent-capability-modules.pdf（模塊）
   08-templates/
   09-open-decisions.md
-  10-decision-log.md        D1–D9 與理由（讓內網知道為什麼這樣定）
+  10-decision-log.md        D1–D13 與理由（讓內網知道為什麼這樣定）
   11-research/              附錄：業界實踐與風險、顧問類比、迴圈與 AI 倍數，附來源
 ```
 

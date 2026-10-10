@@ -24,9 +24,9 @@
 
 ![總覽：實例從 agent 的 repo clone、工作區回到它；depot 只收流程在用的工具](docs/slides/img/agent-own-version-control-and-instances/p-1.png)
 
-串起來一句話：AI 的效益要靠 CI/CD 這塊地基，而地基現在是空的；PM 有決心沒經驗、團隊不堅決也不知怎麼做，agent 補這兩個缺，四方這樣互動；agent 進到任一目錄就做這三步；而 agent 本身這樣版控、clone、換手。為什麼要這樣搭檔，在《AI agent 與人類 PM 搭檔》；現狀的細節（版控只當備份會長出哪些問題）在《把版控當備份的團隊》。
+串起來一句話：AI 的效益要靠 CI/CD 這塊地基，而地基現在是空的；PM 有決心沒經驗、團隊不堅決也不知怎麼做，agent 補這兩個缺，四方這樣互動；agent 進到任一目錄就做這三步；而 agent 本身這樣版控、clone、換手。為什麼要這樣搭檔，在《AI agent 與人類 PM 搭檔》；現狀的細節（版控只當備份會長出哪些問題）在《把版控當備份的團隊》；agent 的能力怎麼拆成可復用的模塊，在《agent 的基本模塊》。
 
-## 六份圖形文件（逐頁）
+## 七份圖形文件（逐頁）
 
 ### AI agent 與人類 PM 搭檔：AI 出 CI/CD 知識與動手能力，人類 PM 定方向與優先序
 
@@ -235,6 +235,31 @@ agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張
 ![多實例的代價：license 與 token 按份數算，PM 要看的請示也變多，所以合併送](docs/slides/img/agent-own-version-control-and-instances/p-10.png)
 
 ![待決：core 誰維護、每個實例一個 Perforce／slack 帳號還是共用、多久升級一次](docs/slides/img/agent-own-version-control-and-instances/p-11.png)
+
+</details>
+
+### agent 的基本模塊：拆成十七個各有規格的模塊，公司專屬的只有三樣
+
+agent 的能力拆成一個個模塊，每個模塊一條規格（contract）：只講它建立什麼性質、回答什麼問題，不講讀哪份文件、怎麼跑測試。第 1 頁一張圖：頂上是定義與例子（乾淨環境重現），左邊是沒拆會怎樣（目標換成 git 要重寫一半、別的 agent 拿不走、沙盒只能驗整體、改一處牽全身），右邊是三層（agent → 十七個模塊 → 公司專屬的三樣：接 depot 的程式、評分表、規矩表）。第 2–6 頁照 agent 的五種動作列模塊（看、判、做、說、守），每個給規格、進出、沙盒怎麼驗；第 7 頁每個模塊靠三樣的哪一樣接公司；第 8 頁 mentor agent 的十個階段各用哪些。**要拆、分三層、照規格切是規則；十七個是哪些、介面長怎樣是建議，內網邊開發、邊部署、邊調（D13）。** 內容來自 [agent-operating-model.md](agent-operating-model.md) 第九節。八頁。PDF：[docs/slides/agent-capability-modules.pdf](docs/slides/agent-capability-modules.pdf)
+
+<details>
+<summary>展開八頁</summary>
+
+![總覽：agent 拆成模塊，各一條只講性質的規格；沒拆就搬不走、驗不了哪裡錯](docs/slides/img/agent-capability-modules/p-1.png)
+
+![看：agent 用四個模塊認識 depot，每條觀察附出處，猜的不能當依據](docs/slides/img/agent-capability-modules/p-2.png)
+
+![判：agent 用三個模塊照評分表打分，每條附檢驗、重現要能辨認結果、不排名](docs/slides/img/agent-capability-modules/p-3.png)
+
+![做：三個模塊讓 agent 把沒過的檢驗寫成提案；任何 check 先只報告，有共識才擋](docs/slides/img/agent-capability-modules/p-4.png)
+
+![說：三個模塊管 agent 和人的互動：PM 看懂才核准、不濫發訊息、動作留紀錄](docs/slides/img/agent-capability-modules/p-5.png)
+
+![守：四個模塊管住 agent：規矩明寫、範圍先登記、改自己先過沙盒、花費有上限](docs/slides/img/agent-capability-modules/p-6.png)
+
+![接公司：公司專屬的只有接 depot 的程式、評分表、規矩表；換掉就是別的 agent](docs/slides/img/agent-capability-modules/p-7.png)
+
+![組裝：mentor agent 的十個階段各挑幾個模塊，所以模塊能分開做、分開驗](docs/slides/img/agent-capability-modules/p-8.png)
 
 </details>
 
