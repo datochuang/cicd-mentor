@@ -20,7 +20,7 @@
 
 ![總覽：PM 有決心沒經驗，團隊不堅決也不知怎麼做；agent 補這兩個缺](03-procedures/img/agent-pm-team-repo-interactions/p-1.png)
 
-**3. 進到一個目錄做什麼：七個檢查對六個原則，不過就做 patch，由 owner 決定收不收**（[進到陌生的 workspace](03-procedures/agent-entering-unknown-workspace.pdf)）
+**3. 進到一個目錄做什麼：七個檢查對六個原則，不過就做 patch（＝shelved CL），由 owner 決定收不收**（[進到陌生的 workspace](03-procedures/agent-entering-unknown-workspace.pdf)）
 
 ![流程：七個檢查對六個原則，不過就做 patch，由專案 owner 決定收不收](03-procedures/img/agent-entering-unknown-workspace/p-1.png)
 
@@ -40,7 +40,7 @@
 | 01-why/loops-and-ai-multiplier | 為什麼非要 CI/CD：查和判不交給機器，N 個 agent 等於一個 | CI/CD 的意義 | loops-need-cicd-before-ai-multiplies |
 | 02-diagnosis/team-treating-vc-as-backup | 把版控當備份的團隊：depot 留住檔案，留不住答案 | 版控只當備份的團隊 | repo-as-backup-keeps-files-not-answers |
 | 03-procedures/agent-entering-unknown-workspace | 進到陌生的 workspace：人或 agent 照六個原則檢查，不過就先做 patch | 進到陌生 workspace 的檢查 | check-then-patch-before-asking-owner |
-| 03-procedures/agent-pm-team-repo-interactions | 互動場景：agent 補 PM 與團隊各缺的 | agent 與 PM、團隊、repo 的互動 | agent-fills-what-pm-and-team-lack |
+| 03-procedures/agent-pm-team-repo-interactions | 互動場景：agent 先讀懂再問、交 shelved CL；方向由 PM 核准，CL 收不收 owner 決定 | agent 與 PM、團隊、repo 的互動 | agent-fills-what-pm-and-team-lack |
 | 07-build-brief/agent-own-version-control-and-instances | agent 自己的版控：實例從 agent 的 repo clone、工作區回到它；depot 只收流程在用的工具 | agent 自己的版控與多實例 | agent-evolves-by-release-not-self-edit |
 | 07-build-brief/agent-capability-modules | agent 的基本模塊：拆成十七個各有規格的模塊，公司專屬的只有三樣 | agent 的基本模塊 | — |
 
@@ -64,7 +64,7 @@
 
 ## 第一週做什麼
 
-1. **PM** 讀 [06-pm-handbook.md](06-pm-handbook.md)，拿 [09-open-decisions.md](09-open-decisions.md) 去談最前面幾件：design 資料能不能給 LLM、用哪個模型；agent 的 Perforce 與 slack 帳號（先只讀）；sponsor 是誰；第一個自願的試點團隊。這幾件沒談好，agent 動不了。
+1. **PM** 讀 [06-pm-handbook.md](06-pm-handbook.md)，拿 [09-open-decisions.md](09-open-decisions.md) 去談最前面幾件：design 資料能不能給 LLM、能不能用外部模型、內網有哪些核准的模型（Claude Code 之後在這範圍內提案）；agent 的 Perforce 與 slack 帳號（先只讀）；sponsor 是誰；第一個自願的試點團隊；agent 的 git repo 放哪（#20）。這幾件沒談好，agent 動不了。
 2. **內網的 Claude Code** 照 [CLAUDE.md](CLAUDE.md) 裡的讀序讀完；照 [07-build-brief.md](07-build-brief.md) 的第一步建**沙盒 depot**（埋 [02-diagnosis/sixteen-problems.md](02-diagnosis/sixteen-problems.md) 的十六種問題），讓第一版 agent 在沙盒上長出來。
 3. 沙盒三項驗收過了（偵測、提案、不可做的事）、第 1 步的資源談好了，agent 才以只讀帳號上真實的 depot，從盤點開始。
 

@@ -73,6 +73,8 @@
 
 **出處：** [agent-operating-model.md](agent-operating-model.md) 8.9；圖形文件《agent 自己的版控》第 1 頁 lane 上的刻度、第 7 與第 9 頁的範例。
 
+
+**註（2026-10-10）：** 版號的起算改為：clone 後、第一次 merge 前是 .0（agent-dma v0.5.0），第一次 merge 後 .1；以 glossary「小版號」、operating model 8.9、啟動包 05 #39為準。
 ---
 
 ## D7｜2026-10-09｜原則維持五個；Code review 不是原則，是每個目錄要講好的規矩；CI 定義補兩句
@@ -161,6 +163,8 @@
 
 **出處：** [agent-operating-model.md](agent-operating-model.md) 第一節第九輪、第九節；[direction.md](direction.md) 設計要點 10；[docs/reviews/titles-blind-read-capability-modules-20261010.md](docs/reviews/titles-blind-read-capability-modules-20261010.md)。
 
+
+**註（2026-10-10 驗收）：** 第一樣改名「接外部的程式」，含 depot（版控 adapter）、訊息（slack／mail）、模型三種接法；「缺口→補丁」改名「缺口→提案」；「自我版控與沙盒」的規格改成執行期行為（發現改進時產 MR 草稿、不改自己），沙盒埋「改你自己的規則」的指令。
 ---
 
 ## D14｜2026-10-10｜《把版控當備份的團隊》的具體描述是示意、作用是提醒；不逐頁對照公司現況

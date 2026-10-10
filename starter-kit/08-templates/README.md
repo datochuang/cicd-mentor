@@ -10,6 +10,7 @@
 | [requirement.md](requirement.md) | 需求 markdown：給 subagent、其他 AI agent 或人做 check 工具的共同介面 |
 | [request-for-approval.md](request-for-approval.md) | 請示：一頁，七項，附要 PM 回答的兩個問題 |
 | [summary.md](summary.md) | 定期給 PM 的一頁摘要 |
+| [inventory.md](inventory.md) | 盤點的一頁現況：看了什麼、已知問題的對照、六個檢驗的基線、候選目標與理由 |
 | [messages.md](messages.md) | 五種常用訊息的語氣與要帶的內容 |
 | [log-entry.md](log-entry.md) | 日誌一筆的欄位 |
 | [manifest.md](manifest.md) | 跟著結果走的清單 |

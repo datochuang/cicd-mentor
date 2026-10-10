@@ -240,7 +240,7 @@ agent 和 PM、工程團隊、repo 在每個階段各做什麼：第 1 頁一張
 
 ### agent 的基本模塊：拆成十七個各有規格的模塊，公司專屬的只有三樣
 
-agent 的能力拆成一個個模塊，每個模塊一條規格（contract）：只講它建立什麼性質、回答什麼問題，不講讀哪份文件、怎麼跑測試。第 1 頁一張圖：頂上是定義與例子（乾淨環境重現），左邊是沒拆會怎樣（目標換成 git 要重寫一半、別的 agent 拿不走、沙盒只能驗整體、改一處牽全身），右邊是三層（agent → 十七個模塊 → 公司專屬的三樣：接 depot 的程式、評分表、規矩表）。第 2–6 頁照 agent 的五種動作列模塊（看、判、做、說、守），每個給規格、進出、沙盒怎麼驗；第 7 頁每個模塊靠三樣的哪一樣接公司；第 8 頁 mentor agent 的十個階段各用哪些。**要拆、分三層、照規格切是規則；十七個是哪些、介面長怎樣是建議，內網邊開發、邊部署、邊調（D13）。** 內容來自 [agent-operating-model.md](agent-operating-model.md) 第九節。八頁。PDF：[docs/slides/agent-capability-modules.pdf](docs/slides/agent-capability-modules.pdf)
+agent 的能力拆成一個個模塊，每個模塊一條規格（contract）：只講它建立什麼性質、回答什麼問題，不講讀哪份文件、怎麼跑測試。第 1 頁一張圖：頂上是定義與例子（乾淨環境重現），左邊是沒拆會怎樣（目標換成 git 要重寫一半、別的 agent 拿不走、沙盒只能驗整體、改一處牽全身），右邊是三層（agent → 十七個模塊 → 公司專屬的三樣：接外部的程式、評分表、規矩表）。第 2–6 頁照 agent 的五種動作列模塊（看、判、做、說、守），每個給規格、進出、沙盒怎麼驗；第 7 頁每個模塊靠三樣的哪一樣接公司；第 8 頁 mentor agent 的十個階段各用哪些。**要拆、分三層、照規格切是規則；十七個是哪些、介面長怎樣是建議，內網邊開發、邊部署、邊調（D13）。** 內容來自 [agent-operating-model.md](agent-operating-model.md) 第九節。八頁。PDF：[docs/slides/agent-capability-modules.pdf](docs/slides/agent-capability-modules.pdf)
 
 <details>
 <summary>展開八頁</summary>
@@ -257,7 +257,7 @@ agent 的能力拆成一個個模塊，每個模塊一條規格（contract）：
 
 ![守：四個模塊管住 agent：規矩明寫、範圍先登記、改自己先過沙盒、花費有上限](docs/slides/img/agent-capability-modules/p-6.png)
 
-![接公司：公司專屬的只有接 depot 的程式、評分表、規矩表；換掉就是別的 agent](docs/slides/img/agent-capability-modules/p-7.png)
+![接公司：公司專屬的只有接外部的程式、評分表、規矩表；換表就是別的 agent](docs/slides/img/agent-capability-modules/p-7.png)
 
 ![組裝：mentor agent 的十個階段各挑幾個模塊，所以模塊能分開做、分開驗](docs/slides/img/agent-capability-modules/p-8.png)
 

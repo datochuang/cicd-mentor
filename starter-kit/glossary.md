@@ -23,7 +23,7 @@
 | **core** | agent 的程式、行為指導原則、提示詞、模板、通用 check script；在 agent 自己的 git repo 的 master 上，出 release（tag）。實例不能直接改它，改進走 MR |
 | **實例** | 從 agent 的 repo clone 出來、跑著的一份 agent（agent-dma、agent-top）；看一個或多個 design。不是 RTL 的 instance |
 | **工作區** | `designs/<名>/`：實例自己建、加入同一個 repo 的目錄，放實例設定、文件的主本（PROJECT_MAP、狀態板、報告）、紀錄（關係人、決定、日誌、HANDOVER）。不是 p4 的 workspace |
-| **workspace（三個意思）** | p4 的 client workspace（工程師的工作目錄；「不碰別人的 workspace」指這個）；agent 的工作區 `designs/<名>/`；投影片《進到陌生 workspace》標題裡的 workspace＝目標 depot 的一個目錄。寫東西時：p4 的叫 workspace，agent 的叫工作區，目標的叫目錄或 depot 路徑 |
+| **workspace（三個意思）** | p4 的 client workspace（工程師的工作目錄；「不碰別人的 workspace」指這個）；agent 的工作區 `designs/<名>/`；投影片《進到陌生的 workspace》標題裡的 workspace＝目標 depot 的一個目錄。寫東西時：p4 的叫 workspace，agent 的叫工作區，目標的叫目錄或 depot 路徑 |
 | **登記表** | repo 裡的 registry：哪個 depot 路徑歸哪個實例、向哪位 PM 報告；一個路徑一個實例；共用的檔案指定一個實例管。改走 MR（新實例接手那筆由 PM 核准）；每次 merge 版本 r 加一（r12） |
 | **小版號** | 實例的版號＝core 的 release 版號再加一位，每把工作區 merge 回 master 一次加一：agent-dma v0.3.2。clone 後、第一次 merge 前是 .0（agent-dma v0.5.0）；宣布接手時標當時的版號 |
 | **改版** | core 出新 release |
@@ -32,8 +32,14 @@
 | **MR** | merge request（GitHub 叫 PR）：對 core 的改動一律走 MR、過沙盒、有人 review 才併 |
 | **模塊** | agent 的一項能力（和 design 的 module 無關），用一條規格描述；agent 是模塊的組合。十七個的清單在 `07-capabilities.md`，是建議；要模組化、分層、怎麼切是規則（D13） |
 | **規格（contract）** | 一句話講一個模塊建立什麼性質、回答什麼問題；不講讀哪份文件、怎麼跑測試、用哪個工具 |
-| **公司專屬的三樣** | 接 depot 的程式（版控 adapter）、評分表、規矩表（授權表、登記表、症狀目錄、預算、訊息上限）；換公司、換版控、換成別的 agent 只換這一層 |
+| **公司專屬的三樣** | 接外部的程式（depot 的版控 adapter、訊息的 slack／mail、模型；目錄樹叫 bindings/）、評分表、規矩表（授權表、登記表、症狀目錄、預算、訊息上限）；換公司、換版控、換成別的 agent 只換這一層 |
 | **評分表** | 每條附「做得到／做不到」檢驗的表；六原則是一張，資安、coding 規範是另外的張。是資料，不是程式 |
+| **元件** | `07-build-brief.md` 第二節的功能塊（版控 adapter、監看與排程、分析…）；元件由模塊組成，對照寫在那裡 |
+| **行動者** | 模塊規格裡的通稱：執行這個模塊的 agent 實例，或將來別的 agent |
+| **總開關** | ＝kill switch：PM 與 admin 都能按、關掉 agent 裝的所有機制；模塊名「預算與總開關」 |
+| **一頁現況** | 盤點的產出（`08-templates/inventory.md`）：看了什麼、已知問題的對照、六個檢驗的基線、候選目標與理由、等誰 |
+| **階段（兩套）** | PM 的四階段：準備／試點／擴散／常態（`06-pm-handbook.md`）；agent 的十階段：啟動…換手與改版（`07-capabilities.md` 第四節）。兩套不同軸 |
+| **模塊／模組** | 模塊＝agent 的能力單位（這一包的用法）；模組＝design 的 module（試點模組、以模組為單位） |
 
 ## Perforce 與版控
 
@@ -58,7 +64,7 @@
 | **check** | 機器跑一個 script 回 PASS／FAIL；「判」是全 PASS 才過 |
 | **sanity check** | 最小的 check：編得過＋一個 sim；第一道 check 就是它 |
 | **regression** | 定期跑的一組 check |
-| **上線分級** | check 的三種等級：只報告 → 警告 → 擋 submit；擋要 PM 與 owner 同意、留 bypass |
+| **上線分級** | check 的三種等級：只報告 → 警告 → 擋 submit；擋要 PM 與 owner 同意、留 bypass；模塊名叫「逐級收緊」 |
 | **bypass** | 擋 submit 時的繞過方式，一定要有、有負責人 |
 | **manifest** | 跟著結果走的一張清單：CL、label、工具版本、環境、指令、結果摘要 |
 | **known-good** | check 通過時打的 label＋manifest，要退回有地方回 |
@@ -67,7 +73,7 @@
 | **HANDOVER** | 換手時的交接：做到哪、進行中的事、關係人、未解的問題、採用率 |
 | **流程在用的工具** | 團隊流程裡真的在跑的東西：check script、flow 的修正、trigger、CL 說明模板、setup／manifest script；這些才進目標的 depot |
 | **請示** | agent 要 PM 核准方針時交的一頁，七項：要做什麼、掛哪個原則、影響誰、不做會怎樣、怎麼退回、要 PM 回答的兩個問題、第一次出現的概念各一句解釋 |
-| **五種訊息** | 自我介紹、問 owner、交 shelved CL、提醒、更正（`08-templates/messages.md`）；請示與一頁摘要是文件，不算在五種裡 |
+| **五種訊息** | 自我介紹、問 owner、交 shelved CL、提醒、更正（`08-templates/messages.md`）；請示與一頁摘要是文件，不算在五種裡；`08-templates/messages.md` 另有「開工輔導的那一句」 |
 | **一頁摘要** | agent 定期給 PM 的：做了什麼、發現什麼、等誰 |
 | **日誌** | agent 每個動作、訊息、判斷、不確定的事；在工作區，團隊可讀 |
 
@@ -84,7 +90,7 @@
 | **Release pipeline** | 打包、manifest、label、放到取用處、通知全是 script，每次 main 過 check 就跑；release／tape-out 的包是按鈕不是工程 |
 | **版控的常規** | CI/CD 站在這些習慣上：一包一件事、說明寫目的、改前 sync、resolve 要看、給人看用 shelve、用 stream 不複製目錄、產物不進 depot、檔案進 depot 才算存在、label 附 manifest、workspace 乾淨、IP drop 走流程 |
 | **授權三級** | 自主（讀、分析、寫地圖、開 shelved CL、私訊）／告知（建議、第二次提醒、交 shelved CL）／請示（方向、新規範、裝 trigger、擋 submit、拉 PL 群聊、超預算要再花）。表的主本在 `09-open-decisions.md` #5，核准後移到 10 |
-| **七個檢查** | 《進到陌生 workspace》的七個檢查＝六個原則的檢驗＋review 規矩（SSOT 分環境與複本兩頁） |
+| **七個檢查** | 《進到陌生的 workspace》的七個檢查＝六個原則的檢驗＋review 規矩（SSOT 分環境與複本兩頁） |
 | **內圈／中圈／外圈** | 一個改動的改、查、判 ／ 迭代進 main 與交接 ／ N 個方案平行比較 |
 | **改、查、判** | 改是人或 agent 做的；查是機器跑 check；判是看結果決定過不過。AI 加速的只有改 |
-| **patch** | 投影片《進到陌生 workspace》沿用的泛稱；對 Perforce 的團隊一律說 shelved CL。同樣地，投影片 lane 上的「repo」指目標的 depot |
+| **patch** | 投影片《進到陌生的 workspace》沿用的泛稱；對 Perforce 的團隊一律說 shelved CL。同樣地，投影片 lane 上的「repo」指目標的 depot |

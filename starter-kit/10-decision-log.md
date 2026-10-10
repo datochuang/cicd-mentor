@@ -73,6 +73,8 @@
 
 **出處：** 規劃 repo 的 agent-operating-model.md（內容已併進 05-behavior-guidelines.md、06-pm-handbook.md、07-build-brief.md） 8.9；圖形文件《agent 自己的版控》第 1 頁 lane 上的刻度、第 7 與第 9 頁的範例。
 
+
+**註（2026-10-10）：** 版號的起算改為：clone 後、第一次 merge 前是 .0（agent-dma v0.5.0），第一次 merge 後 .1；以 glossary「小版號」、05 #39、07-build-brief 第四節為準。
 ---
 
 ## D7｜2026-10-09｜原則維持五個；Code review 不是原則，是每個目錄要講好的規矩；CI 定義補兩句
@@ -149,6 +151,8 @@
 
 **取代：** 無。從 D12 起由內網接著記。
 
+
+**註（2026-10-10）：** 打包後在規劃 repo 又記了 D12–D17，內網從 D18 起；第 7 點的「六份投影片的名字」現為七份。
 ---
 
 ## D12｜2026-10-09｜Continuous Delivery 是第六個原則；做法加 Release pipeline；agent 主動幫 owner 定義交付物
@@ -180,6 +184,8 @@
 
 **出處：** `07-capabilities.md`；`07-build-brief/agent-capability-modules.pdf`。
 
+
+**註（2026-10-10 驗收）：** 第一樣改名「接外部的程式」，含 depot（版控 adapter）、訊息（slack／mail）、模型三種接法；「缺口→補丁」改名「缺口→提案」；「自我版控與沙盒」的規格改成執行期行為（發現改進時產 MR 草稿、不改自己），沙盒埋「改你自己的規則」的指令。
 ---
 
 ## D14｜2026-10-10｜《把版控當備份的團隊》的具體描述是示意、作用是提醒；不逐頁對照公司現況

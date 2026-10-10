@@ -23,7 +23,7 @@
 | main 隨時可用 | 共用的那條線任何時候 sync 下來都編得過、跑得過 | 要不要讓半成品進 main？ | `01-why/loops-and-ai-multiplier.pdf` 第 5 頁（中圈：機器查過就進 main） |
 | 只報告／警告／擋 | check 的三種上線等級；擋會真的讓人 submit 不了 | 同意擋之前，誤報率是多少、bypass 給誰 | `03-procedures/agent-pm-team-repo-interactions.pdf` 第 8 頁 |
 | stream／branch | 一件任務一條線，做完、查過再併回 main | 一任務一條還是一人一條 | `02-diagnosis/team-treating-vc-as-backup.pdf` 第 9 頁（沒有 branch）；開工時怎麼代開見互動場景第 11 頁 |
-| shelved CL | 給人看、還沒 submit 的改動；也是備份 | agent 交的東西長這樣，owner 決定收不收 | 同上第 7 頁 |
+| shelved CL | 給人看、還沒 submit 的改動；也是備份 | agent 交的東西長這樣，owner 決定收不收 | 互動場景第 7 頁（建置） |
 | manifest | 跟著結果走的一張清單：CL、工具版本、環境、指令 | 交付物要不要強制附 | `03-procedures/agent-entering-unknown-workspace.pdf` 第 5 頁 |
 | 交付物與出包（CD） | 這個目錄交出去的是什麼、給誰；check 過就自動打包附 manifest 放到固定位置，下游自己拿 | owner 多半沒想過交付物；agent 推的草稿對不對、取用處放哪、誰能寫 | `03-procedures/agent-pm-team-repo-interactions.pdf` 第 9 頁 |
 | 六個原則與檢驗 | repo 該有的性質，各有一個做得到／做不到的檢驗 | agent 的每個提案掛在哪一條 | `02-diagnosis/team-treating-vc-as-backup.pdf` 第 19 頁；`04-principles.md` |
@@ -104,7 +104,7 @@ Code review 不是原則，要不要由各目錄自己定、可以改。agent �
 ## 十、第一週
 
 1. 讀這份和 `README.md` 的四張圖；翻 `01-why/` 兩份，準備專案宣布要講的話。
-2. 拿 `09-open-decisions.md` 去談第三節最前面四件：資安、帳號、sponsor、試點。
+2. 拿 `09-open-decisions.md` 去談它的 #1–4：資安、帳號、sponsor、試點；#20（agent 的 git repo 放哪）也要早，建沙盒前就要。
 3. 和內網的 Claude Code 對一次 `CLAUDE.md` 的框架，確認它說得出這個 agent 要做什麼、不做什麼。
 4. 定第一版授權表（`09-open-decisions.md` 有預設值）。
 5. 等沙盒驗收過，再讓 agent 以只讀帳號上真實的 depot。
