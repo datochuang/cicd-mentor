@@ -16,6 +16,7 @@
 | PM 要懂的、要談的、路線圖、紅線、請准單格式 | 齊，散在累積體裡 | operating model 第七節 |
 | 版控常規的教育 | 齊 | operating model「教育版控的常規」 |
 | agent 自己的版控、改版、多實例 | 齊 | operating model 第八節、《agent 自己的版控》（十頁） |
+| CI/CD 的機制：Jenkins、trigger、git 在公司的機器上怎麼接，agent 與人各做哪一段 | 齊 | 《CI/CD 在公司怎麼跑》（十頁）、啟動包 11-research 的 jenkins-primer、ci-primer |
 | agent 的能力拆成基本模塊：規則（模組化、分層、切法）與建議（十七個模塊、介面）分開 | 齊（D13；清單與介面由內網邊做邊調） | operating model 第九節、《agent 的基本模塊》（八頁）、啟動包 07-capabilities.md |
 | 決策紀錄 | 齊 | decision-log.md D1–D4 |
 | 業界參考與出處 | 齊 | research/ |
@@ -44,7 +45,7 @@ starter-kit/
   glossary.md
   01-why/                   why-cicd-needs-ai-agent-and-pm.pdf、loops-and-ai-multiplier.pdf
   02-diagnosis/             team-treating-vc-as-backup.pdf
-  03-procedures/            agent-entering-unknown-workspace.pdf、agent-pm-team-repo-interactions.pdf
+  03-procedures/            agent-entering-unknown-workspace.pdf、agent-pm-team-repo-interactions.pdf、how-ci-cd-runs-on-company-machines.pdf（機制篇）
   04-principles.md          五原則＋八做法＋檢驗（含每個目錄講好要不要 review）
   05-behavior-guidelines.md agent 行為指導原則（乾淨版）
   06-pm-handbook.md

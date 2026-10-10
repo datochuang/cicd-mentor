@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+<meta charset="utf-8">
+<title>CI/CD 在公司怎麼跑：check 是 depot 裡的 script，p4 trigger 與 Jenkins 自動跑；AI agent 寫與看結果，人只開帳號、給 token</title>
+<style>
+:root{--paper:#fff;--surface:#fff;--surface-2:#eef2f5;--ink:#17212b;--ink-2:#48596a;--ink-3:#78889a;--rule:#cfd9e1;--rule-2:#aebbc7;
+--goal:#116b64;--warn:#a0580f;--agent:#2f6f9f;--pm:#7a4f9a;
+--mono:"SF Mono",Menlo,Consolas,"PingFang TC","Noto Sans TC","Microsoft JhengHei",monospace;
+--sans:"Helvetica Neue",Arial,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif}
+html,body{margin:0;padding:0;background:#fff;color:var(--ink);font-family:var(--sans)}
+body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@page{size:A4 landscape;margin:0}
+.slide{width:297mm;height:210mm;box-sizing:border-box;padding:11mm 14mm 9mm;display:flex;flex-direction:column;break-after:page;page-break-after:always;overflow:hidden;position:relative}
+.slide:last-child{break-after:auto;page-break-after:auto}
+@media screen{body{background:#e6ebef}.slide{background:#fff;margin:8mm auto;box-shadow:0 1px 4px rgba(0,0,0,.12)}}
+.kicker{font-family:var(--mono);font-size:9.5pt;letter-spacing:.06em;color:var(--ink-3);margin:0 0 2mm}
+.slide h1{font-family:var(--sans);font-size:20pt;font-weight:600;margin:0 0 5mm;line-height:1.25}
+.fig{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{display:block;color:var(--ink)}
+.pn{position:absolute;right:14mm;bottom:6mm;font-family:var(--mono);font-size:8.5pt;color:var(--ink-3)}
+.tx{font-family:var(--mono);font-size:12px;fill:currentColor}
+.tx-s{font-family:var(--mono);font-size:10.5px;fill:var(--ink-3)}
+.tx-b{font-family:var(--sans);font-size:15px;font-weight:700;fill:currentColor}
+.tx-lbl{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.06em;fill:var(--ink-3)}
+</style>
+</head>
+<body>
+<section class="slide"><div class="kicker">CI/CD 的機制　·　圖 1 ／ 10</div><h1>總覽：check 是 depot 裡的 script，機器自動跑；AI agent 寫 script、看結果</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="上排流程：工程師 submit → 察覺（定時查或 trigger）→ Jenkins 節點依序呼叫 depot 裡的 script：sync 乾淨、run_sanity、make_manifest（CI），make_release、放取用處、通知下游（CD）。下排三框：agent 做的（寫 script 與 Jenkinsfile、用 API 建 job 讀結果、不登進 server）、CAD 做的（給帳號、說節點、裝 trigger）、PM 做的（談權限、產 token、核准 bypass 與總開關）。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="20.0" text-anchor="start" fill="var(--ink-2)">這份文件回答：有人 submit 之後，機器做了哪些事；Jenkins 和 trigger 是什麼；AI agent（啟動包要做的那個程式）、CAD、PM 各做哪一段</text>
+<rect x="20.0" y="44.0" width="112.0" height="60.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="34.0" y="66.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">工程師 submit</text>
+<text class="tx-s" x="34.0" y="84.0" text-anchor="start" fill="var(--ink-2)">一包改動進 depot</text>
+<line x1="132.0" y1="74.0" x2="150.0" y2="74.0" stroke="var(--goal)" stroke-width="1.4" marker-end="url(#ar-g)"/>
+<rect x="150.0" y="44.0" width="122.0" height="60.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.5" stroke-dasharray="6 4" fill-opacity=".05"/>
+<text class="tx" x="164.0" y="66.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">察覺</text>
+<text class="tx-s" x="164.0" y="84.0" text-anchor="start" fill="var(--ink-2)">定時查，或 trigger</text>
+<line x1="272.0" y1="74.0" x2="290.0" y2="74.0" stroke="var(--goal)" stroke-width="1.4" marker-end="url(#ar-g)"/>
+<rect x="290.0" y="36.0" width="570.0" height="108.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".06"/>
+<text class="tx" x="302.0" y="56.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">Jenkins 的節點（或農場節點的 cron）：在乾淨 workspace 依序呼叫 depot 的 script</text>
+<rect x="302.0" y="78.0" width="71.9" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="337.9" y="94.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">sync 乾淨</text>
+<rect x="381.9" y="78.0" width="83.0" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="423.4" y="94.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">run_sanity</text>
+<rect x="472.9" y="78.0" width="101.9" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="523.8" y="94.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">make_manifest</text>
+<rect x="582.8" y="78.0" width="95.6" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="630.6" y="94.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">make_release</text>
+<rect x="686.4" y="78.0" width="60.7" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="716.7" y="94.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">放取用處</text>
+<rect x="755.1" y="78.0" width="60.7" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="785.5" y="94.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">通知下游</text>
+<line x1="373.9" y1="89.0" x2="381.9" y2="89.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<line x1="464.9" y1="89.0" x2="472.9" y2="89.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<line x1="574.8" y1="89.0" x2="582.8" y2="89.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<line x1="678.4" y1="89.0" x2="686.4" y2="89.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<line x1="747.1" y1="89.0" x2="755.1" y2="89.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<line x1="302.0" y1="112.0" x2="574.8" y2="112.0" stroke="var(--goal)" stroke-width="1.6"/>
+<text class="tx-s" x="438.4" y="128.0" text-anchor="middle" fill="var(--goal)">CI：查與判，結果寫下來</text>
+<line x1="582.8" y1="112.0" x2="815.9" y2="112.0" stroke="var(--goal)" stroke-width="1.6"/>
+<text class="tx-s" x="699.3" y="128.0" text-anchor="middle" fill="var(--goal)">CD：綠了就打包交下游</text>
+<text class="tx-s" x="20.0" y="162.0" text-anchor="start" fill="var(--ink-2)">每一步都是 depot 裡的 script；Jenkins 或 cron 只是按時按它。agent 交 shelved CL 之前自己跑過一次，那就是這條 pipeline 的第一次執行。</text>
+<rect x="20.0" y="178.0" width="290.0" height="124.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.6" fill-opacity=".10"/>
+<text class="tx" x="34.0" y="200.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">AI agent 做的（從自己的機器，用 API）</text>
+<text class="tx-s" x="34.0" y="220.0" text-anchor="start" fill="var(--ink-2)">寫 run_sanity、make_manifest、make_release</text>
+<text class="tx-s" x="34.0" y="236.0" text-anchor="start" fill="var(--ink-2)">寫 Jenkinsfile 與 trigger，交 shelved CL</text>
+<text class="tx-s" x="34.0" y="252.0" text-anchor="start" fill="var(--ink-2)">用 API 建 job、按一次 build、讀 log 與結果</text>
+<text class="tx-s" x="34.0" y="268.0" text-anchor="start" fill="var(--ink-2)">不登進任何 server，不裝 trigger</text>
+<rect x="318.0" y="178.0" width="260.0" height="124.0" fill="var(--surface-2)" stroke="var(--rule-2)" stroke-width="1.2"/>
+<text class="tx" x="332.0" y="200.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">CAD 做的（各一次）</text>
+<text class="tx-s" x="332.0" y="220.0" text-anchor="start" fill="var(--ink-2)">給 agent 一個限定資料夾的 Jenkins 帳號</text>
+<text class="tx-s" x="332.0" y="236.0" text-anchor="start" fill="var(--ink-2)">告訴 agent 哪個節點有 p4 與 bsub</text>
+<text class="tx-s" x="332.0" y="252.0" text-anchor="start" fill="var(--ink-2)">裝 trigger（super 才能）</text>
+<text class="tx-s" x="332.0" y="268.0" text-anchor="start" fill="var(--ink-2)">不給帳號時：agent 寫好、CAD 貼上建 job</text>
+<rect x="586.0" y="178.0" width="274.0" height="124.0" fill="var(--pm)" stroke="var(--pm)" stroke-width="1.6" fill-opacity=".10"/>
+<text class="tx" x="600.0" y="200.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">PM 做的</text>
+<text class="tx-s" x="600.0" y="220.0" text-anchor="start" fill="var(--ink-2)">去談帳號、節點、權限（09 #25）</text>
+<text class="tx-s" x="600.0" y="236.0" text-anchor="start" fill="var(--ink-2)">用 agent 的帳號登入一次，產 API token 給它</text>
+<text class="tx-s" x="600.0" y="252.0" text-anchor="start" fill="var(--ink-2)">擋 submit 之前：核准 bypass 與總開關</text>
+<text class="tx-s" x="600.0" y="268.0" text-anchor="start" fill="var(--ink-2)">看 build 頁與一頁摘要，不用看 Jenkins 設定</text>
+<line x1="20.0" y1="318.0" x2="860.0" y2="318.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="344.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">每個 check 都是 depot 裡的 script；Jenkins 或 cron 只是定時去跑它；p4 trigger 在 submit 前後把它接上。</text>
+<text class="tx" x="20.0" y="368.0" text-anchor="start" fill="var(--ink-2)">AI agent 寫 script 與 job 定義、用 API 看結果，不登進 server；人只做兩件事：開帳號、給 token。</text>
+<text class="tx" x="20.0" y="392.0" text-anchor="start" fill="var(--ink-2)">後面：分工、CI 三件事、察覺的兩條路、Jenkins 六個概念、trigger 四種事件、check 三級、CD 接著做的三件事、git 的對應、三個坑。</text>
+</svg></div><div class="pn">1 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的機制　·　圖 2 ／ 10</div><h1>分工：人只開帳號、給 token；script、job、trigger 都由 AI agent 用 API 做</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="五列：agent 的機器（讀寫、試跑、交 shelved CL、讀結果）、p4 server（trigger，agent 寫 CAD 裝）、Jenkins（編排，agent 用 API 建按讀）、算力農場（跑 EDA）、取用處與 build 頁（agent 只讀）。底下：人只做兩件事。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="24.0" text-anchor="start" fill="var(--ink-2)">在哪裡</text>
+<text class="tx-lbl" x="190.0" y="24.0" text-anchor="start" fill="var(--ink-2)">做什麼</text>
+<text class="tx-lbl" x="580.0" y="24.0" text-anchor="start" fill="var(--agent)">agent 和它的關係</text>
+<rect x="20.0" y="42.0" width="88.4" height="22.0" rx="11" fill="var(--agent)" stroke="var(--agent)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="64.2" y="58.0" text-anchor="middle" fill="var(--agent)" style="font-weight:700">agent 的機器</text>
+<text class="tx-s" x="190.0" y="52.0" text-anchor="start" fill="var(--ink-2)">跑 Claude Code；有 p4 client、slack、</text>
+<text class="tx-s" x="190.0" y="68.0" text-anchor="start" fill="var(--ink-2)">Jenkins 的 API token</text>
+<text class="tx-s" x="580.0" y="52.0" text-anchor="start" fill="var(--agent)">讀 depot、分析、寫 script、試跑一次、</text>
+<text class="tx-s" x="580.0" y="68.0" text-anchor="start" fill="var(--agent)">交 shelved CL、讀結果、發訊息</text>
+<line x1="20.0" y1="78.0" x2="860.0" y2="78.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="90.0" width="76.7" height="22.0" rx="11" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="58.3" y="106.0" text-anchor="middle" fill="var(--ink-2)" style="font-weight:700">p4 server</text>
+<text class="tx-s" x="190.0" y="100.0" text-anchor="start" fill="var(--ink-2)">trigger：submit 時查 CL 說明，或踢一個 job</text>
+<text class="tx-s" x="580.0" y="100.0" text-anchor="start" fill="var(--ink-2)">agent 寫 trigger script 交 shelved CL；</text>
+<text class="tx-s" x="580.0" y="116.0" text-anchor="start" fill="var(--ink-2)">CAD 裝（要請示）</text>
+<line x1="20.0" y1="126.0" x2="860.0" y2="126.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="138.0" width="64.1" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="52.0" y="154.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">Jenkins</text>
+<text class="tx-s" x="190.0" y="148.0" text-anchor="start" fill="var(--ink-2)">編排：submit 後 sync 乾淨 workspace →</text>
+<text class="tx-s" x="190.0" y="164.0" text-anchor="start" fill="var(--ink-2)">run_sanity → manifest → release → 通知</text>
+<text class="tx-s" x="580.0" y="148.0" text-anchor="start" fill="var(--ink-2)">agent 寫 Jenkinsfile 與 job 定義，</text>
+<text class="tx-s" x="580.0" y="164.0" text-anchor="start" fill="var(--ink-2)">用 API 建、按、讀；不登進它</text>
+<line x1="20.0" y1="174.0" x2="860.0" y2="174.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="186.0" width="100.0" height="22.0" rx="11" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="70.0" y="202.0" text-anchor="middle" fill="var(--ink-2)" style="font-weight:700">算力農場（LSF）</text>
+<text class="tx-s" x="190.0" y="196.0" text-anchor="start" fill="var(--ink-2)">真正跑 EDA</text>
+<text class="tx-s" x="580.0" y="196.0" text-anchor="start" fill="var(--ink-2)">pipeline 用 bsub 送，和工程師一樣；</text>
+<text class="tx-s" x="580.0" y="212.0" text-anchor="start" fill="var(--ink-2)">agent 自己試跑也走這裡，用它的預算</text>
+<line x1="20.0" y1="222.0" x2="860.0" y2="222.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="234.0" width="115.0" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="77.5" y="250.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">取用處與 build 頁</text>
+<text class="tx-s" x="190.0" y="244.0" text-anchor="start" fill="var(--ink-2)">交付包、manifest、check 結果</text>
+<text class="tx-s" x="580.0" y="244.0" text-anchor="start" fill="var(--ink-2)">agent 只從這裡讀；</text>
+<text class="tx-s" x="580.0" y="260.0" text-anchor="start" fill="var(--ink-2)">工程師與下游也從這裡拿</text>
+<line x1="20.0" y1="270.0" x2="860.0" y2="270.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="284.0" width="840.0" height="66.0" fill="var(--pm)" stroke="var(--pm)" stroke-width="1.4" fill-opacity=".06"/>
+<text class="tx" x="32.0" y="304.0" text-anchor="start" fill="var(--pm)" style="font-weight:700">人只做兩件事</text>
+<text class="tx-s" x="32.0" y="322.0" text-anchor="start" fill="var(--ink-2)">CAD：給 agent 一個限定資料夾（cicd-mentor/）的 Jenkins 帳號，說哪個節點有 p4 與 bsub。</text>
+<text class="tx-s" x="32.0" y="338.0" text-anchor="start" fill="var(--ink-2)">PM：用那個帳號登入一次產 API token，交給 agent 放 config，不進 depot。</text>
+<line x1="20.0" y1="366.0" x2="860.0" y2="366.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="392.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">五個地方各做自己的事，中間只靠 depot 裡的 script 與固定位置的結果檔接起來；AI agent 不登進任何 server。</text>
+<text class="tx" x="20.0" y="416.0" text-anchor="start" fill="var(--ink-2)">CAD 不給帳號：agent 寫好 Jenkinsfile 與 job 定義，CAD 在網頁上貼一次，之後 agent 只要唯讀。</text>
+</svg></div><div class="pn">2 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的機制　·　圖 3 ／ 10</div><h1>CI：每次 submit 在乾淨 workspace 跑 sanity、記下結果；submit 前跑才擋得住</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左邊三個方塊：察覺改動、乾淨環境跑 check、結果寫下來，下方虛線框是可選的擋。右邊兩條時間線：submit 後跑（進 depot、幾分鐘後 check 跑、壞了但知道是哪一包）與 submit 前跑（trigger 跑 check，綠才進 depot、紅退回）；底下說明上線分級就是從後者走到前者：只報告、警告、擋。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="24.0" text-anchor="start" fill="var(--goal)">CI 在機器上是三件事</text>
+<rect x="20.0" y="36.0" width="300.0" height="64.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.6" fill-opacity=".10"/>
+<text class="tx" x="34.0" y="58.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">1 察覺改動</text>
+<text class="tx-s" x="34.0" y="76.0" text-anchor="start" fill="var(--ink-2)">有人 submit 了，機器要知道</text>
+<text class="tx-s" x="34.0" y="92.0" text-anchor="start" fill="var(--ink-2)">定時查 p4 changes，或 trigger</text>
+<line x1="170.0" y1="100.0" x2="170.0" y2="112.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<rect x="20.0" y="112.0" width="300.0" height="64.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.6" fill-opacity=".10"/>
+<text class="tx" x="34.0" y="134.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">2 乾淨環境跑 check</text>
+<text class="tx-s" x="34.0" y="152.0" text-anchor="start" fill="var(--ink-2)">sync 一個乾淨的 workspace，照說明跑</text>
+<text class="tx-s" x="34.0" y="168.0" text-anchor="start" fill="var(--ink-2)">run_sanity.sh → make_manifest.sh</text>
+<line x1="170.0" y1="176.0" x2="170.0" y2="188.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<rect x="20.0" y="188.0" width="300.0" height="64.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.6" fill-opacity=".10"/>
+<text class="tx" x="34.0" y="210.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">3 結果寫下來</text>
+<text class="tx-s" x="34.0" y="228.0" text-anchor="start" fill="var(--ink-2)">build 頁、取用處的 manifest、slack</text>
+<text class="tx-s" x="34.0" y="244.0" text-anchor="start" fill="var(--ink-2)">附 CL 號，誰都看得到</text>
+<rect x="20.0" y="266.0" width="300.0" height="44.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="6 4" fill-opacity=".05"/>
+<text class="tx" x="34.0" y="288.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">可選的第四件：擋</text>
+<text class="tx-s" x="34.0" y="306.0" text-anchor="start" fill="var(--ink-2)">check 沒綠，改動進不了共用的 main</text>
+<text class="tx-lbl" x="360.0" y="24.0" text-anchor="start" fill="var(--ink-2)">兩種時機</text>
+<text class="tx" x="360.0" y="48.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">submit 後跑：只報告級、警告級</text>
+<rect x="360.0" y="58.0" width="57.8" height="22.0" rx="11" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="388.9" y="74.0" text-anchor="middle" fill="var(--ink-2)" style="font-weight:700">submit</text>
+<line x1="417.8" y1="69.0" x2="425.8" y2="69.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<rect x="425.8" y="58.0" width="68.0" height="22.0" rx="11" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="459.8" y="74.0" text-anchor="middle" fill="var(--ink-2)" style="font-weight:700">進 depot</text>
+<line x1="493.8" y1="69.0" x2="501.8" y2="69.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<rect x="501.8" y="58.0" width="115.0" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="559.3" y="74.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">幾分鐘後 check 跑</text>
+<line x1="616.8" y1="69.0" x2="624.8" y2="69.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<rect x="624.8" y="58.0" width="121.9" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="685.7" y="74.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">壞了，但知道是哪一包</text>
+<text class="tx-s" x="360.0" y="100.0" text-anchor="start" fill="var(--ink-2)">main 可能已經壞了；誰弄壞的當天就知道，不用等整合</text>
+<text class="tx" x="360.0" y="140.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">submit 前跑：擋</text>
+<rect x="360.0" y="150.0" width="57.8" height="22.0" rx="11" fill="var(--ink-2)" stroke="var(--ink-2)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="388.9" y="166.0" text-anchor="middle" fill="var(--ink-2)" style="font-weight:700">submit</text>
+<line x1="417.8" y1="161.0" x2="425.8" y2="161.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<rect x="425.8" y="150.0" width="118.4" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="485.0" y="166.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">trigger 跑 check</text>
+<line x1="544.2" y1="161.0" x2="552.2" y2="161.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<rect x="552.2" y="150.0" width="88.4" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="596.4" y="166.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">綠：進 depot</text>
+<line x1="640.5" y1="161.0" x2="648.5" y2="161.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<rect x="648.5" y="150.0" width="91.3" height="22.0" rx="11" fill="var(--warn)" stroke="var(--warn)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="694.2" y="166.0" text-anchor="middle" fill="var(--warn)" style="font-weight:700">紅：退回給本人</text>
+<text class="tx-s" x="360.0" y="192.0" text-anchor="start" fill="var(--ink-2)">共用的 main 隨時可用；代價是使用者按 submit 要等，check 必須快</text>
+<rect x="360.0" y="212.0" width="500.0" height="98.0" fill="var(--surface-2)" stroke="var(--ink-2)" stroke-width="1.1"/>
+<text class="tx" x="372.0" y="232.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">check 分三級（啟動包叫上線分級）：從後者走到前者</text>
+<text class="tx-s" x="372.0" y="252.0" text-anchor="start" fill="var(--ink-2)">只報告：submit 後跑，結果只寫下來，不吵人</text>
+<text class="tx-s" x="372.0" y="268.0" text-anchor="start" fill="var(--ink-2)">警告：submit 後跑，私訊本人；誤報率低了才升</text>
+<text class="tx-s" x="372.0" y="284.0" text-anchor="start" fill="var(--ink-2)">擋：submit 前跑；PM 與 owner 同意、有 bypass、有總開關才裝</text>
+<text class="tx-s" x="372.0" y="300.0" text-anchor="start" fill="var(--ink-3)">第 6 步只報告，第 9 步才擋（07-build-brief）</text>
+<line x1="20.0" y1="326.0" x2="860.0" y2="326.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="352.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">CI＝察覺改動、乾淨環境跑 check、結果寫下來；這三件事 submit 後跑就有價值，submit 前跑才擋得住。</text>
+<text class="tx" x="20.0" y="376.0" text-anchor="start" fill="var(--ink-2)">Jenkins 把這一串步驟叫 pipeline；它的前半段就是 CI，後半段才是 CD（第 8 頁）。</text>
+</svg></div><div class="pn">3 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的機制　·　圖 4 ／ 10</div><h1>察覺改動的兩條路：定時跑 p4 changes，agent 自己能裝；trigger 要 CAD 裝</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左框定時查：每 10 分鐘問 depot 有沒有新 CL，有就跑 check；優點不碰 p4 server、agent 自己能裝，缺點晚幾分鐘、擋不住。右框 trigger：p4 server 上的一張表，每行事件、路徑、script；submit 當下就跑、能退回，但只有 super 能裝、要快。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<rect x="20.0" y="30.0" width="405.0" height="300.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".04"/>
+<text class="tx" x="32.0" y="50.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">定時查（polling）：agent 自己能裝</text>
+<rect x="32.0" y="64.0" width="120.0" height="50.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.6" fill-opacity=".10"/>
+<text class="tx" x="46.0" y="86.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">每 10 分鐘</text>
+<text class="tx-s" x="46.0" y="104.0" text-anchor="start" fill="var(--ink-2)">pollSCM 或 cron</text>
+<line x1="152.0" y1="89.0" x2="170.0" y2="89.0" stroke="var(--goal)" stroke-width="1.4" marker-end="url(#ar-g)"/>
+<rect x="170.0" y="64.0" width="150.0" height="50.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.6" fill-opacity=".10"/>
+<text class="tx" x="184.0" y="86.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">問 depot</text>
+<text class="tx-s" x="184.0" y="104.0" text-anchor="start" fill="var(--ink-2)">p4 changes -m1 //…</text>
+<line x1="320.0" y1="89.0" x2="338.0" y2="89.0" stroke="var(--goal)" stroke-width="1.4" marker-end="url(#ar-g)"/>
+<rect x="338.0" y="64.0" width="78.0" height="50.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.6" fill-opacity=".10"/>
+<text class="tx" x="352.0" y="86.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">有新 CL</text>
+<text class="tx-s" x="352.0" y="104.0" text-anchor="start" fill="var(--ink-2)">就跑 check</text>
+<text class="tx-s" x="32.0" y="136.0" text-anchor="start" fill="var(--ink-2)">記下看過的最大 CL 號；重啟不重跑</text>
+<text class="tx" x="32.0" y="166.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx" x="52.0" y="166.0" text-anchor="start" fill="var(--ink-2)">不碰 p4 server，不用 admin</text>
+<text class="tx" x="32.0" y="190.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx" x="52.0" y="190.0" text-anchor="start" fill="var(--ink-2)">MVP 第 6 步就用這個</text>
+<text class="tx" x="32.0" y="214.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="52.0" y="214.0" text-anchor="start" fill="var(--ink-2)">最多晚幾分鐘才知道</text>
+<text class="tx" x="32.0" y="238.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="52.0" y="238.0" text-anchor="start" fill="var(--ink-2)">擋不住：改動已經進去了</text>
+<text class="tx-s" x="32.0" y="270.0" text-anchor="start" fill="var(--ink-2)">有 Jenkins：job 設 pollSCM。沒有：農場節點的 cron 跑一支 script。</text>
+<rect x="445.0" y="30.0" width="415.0" height="300.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".04"/>
+<text class="tx" x="457.0" y="50.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">trigger：裝在 p4 server 上，CAD 才能裝</text>
+<rect x="457.0" y="64.0" width="390.0" height="58.0" fill="var(--surface-2)" stroke="var(--ink-2)" stroke-width="1.1"/>
+<text class="tx" x="469.0" y="82.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">p4 server 的一張表（p4 triggers，super 才能編輯）</text>
+<text class="tx-s" x="469.0" y="100.0" text-anchor="start" fill="var(--ink-2)">每一行：名字　事件　路徑　跑哪支 script</text>
+<text class="tx-s" x="469.0" y="114.0" text-anchor="start" fill="var(--ink-3)">desc-check change-submit //depot/... &quot;desc_check.py %change%&quot;</text>
+<text class="tx-s" x="457.0" y="144.0" text-anchor="start" fill="var(--ink-2)">script 跑在 p4d 那台主機上，拿得到 %change%、%user%、%client%</text>
+<text class="tx" x="457.0" y="174.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx" x="477.0" y="174.0" text-anchor="start" fill="var(--ink-2)">submit 當下就跑，能退回</text>
+<text class="tx" x="457.0" y="198.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx" x="477.0" y="198.0" text-anchor="start" fill="var(--ink-2)">shelve 時也能跑，review 看到的是綠的</text>
+<text class="tx" x="457.0" y="222.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="477.0" y="222.0" text-anchor="start" fill="var(--ink-2)">只有 super 能裝：agent 寫好交 CAD</text>
+<text class="tx" x="457.0" y="246.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="477.0" y="246.0" text-anchor="start" fill="var(--ink-2)">使用者在等：要快，重的事不能放這裡</text>
+<text class="tx-s" x="457.0" y="278.0" text-anchor="start" fill="var(--ink-2)">agent 先在沙盒的 p4d 裝起來測到對，再交 shelved CL。</text>
+<line x1="20.0" y1="346.0" x2="860.0" y2="346.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="372.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">察覺改動有兩種方法：定時查 agent 自己就能裝、擋不住；trigger 裝在 p4 server 上、能擋、要 CAD 裝、要快。</text>
+<text class="tx" x="20.0" y="396.0" text-anchor="start" fill="var(--ink-2)">先定時查（只報告級），穩定了才談 trigger（第 9 步）。</text>
+</svg></div><div class="pn">4 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的機制　·　圖 5 ／ 10</div><h1>Jenkins：負責排程與記錄的 server；check 實際在農場跑，每次結果留在 build 頁</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左上 depot 放 Jenkinsfile 與 script；中間 Jenkins server 的 job 只記去哪拿 Jenkinsfile、credential、觸發；右上執行節點有 p4 與 bsub，派工給農場跑 EDA；中下 build 頁留結果、log、artifacts。左下六個概念的膠囊：job、Jenkinsfile、執行節點、觸發、build、credentials；右下人做的兩件事。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<rect x="20.0" y="40.0" width="180.0" height="120.0" fill="var(--surface-2)" stroke="var(--ink-2)" stroke-width="1.2"/>
+<text class="tx" x="32.0" y="60.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">depot</text>
+<text class="tx-s" x="32.0" y="80.0" text-anchor="start" fill="var(--ink-2)">//…/dma/Jenkinsfile</text>
+<text class="tx-s" x="32.0" y="98.0" text-anchor="start" fill="var(--ink-2)">//…/dma/scripts/run_sanity.sh</text>
+<text class="tx-s" x="32.0" y="116.0" text-anchor="start" fill="var(--ink-2)">//…/dma/scripts/make_manifest.sh</text>
+<text class="tx-s" x="32.0" y="134.0" text-anchor="start" fill="var(--ink-2)">//…/dma/scripts/make_release</text>
+<rect x="240.0" y="30.0" width="320.0" height="150.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".06"/>
+<text class="tx" x="252.0" y="50.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">Jenkins server（網頁與 API）：排程與記錄</text>
+<rect x="252.0" y="60.0" width="296.0" height="50.0" fill="var(--surface)" stroke="var(--goal)" stroke-width="1.2"/>
+<text class="tx" x="264.0" y="78.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">job：dma-sanity（Pipeline）</text>
+<text class="tx-s" x="264.0" y="96.0" text-anchor="start" fill="var(--ink-2)">只記：Jenkinsfile 在哪、credential、何時跑</text>
+<rect x="252.0" y="120.0" width="142.6" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="323.3" y="134.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">觸發 pollSCM 每 10 分</text>
+<rect x="400.6" y="120.0" width="139.7" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="470.5" y="134.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">credential p4-agent</text>
+<text class="tx-s" x="252.0" y="164.0" text-anchor="start" fill="var(--agent)">agent 用 API：建 job、按 build、讀結果；不登進這台</text>
+<line x1="200.0" y1="86.0" x2="240.0" y2="86.0" stroke="var(--ink-2)" stroke-width="1.2" marker-end="url(#ar-gray)"/>
+<text class="tx-s" x="220.0" y="80.0" text-anchor="middle" fill="var(--ink-3)">拿</text>
+<rect x="600.0" y="30.0" width="260.0" height="70.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".06"/>
+<text class="tx" x="612.0" y="50.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">執行節點：Jenkins 派工的機器</text>
+<text class="tx-s" x="612.0" y="68.0" text-anchor="start" fill="var(--ink-2)">有 p4 與 bsub；照 Jenkinsfile 跑</text>
+<text class="tx-s" x="612.0" y="86.0" text-anchor="start" fill="var(--ink-2)">Jenkins 自己不跑 EDA，派工給它</text>
+<line x1="560.0" y1="65.0" x2="600.0" y2="65.0" stroke="var(--goal)" stroke-width="1.4" marker-end="url(#ar-g)"/>
+<text class="tx-s" x="580.0" y="58.0" text-anchor="middle" fill="var(--goal)">派工</text>
+<rect x="600.0" y="120.0" width="260.0" height="62.0" fill="var(--surface-2)" stroke="var(--ink-2)" stroke-width="1.2"/>
+<text class="tx" x="612.0" y="140.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">算力農場（LSF）</text>
+<text class="tx-s" x="612.0" y="158.0" text-anchor="start" fill="var(--ink-2)">bsub -K run_sanity.sh：真正跑 EDA</text>
+<text class="tx-s" x="612.0" y="174.0" text-anchor="start" fill="var(--ink-2)">用 agent 的 license 預算，和工程師一樣</text>
+<line x1="730.0" y1="100.0" x2="730.0" y2="120.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<text class="tx-s" x="740.0" y="114.0" text-anchor="start" fill="var(--goal)">bsub</text>
+<rect x="240.0" y="200.0" width="300.0" height="96.0" fill="var(--surface)" stroke="var(--goal)" stroke-width="1.4"/>
+<text class="tx" x="252.0" y="220.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">build #42（跑了一次）</text>
+<text class="tx-s" x="252.0" y="240.0" text-anchor="start" fill="var(--ink-2)">結果：PASS／FAIL；時間；哪個 CL</text>
+<text class="tx-s" x="252.0" y="256.0" text-anchor="start" fill="var(--ink-2)">console log：每一步印了什麼</text>
+<text class="tx-s" x="252.0" y="272.0" text-anchor="start" fill="var(--ink-2)">artifacts：manifest.json 留下來</text>
+<text class="tx-s" x="252.0" y="288.0" text-anchor="start" fill="var(--ink-2)">URL 就是「結果看得到」的那一頁</text>
+<line x1="600.0" y1="176.0" x2="540.0" y2="216.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<text class="tx-s" x="578.0" y="206.0" text-anchor="middle" fill="var(--goal)">回報</text>
+<text class="tx-lbl" x="20.0" y="200.0" text-anchor="start" fill="var(--goal)">六個概念</text>
+<rect x="20.0" y="210.0" width="38.9" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="39.5" y="226.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">job</text>
+<rect x="110.0" y="210.0" width="89.3" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="154.6" y="226.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">Jenkinsfile</text>
+<rect x="20.0" y="238.0" width="60.7" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="50.4" y="254.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">執行節點</text>
+<rect x="110.0" y="238.0" width="40.4" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="130.2" y="254.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">觸發</text>
+<rect x="20.0" y="266.0" width="51.5" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="45.8" y="282.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">build</text>
+<rect x="110.0" y="266.0" width="89.3" height="22.0" rx="11" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="154.6" y="282.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">credentials</text>
+<text class="tx-lbl" x="600.0" y="206.0" text-anchor="start" fill="var(--pm)">人做的兩件事</text>
+<text class="tx-s" x="600.0" y="226.0" text-anchor="start" fill="var(--ink-2)">CAD：給 agent 限定資料夾的帳號、說節點 label</text>
+<text class="tx-s" x="600.0" y="244.0" text-anchor="start" fill="var(--ink-2)">PM：登入一次產 API token，交給 agent 放 config</text>
+<text class="tx-s" x="600.0" y="268.0" text-anchor="start" fill="var(--ink-3)">沒 P4 plugin：p4sync 那行換成 sh &#x27;p4 sync&#x27;</text>
+<line x1="20.0" y1="316.0" x2="860.0" y2="316.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="342.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">Jenkins 只做一件事：在指定的時機，派一台節點照 depot 裡的 Jenkinsfile 跑（這一串叫 pipeline），把 log 與產物留在 build 頁。</text>
+<text class="tx" x="20.0" y="366.0" text-anchor="start" fill="var(--ink-2)">job 不含任何邏輯，只記去哪拿 Jenkinsfile；所以 agent 用 API 建 job、CAD 給帳號，就接上了。</text>
+</svg></div><div class="pn">5 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的機制　·　圖 6 ／ 10</div><h1>trigger 兩類：submit 前的能擋、要幾秒跑完；submit 後的叫 Jenkins 跑長 check</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="上排是一次 submit 經過的點：按 submit → change-submit → 檔案傳到 server → change-content → commit 進 depot → change-commit；另一條 shelve → shelve-commit。下表四列：change-submit（能擋，查說明與產物，要快）、change-content（能擋，看內容，要快）、change-commit（不能擋，踢 Jenkins、通知、known-good）、shelve-commit（不能擋，對 shelved CL 跑 check）。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="24.0" text-anchor="start" fill="var(--ink-2)">一次 submit 在 p4 server 上經過的點</text>
+<rect x="20.0" y="40.0" width="123.0" height="30.0" fill="var(--surface-2)" stroke="var(--ink-2)" stroke-width="1.3"/>
+<text class="tx" x="81.5" y="60.0" text-anchor="middle" fill="var(--ink-2)">工程師按 submit</text>
+<rect x="157.0" y="40.0" width="119.6" height="30.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.3" fill-opacity=".12"/>
+<text class="tx" x="216.8" y="60.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">change-submit</text>
+<rect x="290.6" y="40.0" width="123.0" height="30.0" fill="var(--surface-2)" stroke="var(--ink-2)" stroke-width="1.3"/>
+<text class="tx" x="352.0" y="60.0" text-anchor="middle" fill="var(--ink-2)">檔案傳到 server</text>
+<rect x="427.5" y="40.0" width="126.8" height="30.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.3" fill-opacity=".12"/>
+<text class="tx" x="490.9" y="60.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">change-content</text>
+<rect x="568.3" y="40.0" width="131.2" height="30.0" fill="var(--surface-2)" stroke="var(--ink-2)" stroke-width="1.3"/>
+<text class="tx" x="633.9" y="60.0" text-anchor="middle" fill="var(--ink-2)">commit 進 depot</text>
+<rect x="713.6" y="40.0" width="119.6" height="30.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.3" stroke-dasharray="6 4" fill-opacity=".05"/>
+<text class="tx" x="773.4" y="60.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">change-commit</text>
+<line x1="143.0" y1="55.0" x2="157.0" y2="55.0" stroke="var(--ink-2)" stroke-width="1.2" marker-end="url(#ar-gray)"/>
+<line x1="276.6" y1="55.0" x2="290.6" y2="55.0" stroke="var(--ink-2)" stroke-width="1.2" marker-end="url(#ar-gray)"/>
+<line x1="413.5" y1="55.0" x2="427.5" y2="55.0" stroke="var(--ink-2)" stroke-width="1.2" marker-end="url(#ar-gray)"/>
+<line x1="554.3" y1="55.0" x2="568.3" y2="55.0" stroke="var(--ink-2)" stroke-width="1.2" marker-end="url(#ar-gray)"/>
+<line x1="699.6" y1="55.0" x2="713.6" y2="55.0" stroke="var(--ink-2)" stroke-width="1.2" marker-end="url(#ar-gray)"/>
+<text class="tx-s" x="20.0" y="90.0" text-anchor="start" fill="var(--ink-2)">另一條：工程師 shelve → shelve-commit（對 shelved CL 先跑 check，review 的人看到的是已經綠的）</text>
+<text class="tx-lbl" x="20.0" y="118.0" text-anchor="start" fill="var(--goal)">事件</text>
+<text class="tx-lbl" x="150.0" y="118.0" text-anchor="start" fill="var(--ink-2)">能不能擋</text>
+<text class="tx-lbl" x="320.0" y="118.0" text-anchor="start" fill="var(--ink-2)">拿來做</text>
+<text class="tx-lbl" x="680.0" y="118.0" text-anchor="start" fill="var(--warn)">要注意</text>
+<text class="tx" x="20.0" y="148.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">change-submit</text>
+<rect x="150.0" y="134.0" width="131.5" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="215.8" y="148.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">能（exit 非 0 退回）</text>
+<text class="tx-s" x="320.0" y="148.0" text-anchor="start" fill="var(--ink-2)">說明有沒有寫目的；netlist 這類產物有沒有放進 rtl/；一包太大</text>
+<text class="tx-s" x="680.0" y="148.0" text-anchor="start" fill="var(--warn)">使用者在等：幾秒內</text>
+<line x1="20.0" y1="164.0" x2="860.0" y2="164.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="188.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">change-content</text>
+<rect x="150.0" y="174.0" width="30.2" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="165.1" y="188.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">能</text>
+<text class="tx-s" x="320.0" y="188.0" text-anchor="start" fill="var(--ink-2)">看內容：filelist 引用的檔在不在、禁止的字串</text>
+<text class="tx-s" x="680.0" y="188.0" text-anchor="start" fill="var(--warn)">使用者在等：要快</text>
+<line x1="20.0" y1="204.0" x2="860.0" y2="204.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="228.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">change-commit</text>
+<rect x="150.0" y="214.0" width="40.4" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="170.2" y="228.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">不能</text>
+<text class="tx-s" x="320.0" y="228.0" text-anchor="start" fill="var(--ink-2)">叫 Jenkins 跑 sanity、通知、打 known-good；長的 check 放這裡</text>
+<text class="tx-s" x="680.0" y="228.0" text-anchor="start" fill="var(--warn)">已進 depot，壞了只能通知</text>
+<line x1="20.0" y1="244.0" x2="860.0" y2="244.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="268.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">shelve-commit</text>
+<rect x="150.0" y="254.0" width="40.4" height="20.0" rx="10" fill="var(--ink-3)" stroke="var(--ink-3)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="170.2" y="268.0" text-anchor="middle" fill="var(--ink-3)" style="font-weight:700">不能</text>
+<text class="tx-s" x="320.0" y="268.0" text-anchor="start" fill="var(--ink-2)">對 shelved CL 跑 check；配合「shelve 給人看」的常規</text>
+<text class="tx-s" x="680.0" y="268.0" text-anchor="start" fill="var(--warn)">shelve 很頻繁，check 要輕</text>
+<line x1="20.0" y1="284.0" x2="860.0" y2="284.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx-s" x="20.0" y="306.0" text-anchor="start" fill="var(--ink-2)">升級的順序：MVP 第 6 步定時查（不裝 trigger）→ change-commit 叫 Jenkins → 穩定後才裝 change-submit／change-content 擋。</text>
+<line x1="20.0" y1="326.0" x2="860.0" y2="326.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="352.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">trigger 有四種事件：submit 前的兩種能擋，但使用者在等、幾秒內要跑完；進 depot 後的那種叫 Jenkins 跑長的 check。</text>
+<text class="tx" x="20.0" y="376.0" text-anchor="start" fill="var(--ink-2)">agent 寫 script 與那一行定義、在沙盒 p4d 上測好、交 shelved CL；真實 server 由 CAD 裝，裝之前請示。</text>
+</svg></div><div class="pn">6 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的機制　·　圖 7 ／ 10</div><h1>check 分三級：只報告與警告不擋 submit；擋的才 exit 1，而且要先有 bypass</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左邊是示意的 trigger script：查 CL 說明長度與用語，不合印訊息；最後幾行決定等級：exit 0 永遠放行是只報告與警告，exit 1 是擋，另有 bypass 與開關檔。右邊三欄只報告、警告、擋各列時機、exit、通知、出錯時的行為；下方說明 bypass 與總開關怎麼做。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<rect x="20.0" y="30.0" width="380.0" height="196.0" fill="var(--surface-2)" stroke="var(--ink-2)" stroke-width="1.1"/>
+<text class="tx" x="32.0" y="50.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">desc_check.py  %change% %user%（示意）</text>
+<text class="tx-s" x="32.0" y="72.0" text-anchor="start" fill="var(--ink-2)">desc = p4 -ztag -F %Description% change -o $change</text>
+<text class="tx-s" x="32.0" y="88.0" text-anchor="start" fill="var(--ink-2)">ok = len(desc) &gt;= 20 and not desc.startswith(&quot;update&quot;)</text>
+<text class="tx-s" x="32.0" y="104.0" text-anchor="start" fill="var(--ink-2)">if not ok:</text>
+<text class="tx-s" x="32.0" y="120.0" text-anchor="start" fill="var(--ink-2)">    print(&quot;[cicd-mentor] CL 的說明太短或只寫 update/fix，請寫目的&quot;)</text>
+<text class="tx-s" x="32.0" y="136.0" text-anchor="start" fill="var(--ink-2)"></text>
+<text class="tx-s" x="32.0" y="152.0" text-anchor="start" fill="var(--ink-3)">sys.exit(0)                    # 只報告、警告：永遠放行</text>
+<text class="tx-s" x="32.0" y="168.0" text-anchor="start" fill="var(--ink-3)"># 擋：sys.exit(0 if ok else 1)</text>
+<text class="tx-s" x="32.0" y="184.0" text-anchor="start" fill="var(--ink-3)"># 說明裡有 [bypass:原因] 的放行並記錄</text>
+<text class="tx-s" x="32.0" y="200.0" text-anchor="start" fill="var(--ink-3)"># 開頭先讀開關檔：總開關關了就 exit 0</text>
+<text class="tx-s" x="32.0" y="214.0" text-anchor="start" fill="var(--ink-2)">三個等級只差最後幾行；check 的邏輯不變</text>
+<rect x="416.0" y="30.0" width="144.0" height="120.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.6" fill-opacity=".10"/>
+<text class="tx" x="430.0" y="52.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">只報告</text>
+<text class="tx-s" x="430.0" y="72.0" text-anchor="start" fill="var(--ink-2)">submit 後跑</text>
+<text class="tx-s" x="430.0" y="90.0" text-anchor="start" fill="var(--ink-2)">永遠 exit 0</text>
+<text class="tx-s" x="430.0" y="108.0" text-anchor="start" fill="var(--ink-2)">結果寫 log、build 頁</text>
+<text class="tx-s" x="430.0" y="126.0" text-anchor="start" fill="var(--ink-2)">出錯：放行</text>
+<rect x="566.0" y="30.0" width="144.0" height="120.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.6" fill-opacity=".10"/>
+<text class="tx" x="580.0" y="52.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">警告</text>
+<text class="tx-s" x="580.0" y="72.0" text-anchor="start" fill="var(--ink-2)">submit 後跑</text>
+<text class="tx-s" x="580.0" y="90.0" text-anchor="start" fill="var(--ink-2)">exit 0，私訊本人</text>
+<text class="tx-s" x="580.0" y="108.0" text-anchor="start" fill="var(--ink-2)">誤報少了才升到擋</text>
+<text class="tx-s" x="580.0" y="126.0" text-anchor="start" fill="var(--ink-2)">出錯：放行</text>
+<rect x="716.0" y="30.0" width="144.0" height="120.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="6 4" fill-opacity=".05"/>
+<text class="tx" x="730.0" y="52.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">擋</text>
+<text class="tx-s" x="730.0" y="72.0" text-anchor="start" fill="var(--ink-2)">submit 前跑</text>
+<text class="tx-s" x="730.0" y="90.0" text-anchor="start" fill="var(--ink-2)">exit 1 就退回</text>
+<text class="tx-s" x="730.0" y="108.0" text-anchor="start" fill="var(--ink-2)">要同意、bypass、總開關</text>
+<text class="tx-s" x="730.0" y="126.0" text-anchor="start" fill="var(--ink-2)">出錯：預設放行並通知</text>
+<text class="tx-s" x="416.0" y="176.0" text-anchor="start" fill="var(--ink-2)">bypass：CL 說明寫 [bypass:原因]，放行並記錄；PM 看得到誰用了幾次</text>
+<text class="tx-s" x="416.0" y="194.0" text-anchor="start" fill="var(--ink-2)">總開關：trigger 表那行註解掉，或 script 開頭讀開關檔；PM 與 admin 都按得到</text>
+<text class="tx-s" x="416.0" y="212.0" text-anchor="start" fill="var(--ink-2)">吵了（誤報、抱怨）就退一級，不硬撐</text>
+<line x1="20.0" y1="248.0" x2="860.0" y2="248.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="274.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">三級是同一支 script：只報告與警告永遠 exit 0、只寫下來或私訊；擋的才 exit 1，而且 bypass 與總開關要先有。</text>
+<text class="tx" x="20.0" y="298.0" text-anchor="start" fill="var(--ink-2)">只報告與警告這兩級一定「出錯也放行」，否則 script 一壞全公司不能 submit。</text>
+</svg></div><div class="pn">7 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的機制　·　圖 8 ／ 10</div><h1>CD：sanity 綠了之後同一條流程接著自動打包、放到固定目錄、通知下游</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="上排六格 stage：sync、sanity、manifest（CI），一條紅色虛線「綠了才過」，然後 release、取用處、通知（CD）。左下下游從取用處拿最新一包附 manifest；右下示意的 Jenkinsfile。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="24.0" text-anchor="start" fill="var(--goal)">同一個 Jenkinsfile 的 stage，由左到右</text>
+<rect x="20.0" y="40.0" width="136.0" height="54.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="28.0" y="60.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">sync</text>
+<text class="tx-s" x="28.0" y="78.0" text-anchor="start" fill="var(--ink-2)">乾淨 workspace</text>
+<rect x="160.0" y="40.0" width="136.0" height="54.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="168.0" y="60.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">sanity</text>
+<text class="tx-s" x="168.0" y="78.0" text-anchor="start" fill="var(--ink-2)">bsub -K run_sanity</text>
+<rect x="300.0" y="40.0" width="136.0" height="54.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".10"/>
+<text class="tx" x="308.0" y="60.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">manifest</text>
+<text class="tx-s" x="308.0" y="78.0" text-anchor="start" fill="var(--ink-2)">make_manifest.sh</text>
+<rect x="440.0" y="40.0" width="136.0" height="54.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".18"/>
+<text class="tx" x="448.0" y="60.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">release</text>
+<text class="tx-s" x="448.0" y="78.0" text-anchor="start" fill="var(--ink-2)">打包、manifest、label</text>
+<rect x="580.0" y="40.0" width="136.0" height="54.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".18"/>
+<text class="tx" x="588.0" y="60.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">放到固定目錄</text>
+<text class="tx-s" x="588.0" y="78.0" text-anchor="start" fill="var(--ink-2)">取用處 //…/release/</text>
+<rect x="720.0" y="40.0" width="136.0" height="54.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".18"/>
+<text class="tx" x="728.0" y="60.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">通知</text>
+<text class="tx-s" x="728.0" y="78.0" text-anchor="start" fill="var(--ink-2)">slack #dma-ci</text>
+<line x1="156.0" y1="67.0" x2="160.0" y2="67.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<line x1="296.0" y1="67.0" x2="300.0" y2="67.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<line x1="436.0" y1="67.0" x2="440.0" y2="67.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<line x1="576.0" y1="67.0" x2="580.0" y2="67.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<line x1="716.0" y1="67.0" x2="720.0" y2="67.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<line x1="440.0" y1="36.0" x2="440.0" y2="130.0" stroke="var(--warn)" stroke-width="1.6" stroke-dasharray="4 3"/>
+<text class="tx-s" x="434.0" y="124.0" text-anchor="end" fill="var(--warn)">綠了才過這條線</text>
+<text class="tx-s" x="446.0" y="124.0" text-anchor="start" fill="var(--warn)">紅：停在這裡，通知本人，不打包</text>
+<text class="tx" x="160.0" y="110.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">CI</text>
+<text class="tx" x="580.0" y="110.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">CD：接著做的三件事</text>
+<rect x="20.0" y="150.0" width="400.0" height="70.0" fill="var(--surface-2)" stroke="var(--ink-2)" stroke-width="1.2"/>
+<text class="tx" x="32.0" y="170.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">下游（top 整合、DV、PD）</text>
+<text class="tx-s" x="32.0" y="188.0" text-anchor="start" fill="var(--ink-2)">從取用處拿最新一包，附 manifest：哪個 CL、什麼工具、怎麼跑</text>
+<text class="tx-s" x="32.0" y="206.0" text-anchor="start" fill="var(--ink-2)">不問人、不等 email 貼路徑；要退回有 known-good 的 label</text>
+<line x1="646.0" y1="94.0" x2="300.0" y2="150.0" stroke="var(--goal)" stroke-width="1.2" marker-end="url(#ar-g)"/>
+<rect x="440.0" y="150.0" width="420.0" height="150.0" fill="var(--surface-2)" stroke="var(--ink-2)" stroke-width="1.1"/>
+<text class="tx" x="452.0" y="170.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">Jenkinsfile（示意）</text>
+<text class="tx-s" x="452.0" y="188.0" text-anchor="start" fill="var(--ink-2)" style="font-size:8px">pipeline {</text>
+<text class="tx-s" x="452.0" y="199.5" text-anchor="start" fill="var(--ink-2)" style="font-size:8px">  agent { label &#x27;ic-farm&#x27; }</text>
+<text class="tx-s" x="452.0" y="211.0" text-anchor="start" fill="var(--ink-2)" style="font-size:8px">  triggers { pollSCM(&#x27;H/10 * * * *&#x27;) }</text>
+<text class="tx-s" x="452.0" y="222.5" text-anchor="start" fill="var(--ink-2)" style="font-size:8px">  stages {</text>
+<text class="tx-s" x="452.0" y="234.0" text-anchor="start" fill="var(--ink-2)" style="font-size:8px">    stage(&#x27;sync&#x27;)     { steps { p4sync credential: &#x27;p4-agent&#x27;, depotPath: &#x27;//…/dma/...&#x27; } }</text>
+<text class="tx-s" x="452.0" y="245.5" text-anchor="start" fill="var(--ink-2)" style="font-size:8px">    stage(&#x27;sanity&#x27;)   { steps { sh &#x27;bsub -K ./scripts/run_sanity.sh&#x27; } }</text>
+<text class="tx-s" x="452.0" y="257.0" text-anchor="start" fill="var(--ink-2)" style="font-size:8px">    stage(&#x27;manifest&#x27;) { steps { sh &#x27;make_manifest.sh&#x27;; archiveArtifacts &#x27;*.json&#x27; } }</text>
+<text class="tx-s" x="452.0" y="268.5" text-anchor="start" fill="var(--ink-2)" style="font-size:8px">    stage(&#x27;release&#x27;)  { when { branch &#x27;main&#x27; } steps { sh &#x27;./scripts/make_release&#x27; } }</text>
+<text class="tx-s" x="452.0" y="280.0" text-anchor="start" fill="var(--ink-2)" style="font-size:8px">  }</text>
+<text class="tx-s" x="452.0" y="291.5" text-anchor="start" fill="var(--ink-2)" style="font-size:8px">}</text>
+<text class="tx-s" x="20.0" y="240.0" text-anchor="start" fill="var(--ink-2)">每個 stage 都只是呼叫 depot 裡的 script；release 只在 main 綠了才跑。</text>
+<line x1="20.0" y1="318.0" x2="860.0" y2="318.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="344.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">CD 不是另一套系統：sanity 綠了之後，同一條流程接著做三件事：打包、放到固定目錄（取用處）、通知下游。</text>
+<text class="tx" x="20.0" y="368.0" text-anchor="start" fill="var(--ink-2)">AI agent 幫 owner 定出交付物後，把 make_release 寫成 script 交 shelved CL；之後 main 過 check 就自動打包交下游。</text>
+</svg></div><div class="pn">8 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的機制　·　圖 9 ／ 10</div><h1>用 git 的 project：client 端的 hook 擋不住人硬 push；要靠 protected branch 擋</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="左框 git 的 hook：client 端在各人電腦擋不住人，server 端 GitLab 不開放。右框 GitLab 內建：pipeline（.gitlab-ci.yml、runner）與 protected branch（MR 要綠加 approve）就是 CI 與擋。下方 Perforce 對 git 的名詞對照七列。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<rect x="20.0" y="30.0" width="400.0" height="184.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".04"/>
+<text class="tx" x="32.0" y="50.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">這頁給用 git 的 project；git 的 hook 兩種，都不是 CI</text>
+<text class="tx" x="32.0" y="72.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">client 端：pre-commit、commit-msg、pre-push</text>
+<text class="tx-s" x="32.0" y="90.0" text-anchor="start" fill="var(--ink-2)">在每個人的 .git/hooks，不隨 repo 走、各人自己裝</text>
+<text class="tx" x="32.0" y="112.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="52.0" y="112.0" text-anchor="start" fill="var(--ink-2)">擋不住任何人，只能當提醒</text>
+<text class="tx" x="32.0" y="146.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:700">server 端：pre-receive、post-receive</text>
+<text class="tx-s" x="32.0" y="164.0" text-anchor="start" fill="var(--ink-2)">在 git server 上；GitLab／GitHub 不開放放自己的 script</text>
+<text class="tx-s" x="32.0" y="182.0" text-anchor="start" fill="var(--ink-2)">→ 改用右邊兩個內建機制</text>
+<rect x="440.0" y="30.0" width="420.0" height="184.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".04"/>
+<text class="tx" x="452.0" y="50.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">GitLab 內建的兩個機制，就是 CI 與擋</text>
+<rect x="452.0" y="62.0" width="190.0" height="60.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.6" fill-opacity=".10"/>
+<text class="tx" x="466.0" y="84.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">pipeline（自動流程）</text>
+<text class="tx-s" x="466.0" y="102.0" text-anchor="start" fill="var(--ink-2)">.gitlab-ci.yml 在 repo 根目錄</text>
+<text class="tx-s" x="466.0" y="118.0" text-anchor="start" fill="var(--ink-2)">每次 push 與每個 MR 自動跑</text>
+<rect x="654.0" y="62.0" width="194.0" height="60.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.6" fill-opacity=".10"/>
+<text class="tx" x="668.0" y="84.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">runner</text>
+<text class="tx-s" x="668.0" y="102.0" text-anchor="start" fill="var(--ink-2)">跑 job 的機器＝Jenkins 的節點</text>
+<text class="tx-s" x="668.0" y="118.0" text-anchor="start" fill="var(--ink-2)">tag ic-farm：有 p4／EDA</text>
+<rect x="452.0" y="132.0" width="396.0" height="70.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.6" fill-opacity=".10"/>
+<text class="tx" x="466.0" y="154.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">protected branch＝擋</text>
+<text class="tx-s" x="466.0" y="172.0" text-anchor="start" fill="var(--ink-2)">master 只能經 MR 併入；MR 要 pipeline 綠＋一人 approve 才能按</text>
+<text class="tx-s" x="466.0" y="188.0" text-anchor="start" fill="var(--ink-2)">不用自己寫 hook；agent 自己的 repo 走的就是這套</text>
+<text class="tx-lbl" x="20.0" y="238.0" text-anchor="start" fill="var(--ink-2)">Perforce</text>
+<text class="tx-lbl" x="200.0" y="238.0" text-anchor="start" fill="var(--ink-2)">git</text>
+<text class="tx-lbl" x="420.0" y="238.0" text-anchor="start" fill="var(--ink-2)">意思</text>
+<text class="tx-s" x="20.0" y="258.0" text-anchor="start" fill="var(--ink-2)">depot</text>
+<text class="tx-s" x="200.0" y="258.0" text-anchor="start" fill="var(--ink-2)">repo、remote</text>
+<text class="tx-s" x="420.0" y="258.0" text-anchor="start" fill="var(--ink-3)">共用的那份</text>
+<text class="tx-s" x="20.0" y="274.0" text-anchor="start" fill="var(--ink-2)">submit</text>
+<text class="tx-s" x="200.0" y="274.0" text-anchor="start" fill="var(--ink-2)">commit＋push</text>
+<text class="tx-s" x="420.0" y="274.0" text-anchor="start" fill="var(--ink-3)">進共用的地方</text>
+<text class="tx-s" x="20.0" y="290.0" text-anchor="start" fill="var(--ink-2)">shelved CL</text>
+<text class="tx-s" x="200.0" y="290.0" text-anchor="start" fill="var(--ink-2)">branch＋MR（GitHub 叫 PR）</text>
+<text class="tx-s" x="420.0" y="290.0" text-anchor="start" fill="var(--ink-3)">給人看、還沒進去</text>
+<text class="tx-s" x="20.0" y="306.0" text-anchor="start" fill="var(--ink-2)">stream</text>
+<text class="tx-s" x="200.0" y="306.0" text-anchor="start" fill="var(--ink-2)">branch</text>
+<text class="tx-s" x="420.0" y="306.0" text-anchor="start" fill="var(--ink-3)">一件任務一條線</text>
+<text class="tx-s" x="20.0" y="322.0" text-anchor="start" fill="var(--ink-2)">label</text>
+<text class="tx-s" x="200.0" y="322.0" text-anchor="start" fill="var(--ink-2)">tag</text>
+<text class="tx-s" x="420.0" y="322.0" text-anchor="start" fill="var(--ink-3)">某一刻的檔案清單</text>
+<text class="tx-s" x="20.0" y="338.0" text-anchor="start" fill="var(--ink-2)">change-submit trigger</text>
+<text class="tx-s" x="200.0" y="338.0" text-anchor="start" fill="var(--ink-2)">protected branch＋pipeline 必須綠</text>
+<text class="tx-s" x="420.0" y="338.0" text-anchor="start" fill="var(--ink-3)">submit 前擋</text>
+<text class="tx-s" x="20.0" y="354.0" text-anchor="start" fill="var(--ink-2)">change-commit trigger</text>
+<text class="tx-s" x="200.0" y="354.0" text-anchor="start" fill="var(--ink-2)">post-receive、webhook</text>
+<text class="tx-s" x="420.0" y="354.0" text-anchor="start" fill="var(--ink-3)">submit 後踢 CI</text>
+<line x1="20.0" y1="372.0" x2="860.0" y2="372.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="398.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">用 git 的 project：client 端的 hook 擋不住人硬 push；pipeline 加 protected branch 才是 CI 與擋。名詞整套切換，原則不變。</text>
+<text class="tx" x="20.0" y="422.0" text-anchor="start" fill="var(--ink-2)">agent 自己的 repo 就是這套：MR、pipeline 跑沙盒三項、master 鎖住。</text>
+</svg></div><div class="pn">9 / 10</div></section>
+<section class="slide"><div class="kicker">CI/CD 的機制　·　圖 10 ／ 10</div><h1>三個坑：submit 前的 check 太慢、低等級卻擋人、把 client 的 hook 當成 CI</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="三欄：trigger 太慢（submit 前只做秒級檢查，重的放 change-commit）；script 壞了全公司不能 submit（低等級出錯也放行，擋要先有總開關與 bypass）；把 client 端 hook 當 CI（要擋靠 protected branch）。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<rect x="20.0" y="30.0" width="272.0" height="250.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".04"/>
+<text class="tx" x="32.0" y="52.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">trigger 太慢</text>
+<text class="tx-lbl" x="32.0" y="72.0" text-anchor="start" fill="var(--warn)">症狀</text>
+<text class="tx-s" x="32.0" y="90.0" text-anchor="start" fill="var(--ink-2)">change-submit、change-content</text>
+<text class="tx-s" x="32.0" y="106.0" text-anchor="start" fill="var(--ink-2)">是使用者按下去在等的；</text>
+<text class="tx-s" x="32.0" y="122.0" text-anchor="start" fill="var(--ink-2)">超過幾秒就被罵，然後被要求拆掉</text>
+<text class="tx-lbl" x="32.0" y="150.0" text-anchor="start" fill="var(--goal)">做法</text>
+<text class="tx" x="32.0" y="166.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="52.0" y="166.0" text-anchor="start" fill="var(--goal)">submit 前只做秒級的檢查</text>
+<text class="tx" x="32.0" y="192.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="52.0" y="192.0" text-anchor="start" fill="var(--goal)">重的 check 放 change-commit 後</text>
+<text class="tx" x="32.0" y="218.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="52.0" y="218.0" text-anchor="start" fill="var(--goal)">沙盒先量 trigger 跑多久</text>
+<rect x="304.0" y="30.0" width="272.0" height="250.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".04"/>
+<text class="tx" x="316.0" y="52.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">低等級的 check 壞了卻擋人</text>
+<text class="tx-lbl" x="316.0" y="72.0" text-anchor="start" fill="var(--warn)">症狀</text>
+<text class="tx-s" x="316.0" y="90.0" text-anchor="start" fill="var(--ink-2)">只報告級的 script 出了 exception、</text>
+<text class="tx-s" x="316.0" y="106.0" text-anchor="start" fill="var(--ink-2)">p4 指令失敗、磁碟滿；trigger 回非 0，</text>
+<text class="tx-s" x="316.0" y="122.0" text-anchor="start" fill="var(--ink-2)">所有人的 submit 都被退回</text>
+<text class="tx-lbl" x="316.0" y="150.0" text-anchor="start" fill="var(--goal)">做法</text>
+<text class="tx" x="316.0" y="166.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="336.0" y="166.0" text-anchor="start" fill="var(--goal)">只報告與警告級：出錯也 exit 0</text>
+<text class="tx" x="316.0" y="192.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="336.0" y="192.0" text-anchor="start" fill="var(--goal)">擋的那級：先有總開關與 bypass</text>
+<text class="tx" x="316.0" y="218.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="336.0" y="218.0" text-anchor="start" fill="var(--goal)">出錯時怎麼辦寫進授權表</text>
+<rect x="588.0" y="30.0" width="272.0" height="250.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".04"/>
+<text class="tx" x="600.0" y="52.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">把 client 端的 hook 當 CI</text>
+<text class="tx-lbl" x="600.0" y="72.0" text-anchor="start" fill="var(--warn)">症狀</text>
+<text class="tx-s" x="600.0" y="90.0" text-anchor="start" fill="var(--ink-2)">git 團隊裝了 pre-commit 以為有 CI；</text>
+<text class="tx-s" x="600.0" y="106.0" text-anchor="start" fill="var(--ink-2)">沒裝的人照樣推上去</text>
+<text class="tx-lbl" x="600.0" y="150.0" text-anchor="start" fill="var(--goal)">做法</text>
+<text class="tx" x="600.0" y="166.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="620.0" y="166.0" text-anchor="start" fill="var(--goal)">要擋靠 protected branch 或 server 端</text>
+<text class="tx" x="600.0" y="192.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="620.0" y="192.0" text-anchor="start" fill="var(--goal)">pre-commit 只當提醒，不當規則</text>
+<text class="tx" x="600.0" y="218.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="620.0" y="218.0" text-anchor="start" fill="var(--goal)">Perforce 沒這問題：trigger 在 server</text>
+<line x1="20.0" y1="300.0" x2="860.0" y2="300.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="326.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">三個坑都來自同一件事：submit 前的 check 有人在等，而且一壞就擋到所有人。</text>
+<text class="tx" x="20.0" y="350.0" text-anchor="start" fill="var(--ink-2)">所以先從 submit 後、只報告開始；擋是最後一步，而且要有退路。</text>
+</svg></div><div class="pn">10 / 10</div></section>
+</body>
+</html>

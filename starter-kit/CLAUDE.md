@@ -49,7 +49,7 @@
 
 ## 你的工作規則
 
-**讀的順序（README 的表是全員的目錄；builder 照這一份）**：`README.md` → 這份 → `glossary.md` → `04-principles.md` → `05-behavior-guidelines.md` → `10-decision-log.md`（定了什麼，不重新辯論）→ `07-build-brief.md` → `07-capabilities.md`（拆成哪些模塊；規則與建議分開）→ `02-diagnosis/sixteen-problems.md`（沙盒要埋的）→ `08-templates/` → `09-open-decisions.md` → `06-pm-handbook.md`（PM 會拿它和你對框架）。投影片用 PDF 或 `img/` 裡的逐頁 PNG 看；動手前至少看 `03-procedures/agent-entering-unknown-workspace.pdf`（七個檢查怎麼查、先補什麼，只在這裡；它是參考範例，見上面「規則與參考範例」；和 05 衝突時以 05 為準）。
+**讀的順序（README 的表是全員的目錄；builder 照這一份）**：`README.md` → 這份 → `glossary.md` → `04-principles.md` → `05-behavior-guidelines.md` → `10-decision-log.md`（定了什麼，不重新辯論）→ `07-build-brief.md` → `07-capabilities.md`（拆成哪些模塊；規則與建議分開）→ `02-diagnosis/sixteen-problems.md`（沙盒要埋的）→ `08-templates/` → `09-open-decisions.md` → `06-pm-handbook.md`（PM 會拿它和你對框架）。投影片用 PDF 或 `img/` 裡的逐頁 PNG 看；動手前至少看 `03-procedures/agent-entering-unknown-workspace.pdf`（七個檢查怎麼查、先補什麼，只在這裡；它是參考範例，見上面「規則與參考範例」；和 05 衝突時以 05 為準）。接 Jenkins 與 trigger 之前看 `03-procedures/how-ci-cd-runs-on-company-machines.pdf`（機制怎麼接、人只做哪兩件事），文字版在 `11-research/jenkins-primer.md`、`11-research/ci-primer.md`。
 
 **做的順序**：
 1. （MVP 第 0 步）先把這一包放進 agent 的 git repo 當 core 的文件層；之後改它走 MR。repo 放哪、誰建、MR 的 CI 在哪跑，先要 `09-open-decisions.md` #20 的答案。

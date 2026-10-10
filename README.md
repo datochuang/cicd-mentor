@@ -24,9 +24,9 @@
 
 ![總覽：實例從 agent 的 repo clone、工作區回到它；depot 只收流程在用的工具](docs/slides/img/agent-own-version-control-and-instances/p-1.png)
 
-串起來一句話：AI 的效益要靠 CI/CD 這塊地基，而地基現在是空的；PM 有決心沒經驗、團隊不堅決也不知怎麼做，agent 補這兩個缺，四方這樣互動；agent 進到任一目錄就做這三步；而 agent 本身這樣版控、clone、換手。為什麼要這樣搭檔，在《AI agent 與人類 PM 搭檔》；現狀的細節（版控只當備份會長出哪些問題）在《把版控當備份的團隊》；agent 的能力怎麼拆成可復用的模塊，在《agent 的基本模塊》。
+串起來一句話：AI 的效益要靠 CI/CD 這塊地基，而地基現在是空的；PM 有決心沒經驗、團隊不堅決也不知怎麼做，agent 補這兩個缺，四方這樣互動；agent 進到任一目錄就做這三步；而 agent 本身這樣版控、clone、換手。為什麼要這樣搭檔，在《AI agent 與人類 PM 搭檔》；現狀的細節（版控只當備份會長出哪些問題）在《把版控當備份的團隊》；agent 的能力怎麼拆成可復用的模塊，在《agent 的基本模塊》。Jenkins、trigger 這些機制在公司的機器上怎麼接、agent 與人各做哪一段，在《CI/CD 在公司怎麼跑》。
 
-## 七份圖形文件（逐頁）
+## 八份圖形文件（逐頁）
 
 ### AI agent 與人類 PM 搭檔：AI 出 CI/CD 知識與動手能力，人類 PM 定方向與優先序
 
@@ -260,6 +260,35 @@ agent 的能力拆成一個個模塊，每個模塊一條規格（contract）：
 ![接公司：公司專屬的只有接外部的程式、評分表、規矩表；換表就是別的 agent](docs/slides/img/agent-capability-modules/p-7.png)
 
 ![組裝：mentor agent 的十個階段各挑幾個模塊，所以模塊能分開做、分開驗](docs/slides/img/agent-capability-modules/p-8.png)
+
+</details>
+
+### CI/CD 在公司怎麼跑：check 是 depot 裡的 script，p4 trigger 與 Jenkins 自動跑；AI agent 寫與看結果，人只開帳號、給 token
+
+使用者問「要做 CD 大部分需要 Jenkins，agent 怎麼做」「CI 具體的執行方式」之後整理的機制篇，給沒用過 Jenkins 的 PM 與團隊，也給內網的 Claude Code 當它對團隊解釋時的圖。第 1 頁一張圖：有人 submit 之後，察覺（定時查或 trigger）→ Jenkins 的節點在乾淨 workspace 依序呼叫 depot 裡的 script（sync、run_sanity、make_manifest 是 CI；make_release、放取用處、通知下游是 CD）；下排三框是 AI agent、CAD、PM 各做哪一段。脊椎：分工 → CI 三件事 → 察覺的兩條路 → Jenkins 六個概念 → trigger 四種事件 → check 三級 → CD 接著做的三件事 → git 的對應 → 三個坑。文字版在啟動包 11-research 的 jenkins-primer.md 與 ci-primer.md。十頁。PDF：[docs/slides/how-ci-cd-runs-on-company-machines.pdf](docs/slides/how-ci-cd-runs-on-company-machines.pdf)
+
+<details>
+<summary>展開十頁</summary>
+
+![總覽：check 是 depot 裡的 script，機器自動跑；AI agent 寫 script、看結果](docs/slides/img/how-ci-cd-runs-on-company-machines/p-1.png)
+
+![分工：人只開帳號、給 token；script、job、trigger 都由 AI agent 用 API 做](docs/slides/img/how-ci-cd-runs-on-company-machines/p-2.png)
+
+![CI：每次 submit 在乾淨 workspace 跑 sanity、記下結果；submit 前跑才擋得住](docs/slides/img/how-ci-cd-runs-on-company-machines/p-3.png)
+
+![察覺改動的兩條路：定時跑 p4 changes，agent 自己能裝；trigger 要 CAD 裝](docs/slides/img/how-ci-cd-runs-on-company-machines/p-4.png)
+
+![Jenkins：負責排程與記錄的 server；check 實際在農場跑，每次結果留在 build 頁](docs/slides/img/how-ci-cd-runs-on-company-machines/p-5.png)
+
+![trigger 兩類：submit 前的能擋、要幾秒跑完；submit 後的叫 Jenkins 跑長 check](docs/slides/img/how-ci-cd-runs-on-company-machines/p-6.png)
+
+![check 分三級：只報告與警告不擋 submit；擋的才 exit 1，而且要先有 bypass](docs/slides/img/how-ci-cd-runs-on-company-machines/p-7.png)
+
+![CD：sanity 綠了之後同一條流程接著自動打包、放到固定目錄、通知下游](docs/slides/img/how-ci-cd-runs-on-company-machines/p-8.png)
+
+![用 git 的 project：client 端的 hook 擋不住人硬 push；要靠 protected branch 擋](docs/slides/img/how-ci-cd-runs-on-company-machines/p-9.png)
+
+![三個坑：submit 前的 check 太慢、低等級卻擋人、把 client 的 hook 當成 CI](docs/slides/img/how-ci-cd-runs-on-company-machines/p-10.png)
 
 </details>
 

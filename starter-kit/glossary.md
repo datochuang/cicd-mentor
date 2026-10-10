@@ -84,6 +84,7 @@
 | **六個原則** | Small batches、Single Source of Truth (SSOT)、Traceability、Continuous Integration (CI)、Self-documenting、Continuous Delivery (CD)；各一個做得到／做不到的檢驗。見 `04-principles.md` |
 | **Continuous Delivery (CD)** | 每個過 check 的改動，機器自動打包、附 manifest、打 label、放到固定位置、通知下游，下游不等人；IC 版的「部署」＝交到下一棒，而且下一棒拿了就能跑 |
 | **交付物** | 一個目錄交出去的東西：交什麼、給誰、什麼形式、多久一次。owner 多半沒想過，agent 從 CL 歷史、label、下游引用推出草稿請他確認 |
+| **出包／打包** | 這一包說的「出包」＝打包出一個交付包（make_release）；台灣口語的「出包」是搞砸，對團隊講一律說「打包」「出 release」 |
 | **取用處** | 交付物放的固定位置（例如 //depot/<chip>/release/<目錄>/），下游從這裡拿，不靠 email 貼路徑 |
 | **review 規矩** | Code review 不是原則：每個目錄都要講好需不需要 review（要／不要、誰看、什麼時候），寫在 PROJECT_MAP，可以改；歸 Self-documenting |
 | **九條做法** | Test-first、Executable spec、Evidence-based delivery、Definition of Done、Flow as code、Blameless postmortem、量化（DORA 四指標的 IC 版）、Review policy per directory、Release pipeline |

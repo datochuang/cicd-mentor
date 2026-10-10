@@ -97,7 +97,7 @@
 | 3 | 目標分析 | PROJECT_MAP、七個檢查、既有工具清單、缺口與計畫、三類分工 | 沙盒的每個缺口掛對原則、分對三類；只問 owner 的問題附已查到的 |
 | 4 | 計畫核准 | 請示（七項、兩個問題）、PM 的回覆比對、owner 同意範圍；一頁摘要 | 假 PM 答不到「影響誰」時 agent 會再問；缺一不動手這條驗得到 |
 | 5 | 建置 | shelved CL 產生與證據：setup、run_sanity、make_manifest、PROJECT_MAP 副本、CL 說明模板；問 owner、提醒、更正三種訊息 | 在乾淨 workspace 實跑過、附 manifest；沒 submit；沙盒三項過 → 出 release，可以上真實 depot（只讀）盤點 |
-| 6 | 上線分級（只報告） | check 執行與結果發佈：sanity＋版控常規的提醒級 check（說明太短、一包太多、產物進 CL、filelist 引用不存在的檔）；先用定時查（pollSCM 或 cron 看 `p4 changes`），不裝 trigger；狀態與日誌的 schema（做法見 `11-research/ci-primer.md`、`jenkins-primer.md`） | 結果看得到、附 CL 號；重啟不重複；常規從第一道 check 就在教 |
+| 6 | 上線分級（只報告） | check 執行與結果發佈：sanity＋版控常規的提醒級 check（說明太短、一包太多、產物進 CL、filelist 引用不存在的檔）；先用定時查（pollSCM 或 cron 看 `p4 changes`），不裝 trigger；狀態與日誌的 schema（做法見 `11-research/ci-primer.md`、`11-research/jenkins-primer.md`） | 結果看得到、附 CL 號；重啟不重複；常規從第一道 check 就在教 |
 | 7 | 交付（CD） | 交付物草稿（從 CL 歷史、label、下游引用推）、owner 確認、make_release（打包＋manifest＋label＋取用處＋通知）、下游拿 | 沙盒裡：草稿照模板、owner 改幾個字就能確認；main 過 check 自動出一包附 manifest 放到固定位置；下游不問人拿得到 |
 | 8 | 日常監看與開工輔導 | 狀態板、開工跡象、代開 stream／workspace／CL 模板、教法（示範、一次一條、私下） | 看到跡象先問再登記；本人不想登記只記「有活動，未登記」 |
 | 9 | 上線分級（警告、擋）、擴充 | 警告級、擋 submit（PM＋owner 同意）：change-submit／change-content trigger，先在沙盒 p4d 測、CAD 裝；bypass、kill switch、預算 | kill switch 按下去 trigger 全停；沒 bypass 不擋；超預算先停 |

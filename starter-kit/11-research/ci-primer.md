@@ -1,6 +1,6 @@
 # CI 入門：Perforce 的 trigger、git 的 hook 與 pipeline，agent 各做哪一段
 
-給沒做過 CI 的 PM 與團隊，也給要寫 trigger 的 Claude Code。和 `jenkins-primer.md` 並排讀：CD 那條 pipeline 的前半段就是 CI。指令、trigger 行、script 都是示意，以公司的 p4d／GitLab 版本與 `p4 help triggers` 為準。
+給沒做過 CI 的 PM 與團隊，也給要寫 trigger 的 Claude Code。圖形版：`../03-procedures/how-ci-cd-runs-on-company-machines.pdf`。和 `jenkins-primer.md` 並排讀：CD 那條 pipeline 的前半段就是 CI。指令、trigger 行、script 都是示意，以公司的 p4d／GitLab 版本與 `p4 help triggers` 為準。
 
 ## 一、CI 在機器上是三件事
 

@@ -1,6 +1,6 @@
 # Jenkins 入門：這個專案用到的六個概念，以及 agent 怎麼操作它
 
-給沒用過 Jenkins 的 PM 與要接 Jenkins 的 Claude Code。公司有 Jenkins 就接它，不自己蓋（05 #32）；哪一種機制、誰管、agent 拿什麼存取，記在 `../09-open-decisions.md` #25。下面的指令與 Jenkinsfile 都是示意，以公司 Jenkins 的版本與 plugin 為準。
+給沒用過 Jenkins 的 PM 與要接 Jenkins 的 Claude Code。圖形版：`../03-procedures/how-ci-cd-runs-on-company-machines.pdf`。公司有 Jenkins 就接它，不自己蓋（05 #32）；哪一種機制、誰管、agent 拿什麼存取，記在 `../09-open-decisions.md` #25。下面的指令與 Jenkinsfile 都是示意，以公司 Jenkins 的版本與 plugin 為準。
 
 ## 一、它是什麼
 

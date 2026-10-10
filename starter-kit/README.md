@@ -30,7 +30,7 @@
 
 串起來一句話：AI 的效益要靠 CI/CD 這塊地基，而地基現在是空的；PM 有決心沒經驗、團隊不堅決也不知怎麼做，agent 補這兩個缺，四方這樣互動；agent 進到任一目錄就做這三步；而 agent 本身這樣版控、clone、換手。為什麼要這樣搭檔，在 [AI agent 與人類 PM 搭檔](01-why/why-cicd-needs-ai-agent-and-pm.pdf)；現狀的細節（版控只當備份會長出哪些問題）在 [把版控當備份的團隊](02-diagnosis/team-treating-vc-as-backup.pdf)。
 
-## 七份投影片的名字
+## 八份投影片的名字
 
 投影片的檔名講它回答什麼問題；頁眉（kicker）和標題是另一套說法；10、11 裡偶爾用舊名或標題稱呼它們，對照如下。
 
@@ -43,6 +43,7 @@
 | 03-procedures/agent-pm-team-repo-interactions | 互動場景：agent 先讀懂再問、交 shelved CL；方向由 PM 核准，CL 收不收 owner 決定 | agent 與 PM、團隊、repo 的互動 | agent-fills-what-pm-and-team-lack |
 | 07-build-brief/agent-own-version-control-and-instances | agent 自己的版控：實例從 agent 的 repo clone、工作區回到它；depot 只收流程在用的工具 | agent 自己的版控與多實例 | agent-evolves-by-release-not-self-edit |
 | 07-build-brief/agent-capability-modules | agent 的基本模塊：拆成十七個各有規格的模塊，公司專屬的只有三樣 | agent 的基本模塊 | — |
+| 03-procedures/how-ci-cd-runs-on-company-machines | CI/CD 在公司怎麼跑：check 是 depot 裡的 script，p4 trigger 與 Jenkins 自動跑；AI agent 寫與看結果，人只開帳號、給 token | CI/CD 的機制 | — |
 
 ## 這包裡有什麼，照什麼順序讀
 
@@ -53,7 +54,7 @@
 | 3 | [01-why/](01-why/) | PM、sponsor | 為什麼要做、為什麼一直做不起來、AI agent 與 PM 怎麼搭 |
 | 4 | [02-diagnosis/](02-diagnosis/) | PM、團隊；Claude Code 讀 [sixteen-problems.md](02-diagnosis/sixteen-problems.md) | 把版控當備份的團隊長什麼樣、十六個問題怎麼歸成六個原則；沙盒要埋的清單。情境是示意，作用是提醒：讓團隊把六個原則連到自己的日常行為，不是現況的審計（D14） |
 | 5 | [04-principles.md](04-principles.md) | 所有人 | 六個原則與檢驗、九條做法、版控的常規、review 規矩 |
-| 6 | [03-procedures/](03-procedures/) | Claude Code、PM | agent 進到一個目錄做什麼；四方在每個階段的互動 |
+| 6 | [03-procedures/](03-procedures/) | Claude Code、PM、團隊 | agent 進到一個目錄做什麼；四方在每個階段的互動；CI/CD 的機制（Jenkins、trigger、git）在公司的機器上怎麼接、人只做哪兩件事 |
 | 7 | [05-behavior-guidelines.md](05-behavior-guidelines.md) | Claude Code（這是 agent 的規矩） | 可以直接照著做的行為指導原則，每條指回依據 |
 | 8 | [06-pm-handbook.md](06-pm-handbook.md) | PM | PM 的功課、要談的資源與人、路線圖與停損、怎麼讀請示、交棒 |
 | 9 | [07-build-brief.md](07-build-brief.md)、[07-capabilities.md](07-capabilities.md)、[07-build-brief/](07-build-brief/) | Claude Code | 做成什麼：元件、介面、兩種 repo 與三層、實例與換手、沙盒驗收、MVP 的順序；能力拆成哪些模塊——要模組化、分層、怎麼切是規則，十七個模塊與介面是建議 |
