@@ -26,6 +26,7 @@
 | T35 | 10-09 | **分階段路線圖與每階段的成功定義、停損**要不要照我寫的 | 準備 → 試點 → 擴散 → 常態；試點的成功：owner 採用了 shelved CL、check 每天跑有人看、至少一個檢驗從做不到變做得到 | agent-operating-model.md 7.3 |
 | T36 | 10-09 | **紅線清單**（不刪、不碰別人 workspace、沒共識不擋、不報個人活動量、design 資料不出核准的模型、不假裝是人、不對 design 下判斷）有沒有要加減 | | agent-operating-model.md 7.4 |
 | T38 | 10-09 | **agent 自己的版控與多實例**：core 由誰維護、一實例一帳號還是共用、升級的節奏 | 三層分離（core／實例的工作區／生產用的工具）、登記表、實例名與版號署名、沙盒當 core 的 regression、換手已寫進 operating model 第八節，並做成投影片《agent 自己的版控》；這三件要公司決定 | agent-operating-model.md 第八節、docs/slides/agent-own-version-control-and-instances.pdf |
+| T48 | 10-10 | **Agent 的正式名稱**（取代「CI/CD mentor agent」這個稱呼；和 D19 的實例別名是兩層） | 使用者偏好（Codex 整理，research/agent-naming-candidates.md）：mentor 太軟、要專業、可用 backronym、動物／動漫／台灣特產都行；候選 ORCA、DARE、OTTER。我的評估見該檔末尾的回覆：三個全稱裡的 Reliability 在 IC 公司會被讀成可靠度（RA）部門，建議換成 Release；推薦 OTTER（展開對到五條原則與做法）或 ORCA。定了之後：啟動包全文的「CI/CD mentor agent」換名、自我介紹模板、README；repo 名可不改 | research/agent-naming-candidates.md |
 
 ## 等你確認的產出
 
