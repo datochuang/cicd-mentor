@@ -218,7 +218,7 @@ def p_start():
         [("agent 用自己的 bot 帳號、只讀權限上線；第一件事是向團隊說自己是誰、向誰報告、會看什麼、紀錄放哪。", True),
          ("權限分階段：先只讀，要交 shelved CL 時加寫入，要開 stream 時再加；每一階 PM 給，agent 不自己擴。", False)],
         "啟動：PM 指定範圍與帳號；agent 以 bot 帳號先只讀上線，之後按需要分階段加權限，私訊 PL 與 owner 自我介紹；工程團隊知道 agent 在、看得到什麼；目標的 repo 只被讀，紀錄在 agent 自己的 repo。",
-        notes=["示意的自我介紹：「hi，我是 Eric，負責幫 dma 導入 CI/CD 的 AI agent，向 PM 某某報告。我會看 //depot/chipA/dma 的 CL 與 check 結果，", "紀錄在我自己的 git repo，你們有讀的權限。有問題直接私訊我。」（別名由 PM 挑定，顯示名稱帶 AI agent；D19）"])
+        notes=["示意的自我介紹：「hi，我是 Eric，OTTER 派在 dma 的 AI agent，負責幫 dma 導入 CI/CD，向 PM 某某報告。我會看 //depot/chipA/dma 的 CL 與 check 結果，", "紀錄在我自己的 git repo，你們有讀的權限。有問題直接私訊我。」（別名由 PM 挑定，顯示名稱帶 AI agent；D19）"])
 
 
 # ── 圖 3：情勢判斷 ──────────────────────────────────────────────────

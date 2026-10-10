@@ -26,7 +26,6 @@
 | T35 | 10-09 | **分階段路線圖與每階段的成功定義、停損**要不要照我寫的 | 準備 → 試點 → 擴散 → 常態；試點的成功：owner 採用了 shelved CL、check 每天跑有人看、至少一個檢驗從做不到變做得到 | agent-operating-model.md 7.3 |
 | T36 | 10-09 | **紅線清單**（不刪、不碰別人 workspace、沒共識不擋、不報個人活動量、design 資料不出核准的模型、不假裝是人、不對 design 下判斷）有沒有要加減 | | agent-operating-model.md 7.4 |
 | T38 | 10-09 | **agent 自己的版控與多實例**：core 由誰維護、一實例一帳號還是共用、升級的節奏 | 三層分離（core／實例的工作區／生產用的工具）、登記表、實例名與版號署名、沙盒當 core 的 regression、換手已寫進 operating model 第八節，並做成投影片《agent 自己的版控》；這三件要公司決定 | agent-operating-model.md 第八節、docs/slides/agent-own-version-control-and-instances.pdf |
-| T48 | 10-10 | **Agent 的正式名稱**（取代「CI/CD mentor agent」這個稱呼；和 D19 的實例別名是兩層） | 使用者偏好（Codex 整理，research/agent-naming-candidates.md）：mentor 太軟、要專業、可用 backronym、動物／動漫／台灣特產都行；候選 ORCA、DARE、OTTER。我的評估見該檔末尾的回覆：三個全稱裡的 Reliability 在 IC 公司會被讀成可靠度（RA）部門，建議換成 Release；推薦 OTTER（展開對到五條原則與做法）或 ORCA。定了之後：啟動包全文的「CI/CD mentor agent」換名、自我介紹模板、README；repo 名可不改 | research/agent-naming-candidates.md |
 
 ## 等你確認的產出
 
@@ -49,6 +48,7 @@
 | T20 | 10-10 | 《把版控當備份的團隊》第 5–17 頁冒號前的「問題」 | 使用者選「換成原則名」：Traceability、CI、Self-documenting、Small batches、SSOT，掛兩個原則的頁用 sixteen-problems.md 排第一的；第 2–4 頁「日常／散落／交付」不動。README alt 與啟動包 02-diagnosis 的 PDF、PNG 同步 |
 | T47 | 10-10 | 圖形文件《agent 的基本模塊》等確認 | 使用者接受：照兩次盲讀改過的版本；「模塊」不改「模組」（glossary 註明分工）；乾淨環境算資源不算公司專屬的三樣（09 #21）。D13、D15 之下它是參考範例 |
 | T10 | 10-08 | 圖形文件要不要做整份盲讀（不只標題） | 做了啟動包整包（docs/reviews/kit-acceptance-20261010.md）與《agent 的基本模塊》全文（content-blind-read-capability-modules-20261010.md）；其餘六份依 D14、D15 是提醒與參考範例，不做（使用者同意） |
+| T48 | 10-10 | Agent 的正式名稱 | 使用者選 OTTER（Orchestration, Testing, Traceability, Evidence, Release；副標 CI/CD Engineering Agent）。記為 D20；啟動包全文改名、glossary 加條目、身分段與自我介紹模板改、三份投影片換稱呼；規劃 repo 不改名 |
 | T21 | 10-10 | 圖形文件《為什麼非要 CI/CD》逐頁修正 | 不審（使用者）。它是論述，D15 之後不會卡 agent |
 | T32 | 10-10 | 圖形文件《互動場景》逐頁修正 | 不審（使用者）。每頁的時機、授權、訊息例句 D15 已列為參考範例 |
 | T17 | 10-10 | 圖形文件《進到陌生的 workspace》逐頁修正（順序、先補什麼的名單、三類分工） | 不審。使用者：T17 也僅能當成參考範例，務必讓新 agent 知道；不希望這裡的發想（某種程度是空想）把 agent 的功能和思維卡死。記為 D15（通則：啟動包分清楚規則與參考範例，CLAUDE.md 列清單）；第 1 頁加一行說明 |

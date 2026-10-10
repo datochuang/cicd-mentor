@@ -32,7 +32,7 @@ def p_overview():
     rect(s, 20, Y, 400, 236, col=WARN, fill=WARN, op=".04", sw=1.4, dash="6 4")
     T(s, 32, Y + 20, "沒有模塊化：agent 是一整塊", cls="tx", fill=WARN, w=700)
     rect(s, 36, Y + 32, 368, 62, col=WARN, fill=WARN, op=".08", sw=1.2)
-    T(s, 48, Y + 52, "CI/CD mentor agent", cls="tx", fill=WARN, w=700)
+    T(s, 48, Y + 52, "OTTER（CI/CD agent）", cls="tx", fill=WARN, w=700)
     T(s, 48, Y + 70, "接 depot・監看・分析・溝通・shelved CL・check・日誌・請示…", fill=INK2)
     T(s, 48, Y + 86, "功能和機制綁在一起：讀哪份文件、怎麼跑測試都寫死在裡面", fill=INK2)
     for k, t in enumerate(["目標 depot 換成 git，要重寫一半", "別的 agent 一塊都拿不走", "沙盒只能驗整體：過了不知道哪裡對，錯了不知道哪裡錯", "改一處牽全身；行為講不清楚，也驗不了"]):
@@ -41,7 +41,7 @@ def p_overview():
     rect(s, 450, Y, 410, 236, col=GOAL, fill=GOAL, op=".04", sw=1.4)
     T(s, 462, Y + 20, "有模塊化：三層", cls="tx", fill=GOAL, w=700)
     T(s, 580, Y + 20, "agent＝模塊的組合；公司專屬的只有最下層", fill=GRAY)
-    for (x, w, t, col, kind) in [(462, 146, "CI/CD mentor agent", MOD, "solid"), (614, 116, "資安 agent", GRAY, "dash"), (736, 112, "coding 規範 agent", GRAY, "dash")]:
+    for (x, w, t, col, kind) in [(462, 146, "OTTER（CI/CD agent）", MOD, "solid"), (614, 116, "資安 agent", GRAY, "dash"), (736, 112, "coding 規範 agent", GRAY, "dash")]:
         if kind == "solid":
             rect(s, x, Y + 30, w, 26, col=col, fill=col, op=".12", sw=1.4)
         else:
@@ -67,10 +67,10 @@ def p_overview():
     bottom(s, Y + 248, [
         ("agent 的能力拆成十七個模塊，每個一條只講性質的規格，所以測得了、搬得走；公司專屬的只有三樣；沙盒驗的是規格。", True),
         ("規則（不能打破）：要拆成模塊、分三層、照上面的方式切。十七個是哪些、介面長什麼樣是建議：邊開發、邊部署、邊調（決定紀錄 D13）。", False),
-        ("後面：五頁列模塊（看、判、做、說、守），一頁接公司的三樣與復用，一頁 mentor agent 的十個階段各用哪些模塊。", False),
+        ("後面：五頁列模塊（看、判、做、說、守），一頁接公司的三樣與復用，一頁 OTTER 的十個階段各用哪些模塊。", False),
     ])
     aria = ("頂上定義：模塊是 agent 的一項能力，和 design 的 module 無關，每個模塊一條規格；規格只講建立什麼性質，不講機制；例子是乾淨環境重現。左邊沒有模塊化：agent 一整塊，功能和機制綁在一起，四個打叉：換 git 要重寫一半、別的 agent 拿不走、沙盒只能驗整體、改一處牽全身。"
-            "右邊有模塊化的三層：上層 agent（CI/CD mentor、資安、coding 規範），中層十七個模塊分看判做說守五組，下層公司專屬的三樣：接外部的程式（depot、訊息、模型）、評分表、規矩表；兩個打勾：規格可測、換這一層就能復用。")
+            "右邊有模塊化的三層：上層 agent（OTTER、資安、coding 規範），中層十七個模塊分看判做說守五組，下層公司專屬的三樣：接外部的程式（depot、訊息、模型）、評分表、規矩表；兩個打勾：規格可測、換這一層就能復用。")
     return svg(s, 880, 480, aria)
 
 
@@ -250,7 +250,7 @@ STAGES = [
 
 def p_assemble():
     s = []
-    T(s, 20, 24, "mentor agent 的階段", cls="tx-lbl", fill=INK2)
+    T(s, 20, 24, "OTTER 的階段", cls="tx-lbl", fill=INK2)
     T(s, 200, 24, "用到的模塊（階段的順序照《互動場景》，從啟動到換手）", cls="tx-lbl", fill=MOD)
     for i, (st, mods) in enumerate(STAGES):
         y = 36 + i * 30
@@ -258,7 +258,7 @@ def p_assemble():
         T(s, 200, y + 17, mods, fill=INK2)
         line(s, 20, y + 29, 860, y + 29)
     bottom(s, 350, [
-        ("mentor agent 的十個階段各用三到六個模塊；沒有一個階段用到全部，每個模塊至少被兩個階段用。", True),
+        ("OTTER 的十個階段各用三到六個模塊；沒有一個階段用到全部，每個模塊至少被兩個階段用。", True),
         ("所以模塊能分開做、分開在沙盒驗、分開換版。這張表和十七個的名字是建議，邊開發部署邊調；規則是要拆、分層、照規格切。", False),
     ])
     aria = ("十列階段與用到的模塊：啟動用日誌、聯絡、範圍登記、預算；盤點用地圖、變更流、依據分級、打分、趨勢；目標分析用地圖、重現、打分、交付物推導、規矩登記、補丁；計畫核准用理解後核准、聯絡、日誌；建置用補丁、證據、重現、聯絡；"
@@ -274,7 +274,7 @@ PAGES = [
     ("說：三個模塊管 agent 和人的互動：PM 看懂才核准、不濫發訊息、動作留紀錄", p_say()),
     ("守：四個模塊管住 agent：規矩明寫、範圍先登記、改自己先過沙盒、花費有上限", p_keep()),
     ("接公司：公司專屬的只有接外部的程式、評分表、規矩表；換表就是別的 agent", p_bind()),
-    ("組裝：mentor agent 的十個階段各挑幾個模塊，所以模塊能分開做、分開驗", p_assemble()),
+    ("組裝：OTTER 的十個階段各挑幾個模塊，所以模塊能分開做、分開驗", p_assemble()),
 ]
 
 if __name__ == "__main__":

@@ -19,7 +19,8 @@
 
 | 詞 | 意思 |
 |---|---|
-| **agent** | 這個 CI/CD mentor agent：自主運行，方針由 PM 核准 |
+| **agent** | 這個 agent，正式名稱 OTTER：自主運行，方針由 PM 核准。舊稱 CI/CD mentor agent |
+| **OTTER** | 這個 agent 的正式名稱（D20）：**O**rchestration, **T**esting, **T**raceability, **E**vidence, **R**elease，五個字各對一條原則或做法；副標 CI/CD Engineering Agent。實例另有別名（Eric） |
 | **core** | agent 的程式、行為指導原則、提示詞、模板、通用 check script；在 agent 自己的 git repo 的 master 上，出 release（tag）。實例不能直接改它，改進走 MR |
 | **實例** | 從 agent 的 repo clone 出來、跑著的一份 agent（agent-dma、agent-top）；看一個或多個 design。不是 RTL 的 instance |
 | **別名** | 實例給人叫的名字（Eric），登記表記著；訊息與日誌仍標實例名與版號；slack 顯示名稱「Eric（AI agent）」；agent 提、不撞同事的名字、不重複、PM 挑；換手沿用（D19） |

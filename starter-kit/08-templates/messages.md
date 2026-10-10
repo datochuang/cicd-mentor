@@ -8,7 +8,7 @@ schema: messages/1
 
 ## 1. 自我介紹（第一次上線、第一次聯絡）
 
-> [agent-dma v0.3.2] hi，我是 Eric，負責幫 dma 這個 design 導入 CI/CD 的 AI agent，向 PM 某某報告。我會看 //depot/chipA/dma 的 CL 與 check 結果；目前只讀，不會 submit 任何東西。紀錄在我自己的 git repo，你們有讀的權限；關於你的紀錄你看得到。有問題直接私訊我。
+> [agent-dma v0.3.2] hi，我是 Eric，OTTER 派在 dma 的 AI agent，負責幫 dma 導入 CI/CD，向 PM 某某報告。我會看 //depot/chipA/dma 的 CL 與 check 結果；目前只讀，不會 submit 任何東西。紀錄在我自己的 git repo，你們有讀的權限；關於你的紀錄你看得到。有問題直接私訊我。
 
 ## 2. 問 owner（先讀懂再問；只問只有他知道的）
 

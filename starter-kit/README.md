@@ -1,6 +1,6 @@
-# CI/CD Mentor Agent 啟動包
+# OTTER 啟動包：CI/CD Engineering Agent
 
-這一包是給**公司內網**用的。在一個全新的 repo 與 session 裡，由內網的 Claude Code 和一位 PM 接手，把 CI/CD mentor agent 做出來、部署、跑起來。這包只講「為什麼、要做成什麼樣、行為的規矩、先做哪一步、哪些事要人決定」；不帶程式碼，不選模型與部署方式——那些是內網決定的事。
+這一包是給**公司內網**用的。在一個全新的 repo 與 session 裡，由內網的 Claude Code 和一位 PM 接手，把 OTTER 做出來、部署、跑起來。OTTER＝Orchestration, Testing, Traceability, Evidence, Release，副標 CI/CD Engineering Agent（D20）；文件裡偶爾出現的「mentor agent」是改名前的稱呼。這包只講「為什麼、要做成什麼樣、行為的規矩、先做哪一步、哪些事要人決定」；不帶程式碼，不選模型與部署方式——那些是內網決定的事。
 
 這包是在公司外的一個規劃用 repo 裡討論出來的（2026-10-08 到 10-09）；那個 repo 不是 agent 的 repo，agent 的 repo 從這一包開始建。
 
@@ -36,7 +36,7 @@
 
 | 檔名 | 文件標題 | 頁眉 | 舊名或別稱 |
 |---|---|---|---|
-| 01-why/why-cicd-needs-ai-agent-and-pm | AI agent 與人類 PM 搭檔 | CI/CD Mentor Agent | ai-agent-and-pm-make-cicd-happen |
+| 01-why/why-cicd-needs-ai-agent-and-pm | AI agent 與人類 PM 搭檔 | OTTER：CI/CD Engineering Agent | ai-agent-and-pm-make-cicd-happen |
 | 01-why/loops-and-ai-multiplier | 為什麼非要 CI/CD：查和判不交給機器，N 個 agent 等於一個 | CI/CD 的意義 | loops-need-cicd-before-ai-multiplies |
 | 02-diagnosis/team-treating-vc-as-backup | 把版控當備份的團隊：depot 留住檔案，留不住答案 | 版控只當備份的團隊 | repo-as-backup-keeps-files-not-answers |
 | 03-procedures/agent-entering-unknown-workspace | 進到陌生的 workspace：人或 agent 照六個原則檢查，不過就先做 patch | 進到陌生 workspace 的檢查 | check-then-patch-before-asking-owner |
@@ -60,7 +60,7 @@
 | 9 | [07-build-brief.md](07-build-brief.md)、[07-capabilities.md](07-capabilities.md)、[07-build-brief/](07-build-brief/) | Claude Code | 做成什麼：元件、介面、兩種 repo 與三層、實例與換手、沙盒驗收、MVP 的順序；能力拆成哪些模塊——要模組化、分層、怎麼切是規則，十七個模塊與介面是建議 |
 | 10 | [08-templates/](08-templates/) | Claude Code | PROJECT_MAP、狀態板、CL 說明、需求、請示、日誌、訊息的骨架 |
 | 11 | [09-open-decisions.md](09-open-decisions.md) | PM、sponsor、CAD | 公司要先決定的事，附預設值 |
-| 12 | [10-decision-log.md](10-decision-log.md) | 想知道為什麼這樣定的人 | D1–D19 與理由 |
+| 12 | [10-decision-log.md](10-decision-log.md) | 想知道為什麼這樣定的人 | D1–D20 與理由 |
 | 13 | [11-research/](11-research/) | 附錄 | 業界實踐與風險、顧問類比、迴圈與 AI 倍數、角色提示與 agent 的身分、Jenkins 入門、CI 入門（trigger、hook、pipeline），附來源 |
 
 ## 第一週做什麼

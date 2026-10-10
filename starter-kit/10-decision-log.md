@@ -1,6 +1,6 @@
 # 決策紀錄
 
-依時間記錄這個專案的重要決定。每筆寫明：決定了什麼、為什麼、取代了什麼。最新的在最下面。這是公司外那個規劃用 repo 的決定紀錄原文（D1–D19；D11 是打包時的註記）；帶進內網後，新的決定從 D20 起接著記在同一份，同樣只增不改。
+依時間記錄這個專案的重要決定。每筆寫明：決定了什麼、為什麼、取代了什麼。最新的在最下面。這是公司外那個規劃用 repo 的決定紀錄原文（D1–D20；D11 是打包時的註記）；帶進內網後，新的決定從 D21 起接著記在同一份，同樣只增不改。
 
 ---
 
@@ -261,3 +261,15 @@
 **取代：** 無；補 D6（實例名與版號）一層別名。
 
 **出處：** `08-templates/registry.md`、`08-templates/config.md`、`08-templates/handover.md`、`08-templates/messages.md`；`05-behavior-guidelines.md` #18、#46；`CLAUDE.md` 紅線；`09-open-decisions.md` #2。
+
+---
+
+## D20｜2026-10-10｜agent 的正式名稱是 OTTER：Orchestration, Testing, Traceability, Evidence, Release；副標 CI/CD Engineering Agent；mentor 從名稱拿掉
+
+**決定：** 正式名稱 **OTTER**，全稱 Orchestration, Testing, Traceability, Evidence, Release——五個字各對一條原則或做法（Flow as code 的編排、Test-first、Traceability、Evidence-based delivery、Release pipeline）；副標 CI/CD Engineering Agent。「mentor」從正式名稱拿掉（教是它的工作之一，不是全部）。實例的別名（D19）不受影響：自我介紹是「我是 Eric，OTTER 派在 dma 的 AI agent」。規劃 repo 的名字 cicd-mentor 不改（它不是 agent 的 repo，D10）。全稱裡不用 Reliability：在 IC 公司會被讀成可靠度工程（RA）。
+
+**理由：** 使用者的偏好（research/agent-naming-candidates.md）：mentor 太軟、要專業、可用 backronym、動物形象可以；候選 ORCA、DARE、OTTER。使用者定：「Otter 可以。」
+
+**取代：** 文件裡的「CI/CD mentor agent」改成 OTTER；舊稱在歷史紀錄裡保留。
+
+**出處：** `README.md` 開頭；`glossary.md`「OTTER」；`CLAUDE.md`「agent 的身分」；`08-templates/messages.md` 自我介紹。

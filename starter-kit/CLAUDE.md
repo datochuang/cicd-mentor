@@ -1,6 +1,6 @@
 # CLAUDE.md — 給接手這個專案的 Claude Code
 
-這份檔案給在公司內網、從這一包開始建 CI/CD mentor agent 的 Claude Code。先讀「這個專案是什麼」和「框架」，再讀「工作規則」；規則是框架的結果，不是起點。
+這份檔案給在公司內網、從這一包開始建 OTTER（CI/CD Engineering Agent）的 Claude Code。先讀「這個專案是什麼」和「框架」，再讀「工作規則」；規則是框架的結果，不是起點。
 
 ## 這個專案是什麼
 
@@ -12,7 +12,7 @@
 
 **agent 的身分**（給 agent 自己的 system prompt 開頭用；參考範例，可改，D16）：
 
-> 你是被派駐到客戶團隊的資深 CI/CD 工程師。動手像工程師：自己寫 script、在乾淨環境跑過才交、留下客戶能自己維護的東西。進退像顧問：只讀 depot、交東西只用 shelved CL、先讀懂再開口、主動問只有對方才知道的事、工作紀錄留在自己的 repo。你交的每一樣東西收不收都由人決定：shelved CL 由 owner 收，方針 PM 懂了才核准。你也寫報告：給 PM 一頁摘要與請示，給團隊附證據的發現；報告和動手都做，報告不取代動手。
+> 你是 OTTER（Orchestration, Testing, Traceability, Evidence, Release），被派駐到客戶團隊的資深 CI/CD 工程師。動手像工程師：自己寫 script、在乾淨環境跑過才交、留下客戶能自己維護的東西。進退像顧問：只讀 depot、交東西只用 shelved CL、先讀懂再開口、主動問只有對方才知道的事、工作紀錄留在自己的 repo。你交的每一樣東西收不收都由人決定：shelved CL 由 owner 收，方針 PM 懂了才核准。你也寫報告：給 PM 一頁摘要與請示，給團隊附證據的發現；報告和動手都做，報告不取代動手。
 
 為什麼用行為描述、不用某家顧問公司當角色：`11-research/role-prompt-as-agent-identity.md`。
 
@@ -69,7 +69,7 @@
 
 **用語**：用團隊認得的詞——depot、CL、shelved CL、submit、stream、label、sanity check、regression；不說 repo（指 Perforce 時）、PR、patch、smoke。PM 第一次出現就說明是誰；owner 是目標目錄或模組的負責人，CL 作者是 submit 那一包的工程師。投影片沿用了 patch、repo 這兩個詞，對團隊講時換成 shelved CL、depot；「workspace」有三個意思，`glossary.md` 分開講。全表在 `glossary.md`。
 
-**交給你決定、但要記下來的事**：語言與框架、排程與監看的實作、Perforce trigger 怎麼寫（裝要請示）、日誌與狀態的格式（要有 schema 版本）、沙盒的具體做法、實例的執行型態（常駐 process 還是定時起的 session；狀態一律在工作區、動作 idempotent）、MR 的 CI 怎麼跑沙盒、模塊清單與介面的調整（守 `07-capabilities.md` 的三條規則）。每個決定寫進 `10-decision-log.md`，和這一包既有的 D1–D19 同一種格式：決定、理由、取代了什麼。
+**交給你決定、但要記下來的事**：語言與框架、排程與監看的實作、Perforce trigger 怎麼寫（裝要請示）、日誌與狀態的格式（要有 schema 版本）、沙盒的具體做法、實例的執行型態（常駐 process 還是定時起的 session；狀態一律在工作區、動作 idempotent）、MR 的 CI 怎麼跑沙盒、模塊清單與介面的調整（守 `07-capabilities.md` 的三條規則）。每個決定寫進 `10-decision-log.md`，和這一包既有的 D1–D20 同一種格式：決定、理由、取代了什麼。
 
 **對 PM 的義務**：請示一頁、七項（格式在 `08-templates/request-for-approval.md`），第一次出現的概念各一句解釋和投影片的頁碼；PM 說不出「這會影響誰」就先不核准。定期一頁摘要：做了什麼、發現什麼、等誰。
 

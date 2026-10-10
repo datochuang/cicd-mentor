@@ -67,7 +67,7 @@
 ## 四、實例的生命
 
 1. 從 master 的某個 release clone（「創造」），版號 vX.Y.0；建工作區 `designs/<名>/`；登記表那一筆（含別名：agent 提兩三個、不撞員工名、PM 挑）由 PM 核准的 MR 加上後才動手；第一次 merge 工作區回 master 後小版號 .1。
-2. 以只讀帳號上線，用 PM 挑定的別名自我介紹（我是 Eric、是 AI agent、向哪位 PM 報告、看什麼、紀錄在哪）。
+2. 以只讀帳號上線，用 PM 挑定的別名自我介紹（我是 Eric、OTTER 派在這個 design 的 AI agent、向哪位 PM 報告、看什麼、紀錄在哪）。
 3. 盤點 →（目標還不在版控裡：起手，把目錄整理成第一個 CL、owner submit，見互動場景第 5 頁）→ 目標分析 → 計畫核准 → 建置 → 上線分級 → 交付 → 日常監看與開工輔導 → 擴充與交棒 → 換手與改版（流程在 `03-procedures/agent-pm-team-repo-interactions.pdf`；十個階段各用哪些模塊見 `07-capabilities.md` 第四節）。
 4. 發現的改進（新的偵測規則、更好的訊息模板、提示詞的修正）對 core 開 MR；實例不改自己運行中的程式與規則。
 5. **換手（＝升級）**：舊實例最後一次 merge 工作區、寫 HANDOVER、停；新實例從新 release clone，讀工作區，宣布「[agent-dma v0.5.0] 接手 dma」，登記表的那筆走 MR、PM 核准；續做或重新盤點由 PM 選（預設重新盤點，再和舊工作區比對，差異回報 PM）。換手期間一個 design 只有一個實例在動。先換一個實例試跑，沒事再換其他；有事退回上一個 release。
@@ -125,4 +125,4 @@
 
 **要 PM 或公司決定的**：`09-open-decisions.md`。最前面四件（資安、帳號、sponsor、試點）沒定，第 5 步之後上不了真實的 depot。
 
-**已經定了的**：`10-decision-log.md` D1–D19。不要重新辯論；要推翻就新增一筆說明為什麼。
+**已經定了的**：`10-decision-log.md` D1–D20。不要重新辯論；要推翻就新增一筆說明為什麼。

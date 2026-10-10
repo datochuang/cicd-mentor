@@ -1,6 +1,6 @@
 # 啟動包（starter kit）的盤點與規劃
 
-2026-10-09。目的：這個 workspace 的最終產出是一個**啟動包**，帶進公司內網後，在一個**全新的 repo 與 session** 裡由內網的 Claude Code 接手把 CI/CD mentor agent 做出來並部署；這個 workspace 本身不是 agent 的 repo，不在這裡做（D10）。啟動包不深入技術細節；它要讓內網的 Claude Code 和 PM 知道「為什麼、要做成什麼樣、行為的規矩、先做哪一步、哪些事要人決定」。
+2026-10-09。目的：這個 workspace 的最終產出是一個**啟動包**，帶進公司內網後，在一個**全新的 repo 與 session** 裡由內網的 Claude Code 接手把 OTTER（CI/CD Engineering Agent，D20）做出來並部署；這個 workspace 本身不是 agent 的 repo，不在這裡做（D10）。啟動包不深入技術細節；它要讓內網的 Claude Code 和 PM 知道「為什麼、要做成什麼樣、行為的規矩、先做哪一步、哪些事要人決定」。
 
 ## 一、盤點：哪些面向已經有了
 

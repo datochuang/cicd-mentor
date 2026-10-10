@@ -4,7 +4,7 @@
 
 這個 repo 只討論與規劃，不在這裡做 agent：最終產出是啟動包，帶進公司內網、在全新的 repo 與 session 裡才開始製作與部署（D10）。
 
-最後更新：2026-10-10（D4–D19）
+最後更新：2026-10-10（D4–D20）
 
 ## 目標
 
@@ -39,6 +39,8 @@
 **PM 是角色，不是某個人（D9）。** 由使用者（技術主管）起頭，之後交棒；任何人都可能接；也可以同時有多位 PM 各推專案的一部分。規矩：一個 design 任何時候只有一位 PM（登記表記 design → 實例 → PM）；多位 PM 共用 core 的規則，各自只定自己那部分的方針；PM 之上有 sponsor（使用者）裁決 PM 之間的衝突、給資源；PM 換人時 agent 不換行為（規則從 core 來），由 agent 從工作區的決定紀錄、狀態板、採用率產一頁現況交接給新 PM，新 PM 重新核准授權表。PM 手冊寫給這個角色，附交棒與多 PM 的一節。
 
 ### Agent（AI）
+
+正式名稱 **OTTER**（Orchestration, Testing, Traceability, Evidence, Release；副標 CI/CD Engineering Agent；D20）。文件裡的「CI/CD mentor agent」是改名前的稱呼。
 
 - 持續自主運行，主動發現問題、提出提案，不等指令
 - 把 PM 的高階目標轉化成可行的行動方案，並主動向 PM 匯報，取得理解後的核准

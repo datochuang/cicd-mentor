@@ -1,4 +1,4 @@
-# CI/CD Mentor Agent
+# OTTER：CI/CD Engineering Agent（原 CI/CD Mentor Agent）
 
 在 IC 設計團隊導入迭代式開發與 CI/CD 的 AI agent 構想。Agent 自主運行，方向由一位人類 PM 掌握（PM 指負責把團隊開發流程導入 CI/CD 的人，和 project 的 PM 無關）：PM 決定要去哪裡，agent 補上 CI/CD 的知識與執行力，兩邊一起把事情做成。
 
@@ -259,7 +259,7 @@ agent 的能力拆成一個個模塊，每個模塊一條規格（contract）：
 
 ![接公司：公司專屬的只有接外部的程式、評分表、規矩表；換表就是別的 agent](docs/slides/img/agent-capability-modules/p-7.png)
 
-![組裝：mentor agent 的十個階段各挑幾個模塊，所以模塊能分開做、分開驗](docs/slides/img/agent-capability-modules/p-8.png)
+![組裝：OTTER 的十個階段各挑幾個模塊，所以模塊能分開做、分開驗](docs/slides/img/agent-capability-modules/p-8.png)
 
 </details>
 
