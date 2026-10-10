@@ -26,7 +26,6 @@
 | T35 | 10-09 | **分階段路線圖與每階段的成功定義、停損**要不要照我寫的 | 準備 → 試點 → 擴散 → 常態；試點的成功：owner 採用了 shelved CL、check 每天跑有人看、至少一個檢驗從做不到變做得到 | agent-operating-model.md 7.3 |
 | T36 | 10-09 | **紅線清單**（不刪、不碰別人 workspace、沒共識不擋、不報個人活動量、design 資料不出核准的模型、不假裝是人、不對 design 下判斷）有沒有要加減 | | agent-operating-model.md 7.4 |
 | T38 | 10-09 | **agent 自己的版控與多實例**：core 由誰維護、一實例一帳號還是共用、升級的節奏 | 三層分離（core／實例的工作區／生產用的工具）、登記表、實例名與版號署名、沙盒當 core 的 regression、換手已寫進 operating model 第八節，並做成投影片《agent 自己的版控》；這三件要公司決定 | agent-operating-model.md 第八節、docs/slides/agent-own-version-control-and-instances.pdf |
-| T7 | 10-08 | **轉型的終點**：流程存在就好，還是要團隊真正理解並自己維護 | D2 給了初步答案（先改變 PM，由他帶動團隊），細節待討論 | decision-log.md D2 |
 
 ## 等你確認的產出
 
@@ -46,6 +45,7 @@
 
 | # | 結束 | 議題 | 結果 |
 |---|---|---|---|
+| T7 | 10-10 | 轉型的終點：流程存在就好，還是團隊真正理解並自己維護 | 使用者接受啟動包 09 第 18 項的預設：團隊自己維護 pipeline，agent 退到監看。記為 D17；09 的第 18 項移到 10 |
 | T15 | 10-10 | 目錄用途與相依關係沒有文件，對 agent 設計的意涵 | 使用者點頭結案。已被接住：Self-documenting 的檢查（《進到陌生的 workspace》第 2 頁，先補 PROJECT_MAP 初稿）、D5（PROJECT_MAP 主本在工作區、副本 owner 要才交）、D13 的「結構地圖」模塊（只讀 depot 就說得出每個目錄的用途與引用，每筆標依據） |
 | T20 | 10-10 | 《把版控當備份的團隊》第 5–17 頁冒號前的「問題」 | 使用者選「換成原則名」：Traceability、CI、Self-documenting、Small batches、SSOT，掛兩個原則的頁用 sixteen-problems.md 排第一的；第 2–4 頁「日常／散落／交付」不動。README alt 與啟動包 02-diagnosis 的 PDF、PNG 同步 |
 | T21 | 10-10 | 圖形文件《為什麼非要 CI/CD》逐頁修正 | 不審（使用者）。它是論述，D15 之後不會卡 agent |

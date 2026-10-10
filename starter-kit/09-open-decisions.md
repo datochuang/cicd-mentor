@@ -21,7 +21,6 @@
 | 15 | **core 由誰維護**：review MR、出 release、看 release note | 沒有這個人，改版的迴路不轉 | 提 MR 的可以是建置 agent 的 Claude Code session，也可以是實例；review 與出 release 由 PM 或 PM 指定的工程師 | PM、sponsor |
 | 16 | **多久升級一次**（換手的節奏） | release 出了誰排試跑 | PM 定；先換一個實例試跑，沒事再換其他 | PM |
 | 17 | **紅線清單有沒有要加減** | 紅線在 `05-behavior-guidelines.md` 第三節 | 照現在的 | PM、sponsor |
-| 18 | **轉型的終點**：流程存在就好，還是團隊真正理解並自己維護 | 決定擴散與常態階段的目標 | 團隊自己維護；agent 退到監看 | sponsor |
 | 19 | **Git／GitLab 的目標要不要一起做** | 公司若有 git 的 repo，用語與流程整套切換 | 先 Perforce；git 的目標等第一個試點過了再開 | PM |
 | 20 | **agent 的 git repo 放哪、誰建、團隊的讀權限、MR 的 CI 在哪跑** | 第一步（沙盒）就要；自我介紹說「你們有讀的權限」 | 公司的 GitLab 開一個 repo；CAD 建；試點團隊有讀權限；CI runner 跑得起沙盒的 p4d | CAD／IT、PM |
 | 21 | **沙盒能不能用真的 EDA 工具與 license** | 決定沙盒驗得到什麼 | 先 mock；上真實 depot 前用真的跑一次 | CAD |
@@ -29,4 +28,4 @@
 | 23 | **slack 還是 mail** | 溝通元件做哪個 | slack；沒 slack 的人用 mail | PM |
 | 24 | **交付物的取用處**：release 區放哪、誰能寫、下游怎麼被通知 | CD 的出包要放到固定位置；agent 不 submit，所以誰按最後那一下要定 | `//depot/<chip>/release/<目錄>/`；出包 script 產生 shelved CL 由 owner submit，或 owner 授權 trigger 直接寫；通知走 slack channel | owner、CAD、PM |
 
-定了的項目移到 `10-decision-log.md`，這張表只留沒定的。
+定了的項目移到 `10-decision-log.md`，這張表只留沒定的；編號不重用（#18 轉型的終點已定，見 D17）。

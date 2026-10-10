@@ -200,3 +200,15 @@
 **取代：** 無。
 
 **出處：** [agent-operating-model.md](agent-operating-model.md) 第一節第十一輪；啟動包 `CLAUDE.md`「agent 的身分」、`07-build-brief.md` 第三節「提示詞」、`11-research/role-prompt-as-agent-identity.md`。
+
+---
+
+## D17｜2026-10-10｜轉型的終點：團隊真正理解並自己維護 pipeline，agent 退到監看
+
+**決定：** 擴散與常態階段的目標是團隊自己維護 pipeline、agent 只剩監看與維運；流程只是「存在」不算到站。這是啟動包 09-open-decisions 第 18 項的預設值，使用者接受，該項從 09 移到 10。每個目標的退場條件（09 第 14 項）仍由 PM 定。
+
+**理由：** D2 已說先改變 PM、由他帶動團隊；終點若只是流程存在，agent 一撤流程就散，和「當備份用」的現狀沒有差別。使用者：「可以結。」
+
+**取代：** 收掉 T7。
+
+**出處：** [direction.md](direction.md) 目標一節；[todo.md](todo.md) T7。
