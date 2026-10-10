@@ -260,4 +260,4 @@
 
 **取代：** 無；補 D6（實例名與版號）一層別名。
 
-**出處：** `08-templates/registry.md`、`config.md`、`handover.md`、`messages.md`；`05-behavior-guidelines.md` #18、#46；`CLAUDE.md` 紅線；`09-open-decisions.md` #2。
+**出處：** `08-templates/registry.md`、`08-templates/config.md`、`08-templates/handover.md`、`08-templates/messages.md`；`05-behavior-guidelines.md` #18、#46；`CLAUDE.md` 紅線；`09-open-decisions.md` #2。
