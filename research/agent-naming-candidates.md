@@ -91,3 +91,23 @@ OTTER 保留了使用者喜歡的靈巧意象。agent 會私訊詢問、交付�
 我的建議是先用 **ORCA、DARE、OTTER** 這三個名字比較實際呈現效果；目前不需要繼續擴大候選。縮寫全稱負責補充含義，日常辨識靠短名稱與固定的 CI/CD 職責副標。
 
 正式名称、英文全稱與是否更名 repo 都仍由使用者決定，本文只保存分析。名稱的既有專案使用情形與商標狀態尚未查核。
+
+---
+
+## Claude 的評估（2026-10-10）
+
+**先踩一個雷：三個全稱都用了 Reliability。** 在 IC 公司，Reliability Engineering 就是可靠度工程——HTOL、ESD、burn-in 那個 RA／QA 部門。一個叫「…Reliability Engineering」的工具，第一眼會被當成 RA 的東西。建議 R 換成 **Release**：release engineering 正是 CD 那一段的工作（打包、版本、manifest、取用處）。換過之後：
+
+| 候選 | 建議的全稱 | 說明 |
+|---|---|---|
+| **OTTER** | **O**rchestration, **T**esting, **T**raceability, **E**vidence, **R**elease | 五個字各對到啟動包裡的一條原則或做法：Flow as code 的編排、Test-first、Traceability、Evidence-based delivery、Release pipeline。不再是功能清單，是這個 agent 的做事方式 |
+| **ORCA** | **O**rchestration, **R**egression & **C**ontinuous **A**utomation | regression 是 IC 現場每天用的詞；Continuous 保留。虎鯨成群獵食＝多實例向同一位 PM 報告，回聲定位＝只讀不碰就看得見 |
+| **DARE** | **D**evelopment **A**utomation & **R**elease **E**ngineering | D 選 Development（涵蓋前期的流程改造）；Delivery 的意思由 Release 接住。讀起來像職稱，正式提案最順；缺點是「敢」對還沒被說服的團隊有強推的味道 |
+
+**排名**：OTTER（改過全稱後）、ORCA、DARE。OTTER 的靈巧對應小步、shelved CL、私訊先問；ORCA 的畫面最強；DARE 最正式。三個都可以，副標一律「CI/CD Engineering Agent」。
+
+**mentor 怎麼處理**：同意從正式名稱拿掉，教是它的工作之一但不是全部。定了之後，啟動包全文的「CI/CD mentor agent」換成「<名字>，CI/CD Engineering Agent」，自我介紹變成「我是 Eric，OTTER 派在 FFT 的 AI agent」（D19 的實例別名不受影響）。規劃 repo 的名字 cicd-mentor 可以不改，它不是 agent 的 repo（D10）。
+
+**撞名**（憑印象，沒查證）：Otter.ai 是會議逐字稿 SaaS；Orca 是 GNOME 的螢幕閱讀器、也有 OrcaSlicer；D.A.R.E. 是美國的反毒教育。都不在 EDA 或 Perforce 的圈子，內部用沒問題；定案前查一下公司內部有沒有同名的工具或專案代號。
+
+**另一個備案**：CICADA（CI／CD Autonomous Depot Advisor），縮寫裡直接藏著 CI 和 CD，中文「知了」；只在使用者想把 CI/CD 四個字母放進名字時才拿出來比。
