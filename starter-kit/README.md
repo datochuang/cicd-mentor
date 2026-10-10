@@ -65,7 +65,7 @@
 ## 第一週做什麼
 
 1. **PM** 讀 [06-pm-handbook.md](06-pm-handbook.md)，拿 [09-open-decisions.md](09-open-decisions.md) 去談最前面幾件：design 資料能不能給 LLM、能不能用外部模型、內網有哪些核准的模型（Claude Code 之後在這範圍內提案）；agent 的 Perforce 與 slack 帳號（先只讀）；sponsor 是誰；第一個自願的試點團隊；agent 的 git repo 放哪（#20）。這幾件沒談好，agent 動不了。
-2. **內網的 Claude Code** 在這一包的目錄裡啟動（根目錄有 CLAUDE.md 它才會自動讀；之後放進 agent 的 repo 時，repo 根目錄放一個 CLAUDE.md 只寫「先讀 docs/CLAUDE.md」），照 [CLAUDE.md](CLAUDE.md) 裡的讀序讀完；照 [07-build-brief.md](07-build-brief.md) 的第一步建**沙盒 depot**（埋 [02-diagnosis/sixteen-problems.md](02-diagnosis/sixteen-problems.md) 的十六種問題），讓第一版 agent 在沙盒上長出來。
+2. **內網的 Claude Code** 在這一包的目錄裡啟動（根目錄有 CLAUDE.md 它才會自動讀；之後放進 agent 的 repo 時，repo 根目錄放一個 CLAUDE.md 只寫「先讀 docs/CLAUDE.md」），照 [CLAUDE.md](CLAUDE.md) 裡的讀序讀完。不要打 `/init`：那是從程式碼產生 CLAUDE.md 的指令，會提議改寫這份；它提議的修改一律拒絕。第一句話建議：「照 docs/CLAUDE.md 的讀序把啟動包讀完，先用一頁告訴我：你理解的目的與框架、MVP 第 0 步你打算怎麼做、09 裡哪幾項不定你就動不了。確認後再開始做第 0 步。」它會卡住才問，不是問卷式帶你走；要一次談完就拿 09 主動給它答案。然後照 [07-build-brief.md](07-build-brief.md) 的第一步建**沙盒 depot**（埋 [02-diagnosis/sixteen-problems.md](02-diagnosis/sixteen-problems.md) 的十六種問題），讓第一版 agent 在沙盒上長出來。
 3. 沙盒三項驗收過了（偵測、提案、不可做的事）、第 1 步的資源談好了，agent 才以只讀帳號上真實的 depot，從盤點開始。
 
 ## 哪些是規則、哪些是參考範例（D15）
