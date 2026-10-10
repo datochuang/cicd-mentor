@@ -59,7 +59,7 @@
 | 9 | [07-build-brief.md](07-build-brief.md)、[07-capabilities.md](07-capabilities.md)、[07-build-brief/](07-build-brief/) | Claude Code | 做成什麼：元件、介面、兩種 repo 與三層、實例與換手、沙盒驗收、MVP 的順序；能力拆成哪些模塊——要模組化、分層、怎麼切是規則，十七個模塊與介面是建議 |
 | 10 | [08-templates/](08-templates/) | Claude Code | PROJECT_MAP、狀態板、CL 說明、需求、請示、日誌、訊息的骨架 |
 | 11 | [09-open-decisions.md](09-open-decisions.md) | PM、sponsor、CAD | 公司要先決定的事，附預設值 |
-| 12 | [10-decision-log.md](10-decision-log.md) | 想知道為什麼這樣定的人 | D1–D14 與理由 |
+| 12 | [10-decision-log.md](10-decision-log.md) | 想知道為什麼這樣定的人 | D1–D15 與理由 |
 | 13 | [11-research/](11-research/) | 附錄 | 業界實踐與風險、顧問類比、迴圈與 AI 倍數，附來源 |
 
 ## 第一週做什麼
@@ -67,6 +67,10 @@
 1. **PM** 讀 [06-pm-handbook.md](06-pm-handbook.md)，拿 [09-open-decisions.md](09-open-decisions.md) 去談最前面幾件：design 資料能不能給 LLM、用哪個模型；agent 的 Perforce 與 slack 帳號（先只讀）；sponsor 是誰；第一個自願的試點團隊。這幾件沒談好，agent 動不了。
 2. **內網的 Claude Code** 照 [CLAUDE.md](CLAUDE.md) 裡的讀序讀完；照 [07-build-brief.md](07-build-brief.md) 的第一步建**沙盒 depot**（埋 [02-diagnosis/sixteen-problems.md](02-diagnosis/sixteen-problems.md) 的十六種問題），讓第一版 agent 在沙盒上長出來。
 3. 沙盒三項驗收過了（偵測、提案、不可做的事）、第 1 步的資源談好了，agent 才以只讀帳號上真實的 depot，從盤點開始。
+
+## 哪些是規則、哪些是參考範例（D15）
+
+這包是在公司外想出來的，多數內容是發想。規則只有：目的與框架、六個原則與九條做法、紅線與授權、兩種 repo 與三層、先沙盒再真實 depot、模組化的三條、定了的決定。其餘——投影片裡的檢查順序與「先補什麼」的名單、十六個情境、十七個模塊、訊息例句、MVP 十步、模板欄位——都是參考範例：內網的 Claude Code 覺得有更好的做法就換，記一句為什麼進 [10-decision-log.md](10-decision-log.md)。清單在 [CLAUDE.md](CLAUDE.md)「規則與參考範例」。
 
 ## 這包不做的
 

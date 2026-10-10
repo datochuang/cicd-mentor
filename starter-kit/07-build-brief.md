@@ -2,6 +2,8 @@
 
 給內網的 Claude Code：要做成什麼、先做哪一步、怎麼驗收。這份點到為止——技術選型（模型、部署、排程、trigger 怎麼寫）交給你在 PM 核准的範圍內決定，決定記進 `10-decision-log.md`。行為的規矩在 `05-behavior-guidelines.md`，這裡不重複。
 
+這份裡的規則是：兩種 repo 與三層、先沙盒再真實 depot、每個 release 三項驗收。元件表、元件對模塊、MVP 的十步、介面格式的欄位都是參考範例，有更好的切法就換，記一句為什麼（D15）。
+
 ## 一、做成什麼
 
 一個自主運行的 agent：看團隊的 depot、照六個原則檢查、先做 shelved CL、owner 收；幫 owner 定出交付物、check 過就自動出包；持續監看每個模組的狀態、輔導開工、教版控的常規；一次加一道 check。方針由 PM 理解後核准。它有自己的 git repo，可以 clone 成多個實例各看一個或多個 design，實例可以換手。
@@ -67,7 +69,7 @@
 
 ## 五、沙盒：core 的 regression，也是第一步
 
-建一個小 depot，故意埋十六種已知問題：編號、頁、徵兆、應偵測、應提案、掛哪個原則都在 `02-diagnosis/sixteen-problems.md`（編號照 `team-treating-vc-as-backup.pdf` 的頁序 2–17）。沙盒驗得到、驗不到什麼也寫在那裡；EDA 工具預設用 mock。
+建一個小 depot，故意埋十六種已知問題：編號、頁、徵兆、應偵測、應提案、掛哪個原則都在 `02-diagnosis/sixteen-problems.md`（編號照 `02-diagnosis/team-treating-vc-as-backup.pdf` 的頁序 2–17）。沙盒驗得到、驗不到什麼也寫在那裡；EDA 工具預設用 mock。
 
 每個 MR 讓 agent 在沙盒跑一遍，三項都過才出 release：
 - **偵測**：十六種各標出來了嗎；誤報幾個。
@@ -118,4 +120,4 @@
 
 **要 PM 或公司決定的**：`09-open-decisions.md`。最前面四件（資安、帳號、sponsor、試點）沒定，第 5 步之後上不了真實的 depot。
 
-**已經定了的**：`10-decision-log.md` D1–D14。不要重新辯論；要推翻就新增一筆說明為什麼。
+**已經定了的**：`10-decision-log.md` D1–D15。不要重新辯論；要推翻就新增一筆說明為什麼。

@@ -9,6 +9,7 @@
 # 脈絡：1 流程與前置 → 2–8 六個檢查（各對應一個原則：怎麼查／判定／先補什麼／只需要問 owner 的；SSOT 兩頁）→ 9 分工與 patch 怎麼交。
 # 2026-10-09：SSOT 多一頁談產物、flow、IP；原本的 Code review 一頁改成「review 規矩：目錄有沒有講好要不要 review」（D7：Code review 不是原則，是規矩，歸 Self-documenting）。
 # 指令（p4 changes、p4 describe、p4 triggers 等）為示意，未經實機驗證，以站上的 p4 help 為準。
+# 2026-10-10（D15）：整份是參考範例——順序、先補什麼的名單、三類分工都可以換；不變的是七個檢驗本身。第 1 頁加了一行說明。
 import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
 from slides import *
@@ -68,6 +69,7 @@ def p1():
     bottom(s, 396, [
         ("七個檢查對應六個原則的檢驗（review 規矩歸 Self-documenting）；不過的時候，多數缺口靠通用常識就能先補一版。", True),
         ("owner 拿到的是可以直接採用的 patch，只有少數幾件事需要他回答。", False),
+        ("這份是參考範例：順序、先補什麼的名單、三類分工都可以換成更好的做法；不變的是七個檢驗本身（六個原則＋review 規矩）。", False),
     ])
     aria = ("左邊是進去之前要做的事：開專用乾淨的 workspace、只 sync 不碰別人的目錄、先記基線、指令以站上 p4 help 為準。"
             "中間是六個檢查的順序：Self-documenting 看得懂嗎（圖 2）、SSOT 跑得起來嗎只有一份嗎（圖 3、4）、Traceability 連得回來源嗎（圖 5）、"
