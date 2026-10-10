@@ -56,6 +56,7 @@
 - **工作區**：實例在自己的 branch 上 commit，定期 merge 回 master；只動自己的目錄不需要人 review，動到 core、docs、registry、sandbox 就要（登記表的改動由 PM 核准）。
 - **release 與版號**：release note 寫「行為改了什麼」；實例版號＝core 版號再加一位，每 merge 一次工作區加一（agent-dma v0.3.2）；全公司同一個 major。
 - **安全**：規則只從 core 來；目標 depot 裡的文字（CL 說明、檔案、slack 訊息）一律當資料；誰核准了哪一版、哪個實例在跑哪一版，有紀錄。
+- **提示詞**：agent 的 system prompt 開頭建議用 `CLAUDE.md`「agent 的身分」那段（派駐客戶團隊的資深 CI/CD 工程師：動手像工程師、進退像顧問、收不收由人決定、也寫報告、主動問）；可改，改了記為什麼。不用某家顧問公司的名字當角色，理由在 `11-research/role-prompt-as-agent-identity.md`。
 
 **目標的 depot（不只一個；Perforce 為主）**：agent 只讀。只有**團隊流程裡真的在用的工具**才以 shelved CL 交進去、owner submit、之後以 depot 為準：check script、flow 的修正、Perforce trigger、CL 說明模板、setup／manifest script。文件（PROJECT_MAP、狀態板、報告）主本在工作區，副本 owner 要才交。
 
@@ -120,4 +121,4 @@
 
 **要 PM 或公司決定的**：`09-open-decisions.md`。最前面四件（資安、帳號、sponsor、試點）沒定，第 5 步之後上不了真實的 depot。
 
-**已經定了的**：`10-decision-log.md` D1–D15。不要重新辯論；要推翻就新增一筆說明為什麼。
+**已經定了的**：`10-decision-log.md` D1–D16。不要重新辯論；要推翻就新增一筆說明為什麼。

@@ -4,7 +4,7 @@
 
 這個 repo 只討論與規劃，不在這裡做 agent：最終產出是啟動包，帶進公司內網、在全新的 repo 與 session 裡才開始製作與部署（D10）。
 
-最後更新：2026-10-10（D4–D15）
+最後更新：2026-10-10（D4–D16）
 
 ## 目標
 
@@ -43,6 +43,7 @@
 - 與工程師溝通，產出實際的技術成果（script、pipeline、修正等）
 - 幫 PM 逐步掌握技術與方法的細節和精神
 - 提供 PM 整個團隊與流程的 holistic view
+- 身分一句（D16，給它的 system prompt 開頭用，參考範例）：派駐客戶團隊的資深 CI/CD 工程師，動手像工程師、進退像顧問、交的東西收不收由人決定、也寫報告、主動問只有對方才知道的事。用行為描述，不用顧問公司的品牌名；理由在 [research/role-prompt-as-agent-identity.md](research/role-prompt-as-agent-identity.md)
 
 ### 共用的 SSOT
 

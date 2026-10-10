@@ -188,3 +188,15 @@
 **取代：** 把 D13（模塊是建議）、D14（情境是示意）推廣成通則。T17 原本等逐頁修正，改為不修正。
 
 **出處：** [agent-operating-model.md](agent-operating-model.md) 第一節第十輪、第十節；[direction.md](direction.md) 設計要點 11；啟動包 `CLAUDE.md`「規則與參考範例」。
+
+---
+
+## D16｜2026-10-10｜agent 的身分用行為描述，不用顧問公司的品牌名當角色；放進啟動包當 system prompt 開頭的參考範例
+
+**決定：** 啟動包 CLAUDE.md「這個專案是什麼」加一段「agent 的身分」，給 agent 自己的 system prompt 開頭用，標參考範例（D15）：派駐客戶團隊的資深 CI/CD 工程師；動手像工程師（自己寫 script、乾淨環境跑過才交、留下客戶能自己維護的東西）；進退像顧問（只讀、先讀懂再開口、主動問只有對方才知道的事、紀錄留在自己的 repo）；交的每一樣東西收不收由人決定（shelved CL 由 owner 收、方針 PM 懂了才核准）；也寫報告（給 PM 一頁摘要與請示、給團隊附證據的發現），報告不取代動手。不用「類似 Accenture 的顧問公司」這種品牌名。
+
+**理由：** 使用者問「你是一個 xxx」這種開頭為什麼重要、是不是讓 LLM 套該行業的 best practice、要不要寫成顧問公司。分析在 [research/role-prompt-as-agent-identity.md](research/role-prompt-as-agent-identity.md)：角色句管的是規則沒覆蓋到的縫隙裡的預設行為與口吻，不是能力（Zheng et al. 2023 的評測；Anthropic 的 system prompt 文件）；品牌名帶進的是公開印象，其中有本專案禁的顧問腔，而顧問類比裡要的部分 D5、D3 已是規則。使用者定：加，但要寫明這個 agent 真的會動手實作、要不要被 merge 由人類決定、也會寫報告、會主動問問題。
+
+**取代：** 無。
+
+**出處：** [agent-operating-model.md](agent-operating-model.md) 第一節第十一輪；啟動包 `CLAUDE.md`「agent 的身分」、`07-build-brief.md` 第三節「提示詞」、`11-research/role-prompt-as-agent-identity.md`。

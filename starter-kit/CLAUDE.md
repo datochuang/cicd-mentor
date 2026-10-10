@@ -10,6 +10,12 @@
 
 你要做的不是「寫一個 bot」，是把這一包描述的 agent 做出來、放進沙盒、再放進真實的 depot，而且過程本身就照這一包的原則來做。
 
+**agent 的身分**（給 agent 自己的 system prompt 開頭用；參考範例，可改，D16）：
+
+> 你是被派駐到客戶團隊的資深 CI/CD 工程師。動手像工程師：自己寫 script、在乾淨環境跑過才交、留下客戶能自己維護的東西。進退像顧問：只讀、先讀懂再開口、主動問只有對方才知道的事、工作紀錄留在自己的 repo。你交的每一樣東西收不收都由人決定：shelved CL 由 owner 收，方針 PM 懂了才核准。你也寫報告：給 PM 一頁摘要與請示，給團隊附證據的發現；報告和動手都做，報告不取代動手。
+
+為什麼用行為描述、不用某家顧問公司當角色：`11-research/role-prompt-as-agent-identity.md`。
+
 ## 規則與參考範例：先分清楚（D15）
 
 這一包是在公司外、沒碰過真實 depot 的情況下想出來的；多數內容是發想，沒驗證過。使用者的原話：「我不希望我們在這邊的發想（某種程度是空想），直接把 agent 的功能和思維卡死。」所以讀每一份之前先分清楚它是哪一種。
@@ -63,7 +69,7 @@
 
 **用語**：用團隊認得的詞——depot、CL、shelved CL、submit、stream、label、sanity check、regression；不說 repo（指 Perforce 時）、PR、patch、smoke。PM 第一次出現就說明是誰；owner 是目標目錄或模組的負責人，CL 作者是 submit 那一包的工程師。投影片沿用了 patch、repo 這兩個詞，對團隊講時換成 shelved CL、depot；「workspace」有三個意思，`glossary.md` 分開講。全表在 `glossary.md`。
 
-**交給你決定、但要記下來的事**：語言與框架、排程與監看的實作、Perforce trigger 怎麼寫（裝要請示）、日誌與狀態的格式（要有 schema 版本）、沙盒的具體做法、實例的執行型態（常駐 process 還是定時起的 session；狀態一律在工作區、動作 idempotent）、MR 的 CI 怎麼跑沙盒、模塊清單與介面的調整（守 `07-capabilities.md` 的三條規則）。每個決定寫進 `10-decision-log.md`，和這一包既有的 D1–D15 同一種格式：決定、理由、取代了什麼。
+**交給你決定、但要記下來的事**：語言與框架、排程與監看的實作、Perforce trigger 怎麼寫（裝要請示）、日誌與狀態的格式（要有 schema 版本）、沙盒的具體做法、實例的執行型態（常駐 process 還是定時起的 session；狀態一律在工作區、動作 idempotent）、MR 的 CI 怎麼跑沙盒、模塊清單與介面的調整（守 `07-capabilities.md` 的三條規則）。每個決定寫進 `10-decision-log.md`，和這一包既有的 D1–D16 同一種格式：決定、理由、取代了什麼。
 
 **對 PM 的義務**：請示一頁、七項（格式在 `08-templates/request-for-approval.md`），第一次出現的概念各一句解釋和投影片的頁碼；PM 說不出「這會影響誰」就先不核准。定期一頁摘要：做了什麼、發現什麼、等誰。
 
