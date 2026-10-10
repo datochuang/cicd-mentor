@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+<meta charset="utf-8">
+<title>agent 的基本模塊：拆成十七個各有規格的模塊，公司專屬的只有三樣</title>
+<style>
+:root{--paper:#fff;--surface:#fff;--surface-2:#eef2f5;--ink:#17212b;--ink-2:#48596a;--ink-3:#78889a;--rule:#cfd9e1;--rule-2:#aebbc7;
+--goal:#116b64;--warn:#a0580f;--agent:#2f6f9f;--pm:#7a4f9a;
+--mono:"SF Mono",Menlo,Consolas,"PingFang TC","Noto Sans TC","Microsoft JhengHei",monospace;
+--sans:"Helvetica Neue",Arial,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif}
+html,body{margin:0;padding:0;background:#fff;color:var(--ink);font-family:var(--sans)}
+body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@page{size:A4 landscape;margin:0}
+.slide{width:297mm;height:210mm;box-sizing:border-box;padding:11mm 14mm 9mm;display:flex;flex-direction:column;break-after:page;page-break-after:always;overflow:hidden;position:relative}
+.slide:last-child{break-after:auto;page-break-after:auto}
+@media screen{body{background:#e6ebef}.slide{background:#fff;margin:8mm auto;box-shadow:0 1px 4px rgba(0,0,0,.12)}}
+.kicker{font-family:var(--mono);font-size:9.5pt;letter-spacing:.06em;color:var(--ink-3);margin:0 0 2mm}
+.slide h1{font-family:var(--sans);font-size:20pt;font-weight:600;margin:0 0 5mm;line-height:1.25}
+.fig{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.fig svg{display:block;color:var(--ink)}
+.pn{position:absolute;right:14mm;bottom:6mm;font-family:var(--mono);font-size:8.5pt;color:var(--ink-3)}
+.tx{font-family:var(--mono);font-size:12px;fill:currentColor}
+.tx-s{font-family:var(--mono);font-size:10.5px;fill:var(--ink-3)}
+.tx-b{font-family:var(--sans);font-size:15px;font-weight:700;fill:currentColor}
+.tx-lbl{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.06em;fill:var(--ink-3)}
+</style>
+</head>
+<body>
+<section class="slide"><div class="kicker">agent 的基本模塊　·　圖 1 ／ 8</div><h1>總覽：agent 拆成模塊，各一條只講性質的規格；沒拆就搬不走、驗不了哪裡錯</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="頂上定義：模塊是 agent 的一項能力，和 design 的 module 無關，每個模塊一條規格；規格只講建立什麼性質，不講機制；例子是乾淨環境重現。左邊沒有模塊化：agent 一整塊，功能和機制綁在一起，四個打叉：換 git 要重寫一半、別的 agent 拿不走、沙盒只能驗整體、改一處牽全身。右邊有模塊化的三層：上層 agent（CI/CD mentor、資安、coding 規範），中層十七個模塊分看判做說守五組，下層公司專屬的三樣：接 depot 的程式、評分表、規矩表；兩個打勾：規格可測、換這一層就能復用。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="20.0" text-anchor="start" fill="var(--ink-2)">這份文件回答：agent 的能力能不能拆成可復用的基本模塊；模塊怎麼描述；有和沒有模塊化差在哪</text>
+<rect x="20.0" y="32.0" width="840.0" height="62.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".06"/>
+<text class="tx" x="32.0" y="50.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">模塊＝agent（自主運行的 AI 程式）的一項能力，和 design 的 module 無關；每個模塊一條規格。</text>
+<text class="tx-s" x="32.0" y="68.0" text-anchor="start" fill="var(--ink-2)">規格（軟體說的 contract）只講它建立什麼性質、回答什麼問題；不講讀哪份文件、怎麼跑測試。</text>
+<text class="tx-s" x="32.0" y="85.0" text-anchor="start" fill="var(--ink-2)">例：乾淨環境重現——主要文件是否描述了怎麼重現執行，而且結果有 fail-safe 的辨認方式（過／不過／探測本身壞了）。</text>
+<rect x="20.0" y="106.0" width="400.0" height="236.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.4" stroke-dasharray="6 4" fill-opacity=".04"/>
+<text class="tx" x="32.0" y="126.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">沒有模塊化：agent 是一整塊</text>
+<rect x="36.0" y="138.0" width="368.0" height="62.0" fill="var(--warn)" stroke="var(--warn)" stroke-width="1.2" fill-opacity=".08"/>
+<text class="tx" x="48.0" y="158.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">CI/CD mentor agent</text>
+<text class="tx-s" x="48.0" y="176.0" text-anchor="start" fill="var(--ink-2)">接 depot 的程式・監看・分析・溝通・shelved CL・check・日誌・請示…</text>
+<text class="tx-s" x="48.0" y="192.0" text-anchor="start" fill="var(--ink-2)">功能和機制綁在一起：讀哪份文件、怎麼跑測試都寫死在裡面</text>
+<text class="tx" x="36.0" y="228.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="56.0" y="228.0" text-anchor="start" fill="var(--ink-2)">目標 depot 換成 git，要重寫一半</text>
+<text class="tx" x="36.0" y="252.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="56.0" y="252.0" text-anchor="start" fill="var(--ink-2)">別的 agent 一塊都拿不走</text>
+<text class="tx" x="36.0" y="276.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="56.0" y="276.0" text-anchor="start" fill="var(--ink-2)">沙盒只能驗整體：過了不知道哪裡對，錯了不知道哪裡錯</text>
+<text class="tx" x="36.0" y="300.0" text-anchor="start" fill="var(--warn)" style="font-weight:700">✗</text>
+<text class="tx" x="56.0" y="300.0" text-anchor="start" fill="var(--ink-2)">改一處牽全身；行為講不清楚，也驗不了</text>
+<rect x="450.0" y="106.0" width="410.0" height="236.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.4" fill-opacity=".04"/>
+<text class="tx" x="462.0" y="126.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">有模塊化：三層</text>
+<text class="tx-s" x="580.0" y="126.0" text-anchor="start" fill="var(--ink-3)">agent＝模塊的組合；公司專屬的只有最下層</text>
+<rect x="462.0" y="136.0" width="146.0" height="26.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.4" fill-opacity=".12"/>
+<text class="tx" x="535.0" y="153.0" text-anchor="middle" fill="var(--agent)" style="font-weight:700">CI/CD mentor agent</text>
+<rect x="614.0" y="136.0" width="116.0" height="26.0" fill="var(--surface)" stroke="var(--ink-3)" stroke-width="1.1" stroke-dasharray="4 3"/>
+<text class="tx-s" x="672.0" y="153.0" text-anchor="middle" fill="var(--ink-3)">資安 agent</text>
+<rect x="736.0" y="136.0" width="112.0" height="26.0" fill="var(--surface)" stroke="var(--ink-3)" stroke-width="1.1" stroke-dasharray="4 3"/>
+<text class="tx-s" x="792.0" y="153.0" text-anchor="middle" fill="var(--ink-3)">coding 規範 agent</text>
+<text class="tx-s" x="848.0" y="176.0" text-anchor="end" fill="var(--ink-3)">將來別的 agent：同樣的模塊，換評分表</text>
+<line x1="535.0" y1="166.0" x2="535.0" y2="178.0" stroke="var(--agent)" stroke-width="1.3" marker-end="url(#ar-a)"/>
+<rect x="462.0" y="182.0" width="386.0" height="48.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="1.2" fill-opacity=".06"/>
+<text class="tx" x="474.0" y="200.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">十七個模塊</text>
+<rect x="552.0" y="190.0" width="42.8" height="20.0" rx="10" fill="var(--agent)" stroke="var(--agent)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="573.4" y="204.0" text-anchor="middle" fill="var(--agent)" style="font-weight:700">看 4</text>
+<rect x="600.8" y="190.0" width="42.8" height="20.0" rx="10" fill="var(--agent)" stroke="var(--agent)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="622.2" y="204.0" text-anchor="middle" fill="var(--agent)" style="font-weight:700">判 3</text>
+<rect x="649.6" y="190.0" width="42.8" height="20.0" rx="10" fill="var(--agent)" stroke="var(--agent)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="671.0" y="204.0" text-anchor="middle" fill="var(--agent)" style="font-weight:700">做 3</text>
+<rect x="698.4" y="190.0" width="42.8" height="20.0" rx="10" fill="var(--agent)" stroke="var(--agent)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="719.7" y="204.0" text-anchor="middle" fill="var(--agent)" style="font-weight:700">說 3</text>
+<rect x="747.1" y="190.0" width="42.8" height="20.0" rx="10" fill="var(--agent)" stroke="var(--agent)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="768.5" y="204.0" text-anchor="middle" fill="var(--agent)" style="font-weight:700">守 4</text>
+<text class="tx-s" x="474.0" y="222.0" text-anchor="start" fill="var(--ink-2)">看判做說守是 agent 的五種動作；每個模塊一條規格＋沙盒裡一組驗它的測試</text>
+<line x1="535.0" y1="234.0" x2="535.0" y2="246.0" stroke="var(--goal)" stroke-width="1.3" marker-end="url(#ar-g)"/>
+<rect x="462.0" y="250.0" width="124.0" height="40.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.3" fill-opacity=".10"/>
+<text class="tx" x="470.0" y="267.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">接 depot 的程式</text>
+<text class="tx-s" x="470.0" y="284.0" text-anchor="start" fill="var(--ink-2)">Perforce／git</text>
+<rect x="593.0" y="250.0" width="124.0" height="40.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.3" fill-opacity=".10"/>
+<text class="tx" x="601.0" y="267.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">評分表</text>
+<text class="tx-s" x="601.0" y="284.0" text-anchor="start" fill="var(--ink-2)">六原則、資安、規範…</text>
+<rect x="724.0" y="250.0" width="124.0" height="40.0" fill="var(--goal)" stroke="var(--goal)" stroke-width="1.3" fill-opacity=".10"/>
+<text class="tx" x="732.0" y="267.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">規矩表</text>
+<text class="tx-s" x="732.0" y="284.0" text-anchor="start" fill="var(--ink-2)">授權、登記、症狀目錄</text>
+<text class="tx-s" x="462.0" y="306.0" text-anchor="start" fill="var(--goal)">公司專屬的只有這三樣：換公司、換版控只換這一層</text>
+<text class="tx" x="462.0" y="322.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="482.0" y="322.0" text-anchor="start" fill="var(--goal)">規格可測：沙盒（埋了已知問題的假 depot）逐模塊驗</text>
+<text class="tx" x="462.0" y="338.0" text-anchor="start" fill="var(--goal)" style="font-weight:700">✓</text>
+<text class="tx-s" x="482.0" y="338.0" text-anchor="start" fill="var(--goal)">別的 agent 換評分表、規矩表就能用；換 git 只換接 depot 的程式</text>
+<line x1="20.0" y1="354.0" x2="860.0" y2="354.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="380.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">agent 的能力拆成十七個模塊，每個一條只講性質的規格，所以測得了、搬得走；公司專屬的只有三樣；沙盒驗的是規格。</text>
+<text class="tx" x="20.0" y="404.0" text-anchor="start" fill="var(--ink-2)">後面：五頁列模塊（看、判、做、說、守），一頁接公司的三樣與復用，一頁 mentor agent 的十個階段各用哪些模塊。</text>
+</svg></div><div class="pn">1 / 8</div></section>
+<section class="slide"><div class="kicker">agent 的基本模塊　·　圖 2 ／ 8</div><h1>看：agent 用四個模塊認識 depot，每條觀察附出處，猜的不能當依據</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="四列模塊：結構地圖（只讀就說得出用途與引用，標依據）、變更流觀察（從歷史推訊號、對照症狀目錄發事件）、依據分級的認知（每筆標擷取實跑文件告知推測，推測不能當依據）、交付物推導（推出交什麼給誰的草稿）。各附進出與沙盒怎麼驗。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="24.0" text-anchor="start" fill="var(--agent)">模塊　用在哪</text>
+<text class="tx-lbl" x="180.0" y="24.0" text-anchor="start" fill="var(--ink-2)">規格（建立什麼性質；不講機制）</text>
+<text class="tx-lbl" x="572.0" y="24.0" text-anchor="start" fill="var(--goal)">進出　沙盒怎麼驗</text>
+<rect x="20.0" y="40.0" width="3.0" height="60.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
+<text class="tx" x="34.0" y="58.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">結構地圖</text>
+<text class="tx-s" x="34.0" y="76.0" text-anchor="start" fill="var(--ink-3)">PROJECT_MAP</text>
+<text class="tx-s" x="34.0" y="92.0" text-anchor="start" fill="var(--ink-3)">盤點的熱點</text>
+<text class="tx" x="180.0" y="58.0" text-anchor="start" fill="var(--ink-2)">只讀 depot 就說得出每個目錄的用途、誰引用誰、哪些沒人引用</text>
+<text class="tx-s" x="180.0" y="74.0" text-anchor="start" fill="var(--ink-2)">每一筆標依據；沒人引用的只標不刪</text>
+<text class="tx-s" x="572.0" y="58.0" text-anchor="start" fill="var(--ink-2)">目錄樹＋引用（filelist、include）→ 地圖、未引用清單</text>
+<text class="tx-s" x="572.0" y="76.0" text-anchor="start" fill="var(--goal)">沙盒：埋一個沒人引用的目錄，地圖要標出來且不刪</text>
+<line x1="20.0" y1="106.0" x2="860.0" y2="106.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="118.0" width="3.0" height="60.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
+<text class="tx" x="34.0" y="136.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">變更流觀察</text>
+<text class="tx-s" x="34.0" y="154.0" text-anchor="start" fill="var(--ink-3)">盤點、日常監看</text>
+<text class="tx-s" x="34.0" y="170.0" text-anchor="start" fill="var(--ink-3)">提醒級 check</text>
+<text class="tx" x="180.0" y="136.0" text-anchor="start" fill="var(--ink-2)">從變更歷史推出行為訊號：包多大、說明有沒有目的、多久進一次、</text>
+<text class="tx" x="180.0" y="154.0" text-anchor="start" fill="var(--ink-2)">誰動哪裡、有沒有用 branch；對照症狀目錄發事件</text>
+<text class="tx-s" x="180.0" y="170.0" text-anchor="start" fill="var(--ink-2)">症狀目錄是資料：換一份目錄，模塊不變</text>
+<text class="tx-s" x="572.0" y="136.0" text-anchor="start" fill="var(--ink-2)">CL／commit 歷史＋症狀目錄 → 訊號與事件</text>
+<text class="tx-s" x="572.0" y="154.0" text-anchor="start" fill="var(--goal)">沙盒：十六種裡從歷史看得出的都要發事件</text>
+<line x1="20.0" y1="184.0" x2="860.0" y2="184.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="196.0" width="3.0" height="60.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
+<text class="tx" x="34.0" y="214.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">依據分級的認知</text>
+<text class="tx-s" x="34.0" y="232.0" text-anchor="start" fill="var(--ink-3)">PROJECT_MAP、人的地圖</text>
+<text class="tx-s" x="34.0" y="248.0" text-anchor="start" fill="var(--ink-3)">草稿、日誌</text>
+<text class="tx" x="180.0" y="214.0" text-anchor="start" fill="var(--ink-2)">每個記下來的事都標它怎麼來的：擷取／實跑／文件／告知／推測</text>
+<text class="tx-s" x="180.0" y="230.0" text-anchor="start" fill="var(--ink-2)">推測沒經人確認，不能當行動的依據</text>
+<text class="tx-s" x="572.0" y="214.0" text-anchor="start" fill="var(--ink-2)">任何觀察 → 帶依據的紀錄</text>
+<text class="tx-s" x="572.0" y="232.0" text-anchor="start" fill="var(--goal)">沙盒：拿「推測」去動手要被擋下</text>
+<line x1="20.0" y1="262.0" x2="860.0" y2="262.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="274.0" width="3.0" height="60.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
+<text class="tx" x="34.0" y="292.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">交付物推導</text>
+<text class="tx-s" x="34.0" y="310.0" text-anchor="start" fill="var(--ink-3)">CD 的第一步（D12）</text>
+<text class="tx" x="180.0" y="292.0" text-anchor="start" fill="var(--ink-2)">從引用與歷史推出一個目錄交什麼、給誰、什麼形式、多久一次</text>
+<text class="tx-s" x="180.0" y="308.0" text-anchor="start" fill="var(--ink-2)">成為可被 owner 確認的草稿，不是結論</text>
+<text class="tx-s" x="572.0" y="292.0" text-anchor="start" fill="var(--ink-2)">地圖＋label＋下游引用 → 交付物草稿</text>
+<text class="tx-s" x="572.0" y="310.0" text-anchor="start" fill="var(--goal)">沙盒：下游引用了的檔要出現在草稿裡</text>
+<line x1="20.0" y1="340.0" x2="860.0" y2="340.0" stroke="var(--rule)" stroke-width="1"/>
+<line x1="20.0" y1="354.0" x2="860.0" y2="354.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="380.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">看的四個模塊建立 agent 對 depot 的認知，每一筆都帶依據；推測沒經人確認不能當依據。</text>
+<text class="tx" x="20.0" y="404.0" text-anchor="start" fill="var(--ink-2)">任何要進一個陌生 depot 的 agent 都要這四個；它們只靠「接 depot 的程式」接公司。</text>
+</svg></div><div class="pn">2 / 8</div></section>
+<section class="slide"><div class="kicker">agent 的基本模塊　·　圖 3 ／ 8</div><h1>判：agent 用三個模塊照評分表打分，每條附檢驗、重現要能辨認結果、不排名</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="三列模塊：照評分表打分（表是資料，逐條判定附證據）、乾淨環境重現（主要文件是否描述怎麼重現，結果分過不過探測壞了三種，失敗分類）、趨勢量測（同一表同一指標隨時間量，不排名）。各附進出與沙盒怎麼驗。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="24.0" text-anchor="start" fill="var(--agent)">模塊　用在哪</text>
+<text class="tx-lbl" x="180.0" y="24.0" text-anchor="start" fill="var(--ink-2)">規格（建立什麼性質；不講機制）</text>
+<text class="tx-lbl" x="572.0" y="24.0" text-anchor="start" fill="var(--goal)">進出　沙盒怎麼驗</text>
+<rect x="20.0" y="40.0" width="3.0" height="78.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
+<text class="tx" x="34.0" y="58.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">照評分表打分</text>
+<text class="tx-s" x="34.0" y="76.0" text-anchor="start" fill="var(--ink-3)">六個檢查、成熟度</text>
+<text class="tx-s" x="34.0" y="92.0" text-anchor="start" fill="var(--ink-3)">基線</text>
+<text class="tx" x="180.0" y="58.0" text-anchor="start" fill="var(--ink-2)">給一張「每條有做得到／做不到檢驗」的表，</text>
+<text class="tx" x="180.0" y="76.0" text-anchor="start" fill="var(--ink-2)">就能對一個 depot 逐條判定，附證據與依據</text>
+<text class="tx-s" x="180.0" y="92.0" text-anchor="start" fill="var(--ink-2)">表是資料：六原則是一張，資安、coding 規範是另外的張；模塊不變</text>
+<text class="tx-s" x="572.0" y="58.0" text-anchor="start" fill="var(--ink-2)">depot＋評分表 → 分數表（做得到／部分／做不到）</text>
+<text class="tx-s" x="572.0" y="76.0" text-anchor="start" fill="var(--goal)">沙盒：六原則表的每條在埋的問題上判成做不到</text>
+<line x1="20.0" y1="124.0" x2="860.0" y2="124.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="136.0" width="3.0" height="78.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
+<text class="tx" x="34.0" y="154.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">乾淨環境重現</text>
+<text class="tx-s" x="34.0" y="172.0" text-anchor="start" fill="var(--ink-3)">SSOT、sanity</text>
+<text class="tx-s" x="34.0" y="188.0" text-anchor="start" fill="var(--ink-3)">CD 的「拿了就能跑」</text>
+<text class="tx" x="180.0" y="154.0" text-anchor="start" fill="var(--ink-2)">主要文件是否描述了怎麼重現執行，</text>
+<text class="tx" x="180.0" y="172.0" text-anchor="start" fill="var(--ink-2)">而且結果有 fail-safe 的辨認方式</text>
+<text class="tx-s" x="180.0" y="188.0" text-anchor="start" fill="var(--ink-2)">三種結果：過／不過／探測本身壞了</text>
+<text class="tx-s" x="180.0" y="204.0" text-anchor="start" fill="var(--ink-2)">失敗分類：缺檔／缺工具／缺環境／缺 script</text>
+<text class="tx-s" x="572.0" y="154.0" text-anchor="start" fill="var(--ink-2)">depot 的說明＋一個乾淨環境 → 判定＋失敗分類</text>
+<text class="tx-s" x="572.0" y="172.0" text-anchor="start" fill="var(--goal)">沙盒：三種 mock check 各回對的結果；缺檔要分類成缺檔</text>
+<line x1="20.0" y1="220.0" x2="860.0" y2="220.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="232.0" width="3.0" height="78.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
+<text class="tx" x="34.0" y="250.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">趨勢量測</text>
+<text class="tx-s" x="34.0" y="268.0" text-anchor="start" fill="var(--ink-3)">基線、四個指標</text>
+<text class="tx-s" x="34.0" y="284.0" text-anchor="start" fill="var(--ink-3)">給 PM 的摘要</text>
+<text class="tx" x="180.0" y="250.0" text-anchor="start" fill="var(--ink-2)">同一張表、同一組指標對同一目錄隨時間量</text>
+<text class="tx-s" x="180.0" y="266.0" text-anchor="start" fill="var(--ink-2)">只看趨勢、以目錄為尺度，不排名個人</text>
+<text class="tx-s" x="572.0" y="250.0" text-anchor="start" fill="var(--ink-2)">分數表＋指標 → 時間序列</text>
+<text class="tx-s" x="572.0" y="268.0" text-anchor="start" fill="var(--goal)">沙盒：兩次掃描的差異算得出；輸出不得出現人名排序</text>
+<line x1="20.0" y1="316.0" x2="860.0" y2="316.0" stroke="var(--rule)" stroke-width="1"/>
+<line x1="20.0" y1="330.0" x2="860.0" y2="330.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="356.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">判的三個模塊把評分表套在 depot 上：表是資料、模塊不變；重現的結果要能辨認；趨勢不排名。</text>
+<text class="tx" x="20.0" y="380.0" text-anchor="start" fill="var(--ink-2)">「乾淨環境重現」一條規格，SSOT 的檢查、sanity check、CD 的「拿了就能跑」都是它。</text>
+</svg></div><div class="pn">3 / 8</div></section>
+<section class="slide"><div class="kicker">agent 的基本模塊　·　圖 4 ／ 8</div><h1>做：三個模塊讓 agent 把沒過的檢驗寫成提案；任何 check 先只報告，有共識才擋</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="三列模塊：缺口到補丁（每個沒過的檢驗對應最小附證據的提案，分三類）、證據打包（結果附 manifest，通過標 known-good）、逐級收緊（只報告警告擋，升級要證據，擋要同意與 bypass）。各附進出與沙盒怎麼驗。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="24.0" text-anchor="start" fill="var(--agent)">模塊　用在哪</text>
+<text class="tx-lbl" x="180.0" y="24.0" text-anchor="start" fill="var(--ink-2)">規格（建立什麼性質；不講機制）</text>
+<text class="tx-lbl" x="572.0" y="24.0" text-anchor="start" fill="var(--goal)">進出　沙盒怎麼驗</text>
+<rect x="20.0" y="40.0" width="3.0" height="78.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
+<text class="tx" x="34.0" y="58.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">缺口→補丁</text>
+<text class="tx-s" x="34.0" y="76.0" text-anchor="start" fill="var(--ink-3)">shelved CL</text>
+<text class="tx-s" x="34.0" y="92.0" text-anchor="start" fill="var(--ink-3)">計畫核准的請示</text>
+<text class="tx" x="180.0" y="58.0" text-anchor="start" fill="var(--ink-2)">每個沒過的檢驗對應一個最小、附證據的提案：</text>
+<text class="tx" x="180.0" y="76.0" text-anchor="start" fill="var(--ink-2)">為什麼、怎麼驗、影響誰、怎麼退回</text>
+<text class="tx-s" x="180.0" y="92.0" text-anchor="start" fill="var(--ink-2)">分成三類：自己能補／要人決定／只有人知道</text>
+<text class="tx-s" x="572.0" y="58.0" text-anchor="start" fill="var(--ink-2)">分數表 → 提案清單（含三類分工）</text>
+<text class="tx-s" x="572.0" y="76.0" text-anchor="start" fill="var(--goal)">沙盒：每個提案掛對原則、分對類、附證據</text>
+<line x1="20.0" y1="124.0" x2="860.0" y2="124.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="136.0" width="3.0" height="78.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
+<text class="tx" x="34.0" y="154.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">證據打包</text>
+<text class="tx-s" x="34.0" y="172.0" text-anchor="start" fill="var(--ink-3)">Traceability、CD 出包</text>
+<text class="tx-s" x="34.0" y="188.0" text-anchor="start" fill="var(--ink-3)">agent 自己的交付</text>
+<text class="tx" x="180.0" y="154.0" text-anchor="start" fill="var(--ink-2)">任何結果附一份清單，能回答</text>
+<text class="tx" x="180.0" y="172.0" text-anchor="start" fill="var(--ink-2)">哪一版、什麼工具、什麼環境、怎麼跑</text>
+<text class="tx-s" x="180.0" y="188.0" text-anchor="start" fill="var(--ink-2)">由產生結果的步驟順手產出；通過就標 known-good</text>
+<text class="tx-s" x="572.0" y="154.0" text-anchor="start" fill="var(--ink-2)">結果 → manifest、known-good 標記</text>
+<text class="tx-s" x="572.0" y="172.0" text-anchor="start" fill="var(--goal)">沙盒：沒 manifest 的交付視為未完成</text>
+<line x1="20.0" y1="220.0" x2="860.0" y2="220.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="232.0" width="3.0" height="78.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
+<text class="tx" x="34.0" y="250.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">逐級收緊</text>
+<text class="tx-s" x="34.0" y="268.0" text-anchor="start" fill="var(--ink-3)">上線分級的階段</text>
+<text class="tx-s" x="34.0" y="284.0" text-anchor="start" fill="var(--ink-3)">trigger</text>
+<text class="tx" x="180.0" y="250.0" text-anchor="start" fill="var(--ink-2)">任何自動 check 都走只報告→警告→擋；升級要證據（誤報率）</text>
+<text class="tx-s" x="180.0" y="266.0" text-anchor="start" fill="var(--ink-2)">擋要同意＋bypass＋總開關；吵了就退一級</text>
+<text class="tx-s" x="572.0" y="250.0" text-anchor="start" fill="var(--ink-2)">一道 check → 它現在在哪一級</text>
+<text class="tx-s" x="572.0" y="268.0" text-anchor="start" fill="var(--goal)">沙盒：沒 bypass 時嘗試擋，要被拒</text>
+<line x1="20.0" y1="316.0" x2="860.0" y2="316.0" stroke="var(--rule)" stroke-width="1"/>
+<line x1="20.0" y1="330.0" x2="860.0" y2="330.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="356.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">做的三個模塊把缺口變成附證據的最小提案、把結果打包成證據、把自動 check 逐級收緊。</text>
+<text class="tx" x="20.0" y="380.0" text-anchor="start" fill="var(--ink-2)">三個都不碰 depot 的內容：提案給人收、證據跟著結果走、擋要人同意。</text>
+</svg></div><div class="pn">4 / 8</div></section>
+<section class="slide"><div class="kicker">agent 的基本模塊　·　圖 5 ／ 8</div><h1>說：三個模塊管 agent 和人的互動：PM 看懂才核准、不濫發訊息、動作留紀錄</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="三列模塊：理解後核准（附原則影響誰怎麼退回，兩個問題確認懂了，逾時不自動通過）、節制的聯絡（先查再問、只問對方才知道的、不重問、有上限、先私訊、原處更正）、可查的行動日誌（記看了推了不確定什麼，當事人可查，重啟不重複）。各附進出與沙盒怎麼驗。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="24.0" text-anchor="start" fill="var(--agent)">模塊　用在哪</text>
+<text class="tx-lbl" x="180.0" y="24.0" text-anchor="start" fill="var(--ink-2)">規格（建立什麼性質；不講機制）</text>
+<text class="tx-lbl" x="572.0" y="24.0" text-anchor="start" fill="var(--goal)">進出　沙盒怎麼驗</text>
+<rect x="20.0" y="40.0" width="3.0" height="78.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
+<text class="tx" x="34.0" y="58.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">理解後核准</text>
+<text class="tx-s" x="34.0" y="76.0" text-anchor="start" fill="var(--ink-3)">計畫核准、擋 submit</text>
+<text class="tx-s" x="34.0" y="92.0" text-anchor="start" fill="var(--ink-3)">（D3）</text>
+<text class="tx" x="180.0" y="58.0" text-anchor="start" fill="var(--ink-2)">要人簽的事，先附原則、影響誰、怎麼退回，</text>
+<text class="tx" x="180.0" y="76.0" text-anchor="start" fill="var(--ink-2)">再用兩個問題確認對方懂了</text>
+<text class="tx-s" x="180.0" y="92.0" text-anchor="start" fill="var(--ink-2)">答不到不算核准；逾時不自動通過；分批送</text>
+<text class="tx-s" x="572.0" y="58.0" text-anchor="start" fill="var(--ink-2)">提案 → 請示＋核准紀錄</text>
+<text class="tx-s" x="572.0" y="76.0" text-anchor="start" fill="var(--goal)">沙盒：假 PM 答不到「影響誰」，agent 要再問</text>
+<line x1="20.0" y1="124.0" x2="860.0" y2="124.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="136.0" width="3.0" height="78.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
+<text class="tx" x="34.0" y="154.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">節制的聯絡</text>
+<text class="tx-s" x="34.0" y="172.0" text-anchor="start" fill="var(--ink-3)">問 owner、提醒</text>
+<text class="tx-s" x="34.0" y="188.0" text-anchor="start" fill="var(--ink-3)">更正、開工的那一句</text>
+<text class="tx" x="180.0" y="154.0" text-anchor="start" fill="var(--ink-2)">先查到能查的才開口；只問對方才知道的；</text>
+<text class="tx" x="180.0" y="172.0" text-anchor="start" fill="var(--ink-2)">同一件事不帶新資訊不重問</text>
+<text class="tx-s" x="180.0" y="188.0" text-anchor="start" fill="var(--ink-2)">每人每天有上限；先私訊；錯了在原處更正</text>
+<text class="tx-s" x="572.0" y="154.0" text-anchor="start" fill="var(--ink-2)">要說的事＋對象 → 訊息，或不發</text>
+<text class="tx-s" x="572.0" y="172.0" text-anchor="start" fill="var(--goal)">沙盒：同一問題第二次要帶新資訊，否則不發</text>
+<line x1="20.0" y1="220.0" x2="860.0" y2="220.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="232.0" width="3.0" height="78.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
+<text class="tx" x="34.0" y="250.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">可查的行動日誌</text>
+<text class="tx-s" x="34.0" y="268.0" text-anchor="start" fill="var(--ink-3)">透明、idempotent</text>
+<text class="tx" x="180.0" y="250.0" text-anchor="start" fill="var(--ink-2)">每個動作、判斷、訊息都記看了什麼、推了什麼、不確定什麼</text>
+<text class="tx-s" x="180.0" y="266.0" text-anchor="start" fill="var(--ink-2)">當事人看得到關於自己的；重啟從日誌接續、不重複</text>
+<text class="tx-s" x="572.0" y="250.0" text-anchor="start" fill="var(--ink-2)">動作 → 日誌（有 schema 版本）</text>
+<text class="tx-s" x="572.0" y="268.0" text-anchor="start" fill="var(--goal)">沙盒：中途重啟，不重複問、不重複開 CL</text>
+<line x1="20.0" y1="316.0" x2="860.0" y2="316.0" stroke="var(--rule)" stroke-width="1"/>
+<line x1="20.0" y1="330.0" x2="860.0" y2="330.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="356.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">說的三個模塊管 agent 和人共處：PM 看懂才核准、不濫發訊息、每個動作留可查的紀錄。</text>
+<text class="tx" x="20.0" y="380.0" text-anchor="start" fill="var(--ink-2)">這三個和 CI/CD 無關，任何會跟人打交道的 agent 都該拿去用。</text>
+</svg></div><div class="pn">5 / 8</div></section>
+<section class="slide"><div class="kicker">agent 的基本模塊　·　圖 6 ／ 8</div><h1>守：四個模塊管住 agent：規矩明寫、範圍先登記、改自己先過沙盒、花費有上限</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="四列模塊：目錄的規矩登記（規矩明寫，沒寫標未定去要）、範圍登記與獨占（一範圍一行動者，換手有交接包）、自我版控與沙盒（不改自己運行中的規則，改進走 review 過沙盒出 release，三軸驗收）、預算與總開關（超預算先停，機制有總開關）。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="24.0" text-anchor="start" fill="var(--agent)">模塊　用在哪</text>
+<text class="tx-lbl" x="180.0" y="24.0" text-anchor="start" fill="var(--ink-2)">規格（建立什麼性質；不講機制）</text>
+<text class="tx-lbl" x="572.0" y="24.0" text-anchor="start" fill="var(--goal)">進出　沙盒怎麼驗</text>
+<rect x="20.0" y="40.0" width="3.0" height="60.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
+<text class="tx" x="34.0" y="58.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">目錄的規矩登記</text>
+<text class="tx-s" x="34.0" y="76.0" text-anchor="start" fill="var(--ink-3)">review 規矩（D7）</text>
+<text class="tx-s" x="34.0" y="92.0" text-anchor="start" fill="var(--ink-3)">交付物（D12）</text>
+<text class="tx" x="180.0" y="58.0" text-anchor="start" fill="var(--ink-2)">每個目錄的規矩要明寫：要不要 review、交付物是什麼、誰負責</text>
+<text class="tx-s" x="180.0" y="74.0" text-anchor="start" fill="var(--ink-2)">沒寫就標「未定」並去要一個，不自己猜</text>
+<text class="tx-s" x="572.0" y="58.0" text-anchor="start" fill="var(--ink-2)">目錄 → 規矩，或「未定」</text>
+<text class="tx-s" x="572.0" y="76.0" text-anchor="start" fill="var(--goal)">沙盒：沒寫規矩的目錄要出現「未定」的提問</text>
+<line x1="20.0" y1="106.0" x2="860.0" y2="106.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="118.0" width="3.0" height="60.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
+<text class="tx" x="34.0" y="136.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">範圍登記與獨占</text>
+<text class="tx-s" x="34.0" y="154.0" text-anchor="start" fill="var(--ink-3)">多實例、換手</text>
+<text class="tx" x="180.0" y="136.0" text-anchor="start" fill="var(--ink-2)">一個範圍任何時候只有一個行動者；共用物指定負責</text>
+<text class="tx-s" x="180.0" y="152.0" text-anchor="start" fill="var(--ink-2)">動手前先查；換手有交接包</text>
+<text class="tx-s" x="572.0" y="136.0" text-anchor="start" fill="var(--ink-2)">範圍＋行動者 → 登記表、HANDOVER</text>
+<text class="tx-s" x="572.0" y="154.0" text-anchor="start" fill="var(--goal)">沙盒：兩個實例同一路徑，第二個要退</text>
+<line x1="20.0" y1="184.0" x2="860.0" y2="184.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="196.0" width="3.0" height="60.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
+<text class="tx" x="34.0" y="214.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">自我版控與沙盒</text>
+<text class="tx-s" x="34.0" y="232.0" text-anchor="start" fill="var(--ink-3)">core／工作區</text>
+<text class="tx-s" x="34.0" y="248.0" text-anchor="start" fill="var(--ink-3)">release、換手</text>
+<text class="tx" x="180.0" y="214.0" text-anchor="start" fill="var(--ink-2)">行動者不改自己運行中的規則；改進走 review（MR）、</text>
+<text class="tx" x="180.0" y="232.0" text-anchor="start" fill="var(--ink-2)">過埋了已知問題的沙盒、有人看過才出 release</text>
+<text class="tx-s" x="180.0" y="248.0" text-anchor="start" fill="var(--ink-2)">每個 release 三軸驗收：偵測到了嗎、提案對嗎、沒做不可做的事</text>
+<text class="tx-s" x="572.0" y="214.0" text-anchor="start" fill="var(--ink-2)">改進 → MR → 沙盒 → release</text>
+<text class="tx-s" x="572.0" y="232.0" text-anchor="start" fill="var(--goal)">沙盒：就是沙盒本身</text>
+<line x1="20.0" y1="262.0" x2="860.0" y2="262.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="274.0" width="3.0" height="60.0" fill="var(--agent)" stroke="var(--agent)" stroke-width="0"/>
+<text class="tx" x="34.0" y="292.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">預算與總開關</text>
+<text class="tx-s" x="34.0" y="310.0" text-anchor="start" fill="var(--ink-3)">kill switch</text>
+<text class="tx-s" x="34.0" y="326.0" text-anchor="start" fill="var(--ink-3)">多實例的代價</text>
+<text class="tx" x="180.0" y="292.0" text-anchor="start" fill="var(--ink-2)">每個行動者有訊息、算力、token 的預算，超過先停、告知</text>
+<text class="tx-s" x="180.0" y="308.0" text-anchor="start" fill="var(--ink-2)">它裝的機制有一個人按得到的總開關</text>
+<text class="tx-s" x="572.0" y="292.0" text-anchor="start" fill="var(--ink-2)">預算＋開關 → 停或繼續</text>
+<text class="tx-s" x="572.0" y="310.0" text-anchor="start" fill="var(--goal)">沙盒：超預算要停並告知；開關按下去機制全停</text>
+<line x1="20.0" y1="340.0" x2="860.0" y2="340.0" stroke="var(--rule)" stroke-width="1"/>
+<line x1="20.0" y1="354.0" x2="860.0" y2="354.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="380.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">守的四個模塊讓 agent 管住自己：規矩要明寫、範圍要登記；改自己走 review 與沙盒；有預算、有總開關。</text>
+<text class="tx" x="20.0" y="404.0" text-anchor="start" fill="var(--ink-2)">這四個讓多個 agent 能同時存在而不互相踩、不失控。</text>
+</svg></div><div class="pn">6 / 8</div></section>
+<section class="slide"><div class="kicker">agent 的基本模塊　·　圖 7 ／ 8</div><h1>接公司：公司專屬的只有接 depot 的程式、評分表、規矩表；換掉就是別的 agent</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="十七列：每個模塊靠公司專屬三樣（接 depot 的程式、評分表、規矩表）的哪一樣接公司，或完全通用，以及別的 agent 怎麼用。完全通用的三個：依據分級的認知、可查的行動日誌、自我版控與沙盒。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="24.0" text-anchor="start" fill="var(--agent)">模塊</text>
+<text class="tx-lbl" x="200.0" y="24.0" text-anchor="start" fill="var(--goal)">靠公司專屬三樣的哪一樣接公司（—＝完全通用）</text>
+<text class="tx-lbl" x="520.0" y="24.0" text-anchor="start" fill="var(--ink-2)">別的 agent 怎麼用</text>
+<text class="tx-s" x="20.0" y="49.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">結構地圖</text>
+<text class="tx-s" x="200.0" y="49.0" text-anchor="start" fill="var(--goal)">接 depot 的程式</text>
+<text class="tx-s" x="520.0" y="49.0" text-anchor="start" fill="var(--ink-2)">任何 depot 的入門地圖</text>
+<text class="tx-s" x="20.0" y="68.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">變更流觀察</text>
+<text class="tx-s" x="200.0" y="68.0" text-anchor="start" fill="var(--goal)">接 depot 的程式、症狀目錄（規矩表）</text>
+<text class="tx-s" x="520.0" y="68.0" text-anchor="start" fill="var(--ink-2)">換一份症狀目錄：資安事件、命名違規</text>
+<text class="tx-s" x="20.0" y="87.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">依據分級的認知</text>
+<text class="tx-s" x="200.0" y="87.0" text-anchor="start" fill="var(--ink-3)">—</text>
+<text class="tx-s" x="520.0" y="87.0" text-anchor="start" fill="var(--ink-2)">任何會記東西的 agent</text>
+<text class="tx-s" x="20.0" y="106.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">交付物推導</text>
+<text class="tx-s" x="200.0" y="106.0" text-anchor="start" fill="var(--goal)">接 depot 的程式</text>
+<text class="tx-s" x="520.0" y="106.0" text-anchor="start" fill="var(--ink-2)">任何有上下游的目錄</text>
+<text class="tx-s" x="20.0" y="125.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">照評分表打分</text>
+<text class="tx-s" x="200.0" y="125.0" text-anchor="start" fill="var(--goal)">評分表</text>
+<text class="tx-s" x="520.0" y="125.0" text-anchor="start" fill="var(--ink-2)">換表：資安、coding 規範、文件完整度</text>
+<text class="tx-s" x="20.0" y="144.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">乾淨環境重現</text>
+<text class="tx-s" x="200.0" y="144.0" text-anchor="start" fill="var(--goal)">接 depot 的程式（要一個乾淨環境）</text>
+<text class="tx-s" x="520.0" y="144.0" text-anchor="start" fill="var(--ink-2)">任何「說明能不能重現」的檢查</text>
+<text class="tx-s" x="20.0" y="163.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">趨勢量測</text>
+<text class="tx-s" x="200.0" y="163.0" text-anchor="start" fill="var(--goal)">評分表、指標</text>
+<text class="tx-s" x="520.0" y="163.0" text-anchor="start" fill="var(--ink-2)">任何要看改善的推動</text>
+<text class="tx-s" x="20.0" y="182.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">缺口→補丁</text>
+<text class="tx-s" x="200.0" y="182.0" text-anchor="start" fill="var(--goal)">接 depot 的程式、評分表</text>
+<text class="tx-s" x="520.0" y="182.0" text-anchor="start" fill="var(--ink-2)">任何「不過就提案」的 agent</text>
+<text class="tx-s" x="20.0" y="201.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">證據打包</text>
+<text class="tx-s" x="200.0" y="201.0" text-anchor="start" fill="var(--goal)">接 depot 的程式</text>
+<text class="tx-s" x="520.0" y="201.0" text-anchor="start" fill="var(--ink-2)">任何產出結果的 flow</text>
+<text class="tx-s" x="20.0" y="220.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">逐級收緊</text>
+<text class="tx-s" x="200.0" y="220.0" text-anchor="start" fill="var(--goal)">規矩表</text>
+<text class="tx-s" x="520.0" y="220.0" text-anchor="start" fill="var(--ink-2)">任何自動 check 的推行</text>
+<text class="tx-s" x="20.0" y="239.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">理解後核准</text>
+<text class="tx-s" x="200.0" y="239.0" text-anchor="start" fill="var(--goal)">規矩表（授權）</text>
+<text class="tx-s" x="520.0" y="239.0" text-anchor="start" fill="var(--ink-2)">任何要人簽的 agent</text>
+<text class="tx-s" x="20.0" y="258.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">節制的聯絡</text>
+<text class="tx-s" x="200.0" y="258.0" text-anchor="start" fill="var(--goal)">規矩表（上限）</text>
+<text class="tx-s" x="520.0" y="258.0" text-anchor="start" fill="var(--ink-2)">任何會私訊人的 agent</text>
+<text class="tx-s" x="20.0" y="277.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">可查的行動日誌</text>
+<text class="tx-s" x="200.0" y="277.0" text-anchor="start" fill="var(--ink-3)">—</text>
+<text class="tx-s" x="520.0" y="277.0" text-anchor="start" fill="var(--ink-2)">任何自主運行的 agent</text>
+<text class="tx-s" x="20.0" y="296.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">目錄的規矩登記</text>
+<text class="tx-s" x="200.0" y="296.0" text-anchor="start" fill="var(--goal)">規矩表</text>
+<text class="tx-s" x="520.0" y="296.0" text-anchor="start" fill="var(--ink-2)">任何有「每個目錄各自定」的規則</text>
+<text class="tx-s" x="20.0" y="315.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">範圍登記與獨占</text>
+<text class="tx-s" x="200.0" y="315.0" text-anchor="start" fill="var(--goal)">規矩表（登記）</text>
+<text class="tx-s" x="520.0" y="315.0" text-anchor="start" fill="var(--ink-2)">任何多實例的 agent</text>
+<text class="tx-s" x="20.0" y="334.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">自我版控與沙盒</text>
+<text class="tx-s" x="200.0" y="334.0" text-anchor="start" fill="var(--ink-3)">—</text>
+<text class="tx-s" x="520.0" y="334.0" text-anchor="start" fill="var(--ink-2)">任何會改版的 agent</text>
+<text class="tx-s" x="20.0" y="353.0" text-anchor="start" fill="var(--agent)" style="font-weight:700">預算與總開關</text>
+<text class="tx-s" x="200.0" y="353.0" text-anchor="start" fill="var(--goal)">規矩表（預算）</text>
+<text class="tx-s" x="520.0" y="353.0" text-anchor="start" fill="var(--ink-2)">任何會花錢、裝機制的 agent</text>
+<line x1="20.0" y1="361.0" x2="860.0" y2="361.0" stroke="var(--rule)" stroke-width="1"/>
+<line x1="20.0" y1="372.0" x2="860.0" y2="372.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="398.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">十七個模塊接公司的只有三樣：接 depot 的程式、評分表、規矩表；三個模塊完全通用。</text>
+<text class="tx" x="20.0" y="422.0" text-anchor="start" fill="var(--ink-2)">換評分表、換規矩表，就是另一個 agent；目標換成 git，也只換「接 depot 的程式」這一樣。</text>
+</svg></div><div class="pn">7 / 8</div></section>
+<section class="slide"><div class="kicker">agent 的基本模塊　·　圖 8 ／ 8</div><h1>組裝：mentor agent 的十個階段各挑幾個模塊，所以模塊能分開做、分開驗</h1><div class="fig"><svg style="width:269.0mm;height:146.7mm" viewBox="0 0 880 480" role="img" aria-label="十列階段與用到的模塊：啟動用日誌、聯絡、範圍登記、預算；盤點用地圖、變更流、依據分級、打分、趨勢；目標分析用地圖、重現、打分、交付物推導、規矩登記、補丁；計畫核准用理解後核准、聯絡、日誌；建置用補丁、證據、重現、聯絡；上線分級用逐級收緊、證據、趨勢、預算與總開關；交付用交付物推導、規矩登記、證據、補丁；監看與開工用變更流、依據分級、聯絡、規矩登記、日誌；擴充與交棒用趨勢、逐級收緊、理解後核准、自我版控；換手與改版用自我版控、範圍登記、日誌。" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><defs><marker id="ar-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker></defs><defs><marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--goal)"/></marker></defs><defs><marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--agent)"/></marker></defs><defs><marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--pm)"/></marker></defs><defs><marker id="ar-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+<text class="tx-lbl" x="20.0" y="24.0" text-anchor="start" fill="var(--ink-2)">mentor agent 的階段</text>
+<text class="tx-lbl" x="200.0" y="24.0" text-anchor="start" fill="var(--agent)">用到的模塊（階段的順序照《互動場景》，從啟動到換手）</text>
+<rect x="20.0" y="39.0" width="40.4" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="40.2" y="53.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">啟動</text>
+<text class="tx-s" x="200.0" y="53.0" text-anchor="start" fill="var(--ink-2)">可查的行動日誌、節制的聯絡（自我介紹）、範圍登記與獨占、預算與總開關</text>
+<line x1="20.0" y1="65.0" x2="860.0" y2="65.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="69.0" width="40.4" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="40.2" y="83.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">盤點</text>
+<text class="tx-s" x="200.0" y="83.0" text-anchor="start" fill="var(--ink-2)">結構地圖、變更流觀察、依據分級的認知、照評分表打分、趨勢量測（基線）</text>
+<line x1="20.0" y1="95.0" x2="860.0" y2="95.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="99.0" width="60.7" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="50.4" y="113.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">目標分析</text>
+<text class="tx-s" x="200.0" y="113.0" text-anchor="start" fill="var(--ink-2)">結構地圖、乾淨環境重現、照評分表打分、交付物推導、目錄的規矩登記、缺口→補丁</text>
+<line x1="20.0" y1="125.0" x2="860.0" y2="125.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="129.0" width="60.7" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="50.4" y="143.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">計畫核准</text>
+<text class="tx-s" x="200.0" y="143.0" text-anchor="start" fill="var(--ink-2)">理解後核准、節制的聯絡、可查的行動日誌（核准紀錄）</text>
+<line x1="20.0" y1="155.0" x2="860.0" y2="155.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="159.0" width="40.4" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="40.2" y="173.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">建置</text>
+<text class="tx-s" x="200.0" y="173.0" text-anchor="start" fill="var(--ink-2)">缺口→補丁、證據打包、乾淨環境重現、節制的聯絡（交 shelved CL）</text>
+<line x1="20.0" y1="185.0" x2="860.0" y2="185.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="189.0" width="60.7" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="50.4" y="203.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">上線分級</text>
+<text class="tx-s" x="200.0" y="203.0" text-anchor="start" fill="var(--ink-2)">逐級收緊、證據打包、趨勢量測、預算與總開關（擋之前先有總開關）</text>
+<line x1="20.0" y1="215.0" x2="860.0" y2="215.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="219.0" width="73.3" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="56.7" y="233.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">交付（CD）</text>
+<text class="tx-s" x="200.0" y="233.0" text-anchor="start" fill="var(--ink-2)">交付物推導、目錄的規矩登記、證據打包、缺口→補丁</text>
+<line x1="20.0" y1="245.0" x2="860.0" y2="245.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="249.0" width="70.9" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="55.5" y="263.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">監看與開工</text>
+<text class="tx-s" x="200.0" y="263.0" text-anchor="start" fill="var(--ink-2)">變更流觀察、依據分級的認知、節制的聯絡、目錄的規矩登記、可查的行動日誌</text>
+<line x1="20.0" y1="275.0" x2="860.0" y2="275.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="279.0" width="70.9" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="55.5" y="293.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">擴充與交棒</text>
+<text class="tx-s" x="200.0" y="293.0" text-anchor="start" fill="var(--ink-2)">趨勢量測、逐級收緊、理解後核准、自我版控與沙盒（新實例從 core clone）</text>
+<line x1="20.0" y1="305.0" x2="860.0" y2="305.0" stroke="var(--rule)" stroke-width="1"/>
+<rect x="20.0" y="309.0" width="70.9" height="20.0" rx="10" fill="var(--goal)" stroke="var(--goal)" stroke-width="1" fill-opacity=".14"/>
+<text class="tx-s" x="55.5" y="323.0" text-anchor="middle" fill="var(--goal)" style="font-weight:700">換手與改版</text>
+<text class="tx-s" x="200.0" y="323.0" text-anchor="start" fill="var(--ink-2)">自我版控與沙盒、範圍登記與獨占、可查的行動日誌</text>
+<line x1="20.0" y1="335.0" x2="860.0" y2="335.0" stroke="var(--rule)" stroke-width="1"/>
+<line x1="20.0" y1="350.0" x2="860.0" y2="350.0" stroke="var(--rule)" stroke-width="1"/>
+<text class="tx" x="20.0" y="376.0" text-anchor="start" fill="var(--ink-2)" style="font-weight:600">mentor agent 的十個階段各用三到六個模塊；沒有一個階段用到全部，每個模塊至少被兩個階段用。</text>
+<text class="tx" x="20.0" y="400.0" text-anchor="start" fill="var(--ink-2)">所以模塊能分開做、分開在沙盒驗、分開換版；步驟按順序排，模塊可以在任何階段被叫。</text>
+</svg></div><div class="pn">8 / 8</div></section>
+</body>
+</html>
