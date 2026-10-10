@@ -68,7 +68,7 @@ c7f0b9dbf99a12a114919d6d3fb3a7215aed0bbbaba7c4a1fb8de89998ccbc6b  ./03-procedure
 f6e1e63f90144500eb7d3a4ddcae0ab12dba2f449351bc043df4eb234ae752c4  ./04-principles.md
 0ff32d703acdc1fb0d6fcb97259b424a99d6483d8821bf705f86ac261bbd24e1  ./05-behavior-guidelines.md
 9645374aae9788b5948f9cc9ba99b789fb452727e894e369b7ab46ab5f0a53dc  ./06-pm-handbook.md
-2a4abd8a7c800a076dbab5ece5d3d67c78f063cfb89642781473b5b356b127e1  ./07-build-brief.md
+caf684b51e7a71c7098379e9df6901de63e1c244a17353538d18df6985493263  ./07-build-brief.md
 bb1110956622f0eaed0e9822c253496c75ac9aed4b611fbdf6a838aaac4589a7  ./07-build-brief/agent-capability-modules.pdf
 ef32dfa461ee930f50b0d245b3d0e6413ae744b1ca7e477e3b213e63143e38fa  ./07-build-brief/agent-own-version-control-and-instances.pdf
 9e9361fa4c9152654e4688c76799ef8ed46f65d62cf29dfd552571561aa55eab  ./07-build-brief/img/agent-capability-modules/p-1.png
@@ -90,7 +90,7 @@ aea0a03910149ea2b1d5a4ab8341b238c1baff6ffe957fcc3b27d22a427ac1e2  ./07-build-bri
 aa20b2f1db4d35606e32773e68fe0f412f11c22a2a4193c2c9a946bfe487d675  ./07-build-brief/img/agent-own-version-control-and-instances/p-7.png
 15c51a60b012f22ce39e47be488f71ce2faf4e8a98732b75b0cf29be623b7a12  ./07-build-brief/img/agent-own-version-control-and-instances/p-8.png
 9e11295b9f86df887cc33039b497bb4cc69319861425ac97d10f5f73d6fb52bb  ./07-build-brief/img/agent-own-version-control-and-instances/p-9.png
-4415b006c55cae1565aa54481e9f754b2c0d8f77dba6ce10b3980991fdd79f28  ./07-capabilities.md
+9aa3abccbcf02d5d19766b802ec3f4f4253e0affad44e084279c697aafbfa5a7  ./07-capabilities.md
 550aa5b179ece539f5394f03740bda9f1001fa6432fac444aa6fab5e48ce1825  ./08-templates/README.md
 d300cf63fc61a1dc9b6b10b58c99ae5fc9fa4c4ef12f2314423207cf09f51bd3  ./08-templates/cl-description.md
 417afdae07e2544f5cd9f74b3651ca5d90dd97187d5be5f922dfe0503bff94b2  ./08-templates/config.md
@@ -108,7 +108,7 @@ f0989051df5de0371d19862edee11f36a9a04ad91bcfaf2ebba8276708faadb8  ./08-templates
 707d5da61b5de153b04a0b2391a310296f87d1bc0746aacfdc37f6788bfb7d0a  ./08-templates/requirement.md
 149709baeb279f002f40cdde41be86eaa09474de0ea0faa080983b9d22222f54  ./08-templates/status-board.md
 bdb960668df2c0f55697037d754eb1db12b849f64ad397c3620ffca482586372  ./08-templates/summary.md
-67d2f36e89d8b516589dbbcf4b63962f95bc790d1ef5c1c9f79d748c813cdf8c  ./09-open-decisions.md
+d0bd0326755efeb49ce26c2b40fa687fe31d2a674ac433170aac14f07d4b8234  ./09-open-decisions.md
 ec3ed8abecf70632689237cfda5670a252ebf5dab9b9b673a38c8874bde23fb4  ./10-decision-log.md
 45a78b36209d7247520977c3da97148f85f3bf0f763058ef5c13c2c6ab662795  ./11-research/consulting-analogy.md
 8f9cf2131ac7624cec6d0fb13b627037d238f9a75ee9d8075affb0f2e031039e  ./11-research/industry-practices-and-risks.md
@@ -116,4 +116,4 @@ f509c5cc727bf19c7009256db403149e68dbd5c6786f22be778692c24f9a9121  ./11-research/
 afa5e3bcd272f1641972c61bd6f162e51fac75e949c360f637b82599c6009799  ./11-research/role-prompt-as-agent-identity.md
 e8a2a49962a5182d616640163d8e9419e836a3c6f8ca8a3b2034bca535655ea9  ./CLAUDE.md
 ff0be9d34d602a2b711bb3e377e924c63027a9d0162281a37630f70566249b48  ./README.md
-8934df521796321a681932659a266ee678d99e549cc279457579d8ea426344b2  ./glossary.md
+b7f2b9899783b38e267f409305a6daf84befd3c1fe7ae35cd4654d385aa23884  ./glossary.md

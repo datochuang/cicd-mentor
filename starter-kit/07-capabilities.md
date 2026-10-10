@@ -97,7 +97,7 @@
 ```
 core/
   capabilities/<模塊>/   每個模塊一個目錄：規格（一句話＋進出）、實作、它自己的沙盒測試
-  bindings/p4/  git/  slack/  model/   接外部的程式：depot、訊息、模型；同一套介面，各一份實作
+  bindings/p4/  git/  slack/  model/  ci/   接外部的程式：depot、訊息、模型、CI server 的唯讀結果；同一套介面，各一份實作
   rubrics/               評分表（六原則那張）與症狀目錄（初版由 02-diagnosis/sixteen-problems.md 的徵兆欄產生）——資料，不是程式
   runtime/               機制：排程、跑 check 的 runner、結果發佈、trigger；不是模塊，模塊只做判斷與產出
 registry/、designs/<名>/config   規矩表：授權表、登記表、預算、訊息上限

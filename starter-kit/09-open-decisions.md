@@ -27,5 +27,6 @@
 | 22 | **check 的結果放哪、誰看得到** | 「結果可見」做不到等於沒做 | depot 裡團隊看得到的路徑，或公司既有的結果頁；試點團隊都看得到 | CAD／IT、PM |
 | 23 | **slack 還是 mail** | 溝通元件做哪個 | slack；沒 slack 的人用 mail | PM |
 | 24 | **交付物的取用處**：release 區放哪、誰能寫、下游怎麼被通知 | CD 的出包要放到固定位置；agent 不 submit，所以誰按最後那一下要定 | `//depot/<chip>/release/<目錄>/`；出包 script 產生 shelved CL 由 owner submit，或 owner 授權 trigger 直接寫；通知走 slack channel | owner、CAD、PM |
+| 25 | **團隊流程的執行機制**：submit 後誰去跑 check 與出包——公司既有的 Jenkins／GitLab CI、還是農場節點上的 cron；job 誰建誰管；agent 能不能有唯讀的 API 看結果；Perforce trigger 裝在哪、誰裝 | agent 不當 CI server，只寫 script 與 job 定義、讀結果；沒定就只能停在「agent 自己手動跑一次」 | 有 Jenkins 就接（Jenkinsfile 進 depot、CAD 建 job、agent 唯讀 API）；沒有就一台農場節點的 cron 跑 run_sanity.sh，只報告級；trigger 等第 9 步，CAD 裝 | CAD／IT、PM |
 
 定了的項目移到 `10-decision-log.md`，這張表只留沒定的；編號不重用（#18 轉型的終點已定，見 D17）。

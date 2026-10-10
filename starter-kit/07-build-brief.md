@@ -28,6 +28,8 @@
 
 元件是功能塊；做的時候照 `07-capabilities.md` 拆成模塊（D13：要模組化、分層、怎麼切是規則；哪些模塊、介面是建議）。元件對模塊的對照，也是建議：版控 adapter＝接 depot 的程式；監看與排程＝變更流觀察（排程本身是機制，放 runtime）；分析＝結構地圖、變更流觀察、依據分級的認知、照評分表打分、乾淨環境重現、交付物推導；溝通＝節制的聯絡；shelved CL 產生與證據＝缺口→提案、證據打包；交付流水線＝交付物推導、證據打包；check 執行與結果發佈＝逐級收緊、證據打包（跑 check、寫結果、裝 trigger 是機制，放 runtime）；狀態與日誌＝可查的行動日誌、依據分級的認知；請示與摘要＝理解後核准、趨勢量測；登記表＝範圍登記與獨占、目錄的規矩登記；預算與 kill switch＝預算與總開關。runner、排程、結果發佈、trigger 是機制不是模塊，放 `core/runtime/`；模塊只做判斷與產出。
 
+**機制跑在別台機器上，agent 怎麼接**：agent 不當 CI server，它寫 CI server 要跑的東西、再讀跑出來的結果。CD 的每一步都是 script（run_sanity.sh、make_manifest.sh、make_release）進 depot；排程器或 trigger 只在對的時機、在乾淨的 workspace 呼叫它們，所以呼叫的可以是 Jenkins、GitLab CI、一台農場節點上的 cron，script 不變。分工：agent 的機器（跑 Claude Code，有 p4 client 與 slack）讀 depot、寫 script、在自己的 workspace 用 LSF 試跑一次附 manifest、交 shelved CL、讀結果；Perforce server 跑 trigger（agent 寫、CAD 裝，要請示）；Jenkins 那台做編排（Jenkinsfile 或 cron 條目進 depot，job 由 CAD 建一次；Jenkins 用 UI 設定的公司，agent 把 job 設定寫成文字交 CAD 裝）；農場跑 EDA；取用處與結果頁是 agent 唯一要讀的地方。agent 對 Jenkins 只要唯讀 API，算「接外部的程式」的第四種接法（bindings/ci/）。沒有 Jenkins：MVP 第 6 步本來就從一台節點的 cron 加 run_sanity.sh 起步；擋 submit 的 trigger 是第 9 步的事。哪一種機制、誰管、agent 拿什麼存取，見 `09-open-decisions.md` #25。
+
 ## 三、兩種 repo 與三層（D5、D6）
 
 **agent 的 git repo（只有一個）**
@@ -36,7 +38,7 @@
 <agent-repo>/
   core/                                                                        ← 只能經 MR 改
     capabilities/<模塊>/   每個模塊：規格、實作、它自己的沙盒測試（清單見 07-capabilities.md，是建議）
-    bindings/p4/  git/  slack/  model/   接外部的程式：depot（git 先留空，09 #19）、訊息、模型；同一套介面
+    bindings/p4/  git/  slack/  model/  ci/   接外部的程式：depot（git 先留空，09 #19）、訊息、模型、CI server 的唯讀結果；同一套介面
     rubrics/               評分表（六原則那張）與症狀目錄（初版由 02-diagnosis/sixteen-problems.md 的徵兆欄產生）——資料，不是程式
     runtime/               機制：排程、跑 check 的 runner、結果發佈、trigger 的安裝；不是模塊
     prompts/  templates/   執行時讀的提示詞與模板（含 agent 的身分、05 的規矩）；和 docs/ 哪個是主本由你定，記 D18
