@@ -60,7 +60,7 @@
 | 10 | [08-templates/](08-templates/) | Claude Code | PROJECT_MAP、狀態板、CL 說明、需求、請示、日誌、訊息的骨架 |
 | 11 | [09-open-decisions.md](09-open-decisions.md) | PM、sponsor、CAD | 公司要先決定的事，附預設值 |
 | 12 | [10-decision-log.md](10-decision-log.md) | 想知道為什麼這樣定的人 | D1–D17 與理由 |
-| 13 | [11-research/](11-research/) | 附錄 | 業界實踐與風險、顧問類比、迴圈與 AI 倍數、角色提示與 agent 的身分、Jenkins 入門，附來源 |
+| 13 | [11-research/](11-research/) | 附錄 | 業界實踐與風險、顧問類比、迴圈與 AI 倍數、角色提示與 agent 的身分、Jenkins 入門、CI 入門（trigger、hook、pipeline），附來源 |
 
 ## 第一週做什麼
 

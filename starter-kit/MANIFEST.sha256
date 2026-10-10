@@ -68,7 +68,7 @@ c7f0b9dbf99a12a114919d6d3fb3a7215aed0bbbaba7c4a1fb8de89998ccbc6b  ./03-procedure
 f6e1e63f90144500eb7d3a4ddcae0ab12dba2f449351bc043df4eb234ae752c4  ./04-principles.md
 0ff32d703acdc1fb0d6fcb97259b424a99d6483d8821bf705f86ac261bbd24e1  ./05-behavior-guidelines.md
 9645374aae9788b5948f9cc9ba99b789fb452727e894e369b7ab46ab5f0a53dc  ./06-pm-handbook.md
-c9523b346547c4394b27d28cbea130d92f14439c47622cb73f9c2a31e763c7f5  ./07-build-brief.md
+bed798c093c007e581735405915c075f81ba317ba1bddf9462cdcf70ad6113fe  ./07-build-brief.md
 bb1110956622f0eaed0e9822c253496c75ac9aed4b611fbdf6a838aaac4589a7  ./07-build-brief/agent-capability-modules.pdf
 ef32dfa461ee930f50b0d245b3d0e6413ae744b1ca7e477e3b213e63143e38fa  ./07-build-brief/agent-own-version-control-and-instances.pdf
 9e9361fa4c9152654e4688c76799ef8ed46f65d62cf29dfd552571561aa55eab  ./07-build-brief/img/agent-capability-modules/p-1.png
@@ -110,11 +110,12 @@ f0989051df5de0371d19862edee11f36a9a04ad91bcfaf2ebba8276708faadb8  ./08-templates
 bdb960668df2c0f55697037d754eb1db12b849f64ad397c3620ffca482586372  ./08-templates/summary.md
 02c8e576d9b788e0f61247d3be7db48d619264c73db4377918e8d7768bee9c2d  ./09-open-decisions.md
 ec3ed8abecf70632689237cfda5670a252ebf5dab9b9b673a38c8874bde23fb4  ./10-decision-log.md
+535c5d9c8a3a7f3076ba7cda615e3cd3a025a64f9321fb9919c4da29b665d1ec  ./11-research/ci-primer.md
 45a78b36209d7247520977c3da97148f85f3bf0f763058ef5c13c2c6ab662795  ./11-research/consulting-analogy.md
 8f9cf2131ac7624cec6d0fb13b627037d238f9a75ee9d8075affb0f2e031039e  ./11-research/industry-practices-and-risks.md
 170a0589d8714a3502dd05bba2c943dc5ba2a1b92c11cff5ced83d6b40b4bed5  ./11-research/jenkins-primer.md
 f509c5cc727bf19c7009256db403149e68dbd5c6786f22be778692c24f9a9121  ./11-research/loops-and-ai-multiplier.md
 afa5e3bcd272f1641972c61bd6f162e51fac75e949c360f637b82599c6009799  ./11-research/role-prompt-as-agent-identity.md
 e8a2a49962a5182d616640163d8e9419e836a3c6f8ca8a3b2034bca535655ea9  ./CLAUDE.md
-575a56ac3c67bcefe618d2cba135a4774016c989fcb4621b11c834940f470f6a  ./README.md
-b7f2b9899783b38e267f409305a6daf84befd3c1fe7ae35cd4654d385aa23884  ./glossary.md
+854d322d2c579bbc3657a67c572fbd9a25b50eaa1521974af8c439e79fb7ce33  ./README.md
+e1c7069d6892ac363f1384c44bc5775e2503f6ac015f59407ca8165375e473b8  ./glossary.md

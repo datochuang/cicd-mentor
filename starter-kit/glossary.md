@@ -53,7 +53,7 @@
 | **main** | 共用的那條線；CI 要求它任何時候 sync 下來都編得過、跑得過 |
 | **label** | 某一天的檔案清單；只有檔案，沒有工具與環境，所以要附 manifest |
 | **sync／resolve** | 改之前先 sync；兩人改同一檔要 resolve，看懂兩邊再收，不整份 accept |
-| **trigger** | Perforce 的 submit 觸發；裝 trigger 要 admin 權限與 PM 核准 |
+| **trigger** | Perforce server 上的 hook：change-submit／change-content（submit 前，能擋）、change-commit（進了 depot 之後，踢 CI）、shelve-commit（shelve 時先跑 check）；只有 super 能裝，所以是 CAD 裝、PM 核准；agent 在沙盒的 p4d 上測好再交。入門見 `11-research/ci-primer.md` |
 | **Swarm** | Perforce 的 review 工具；公司有沒有，盤點時查 |
 | **目標** | 一個實例負責看的 design 與它的 depot 路徑；可能是 Perforce，也可能是 git 的 repo |
 
