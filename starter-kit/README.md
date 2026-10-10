@@ -51,7 +51,7 @@
 | 1 | [CLAUDE.md](CLAUDE.md) | 內網的 Claude Code | 說出這個專案的目的與框架，以及自己的工作規則 |
 | 2 | [glossary.md](glossary.md) | 所有人 | 用語一致：PM、owner、實例、工作區、shelved CL、check、manifest… |
 | 3 | [01-why/](01-why/) | PM、sponsor | 為什麼要做、為什麼一直做不起來、AI agent 與 PM 怎麼搭 |
-| 4 | [02-diagnosis/](02-diagnosis/) | PM、團隊；Claude Code 讀 [sixteen-problems.md](02-diagnosis/sixteen-problems.md) | 把版控當備份的團隊長什麼樣、十六個問題怎麼歸成六個原則；沙盒要埋的清單 |
+| 4 | [02-diagnosis/](02-diagnosis/) | PM、團隊；Claude Code 讀 [sixteen-problems.md](02-diagnosis/sixteen-problems.md) | 把版控當備份的團隊長什麼樣、十六個問題怎麼歸成六個原則；沙盒要埋的清單。情境是示意，作用是提醒：讓團隊把六個原則連到自己的日常行為，不是現況的審計（D14） |
 | 5 | [04-principles.md](04-principles.md) | 所有人 | 六個原則與檢驗、九條做法、版控的常規、review 規矩 |
 | 6 | [03-procedures/](03-procedures/) | Claude Code、PM | agent 進到一個目錄做什麼；四方在每個階段的互動 |
 | 7 | [05-behavior-guidelines.md](05-behavior-guidelines.md) | Claude Code（這是 agent 的規矩） | 可以直接照著做的行為指導原則，每條指回依據 |
@@ -59,7 +59,7 @@
 | 9 | [07-build-brief.md](07-build-brief.md)、[07-capabilities.md](07-capabilities.md)、[07-build-brief/](07-build-brief/) | Claude Code | 做成什麼：元件、介面、兩種 repo 與三層、實例與換手、沙盒驗收、MVP 的順序；能力拆成哪些模塊——要模組化、分層、怎麼切是規則，十七個模塊與介面是建議 |
 | 10 | [08-templates/](08-templates/) | Claude Code | PROJECT_MAP、狀態板、CL 說明、需求、請示、日誌、訊息的骨架 |
 | 11 | [09-open-decisions.md](09-open-decisions.md) | PM、sponsor、CAD | 公司要先決定的事，附預設值 |
-| 12 | [10-decision-log.md](10-decision-log.md) | 想知道為什麼這樣定的人 | D1–D13 與理由 |
+| 12 | [10-decision-log.md](10-decision-log.md) | 想知道為什麼這樣定的人 | D1–D14 與理由 |
 | 13 | [11-research/](11-research/) | 附錄 | 業界實踐與風險、顧問類比、迴圈與 AI 倍數，附來源 |
 
 ## 第一週做什麼

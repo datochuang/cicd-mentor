@@ -160,3 +160,15 @@
 **取代：** 無。補充 D5 的三層（core／工作區／流程在用的工具）：core 內部再依模塊分；沙盒除了整體三項，每個模塊各有一組測試。
 
 **出處：** [agent-operating-model.md](agent-operating-model.md) 第一節第九輪、第九節；[direction.md](direction.md) 設計要點 10；[docs/reviews/titles-blind-read-capability-modules-20261010.md](docs/reviews/titles-blind-read-capability-modules-20261010.md)。
+
+---
+
+## D14｜2026-10-10｜《把版控當備份的團隊》的具體描述是示意、作用是提醒；不逐頁對照公司現況
+
+**決定：** 那份投影片（與啟動包 `02-diagnosis/`）裡的情境、路徑、CL 號、十六個問題的細節都是示意。它的作用是提醒：讓團隊把「六個原則」這種 high-level 的敘述連結到自己的日常行為，在圖裡認出自己的做法。不當成公司現況的審計，不需要逐頁對照實際狀況修正（T14 結案）。沙盒照十六種埋，那是 agent 的 regression 用途，不受影響。
+
+**理由：** 使用者：「T14 不用審，對於現狀的具體描述只是起提醒的作用，讓團隊把 high level 的敘述可以連結到自己日常行為。」
+
+**取代：** T14 原本等使用者逐頁修正；改為不修正。
+
+**出處：** [todo.md](todo.md) T14；[direction.md](direction.md) 定錨點一節；啟動包 `02-diagnosis/sixteen-problems.md` 開頭。
