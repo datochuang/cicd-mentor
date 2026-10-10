@@ -205,7 +205,7 @@ def p5():
         "desc = p4 -ztag -F %Description% change -o $change",
         "ok = len(desc) >= 20 and not desc.startswith(\"update\")",
         "if not ok:",
-        "    print(\"[cicd-mentor] CL 的說明太短或只寫 update/fix，請寫目的\")",
+        "    print(\"[OTTER] CL 的說明太短或只寫 update/fix，請寫目的\")",
         "",
         "sys.exit(0)                    # 只報告、警告：永遠放行",
         "# 擋：sys.exit(0 if ok else 1)",
@@ -354,7 +354,7 @@ def p8():
         line(s, 20, y + 42, 860, y + 42)
     rect(s, 20, 284, 840, 66, col=PM, fill=PM, op=".06", sw=1.4)
     T(s, 32, 304, "人只做兩件事", cls="tx", fill=PM, w=700)
-    T(s, 32, 322, "CAD：給 agent 一個限定資料夾（cicd-mentor/）的 Jenkins 帳號，說哪個節點有 p4 與 bsub。", fill=INK2)
+    T(s, 32, 322, "CAD：給 agent 一個限定資料夾（otter/）的 Jenkins 帳號，說哪個節點有 p4 與 bsub。", fill=INK2)
     T(s, 32, 338, "PM：用那個帳號登入一次產 API token，交給 agent 放 config，不進 depot。", fill=INK2)
     bottom(s, 366, [
         ("五個地方各做自己的事，中間只靠 depot 裡的 script 與固定位置的結果檔接起來；AI agent 不登進任何 server。", True),

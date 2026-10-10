@@ -45,12 +45,12 @@ desc = subprocess.run(["p4", "-ztag", "-F", "%Description%", "change", "-o", cha
                       capture_output=True, text=True).stdout.strip()
 ok = len(desc) >= 20 and not desc.lower().startswith(("update", "fix"))
 if not ok:
-    print(f"[cicd-mentor] CL {change} 的說明太短或只寫 update/fix，請寫目的。")
+    print(f"[OTTER] CL {change} 的說明太短或只寫 update/fix，請寫目的。")
 sys.exit(0)                      # 只報告級與警告級：永遠放行，只印訊息、寫 log
 # 升到擋：sys.exit(0 if ok else 1)；說明裡有 [bypass:原因] 的放行並記錄；script 自己出錯時擋不擋，照 09 #5 的授權表
 ```
 
-`kick_jenkins.sh` 只做一件事：`curl -X POST $JENKINS/job/cicd-mentor/job/dma-sanity/buildWithParameters?CL=$1`。
+`kick_jenkins.sh` 只做一件事：`curl -X POST $JENKINS/job/otter/job/dma-sanity/buildWithParameters?CL=$1`。
 
 ### agent 做哪一段
 

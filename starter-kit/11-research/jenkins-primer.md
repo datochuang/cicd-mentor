@@ -37,21 +37,21 @@ pipeline {
 ## 三、誰做哪些事
 
 **人要做的只有兩件**（PM 去談，CAD 做）：
-1. 給 agent 一個 Jenkins 帳號，權限限在一個資料夾（例如 `cicd-mentor/`），只能在裡面建 job、按 build、讀結果；告訴 agent 哪個節點有 p4 與 bsub（label）、P4 plugin 裝了沒。
+1. 給 agent 一個 Jenkins 帳號，權限限在一個資料夾（例如 `otter/`），只能在裡面建 job、按 build、讀結果；告訴 agent 哪個節點有 p4 與 bsub（label）、P4 plugin 裝了沒。
 2. 用那個帳號登入網頁一次，在「使用者 → 設定 → API Token」產生一個 token，交給 agent 放在 `designs/<名>/config`（不進 depot、不進日誌）。
 
 **agent 做的，全在它自己的機器上用 HTTP**：寫 run_sanity.sh、make_manifest.sh；寫 Jenkinsfile 與 job 的設定檔（config.xml）；用 API 建 job、按一次 build、讀 console log，不過就改，綠了才把 build 的 URL 與 manifest 當證據交 shelved CL 給 owner。
 
 ```bash
 # 建 job（config.xml 是 job 定義的文字檔，也進 agent 的 repo）
-curl -u agent:$TOKEN -X POST "$JENKINS/job/cicd-mentor/createItem?name=dma-sanity" \
+curl -u agent:$TOKEN -X POST "$JENKINS/job/otter/createItem?name=dma-sanity" \
      -H "Content-Type: application/xml" --data-binary @dma-sanity.xml
 # 跑一次
-curl -u agent:$TOKEN -X POST "$JENKINS/job/cicd-mentor/job/dma-sanity/build"
+curl -u agent:$TOKEN -X POST "$JENKINS/job/otter/job/dma-sanity/build"
 # 讀結果（JSON：result、timestamp、artifacts）
-curl -u agent:$TOKEN "$JENKINS/job/cicd-mentor/job/dma-sanity/lastBuild/api/json"
+curl -u agent:$TOKEN "$JENKINS/job/otter/job/dma-sanity/lastBuild/api/json"
 # 讀 console log
-curl -u agent:$TOKEN "$JENKINS/job/cicd-mentor/job/dma-sanity/lastBuild/consoleText"
+curl -u agent:$TOKEN "$JENKINS/job/otter/job/dma-sanity/lastBuild/consoleText"
 ```
 
 網頁能做的，API 都能做。不要 ssh 或 tmux 進 Jenkins server 改檔案：job 定義在 server 磁碟上是 XML，直接改要重啟、沒有紀錄、CAD 也不會同意。這些 curl 包成 `bindings/ci/`，是「接外部的程式」的第四種接法。
