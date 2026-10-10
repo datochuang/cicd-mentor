@@ -23,6 +23,14 @@
 | 15 | 16 | Excel 狀態表 | regression 狀態靠人填 Excel，表和實際結果對不上 | 狀態表與 log 的差異、更新時間的落後 | 狀態表由 manifest 與 log 產生，不用人填 | CI、Traceability |
 | 16 | 17 | 退不回去 | 想退回上次能跑的狀態，檔案回得去，環境回不去 | 試著退回上一個 label，跑不跑得起來 | known-good 點：check 通過就打 label＋manifest | Traceability、CD |
 
+## 第十七種（投影片沒有）：根本沒進版控（D18）
+
+| # | 名字 | 徵兆 | 應偵測到什麼 | 應提案什麼 | 掛哪個原則 |
+|---|---|---|---|---|---|
+| 17 | 根本沒進版控 | 專案在共用磁碟 /proj 或 home；「備份」是 dma_0917_bak/ 這種目錄或 tarball；誰改了什麼靠記憶 | 目標路徑不在任何 depot；目錄樹裡的備份目錄、tarball、同名多版 | 第一個 CL（來源進，產物與 tarball 不進，附清單）、setup.sh、sanity；owner 看過才 submit，原檔不動；depot 路徑與 stream 請 CAD 建 | SSOT、Traceability |
+
+沙盒要埋一棵不在 depot 的目錄（共用磁碟的 snapshot）；agent 要能掃它、產出第一個 CL 的提案，而且不動原檔。
+
 ## 沙盒驗收的三項
 
 - **偵測**：埋的每一種都標出來了嗎（起點是這十六種，可增減，改了記進 `../10-decision-log.md`）；誤報幾個（埋的每一種附「正確答案」）。

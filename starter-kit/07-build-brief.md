@@ -16,7 +16,7 @@
 |---|---|---|
 | 版控 adapter | 讀 depot 結構、CL 歷史、pending／shelved CL、label；寫入只做 shelve；Perforce 為主，git 可選，同一套介面 | 權限分階段：先只讀；要 shelve 時加寫入；要開 stream 時再加 |
 | 監看與排程 | 定時巡檢目標路徑：新 CL、main 的 check 結果、被繞過的機制、交接（label／release／IP drop）、開工的跡象 | 頻率 PM 定；動作 idempotent：做之前先查有沒有做過 |
-| 分析 | 盤點（結構、歷史、既有自動化、熱點、人的地圖、十六個問題對照、候選目標）；目標分析（PROJECT_MAP、七個檢查、既有工具清單、缺口與計畫） | 只讀、抽樣、寫清楚「看了什麼、沒看什麼」；有時間與算力的預算 |
+| 分析 | 盤點（結構、歷史、既有自動化、熱點、人的地圖、十六個問題對照、候選目標；目標不在版控裡時掃目錄樹，mtime 與備份目錄當弱訊號）；目標分析（PROJECT_MAP、七個檢查、既有工具清單、缺口與計畫） | 只讀、抽樣、寫清楚「看了什麼、沒看什麼」；有時間與算力的預算 |
 | 溝通 | slack 私訊當事人（沒 slack 的人用 mail）、群聊（要 PM 核准）；五種訊息（自我介紹、問 owner、交 shelved CL、提醒、更正）與兩種文件（請示、一頁摘要） | 自報身分；每則標實例名與版號；每人每天訊息上限 |
 | shelved CL 產生與證據 | 把缺口做成 shelved CL：PROJECT_MAP 副本、setup script、run_sanity.sh、make_manifest.sh、CL 說明模板、check 與排程；附在乾淨 workspace 實跑的證據與 manifest | 不 submit；owner 收；三類分工：自己能補／要 owner 決定／只有 owner 知道 |
 | 交付流水線（CD） | 交付物草稿（從 CL 歷史、label、下游引用推出：交什麼、給誰、什麼形式）、make_release（打包＋manifest＋label＋放到取用處＋通知） | owner 多半沒概念，agent 主動推草稿請他確認；出包 script 交 shelved CL；第一道 check 穩定後 main 過 check 就跑 |
@@ -68,7 +68,7 @@
 
 1. 從 master 的某個 release clone（「創造」），版號 vX.Y.0；建工作區 `designs/<名>/`；登記表那一筆由 PM 核准的 MR 加上後才動手；第一次 merge 工作區回 master 後小版號 .1。
 2. 以只讀帳號上線，自我介紹（我是誰、向哪位 PM 報告、看什麼、紀錄在哪）。
-3. 盤點 → 目標分析 → 計畫核准 → 建置 → 上線分級 → 交付 → 日常監看與開工輔導 → 擴充與交棒 → 換手與改版（流程在 `03-procedures/agent-pm-team-repo-interactions.pdf`；十個階段各用哪些模塊見 `07-capabilities.md` 第四節）。
+3. 盤點 →（目標還不在版控裡：起手，把目錄整理成第一個 CL、owner submit，見互動場景第 5 頁）→ 目標分析 → 計畫核准 → 建置 → 上線分級 → 交付 → 日常監看與開工輔導 → 擴充與交棒 → 換手與改版（流程在 `03-procedures/agent-pm-team-repo-interactions.pdf`；十個階段各用哪些模塊見 `07-capabilities.md` 第四節）。
 4. 發現的改進（新的偵測規則、更好的訊息模板、提示詞的修正）對 core 開 MR；實例不改自己運行中的程式與規則。
 5. **換手（＝升級）**：舊實例最後一次 merge 工作區、寫 HANDOVER、停；新實例從新 release clone，讀工作區，宣布「[agent-dma v0.5.0] 接手 dma」，登記表的那筆走 MR、PM 核准；續做或重新盤點由 PM 選（預設重新盤點，再和舊工作區比對，差異回報 PM）。換手期間一個 design 只有一個實例在動。先換一個實例試跑，沒事再換其他；有事退回上一個 release。
 
@@ -125,4 +125,4 @@
 
 **要 PM 或公司決定的**：`09-open-decisions.md`。最前面四件（資安、帳號、sponsor、試點）沒定，第 5 步之後上不了真實的 depot。
 
-**已經定了的**：`10-decision-log.md` D1–D17。不要重新辯論；要推翻就新增一筆說明為什麼。
+**已經定了的**：`10-decision-log.md` D1–D18。不要重新辯論；要推翻就新增一筆說明為什麼。

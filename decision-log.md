@@ -216,3 +216,16 @@
 **取代：** 收掉 T7。
 
 **出處：** [direction.md](direction.md) 目標一節；[todo.md](todo.md) T7。
+
+
+---
+
+## D18｜2026-10-10｜場景也要包含目標還沒有 repo 的狀況：既有專案不在版控裡、全新專案的第一天
+
+**決定：** agent 的工作場景加「起手」：目標根本不在版控裡（共用磁碟、home、tarball）或全新專案的第一天。agent 掃目錄樹當盤點，整理成第一個 CL（來源進、產物與 tarball 不進、附清單、setup.sh、sanity），owner 看過才 submit；原檔不動、不搬、不刪；讀共用磁碟要 PM 核准（資安），建 depot 路徑與 stream 要 CAD，都是請示項；全新專案從第一個 CL 就有 check 與 manifest，常規從第一天教。「不在版控裡」是十六種問題之外的第十七種，沙盒要埋一棵不在 depot 的目錄。
+
+**理由：** 使用者：「目前設定的 agent 工作場景，包含使用者根本連 repo 都沒有的狀況嗎？這也需要。」之前每個場景都假設目標已經在 depot 裡；公司裡最缺 CI/CD 的專案，常常連 depot 路徑都沒有。
+
+**取代：** 無；補《互動場景》一頁（第 5 頁，之後頁碼各加一）。
+
+**出處：** [agent-operating-model.md](agent-operating-model.md) 第一節第十二輪、第十一節；docs/slides/agent-pm-team-repo-interactions.pdf 第 5 頁。

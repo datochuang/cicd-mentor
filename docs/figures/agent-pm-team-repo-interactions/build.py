@@ -7,6 +7,7 @@
 # 讀完要能：在每一種情況下說出誰對誰做什麼、agent 自己能做什麼、什麼要問、什麼要 PM 決定。
 # 主旨：agent 先讀懂再問再交 patch；方向與影響他人的事 PM 懂了才算；採不採用是團隊的事。
 # 內容來源：agent-operating-model.md（使用者的原始描述與補充）。所有訊息的例句都是示意。
+# 2026-10-10（D18）：加第 5 頁「起手」——目標還不在版控裡（共用磁碟、home、tarball）或全新專案；之後頁碼各加一。
 # 版型：第 1 頁角色 × 階段的表；之後每頁一個場景，四條泳道 PM／agent／工程團隊／repo，箭頭＝誰對誰做什麼。
 import pathlib, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "lib"))
@@ -237,6 +238,23 @@ def p_survey():
         notes=["報告裡每個判斷都附依據：擷取（從檔案或歷史讀到）、實跑（在乾淨 workspace 跑過）、推測。"])
 
 
+# ── 圖 5：起手——目標還不在版控裡 ─────────────────────────────────────
+def p_bootstrap():
+    x = xs(6)
+    acts = [("PM", x[0], W, "核准讀共用磁碟", "資安範圍；指 owner"),
+            ("agent", x[1], W, "掃目錄樹當盤點", "mtime、備份目錄"),
+            ("agent", x[2], W, "整理第一個 CL", "來源進，產物不進"),
+            ("工程團隊", x[3], W, "owner 看過才 submit", "原檔不動、不搬、不刪"),
+            ("repo", x[4], W, "depot 路徑與 stream", "CAD 建；sanity 跟著進"),
+            ("agent", x[5], W, "從第一天教常規", "全新專案先有 check")]
+    flows = [("PM", "agent", x[0] + W / 2, "範圍與 owner"), ("agent", "工程團隊", x[2] + W / 2, "shelved CL：第一次 import"), ("工程團隊", "repo", x[3] + W / 2, "submit"), ("agent", "repo", x[5] + W / 2, "sanity 跟著進")]
+    return scenario("什麼時候：盤點發現目標根本不在版控裡（共用磁碟、home、tarball），或全新專案的第一天", "授權：讀共用磁碟、建 depot 路徑都請示", acts, flows,
+        [("目標還沒有 repo 也接：agent 把目錄整理成第一個 CL（來源進、產物不進、附 setup 與 sanity），owner 看過才 submit；原檔不動。", True),
+         ("全新專案更簡單：從第一個 CL 就有 sanity 與 manifest，常規從第一天教。建 depot 路徑與 stream 要 CAD，先請示。", False)],
+        "起手：PM 核准 agent 讀共用磁碟並指定 owner；agent 掃目錄樹當盤點（mtime、備份目錄、tarball 是弱訊號），整理第一個 CL：來源進、產物與 tarball 不進；owner 看過才 submit，原檔不動不搬不刪；depot 路徑與 stream 由 CAD 建，sanity 跟著進；全新專案從第一個 CL 就有 check，常規從第一天教。",
+        notes=["示意的第一個 CL 說明：「dma 第一次進 depot：rtl/、tb/、scripts/ 的來源共 312 檔；sim 結果與 netlist 不進（清單附在 CL）。", "原目錄 /proj/chipA/dma 不動，等 owner 確認再談。」"])
+
+
 # ── 圖 4：目標分析與訪談 ─────────────────────────────────────────────
 def p_analyze():
     x = xs(6)
@@ -420,6 +438,7 @@ PAGES = [
     ("總表：每個階段誰做什麼、agent 的授權三級、用語定義", p_overview()),
     ("啟動：PM 給 depot 範圍與帳號，agent 以 bot 身分先只讀上線，先向團隊自我介紹", p_start()),
     ("盤點：agent 只讀掃指定的 depot 範圍，交 PM 一頁現況與幾個候選目標，PM 選", p_survey()),
+    ("起手：目標還不在版控裡，agent 把目錄整理成第一個 CL，owner 看過才 submit", p_bootstrap()),
     ("目標分析：agent 讀完才私訊目錄 owner，只問他才知道的事，答案進 PROJECT_MAP", p_analyze()),
     ("計畫核准：PM 核准方向、owner 同意範圍，缺一就不動手；PM 沒弄懂不算核准", p_approve()),
     ("建置：骨架做成 shelved CL 交 owner，缺的 check 寫需求讓人或 subagent 做", p_build()),

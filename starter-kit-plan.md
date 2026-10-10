@@ -16,6 +16,7 @@
 | PM 要懂的、要談的、路線圖、紅線、請准單格式 | 齊，散在累積體裡 | operating model 第七節 |
 | 版控常規的教育 | 齊 | operating model「教育版控的常規」 |
 | agent 自己的版控、改版、多實例 | 齊 | operating model 第八節、《agent 自己的版控》（十頁） |
+| 目標還沒有 repo 的起手式（既有專案不在版控裡、全新專案） | 齊（D18） | 《互動場景》第 5 頁、operating model 第十一節、啟動包 05 #45、sixteen-problems 第十七種、09 #26 |
 | CI/CD 的機制：Jenkins、trigger、git 在公司的機器上怎麼接，agent 與人各做哪一段 | 齊 | 《CI/CD 在公司怎麼跑》（十頁）、啟動包 11-research 的 jenkins-primer、ci-primer |
 | agent 的能力拆成基本模塊：規則（模組化、分層、切法）與建議（十七個模塊、介面）分開 | 齊（D13；清單與介面由內網邊做邊調） | operating model 第九節、《agent 的基本模塊》（八頁）、啟動包 07-capabilities.md |
 | 決策紀錄 | 齊 | decision-log.md D1–D4 |

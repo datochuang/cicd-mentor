@@ -28,5 +28,6 @@
 | 23 | **slack 還是 mail** | 溝通元件做哪個 | slack；沒 slack 的人用 mail | PM |
 | 24 | **交付物的取用處**：release 區放哪、誰能寫、下游怎麼被通知 | CD 的出包要放到固定位置；agent 不 submit，所以誰按最後那一下要定 | `//depot/<chip>/release/<目錄>/`；出包 script 產生 shelved CL 由 owner submit，或 owner 授權 trigger 直接寫；通知走 slack channel | owner、CAD、PM |
 | 25 | **團隊流程的執行機制**：submit 後誰去跑 check 與出包——公司既有的 Jenkins／GitLab CI、還是農場節點上的 cron；job 誰建誰管；agent 能不能有唯讀的 API 看結果；Perforce trigger 裝在哪、誰裝 | agent 不當 CI server，只寫 script 與 job 定義、讀結果；沒定就只能停在「agent 自己手動跑一次」 | 有 Jenkins 就接：給 agent 一個限定資料夾的 Jenkins 帳號與 API token（只能在 `cicd-mentor/` 裡建 job、按 build、讀結果），Jenkinsfile 與 job 的 config.xml 進版控，agent 用 API 建與跑；CAD 不給帳號就退成 agent 寫好、CAD 貼上、agent 唯讀。沒有 Jenkins：一台農場節點的 cron 跑 run_sanity.sh，只報告級。trigger 等第 9 步，CAD 裝。入門見 `11-research/jenkins-primer.md` | CAD／IT、PM |
+| 26 | **沒進版控的專案怎麼納入**：agent 能不能讀共用磁碟與 home（資安）；第一次 import 的 CL 由誰 submit；depot 路徑與 stream 誰建 | 最缺 CI/CD 的專案常常連 depot 路徑都沒有；沒定 agent 只能看、不能起手 | PM 定範圍後 agent 只讀共用磁碟；import 的 CL 由 owner submit；depot 路徑與 stream 由 CAD 建；原檔由 owner 之後自己處理，agent 不搬不刪 | 資安、CAD、PM |
 
 定了的項目移到 `10-decision-log.md`，這張表只留沒定的；編號不重用（#18 轉型的終點已定，見 D17）。
